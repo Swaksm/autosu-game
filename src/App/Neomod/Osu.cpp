@@ -272,6 +272,7 @@ Osu::Osu()
     };
     cv::ignore_beatmap_skins.setCallback(reloadBeatmapSkin);
     cv::ignore_beatmap_samples.setCallback(reloadBeatmapSkin);
+    cv::mod_storyboard.setCallback(reloadBeatmapSkin);
 
     cv::skin_allow_convars.setCallback([](float oldValue, float newValue) -> void {
         if(oldValue == newValue) return;
@@ -520,6 +521,7 @@ Osu::~Osu() {
         cv::skin_export.removeAllCallbacks();
         cv::ignore_beatmap_skins.removeAllCallbacks();
         cv::ignore_beatmap_samples.removeAllCallbacks();
+        cv::mod_storyboard.removeAllCallbacks();
         cv::skin_allow_convars.removeAllCallbacks();
         cv::mod_mafham.removeAllCallbacks();
         cv::mod_fposu.removeAllCallbacks();
@@ -2218,6 +2220,7 @@ bool Osu::getModSS() const { return flags::has<ModFlags::Perfect>(this->score->m
 bool Osu::getModTD() const { return flags::has<ModFlags::TouchDevice>(this->score->mods.flags); }
 bool Osu::getModTraceable() const { return flags::has<ModFlags::Traceable>(this->score->mods.flags); }
 bool Osu::getModFreezeFrame() const { return flags::has<ModFlags::FreezeFrame>(this->score->mods.flags); }
+bool Osu::getModStoryboard() const { return flags::has<ModFlags::Storyboard>(this->score->mods.flags); }
 bool Osu::getModDT() const { return this->score->mods.speed == 1.5f; }
 bool Osu::getModNC() const {
     return this->score->mods.speed == 1.5f && flags::has<ModFlags::NoPitchCorrection>(this->score->mods.flags);

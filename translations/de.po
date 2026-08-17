@@ -585,6 +585,11 @@ msgstr "Geschwindigkeits-/BPM-Multiplikator"
 msgid " Experimental Mods (!)"
 msgstr " Experimentelle Mods (!)"
 
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/OsuDirectScreen.cpp
+#, fuzzy
+msgid "Storyboard"
+msgstr "Tastatur"
+
 #: src/App/Neomod/ModSelector.cpp
 msgid "Flip Up/Down"
 msgstr "Hoch/Runter spiegeln"
@@ -3061,11 +3066,6 @@ msgstr ""
 #: src/App/Neomod/OsuDirectScreen.cpp
 msgid "Video"
 msgstr ""
-
-#: src/App/Neomod/OsuDirectScreen.cpp
-#, fuzzy
-msgid "Storyboard"
-msgstr "Tastatur"
 
 #: src/App/Neomod/OsuDirectScreen.cpp
 msgid "Newest maps"

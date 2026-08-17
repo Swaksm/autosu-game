@@ -45,6 +45,7 @@
 #include "RoomScreen.h"
 #include "GameplayJudge.h"
 #include "Sound.h"
+#include "File.h"
 #include "Font.h"
 #include "Shader.h"
 #include "RenderTarget.h"
@@ -54,6 +55,7 @@
 #include "AsyncPPCalculator.h"
 #include "SoundEngine.h"
 #include "SpectatorScreen.h"
+#include "Storyboard.h"
 #include "UI.h"
 #include "Matrices.h"
 #include "UIModSelectorModButton.h"
@@ -180,43 +182,53 @@ void BeatmapInterface::drawDebug() {
 void BeatmapInterface::drawBackground() {
     if(!this->canDraw()) return;
 
-    // draw beatmap background image
+    // draw background image
     {
+        f32 brightness = 1.f - cv::background_dim.getFloat();
+        brightness += this->fBreakBackgroundFade * 0.3f;
+        brightness = std::clamp(brightness, 0.f, 1.f);
+
         const Image *backgroundImage = nullptr;
-        if(cv::draw_beatmap_background_image.getBool() &&
-           (cv::background_dim.getFloat() < 1.0f || this->fBreakBackgroundFade > 0.0f) &&
-           (backgroundImage = osu->getBackgroundImageHandler()->getLoadBackgroundImage(
-                this->beatmap, false, cv::draw_menu_background.getBool()))) {
+        vec2 offset{0.f};
+        if(this->storyboard) {
+            if(!this->storyboard->replacesBackground()) backgroundImage = this->storyboard->getBackgroundImage();
+            offset = this->storyboard->getBackgroundOffset() * (osu->getVirtScreenHeight() / 480.f);
+        } else if(cv::draw_beatmap_background_image.getBool() && brightness > 0.0f) {
+            backgroundImage = osu->getBackgroundImageHandler()->getLoadBackgroundImage(
+                this->beatmap, false, cv::draw_menu_background.getBool());
+        }
+        if(backgroundImage && backgroundImage->isReady()) {
             const float scale = Osu::getImageScaleToFillResolution(backgroundImage, osu->getVirtScreenSize());
-            const vec2 centerTrans = (osu->getVirtScreenSize() / 2.0f);
-            const float backgroundFadeDimMultiplier = 1.0f - (cv::background_dim.getFloat() - 0.3f);
-            const auto dim =
-                (1.0f - cv::background_dim.getFloat()) + this->fBreakBackgroundFade * backgroundFadeDimMultiplier;
+            const vec2 centerTrans = (osu->getVirtScreenSize() / 2.0f) + offset;
             const auto alpha = cv::mod_fposu.getBool() ? cv::background_alpha.getFloat() : 1.0f;
 
-            g->setColor(argb(alpha, dim, dim, dim));
+            g->setColor(argb(alpha, brightness, brightness, brightness));
             g->pushTransform();
             {
                 g->scale(scale, scale);
                 g->translate((int)centerTrans.x, (int)centerTrans.y);
+                if(this->storyboard) this->getStoryboardView().transform();
                 g->drawImage(backgroundImage);
             }
             g->popTransform();
         }
+
+        if(cv::background_brightness.getFloat() > 0.0f) {
+            const f32 brightness = cv::background_brightness.getFloat();
+
+            const Channel red = std::clamp<float>(brightness * cv::background_color_r.getFloat(), 0.0f, 255.0f);
+            const Channel green = std::clamp<float>(brightness * cv::background_color_g.getFloat(), 0.0f, 255.0f);
+            const Channel blue = std::clamp<float>(brightness * cv::background_color_b.getFloat(), 0.0f, 255.0f);
+            const Channel alpha = 255 * (1.0f - this->fBreakBackgroundFade) *
+                                  (cv::mod_fposu.getBool() ? cv::background_alpha.getFloat() : 1.0f);
+
+            g->setColor(argb(alpha, red, green, blue));
+            g->fillRect(0, 0, osu->getVirtScreenWidth(), osu->getVirtScreenHeight());
+        }
     }
 
-    // draw background
-    if(cv::background_brightness.getFloat() > 0.0f) {
-        const auto brightness = cv::background_brightness.getFloat();
-
-        const Channel red = std::clamp<float>(brightness * cv::background_color_r.getFloat(), 0.0f, 255.0f);
-        const Channel green = std::clamp<float>(brightness * cv::background_color_g.getFloat(), 0.0f, 255.0f);
-        const Channel blue = std::clamp<float>(brightness * cv::background_color_b.getFloat(), 0.0f, 255.0f);
-        const Channel alpha = 255 * (1.0f - this->fBreakBackgroundFade) *
-                              (cv::mod_fposu.getBool() ? cv::background_alpha.getFloat() : 1.0f);
-
-        g->setColor(argb(alpha, red, green, blue));
-        g->fillRect(0, 0, osu->getVirtScreenWidth(), osu->getVirtScreenHeight());
+    if(this->storyboard) {
+        this->storyboard->draw(Storyboard::Layer::BACKGROUND, Storyboard::Layer::FOREGROUND, this->getStoryboardView());
     }
 
     // draw scorebar-bg
@@ -637,6 +649,7 @@ bool BeatmapInterface::start() {
         this->cur_timing_info = {};
 
         this->loadBeatmapSkin();
+        this->loadStoryboard();
     }
 
     // start preloading (delays the play start until it's set to false, see isLoading())
@@ -1199,8 +1212,23 @@ void BeatmapInterface::playHitSound(DatabaseBeatmapTypes::HITSAMPLE_BITS samples
         }
     }
 
-    HitSoundUtils::play(*skin, HitSoundUtils::resolve(samples, hitSoundContext(*this, *skin, timeMS), false),
-                        soundPanAt(*this, rawPos), pitch);
+    const auto sounds = HitSoundUtils::resolve(samples, hitSoundContext(*this, *skin, timeMS), false);
+    HitSoundUtils::play(*skin, sounds, soundPanAt(*this, rawPos), pitch);
+
+    if(this->storyboard && !sounds.empty()) {
+        Storyboard::HitSound played{
+            .normalSet = sounds[0].set, .additionSet = sounds[0].set, .additions = 0, .index = sounds[0].index};
+        for(const auto &sound : sounds) {
+            if(sound.hit == 0) {
+                played.normalSet = sound.set;
+            } else {
+                played.additionSet = sound.set;
+                played.additions |= (u8)(1 << (sound.hit - 1));
+            }
+        }
+        this->storyboard->onHitSound(played, this->iCurMusicPosWithOffsets);
+        this->storyboard->onHitObjectHit(this->iCurMusicPosWithOffsets);
+    }
 }
 
 void BeatmapInterface::playSliderTickSound(DatabaseBeatmapTypes::HITSAMPLE_BITS samples, vec2 rawPos, i32 timeMS) {
@@ -1280,7 +1308,38 @@ void BeatmapInterface::loadBeatmapSkin() {
                               map->primitives.sliderTrackOverride);
 }
 
+Storyboard::View BeatmapInterface::getStoryboardView() const {
+    return {
+        .screen = McRect(0, 0, osu->getVirtScreenWidth(), osu->getVirtScreenHeight()),
+        .pivot = this->vPlayfieldCenter,
+        .flipX = cv::playfield_mirror_vertical.getBool(),
+        .flipY = cv::playfield_mirror_horizontal.getBool(),
+        .rotation = cv::playfield_rotation.getFloat(),
+    };
+}
+
+void BeatmapInterface::loadStoryboard() {
+    const PlayedMap *map = this->judge->getMapData();
+    if(!cv::mod_storyboard.getBool() || !map || !map->data) return;
+
+    const std::string folder{this->beatmap->getFolder()};
+    std::string osb;
+    if(const std::string osbFile = Storyboard::findOsbFile(folder, this->beatmap->getArtistLatin(),
+                                                           this->beatmap->getTitleLatin(), this->beatmap->getCreator());
+       !osbFile.empty()) {
+        File file(folder + osbFile);
+        if(file.canRead()) osb = file.readToString();
+    }
+
+    this->storyboard = std::make_unique<Storyboard>(
+        folder, std::string_view{reinterpret_cast<const char *>(map->data->data()), map->data->size()}, osb,
+        std::string{this->beatmap->getBackgroundImageFileName()});
+    const Skin *skin = this->getSkin();
+    this->storyboard->load(skin ? std::string_view{skin->skin_dir} : std::string_view{});
+}
+
 void BeatmapInterface::unloadObjects() {
+    this->storyboard.reset();
     this->resetLiveStarsTasks();
     if(this->judge) this->judge->unload();
     if(Skin *skin = this->getSkinMutable()) skin->unloadBeatmapOverride();
@@ -1394,6 +1453,10 @@ void BeatmapInterface::draw() {
 
     // draw all hitobjects in reverse
     if(cv::draw_hitobjects.getBool()) this->drawHitObjects();
+
+    if(this->storyboard) {
+        this->storyboard->draw(Storyboard::Layer::OVERLAY, Storyboard::Layer::OVERLAY, this->getStoryboardView());
+    }
 
     // draw smoke
     if(cv::draw_smoke.getBool()) this->drawSmoke();
@@ -1834,6 +1897,7 @@ void BeatmapInterface::update() {
             if(this->iPreLoadingIndex >= hitobjects.size()) {
                 // (and for the map's skin elements to load, see loadBeatmapSkin())
                 if(const Skin *skin = this->getSkin(); skin && !skin->isReady()) break;
+                if(this->storyboard && !this->storyboard->isReady()) break;
                 this->bIsPreLoading = false;
                 debugLog("Beatmap: Preloading done.");
                 break;
@@ -2126,6 +2190,10 @@ void BeatmapInterface::update2() {
     }
     this->key_events.clear();
     this->vAutoCursorPos = this->replayCoords2Pixels(this->judge->getAutoCursorPos());
+
+    if(this->storyboard) {
+        this->storyboard->update(this->iCurMusicPosWithOffsets, this->judge->isPassing(), wasSeekFrame);
+    }
 
     const i32 previousHitObjectTime = this->judge->getPreviousHitObjectTime();
     const i32 nextHitObjectTime = this->judge->getNextHitObjectTime();
@@ -2832,6 +2900,7 @@ FinishedScore BeatmapInterface::saveAndSubmitScore(bool quit) {
     score.numCircles = numCircles;
     score.mods = liveScore->mods;
     score.beatmap_hash = played.md5;  // NOTE: necessary for "Use Mods"
+    if(this->storyboard) score.storyboard_hash = this->storyboard->getHash();
     score.replay = this->judge->replay;
 
     // @PPV3: store ppv3 data if not already done. also double check replay is marked correctly

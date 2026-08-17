@@ -11,6 +11,8 @@
 #include "DatabaseBeatmapTypes.h"
 #include "PlayfieldView.h"
 
+#include "Storyboard.h"
+
 #include <memory>
 
 class RenderTarget;
@@ -55,6 +57,9 @@ class BeatmapInterface final : public GameplayJudge::Listener, public PlayfieldV
     void onModUpdate(bool rebuildSliderVertexBuffers = true, bool recomputeDrainRate = true);
 
     void loadBeatmapSkin();
+
+    [[nodiscard]] inline Storyboard *getStoryboard() const { return this->storyboard.get(); }
+    [[nodiscard]] Storyboard::View getStoryboardView() const;
 
     // Returns true if we're loading or waiting on other players
     bool isLoading();
@@ -287,6 +292,7 @@ class BeatmapInterface final : public GameplayJudge::Listener, public PlayfieldV
     void actualRestart();
 
     void unloadObjects();
+    void loadStoryboard();
 
     void step(f64 frametime);
     void stopObjectSounds();
@@ -305,6 +311,8 @@ class BeatmapInterface final : public GameplayJudge::Listener, public PlayfieldV
 
     // contains hitobjects, score, health
     std::unique_ptr<GameplayJudge> judge;
+
+    std::unique_ptr<Storyboard> storyboard;
 
     AnimFloat fFailAnim;
     AnimFloat fBreakBackgroundFade;

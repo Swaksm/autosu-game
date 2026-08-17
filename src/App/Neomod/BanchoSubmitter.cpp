@@ -67,6 +67,12 @@ void submit_score(FinishedScore score) {
         .data = {beatmap_hash_str.begin(), beatmap_hash_str.end()},
     });
 
+    MD5String storyboard_hash_str = score.storyboard_hash.to_chars();
+    options.mime_parts.push_back({
+        .name = "sbk",
+        .data = {storyboard_hash_str.begin(), storyboard_hash_str.end()},
+    });
+
     auto unique_ids = fmt::format("{}|{}", BanchoState::get_install_id(), BanchoState::get_disk_uuid());
     options.mime_parts.push_back({
         .name = "c1",

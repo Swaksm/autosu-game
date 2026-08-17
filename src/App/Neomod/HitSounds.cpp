@@ -94,8 +94,8 @@ static constexpr auto SOUND_METHODS =  //
           A_{
               &Skin::s_normal_sliderslide,    //
               &Skin::s_normal_sliderwhistle,  //
-              (Sound * Skin::*)nullptr,       // SET-sliderfinish and SET-sliderclap aren't actually valid
-              (Sound * Skin::*)nullptr        //
+              (Sound *Skin::*)nullptr,        // SET-sliderfinish and SET-sliderclap aren't actually valid
+              (Sound *Skin::*)nullptr         //
           }},
        // SampleSetType::SOFT
        A_{//
@@ -110,8 +110,8 @@ static constexpr auto SOUND_METHODS =  //
           A_{
               &Skin::s_soft_sliderslide,    //
               &Skin::s_soft_sliderwhistle,  //
-              (Sound * Skin::*)nullptr,     //
-              (Sound * Skin::*)nullptr      //
+              (Sound *Skin::*)nullptr,      //
+              (Sound *Skin::*)nullptr       //
           }},                               //
        // SampleSetType::DRUM
        A_{//
@@ -126,8 +126,8 @@ static constexpr auto SOUND_METHODS =  //
           A_{
               &Skin::s_drum_sliderslide,    //
               &Skin::s_drum_sliderwhistle,  //
-              (Sound * Skin::*)nullptr,     //
-              (Sound * Skin::*)nullptr      //
+              (Sound *Skin::*)nullptr,      //
+              (Sound *Skin::*)nullptr       //
           }}};  //
 #undef A_
 
@@ -244,9 +244,9 @@ HitSoundContext makeContext(const TIMING_INFO &samples, u8 defaultSampleSet, boo
         .timingPointVolume = samples.volume,
         .timingPointSampleIndex = samples.sampleIndex,
         .defaultSampleSet = defaultSampleSet,
-        .forcedSampleSet = cv::skin_force_hitsound_sample_set.getVal<u8>(),
+        .forcedSampleSet = cv::mod_storyboard.getBool() ? (u8)0 : cv::skin_force_hitsound_sample_set.getVal<u8>(),
         .layeredHitSounds = layeredHitSounds,
-        .ignoreSampleVolume = cv::ignore_beatmap_sample_volume.getBool(),
+        .ignoreSampleVolume = cv::ignore_beatmap_sample_volume.getBool() && !cv::mod_storyboard.getBool(),
         .boostVolume = cv::snd_boost_hitsound_volume.getBool(),
     };
 }

@@ -1,0 +1,978 @@
+// Copyright (c) 2025, kiwec, All rights reserved.
+#include "Storyboard.h"
+
+#include "AnimationHandler.h"
+#include "AsyncPool.h"
+#include "BeatmapFile/BeatmapFile.h"
+#include "Engine.h"
+#include "Environment.h"
+#include "File.h"
+#include "Graphics.h"
+#include "Hashing.h"
+#include "Image.h"
+#include "Logging.h"
+#include "Parsing.h"
+#include "ResourceManager.h"
+#include "SString.h"
+#include "Sound.h"
+#include "SoundEngine.h"
+#include "crypto.h"
+
+#include <algorithm>
+#include <array>
+#include <cmath>
+#include <limits>
+#include <numbers>
+#include <utility>
+
+using neomod::BeatmapFile;
+using Ease = AnimationHandler::Ease;
+using Layer = Storyboard::Layer;
+
+namespace {
+
+constexpr f64 INF = std::numeric_limits<f64>::infinity();
+
+// a property going from one value to another over [start, end]
+template <typename T>
+struct Command {
+    f64 start;
+    f64 end;
+    T from;
+    T to;
+    Ease easing;
+};
+
+// the commands of a sprite, a loop or a trigger, per property, sorted by start (then end) time
+struct Group {
+    std::vector<Command<f32>> x, y, scale, rotation, alpha;
+    std::vector<Command<vec2>> vectorScale;
+    std::vector<Command<vec3>> colour;
+    std::vector<Command<bool>> flipH, flipV, additive;
+    f64 start{INF};
+    f64 end{-INF};
+
+    [[nodiscard]] bool empty() const { return this->start > this->end; }
+
+    template <typename T>
+    void add(std::vector<Command<T>> &list, Command<T> cmd) {
+        if(cmd.end < cmd.start) cmd.end = cmd.start;
+        list.push_back(cmd);
+        this->start = std::min(this->start, cmd.start);
+        this->end = std::max(this->end, cmd.end);
+    }
+
+    void sort() {
+        const auto byTime = [](auto &list) {
+            std::ranges::stable_sort(list, [](const auto &a, const auto &b) {
+                return a.start != b.start ? a.start < b.start : a.end < b.end;
+            });
+        };
+        byTime(this->x), byTime(this->y), byTime(this->scale), byTime(this->rotation), byTime(this->alpha);
+        byTime(this->vectorScale), byTime(this->colour), byTime(this->flipH), byTime(this->flipV);
+        byTime(this->additive);
+    }
+};
+
+// commands repeated `iterations` times after `start`
+struct Loop {
+    f64 start;
+    i32 iterations;
+    Group cmds{};
+
+    [[nodiscard]] f64 duration() const { return this->cmds.end - this->cmds.start; }
+};
+
+struct TriggerCondition {
+    enum class Kind : u8 { PASSING, FAILING, HIT_OBJECT_HIT, HIT_SOUND };
+    Kind kind;
+
+    // filters for HIT_SOUND
+    i8 normalSet{-1};
+    i8 additionSet{-1};
+    u8 additions{0};
+    i32 index{-1};
+
+    [[nodiscard]] bool matches(const Storyboard::HitSound &sound) const {
+        if(this->normalSet >= 0 && sound.normalSet != this->normalSet) return false;
+        if(this->additions != 0 && (sound.additions & this->additions) == 0) return false;
+        if(this->additionSet >= 0 && (sound.additions == 0 || sound.additionSet != this->additionSet)) return false;
+        if(this->index >= 0 && sound.index != this->index) return false;
+        return true;
+    }
+};
+
+// commands executed when `condition` matches between `start` and `end`
+struct Trigger {
+    TriggerCondition condition;
+    f64 start;
+    f64 end;
+    i32 groupNumber;  // (0: none) firing one stops others in the same group
+    Group cmds{};
+};
+
+struct Sprite {
+    Layer layer;
+    vec2 origin;
+    vec2 pos;
+    std::string path;
+    u32 frameCount{0};
+    f64 frameDelay{0.0};
+    bool loopForever{true};
+    Group cmds{};
+    std::vector<Loop> loops{};
+    std::vector<Trigger> triggers{};
+
+    f64 start{0.0};
+    f64 end{0.0};
+    f64 earliestCommand{0.0};
+    u32 firstImage{0};
+};
+
+struct Sample {
+    f64 time;
+    Layer layer;
+    std::string path;
+    f32 volume;  // 0 to 1
+    u32 sound{0};
+};
+
+struct FiredTrigger {
+    u32 trigger;
+    f64 time;
+};
+
+template <typename T>
+struct Latest {
+    const Command<T> *cmd{nullptr};
+    f64 offset{0.0};
+    f64 start{-INF};
+
+    bool consider(const std::vector<Command<T>> &cmds, f64 offset, f64 time) {
+        const auto it = std::ranges::upper_bound(cmds, time - offset, {}, &Command<T>::start);
+        if(it == cmds.begin()) return false;
+        const Command<T> &cmd = *std::prev(it);
+        if(cmd.start + offset >= this->start) {
+            this->cmd = &cmd;
+            this->offset = offset;
+            this->start = cmd.start + offset;
+        }
+        return true;
+    }
+};
+
+// the not inplace version is gone?
+std::string_view trimmed(std::string_view s) {
+    SString::trim_inplace(s);
+    return s;
+}
+
+template <typename T>
+bool parseNumber(std::string_view s, T &out) {
+    return Parsing::strto_s(trimmed(s), out);
+}
+
+// extra generous path handling, as it needs to be for some storyboards
+std::string cleanPath(std::string_view s) {
+    s = trimmed(s);
+    if(s.size() >= 2 && s.front() == '"' && s.back() == '"') s = s.substr(1, s.size() - 2);
+    std::string path{s};
+    File::normalizeSlashes(path, '\\', '/');
+    return path;
+}
+
+std::optional<Layer> parseLayer(std::string_view s) {
+    s = trimmed(s);
+    static constexpr std::array<std::pair<std::string_view, Layer>, 5> names{{
+        {"Background", Layer::BACKGROUND},
+        {"Fail", Layer::FAIL},
+        {"Pass", Layer::PASS},
+        {"Foreground", Layer::FOREGROUND},
+        {"Overlay", Layer::OVERLAY},
+    }};
+    for(const auto &[name, layer] : names) {
+        if(SString::strcase_equal(s, name)) return layer;
+    }
+    if(i32 n; Parsing::strto_s(s, n) && n >= 0 && n < (i32)Layer::COUNT) return (Layer)n;
+    return std::nullopt;
+}
+
+// where on the image its position is, as a fraction of its size
+std::optional<vec2> parseOrigin(std::string_view s) {
+    s = trimmed(s);
+    static constexpr std::array<std::pair<std::string_view, vec2>, 10> names{{
+        {"TopLeft", {0.f, 0.f}},
+        {"Centre", {0.5f, 0.5f}},
+        {"CentreLeft", {0.f, 0.5f}},
+        {"TopRight", {1.f, 0.f}},
+        {"BottomCentre", {0.5f, 1.f}},
+        {"TopCentre", {0.5f, 0.f}},
+        {"Custom", {0.f, 0.f}},  // TopLeft
+        {"CentreRight", {1.f, 0.5f}},
+        {"BottomLeft", {0.f, 1.f}},
+        {"BottomRight", {1.f, 1.f}},
+    }};
+    for(const auto &[name, origin] : names) {
+        if(SString::strcase_equal(s, name)) return origin;
+    }
+    if(i32 n; Parsing::strto_s(s, n) && n >= 0 && n < (i32)names.size()) return names[n].second;
+    return std::nullopt;
+}
+
+// HitSound[set][set][addition][index]
+// see https://osu.ppy.sh/wiki/en/Storyboard/Scripting/Compound_Commands
+std::optional<TriggerCondition> parseTriggerCondition(std::string_view s) {
+    using Kind = TriggerCondition::Kind;
+    s = trimmed(s);
+    if(s == "Passing") return TriggerCondition{.kind = Kind::PASSING};
+    if(s == "Failing") return TriggerCondition{.kind = Kind::FAILING};
+    if(s == "HitObjectHit") return TriggerCondition{.kind = Kind::HIT_OBJECT_HIT};
+
+    constexpr std::string_view prefix{"HitSound"};
+    if(s.size() < prefix.size() || !SString::strcase_equal(s.substr(0, prefix.size()), prefix)) return std::nullopt;
+    s.remove_prefix(prefix.size());
+
+    // take the next word of `words` that is at the start of `s`
+    const auto take = [&s](std::span<const std::string_view> words) -> i8 {
+        for(uSz i = 0; i < words.size(); i++) {
+            if(s.size() >= words[i].size() && SString::strcase_equal(s.substr(0, words[i].size()), words[i])) {
+                s.remove_prefix(words[i].size());
+                return (i8)i;
+            }
+        }
+        return -1;
+    };
+
+    static constexpr std::array<std::string_view, 4> sets{"All", "Normal", "Soft", "Drum"};
+    static constexpr std::array<std::string_view, 3> additions{"Whistle", "Finish", "Clap"};
+    const i8 set1 = take(sets);
+    const i8 set2 = set1 >= 0 ? take(sets) : (i8)-1;
+    const i8 addition = take(additions);
+
+    TriggerCondition condition{.kind = Kind::HIT_SOUND};
+    if(!s.empty() && !Parsing::strto_s(s, condition.index)) return std::nullopt;
+
+    // with only one set and an addition, the set is the addition's
+    const bool set1IsAddition = set1 >= 0 && set2 < 0 && addition >= 0;
+    const i8 normalSet = set1IsAddition ? set2 : set1;
+    const i8 additionSet = set1IsAddition ? set1 : set2;
+
+    // "All" == no filter
+    condition.normalSet = normalSet > 0 ? (i8)(normalSet - 1) : (i8)-1;
+    condition.additionSet = additionSet > 0 ? (i8)(additionSet - 1) : (i8)-1;
+    condition.additions = addition >= 0 ? (u8)(1 << addition) : (u8)0;
+    return condition;
+}
+
+// get all files of a folder, recursively
+Hash::unstable_ncase_stringmap<std::string> listFolder(std::string_view folder) {
+    Hash::unstable_ncase_stringmap<std::string> files;
+    std::vector<std::pair<std::string, int>> pending{{"", 0}};
+    std::vector<File::DirEntry> entries;
+    while(!pending.empty()) {
+        auto [dir, depth] = std::move(pending.back());
+        pending.pop_back();
+        entries.clear();
+        if(!File::getDirectoryEntries(fmt::format("{}{}", folder, dir), File::DirContents::ALL, entries, false)) {
+            continue;
+        }
+        for(auto &entry : entries) {
+            std::string path = dir + entry.name;
+            if(entry.type == File::FILETYPE::FOLDER) {
+                // storyboards nest their assets a few folders deep, but no deeper than this
+                if(depth < 8) pending.emplace_back(path + '/', depth + 1);
+            } else {
+                files.emplace(path, path);
+            }
+        }
+    }
+    return files;
+}
+
+}  // namespace
+
+struct Storyboard::Impl {
+    std::string folder;  // with a trailing slash
+    std::string backgroundFile;
+    vec2 backgroundOffset{0.f, 0.f};
+    bool widescreen{false};
+    bool useSkinSprites{false};
+
+    std::vector<Sprite> sprites;
+    std::array<std::vector<u32>, (uSz)Layer::COUNT> layers;  // sprites of each layer, in drawing order
+    std::vector<Sample> samples;                             // sorted by time
+    MD5Hash osbHash;
+    bool hasOsb{false};
+
+    // once loaded
+    std::vector<Image *> frames;
+    std::vector<Image *> images;
+    std::vector<Sound *> sounds;
+    Image *background{nullptr};
+    std::optional<Async::Future<MD5Hash>> hashing;
+    std::optional<MD5Hash> hash;
+
+    // once played
+    f64 time{-INF};
+    bool passing{true};
+    std::vector<std::vector<FiredTrigger>> fired;
+
+    ~Impl() {
+        for(Image *image : this->images) {
+            if(image) resourceManager->destroyResource(image);
+        }
+        for(Sound *sound : this->sounds) {
+            if(sound) resourceManager->destroyResource(sound);
+        }
+    }
+
+    void parse(std::string_view file, bool isOsu, std::vector<std::pair<std::string, std::string>> &variables);
+    void parseEventLine(std::string_view line, i32 version);
+    void finish();
+
+    template <typename T, typename Get>
+    [[nodiscard]] T evaluate(u32 index, Get get, T fallback, f64 time) const;
+    [[nodiscard]] std::optional<SpriteState> stateAt(u32 index, f64 time) const;
+
+    void fire(TriggerCondition::Kind kind, const HitSound *sound, f64 time);
+
+    // set up while parsing
+    Sprite *current{nullptr};
+    Group *currentGroup{nullptr};
+};
+
+void Storyboard::Impl::parse(std::string_view file, bool isOsu,
+                             std::vector<std::pair<std::string, std::string>> &variables) {
+    const BeatmapFile osu{file};
+    // .osb files have no version, they're read as the latest one
+    const i32 version = isOsu ? osu.getVersion().value_or(14) : 14;
+    this->current = nullptr;
+    this->currentGroup = nullptr;
+
+    for(const auto &section : osu.getSections()) {
+        const bool isVariables = section.name == "Variables";
+        if(!isVariables && section.readAs != BeatmapFile::SectionKind::EVENTS &&
+           section.readAs != BeatmapFile::SectionKind::GENERAL) {
+            continue;
+        }
+
+        for(std::string_view line : SString::split_newlines(section.body)) {
+            if(line.ends_with('\r')) line.remove_suffix(1);
+            if(SString::is_wspace_only(line) || SString::is_comment(line)) continue;
+
+            if(isVariables) {
+                const uSz eq = line.find('=');
+                if(eq == std::string_view::npos) continue;
+                const std::string_view name = trimmed(line.substr(0, eq));
+                if(!name.starts_with('$')) continue;
+                std::string value{trimmed(line.substr(eq + 1))};
+                if(auto it = std::ranges::find(variables, name, &std::pair<std::string, std::string>::first);
+                   it != variables.end()) {
+                    it->second = std::move(value);
+                } else {
+                    variables.emplace_back(name, std::move(value));
+                }
+            } else if(section.readAs == BeatmapFile::SectionKind::GENERAL) {
+                if(BeatmapFile::KeyValue kv; BeatmapFile::parse(line, kv)) {
+                    if(kv.key == "UseSkinSprites") this->useSkinSprites = kv.value == "1";
+                    if(kv.key == "WidescreenStoryboard") this->widescreen = kv.value == "1";
+                }
+            } else if(line.contains('$') && !variables.empty()) {
+                std::string substituted{line};
+                for(const auto &[name, value] : variables) {
+                    for(uSz pos = 0; (pos = substituted.find(name, pos)) != std::string::npos; pos += value.size()) {
+                        substituted.replace(pos, name.size(), value);
+                    }
+                }
+                this->parseEventLine(substituted, version);
+            } else {
+                this->parseEventLine(line, version);
+            }
+        }
+    }
+}
+
+// absolute hell
+void Storyboard::Impl::parseEventLine(std::string_view line, i32 version) {
+    // strip out comments from commands
+    if(const uSz comment = line.find("//"); comment != std::string_view::npos) line = line.substr(0, comment);
+
+    uSz depth = 0;
+    while(depth < line.size() && (line[depth] == ' ' || line[depth] == '_')) depth++;
+    line.remove_prefix(depth);
+
+    const auto fields = SString::split(line, ',');
+    if(fields.empty()) return;
+
+    if(depth == 0) {
+        this->current = nullptr;
+        this->currentGroup = nullptr;
+
+        const std::string_view type = trimmed(fields[0]);
+        if(type == "Background" || type == "0") {
+            if(f32 x, y; fields.size() > 4 && parseNumber(fields[3], x) && parseNumber(fields[4], y)) {
+                this->backgroundOffset = {x, y};
+            }
+        } else if(type == "Sprite" || type == "4" || type == "Animation" || type == "6") {
+            const bool animation = type == "Animation" || type == "6";
+            if(fields.size() < (animation ? 8u : 6u)) return;
+            const auto layer = parseLayer(fields[1]);
+            const auto origin = parseOrigin(fields[2]);
+            f32 x, y;
+            if(!layer || !origin || !parseNumber(fields[4], x) || !parseNumber(fields[5], y)) return;
+
+            Sprite sprite{.layer = *layer, .origin = *origin, .pos = {x, y}, .path = cleanPath(fields[3])};
+            if(animation) {
+                i32 frameCount;
+                f64 frameDelay;
+                if(!parseNumber(fields[6], frameCount) || !parseNumber(fields[7], frameDelay) || frameCount <= 0) {
+                    return;
+                }
+                if(version < 6) frameDelay = std::round(0.015 * frameDelay) * 1.186 * (1000.0 / 60.0);
+                sprite.frameCount = (u32)frameCount;
+                sprite.frameDelay = frameDelay;
+                sprite.loopForever =
+                    fields.size() <= 8 || (trimmed(fields[8]) != "LoopOnce" && trimmed(fields[8]) != "1");
+            }
+            this->sprites.push_back(std::move(sprite));
+            this->current = &this->sprites.back();
+        } else if(type == "Sample" || type == "5") {
+            f64 time;
+            const auto layer = fields.size() >= 4 ? parseLayer(fields[2]) : std::nullopt;
+            if(!layer || !parseNumber(fields[1], time)) return;
+            f32 volume = 100.f;
+            if(fields.size() > 4) (void)parseNumber(fields[4], volume);
+            this->samples.push_back({.time = time,
+                                     .layer = *layer,
+                                     .path = cleanPath(fields[3]),
+                                     .volume = std::clamp(volume, 0.f, 100.f) / 100.f});
+        }
+        return;
+    }
+
+    if(!this->current) return;
+    if(depth < 2) this->currentGroup = &this->current->cmds;
+
+    const std::string_view type = trimmed(fields[0]);
+    if(type == "L") {
+        f64 start;
+        i32 count;
+        if(fields.size() < 3 || !parseNumber(fields[1], start) || !parseNumber(fields[2], count)) return;
+        this->current->loops.push_back({.start = start, .iterations = std::max(count, 1), .cmds = {}});
+        this->currentGroup = &this->current->loops.back().cmds;
+        return;
+    }
+    if(type == "T") {
+        const auto condition = fields.size() >= 2 ? parseTriggerCondition(fields[1]) : std::nullopt;
+        if(!condition) {
+            this->currentGroup = nullptr;
+            return;
+        }
+        f64 start = -INF, end = INF;
+        i32 groupNumber = 0;
+        if(fields.size() > 2) (void)parseNumber(fields[2], start);
+        if(fields.size() > 3) (void)parseNumber(fields[3], end);
+        if(fields.size() > 4) (void)parseNumber(fields[4], groupNumber);
+        this->current->triggers.push_back(
+            {.condition = *condition, .start = start, .end = end, .groupNumber = groupNumber, .cmds = {}});
+        this->currentGroup = &this->current->triggers.back().cmds;
+        return;
+    }
+
+    Group *group = this->currentGroup;
+    if(!group || fields.size() < 5) return;
+
+    i32 easing;
+    f64 start, end;
+    if(!parseNumber(fields[1], easing) || !parseNumber(fields[2], start)) return;
+    if(trimmed(fields[3]).empty()) {
+        end = start;
+    } else if(!parseNumber(fields[3], end)) {
+        return;
+    }
+    const Ease ease = easing >= 0 && easing < (i32)Ease::COUNT ? (Ease)easing : Ease::Linear;
+
+    if(type == "P") {
+        const std::string_view param = trimmed(fields[4]);
+        const Command<bool> cmd{.start = start, .end = end, .from = true, .to = start == end, .easing = ease};
+        if(param == "H") group->add(group->flipH, cmd);
+        if(param == "V") group->add(group->flipV, cmd);
+        if(param == "A") group->add(group->additive, cmd);
+        return;
+    }
+
+    const auto values = std::span{fields}.subspan(4);
+    const auto commands = [&]<typename T>(std::vector<Command<T>> &list, uSz arity, auto read) {
+        std::vector<T> steps;
+        for(uSz i = 0; i + arity <= values.size(); i += arity) {
+            T value;
+            if(!read(values.subspan(i, arity), value)) return;
+            steps.push_back(value);
+        }
+        if(steps.empty()) return;
+        if(steps.size() == 1) steps.push_back(steps[0]);
+
+        // https://osu.ppy.sh/wiki/en/Storyboard/Scripting/Shorthand
+        const f64 duration = std::max(end - start, 0.0);
+        for(uSz i = 0; i + 1 < steps.size(); i++) {
+            group->add(list, Command<T>{.start = start + duration * (f64)i,
+                                        .end = end + duration * (f64)i,
+                                        .from = steps[i],
+                                        .to = steps[i + 1],
+                                        .easing = ease});
+        }
+    };
+    const auto one = [](std::span<const std::string_view> v, f32 &out) { return parseNumber(v[0], out); };
+    const auto two = [](std::span<const std::string_view> v, vec2 &out) {
+        return parseNumber(v[0], out.x) && parseNumber(v[1], out.y);
+    };
+
+    if(type == "F") {
+        commands(group->alpha, 1, one);
+    } else if(type == "S") {
+        commands(group->scale, 1, one);
+    } else if(type == "R") {
+        commands(group->rotation, 1, one);
+    } else if(type == "MX") {
+        commands(group->x, 1, one);
+    } else if(type == "MY") {
+        commands(group->y, 1, one);
+    } else if(type == "V") {
+        commands(group->vectorScale, 2, two);
+    } else if(type == "M") {
+        std::vector<Command<vec2>> moves;
+        commands(moves, 2, two);
+        for(const auto &m : moves) {
+            group->add(group->x, Command<f32>{m.start, m.end, m.from.x, m.to.x, m.easing});
+            group->add(group->y, Command<f32>{m.start, m.end, m.from.y, m.to.y, m.easing});
+        }
+    } else if(type == "C") {
+        commands(group->colour, 3, [](std::span<const std::string_view> v, vec3 &out) {
+            if(!parseNumber(v[0], out.x) || !parseNumber(v[1], out.y) || !parseNumber(v[2], out.z)) return false;
+            out /= 255.f;
+            return true;
+        });
+    }
+}
+
+void Storyboard::Impl::finish() {
+    // only what has something to do is drawn
+    std::erase_if(this->sprites, [](Sprite &sprite) {
+        std::erase_if(sprite.loops, [](const Loop &loop) { return loop.cmds.empty(); });
+        return sprite.cmds.empty() && sprite.loops.empty();
+    });
+
+    for(u32 i = 0; i < this->sprites.size(); i++) {
+        Sprite &sprite = this->sprites[i];
+        sprite.cmds.sort();
+        for(auto &loop : sprite.loops) loop.cmds.sort();
+        for(auto &trigger : sprite.triggers) trigger.cmds.sort();
+
+        f64 earliest = sprite.cmds.start;
+        f64 end = sprite.cmds.end;
+        for(const auto &loop : sprite.loops) {
+            earliest = std::min(earliest, loop.start + loop.cmds.start);
+            end = std::max(end, loop.start + loop.cmds.start + loop.duration() * loop.iterations);
+        }
+        sprite.earliestCommand = earliest;
+        sprite.start = earliest;
+
+        std::vector<std::pair<f64, const Command<f32> *>> alphas;  // (startTime, cmd)
+        const auto collectAlphas = [&alphas](const std::vector<Command<f32>> &cmds, f64 offset) {
+            for(const auto &cmd : cmds) {
+                alphas.emplace_back(cmd.start + offset, &cmd);
+                if(cmd.from > 0.f || cmd.to > 0.f) break;
+            }
+        };
+        collectAlphas(sprite.cmds.alpha, 0.0);
+        for(const auto &loop : sprite.loops) collectAlphas(loop.cmds.alpha, loop.start);
+        if(!alphas.empty()) {
+            const auto first = std::ranges::min_element(alphas, {}, &std::pair<f64, const Command<f32> *>::first);
+            f64 firstVisible = INF;
+            for(const auto &[start, cmd] : alphas) {
+                if(cmd->from > 0.f || cmd->to > 0.f) firstVisible = std::min(firstVisible, start);
+            }
+            if(first->second->from == 0.f && firstVisible < INF) sprite.start = firstVisible;
+        }
+        sprite.end = end;
+
+        this->layers[(uSz)sprite.layer].push_back(i);
+    }
+
+    std::ranges::stable_sort(this->samples, {}, &Sample::time);
+    this->fired.resize(this->sprites.size());
+}
+
+template <typename T, typename Get>
+T Storyboard::Impl::evaluate(u32 index, Get get, T fallback, f64 time) const {
+    const Sprite &sprite = this->sprites[index];
+    Latest<T> latest;
+    latest.consider(get(sprite.cmds), 0.0, time);
+    for(const auto &loop : sprite.loops) {
+        const auto &cmds = get(loop.cmds);
+        if(cmds.empty()) continue;
+        const f64 duration = loop.duration();
+        i32 iteration = 0;
+        if(duration > 0.0) {
+            iteration = (i32)std::clamp(std::floor((time - loop.start - loop.cmds.start) / duration), 0.0,
+                                        (f64)(loop.iterations - 1));
+        }
+        if(!latest.consider(cmds, loop.start + duration * iteration, time) && iteration > 0) {
+            latest.consider(cmds, loop.start + duration * (iteration - 1), time);
+        }
+    }
+    for(const auto &fired : this->fired[index]) {
+        latest.consider(get(sprite.triggers[fired.trigger].cmds), fired.time, time);
+    }
+
+    if(latest.cmd) {
+        Command<T> cmd = *latest.cmd;
+        cmd.start += latest.offset;
+        cmd.end += latest.offset;
+
+        if constexpr(std::is_same_v<T, bool>) {
+            return time < cmd.end ? cmd.from : cmd.to;
+        } else {
+            if(time >= cmd.end || cmd.end <= cmd.start) return cmd.to;
+            const f32 progress = AnimationHandler::ease(cmd.easing, (time - cmd.start) / (cmd.end - cmd.start));
+            return cmd.from + (cmd.to - cmd.from) * progress;
+        }
+    }
+
+    const Command<T> *first = nullptr;
+    f64 firstStart = INF;
+    if(const auto &cmds = get(sprite.cmds); !cmds.empty()) {
+        first = &cmds.front();
+        firstStart = cmds.front().start;
+    }
+    for(const auto &loop : sprite.loops) {
+        if(const auto &cmds = get(loop.cmds); !cmds.empty() && loop.start + cmds.front().start < firstStart) {
+            first = &cmds.front();
+            firstStart = loop.start + cmds.front().start;
+        }
+    }
+    if(!first) return fallback;
+    if constexpr(std::is_same_v<T, bool>) {
+        return first->start == first->end;
+    } else {
+        return first->from;
+    }
+}
+
+std::optional<Storyboard::SpriteState> Storyboard::Impl::stateAt(u32 index, f64 time) const {
+    const Sprite &sprite = this->sprites[index];
+    if(time < sprite.start || time >= sprite.end) return std::nullopt;
+
+    // clang-format off
+    SpriteState state{
+        .pos = {this->evaluate<f32>(index, [](const Group &g) -> auto & { return g.x; }, sprite.pos.x, time),
+                this->evaluate<f32>(index, [](const Group &g) -> auto & { return g.y; }, sprite.pos.y, time)},
+        .scale = this->evaluate<vec2>(index, [](const Group &g) -> auto & { return g.vectorScale; }, vec2{1.f}, time) *
+                 this->evaluate<f32>(index, [](const Group &g) -> auto & { return g.scale; }, 1.f, time),
+        .rotation = this->evaluate<f32>(index, [](const Group &g) -> auto & { return g.rotation; }, 0.f, time),
+        .colour = this->evaluate<vec3>(index, [](const Group &g) -> auto & { return g.colour; }, vec3{1.f}, time),
+        .alpha = this->evaluate<f32>(index, [](const Group &g) -> auto & { return g.alpha; }, 1.f, time),
+        .flipH = this->evaluate<bool>(index, [](const Group &g) -> auto & { return g.flipH; }, false, time),
+        .flipV = this->evaluate<bool>(index, [](const Group &g) -> auto & { return g.flipV; }, false, time),
+        .additive = this->evaluate<bool>(index, [](const Group &g) -> auto & { return g.additive; }, false, time),
+        .frame = 0,
+    };
+    // clang-format on
+
+    // an opacity above 1 wraps around, which storyboards use for flickering
+    if(state.alpha > 1.f) state.alpha = std::fmod(state.alpha, 1.f);
+
+    if(sprite.frameCount > 0 && sprite.frameDelay > 0.0) {
+        const auto frame = (i64)std::floor((time - sprite.earliestCommand) / sprite.frameDelay);
+        const auto count = (i64)sprite.frameCount;
+        state.frame =
+            (u32)(sprite.loopForever ? ((frame % count) + count) % count : std::clamp<i64>(frame, 0, count - 1));
+    }
+    return state;
+}
+
+void Storyboard::Impl::fire(TriggerCondition::Kind kind, const HitSound *sound, f64 time) {
+    for(u32 s = 0; s < this->sprites.size(); s++) {
+        const Sprite &sprite = this->sprites[s];
+        if(sprite.triggers.empty() || time < sprite.start || time >= sprite.end) continue;
+        for(u32 t = 0; t < sprite.triggers.size(); t++) {
+            const Trigger &trigger = sprite.triggers[t];
+            if(trigger.condition.kind != kind || time < trigger.start || time > trigger.end) continue;
+            if(sound && !trigger.condition.matches(*sound)) continue;
+
+            // a trigger that fires again starts over, and stops others of the same group
+            auto &fired = this->fired[s];
+            std::erase_if(fired, [&](const FiredTrigger &f) {
+                return f.trigger == t ||
+                       (trigger.groupNumber != 0 && sprite.triggers[f.trigger].groupNumber == trigger.groupNumber);
+            });
+            fired.push_back({.trigger = t, .time = time});
+        }
+    }
+}
+
+Storyboard::Storyboard(std::string folder, std::string_view osuFile, std::string_view osbFile,
+                       std::string backgroundFile)
+    : impl(std::make_unique<Impl>()) {
+    this->impl->folder = std::move(folder);
+    if(!this->impl->folder.empty() && !this->impl->folder.ends_with('/')) this->impl->folder.push_back('/');
+    this->impl->backgroundFile = std::move(backgroundFile);
+    File::normalizeSlashes(this->impl->backgroundFile, '\\', '/');
+
+    std::vector<std::pair<std::string, std::string>> variables;
+    this->impl->parse(osuFile, true, variables);
+    if(!osbFile.empty()) {
+        this->impl->hasOsb = true;
+        this->impl->osbHash = crypto::hash::md5(osbFile);
+        this->impl->parse(osbFile, false, variables);
+    }
+    this->impl->current = nullptr;
+    this->impl->currentGroup = nullptr;
+    this->impl->finish();
+}
+
+Storyboard::~Storyboard() = default;
+
+std::string Storyboard::findOsbFile(std::string_view folder, std::string_view artist, std::string_view title,
+                                    std::string_view creator) {
+    std::vector<std::string> osbs;
+    for(auto &file : Environment::getFilesInFolder(folder)) {
+        if(file.size() > 4 && SString::strcase_equal(std::string_view{file}.substr(file.size() - 4), ".osb")) {
+            osbs.push_back(std::move(file));
+        }
+    }
+    if(osbs.empty()) return {};
+    const std::string expected = fmt::format("{} - {} ({}).osb", artist, title, creator);
+    if(const auto it = std::ranges::find_if(osbs, [&](const auto &f) { return SString::strcase_equal(f, expected); });
+       it != osbs.end()) {
+        return *it;
+    }
+    return std::ranges::min(osbs);
+}
+
+bool Storyboard::isEmpty() const { return this->impl->sprites.empty() && this->impl->samples.empty(); }
+vec2 Storyboard::getBackgroundOffset() const { return this->impl->backgroundOffset; }
+uSz Storyboard::getNumSprites() const { return this->impl->sprites.size(); }
+
+bool Storyboard::replacesBackground() const {
+    const auto &bg = this->impl->backgroundFile;
+    if(bg.empty()) return false;
+    return std::ranges::any_of(this->impl->layers[(uSz)Layer::BACKGROUND],
+                               [&](u32 i) { return SString::strcase_equal(this->impl->sprites[i].path, bg); });
+}
+
+std::optional<Storyboard::SpriteState> Storyboard::getSpriteState(uSz sprite, f64 time) const {
+    if(sprite >= this->impl->sprites.size()) return std::nullopt;
+    return this->impl->stateAt((u32)sprite, time);
+}
+
+std::optional<f64> Storyboard::getEndTime() const {
+    std::optional<f64> end;
+    for(const auto &sprite : this->impl->sprites) end = std::max(end.value_or(-INF), sprite.end);
+    for(const auto &sample : this->impl->samples) end = std::max(end.value_or(-INF), sample.time);
+    return end;
+}
+
+void Storyboard::load(std::string_view skinFolder) {
+    Impl &sb = *this->impl;
+    const auto files = listFolder(sb.folder);
+
+    const auto resolve = [&files](std::string_view path) -> std::string {
+        if(path.empty() || path.starts_with('/') ||
+           std::ranges::any_of(SString::split(path, '/'), [](std::string_view part) { return part == ".."; })) {
+            return {};
+        }
+        if(const auto it = files.find(path); it != files.end()) return it->second;
+
+        // old storyboards leave the extension out
+        if(!path.substr(path.rfind('/') + 1).contains('.')) {
+            for(const std::string_view ext : {".png", ".jpg", ".jpeg"}) {
+                if(const auto it = files.find(fmt::format("{}{}", path, ext)); it != files.end()) return it->second;
+            }
+        }
+        return {};
+    };
+
+    // files used in the storyboard (for storyboard_hash)
+    std::vector<std::pair<std::string, std::string>> used;
+    Hash::unstable_ncase_stringmap<Image *> loadedImages;
+    const auto loadImage = [&](const std::string &path) -> Image * {
+        if(const auto it = loadedImages.find(path); it != loadedImages.end()) return it->second;
+        std::string file;
+        if(sb.useSkinSprites && !skinFolder.empty()) {
+            if(std::string skinFile = fmt::format("{}{}", skinFolder, path);
+               File::existsCaseInsensitive(skinFile) == File::FILETYPE::FILE) {
+                file = std::move(skinFile);
+            }
+        }
+        const std::string inFolder = resolve(path);
+        used.emplace_back(SString::to_lower(path), inFolder);
+        if(file.empty() && !inFolder.empty()) file = sb.folder + inFolder;
+
+        Image *image = nullptr;
+        if(!file.empty()) {
+            resourceManager->requestNextLoadAsync();
+            image = resourceManager->loadImageAbsUnnamed(std::move(file));
+        }
+        loadedImages.emplace(path, image);
+        if(image) sb.images.push_back(image);
+        return image;
+    };
+
+    std::vector<Image *> frames;
+    for(auto &sprite : sb.sprites) {
+        sprite.firstImage = (u32)frames.size();
+        if(sprite.frameCount == 0) {
+            frames.push_back(loadImage(sprite.path));
+            continue;
+        }
+        const uSz slash = sprite.path.rfind('/');
+        const uSz dot = sprite.path.rfind('.');
+        const uSz numberAt =
+            dot != std::string::npos && (slash == std::string::npos || dot > slash) ? dot : sprite.path.size();
+        for(u32 i = 0; i < sprite.frameCount; i++) {
+            std::string framePath = sprite.path;
+            framePath.insert(numberAt, std::to_string(i));
+            frames.push_back(loadImage(framePath));
+        }
+    }
+    sb.frames = std::move(frames);
+
+    if(!sb.backgroundFile.empty()) sb.background = loadImage(sb.backgroundFile);
+
+    Hash::unstable_ncase_stringmap<u32> loadedSounds;
+    for(auto &sample : sb.samples) {
+        if(const auto it = loadedSounds.find(sample.path); it != loadedSounds.end()) {
+            sample.sound = it->second;
+            continue;
+        }
+        const std::string inFolder = resolve(sample.path);
+        used.emplace_back(SString::to_lower(sample.path), inFolder);
+        Sound *sound = nullptr;
+        if(!inFolder.empty()) {
+            resourceManager->requestNextLoadAsync();
+            sound = resourceManager->loadSoundAbs(sb.folder + inFolder, "", false, true);
+        }
+        sample.sound = (u32)sb.sounds.size();
+        sb.sounds.push_back(sound);
+        loadedSounds.emplace(sample.path, sample.sound);
+    }
+
+    // no idea how stable generates the storyboard hash, claude picked this.
+    // i don't think this matters much, no server is going to extract .oszs
+    // and do a bunch of parsing when they can just look at the most used hash
+    // on the leaderboard.
+    std::ranges::sort(used);
+    used.erase(std::unique(used.begin(), used.end()), used.end());
+    sb.hashing = Async::submit(
+        [folder = sb.folder, used = std::move(used), osb = sb.hasOsb ? std::optional{sb.osbHash} : std::nullopt]() {
+            std::string manifest = fmt::format("osb\t{}\n", osb ? osb->to_chars().string() : std::string{"-"});
+            for(const auto &[name, file] : used) {
+                const auto md5 = file.empty() ? std::nullopt : crypto::hash::md5_file(folder + file);
+                manifest += fmt::format("{}\t{}\n", name, md5 ? md5->to_chars().string() : std::string{"-"});
+            }
+            return crypto::hash::md5(manifest);
+        },
+        Lane::Background);
+}
+
+bool Storyboard::isReady() const {
+    return std::ranges::none_of(this->impl->images,
+                                [](const Image *i) { return resourceManager->isLoadingResource(i); }) &&
+           std::ranges::none_of(this->impl->sounds,
+                                [](const Sound *s) { return s && resourceManager->isLoadingResource(s); });
+}
+
+const Image *Storyboard::getBackgroundImage() const { return this->impl->background; }
+
+MD5Hash Storyboard::getHash() {
+    Impl &sb = *this->impl;
+    if(!sb.hash && sb.hashing) {
+        sb.hash = sb.hashing->get();
+        sb.hashing.reset();
+    }
+    return sb.hash.value_or(MD5Hash{});
+}
+
+void Storyboard::update(f64 time, bool passing, bool seeked) {
+    Impl &sb = *this->impl;
+
+    // (the first update is where it starts, not a move)
+    seeked |= sb.time == -INF || time < sb.time;
+
+    if(seeked) {
+        for(auto &fired : sb.fired) fired.clear();
+    } else if(time > sb.time) {
+        for(auto it = std::ranges::upper_bound(sb.samples, sb.time, {}, &Sample::time);
+            it != sb.samples.end() && it->time <= time; ++it) {
+            if((it->layer == Layer::FAIL && passing) || (it->layer == Layer::PASS && !passing)) continue;
+            if(Sound *sound = sb.sounds[it->sound]; sound && sound->isReady()) {
+                soundEngine->play(sound, 0.f, 0.f, it->volume);
+            }
+        }
+        if(passing != sb.passing) {
+            sb.fire(passing ? TriggerCondition::Kind::PASSING : TriggerCondition::Kind::FAILING, nullptr, time);
+        }
+    }
+
+    sb.time = time;
+    sb.passing = passing;
+}
+
+void Storyboard::onHitSound(HitSound sound, f64 time) {
+    this->impl->fire(TriggerCondition::Kind::HIT_SOUND, &sound, time);
+}
+
+void Storyboard::onHitObjectHit(f64 time) { this->impl->fire(TriggerCondition::Kind::HIT_OBJECT_HIT, nullptr, time); }
+
+void Storyboard::View::transform() const {
+    g->translate(-this->pivot);
+    g->scale(this->flipX ? -1.f : 1.f, this->flipY ? -1.f : 1.f);
+    g->rotate(-this->rotation);
+    g->translate(this->pivot);
+}
+
+void Storyboard::draw(Layer first, Layer last, const View &view) const {
+    const Impl &sb = *this->impl;
+    const McRect &screen = view.screen;
+
+    // storyboards have a virtual 4:3 resolution of 640x480
+    // but nothing stops a mapper from going further neg/pos to support 16:9
+    const f32 scale = screen.getHeight() / 480.f;
+    const vec2 topLeft{screen.getX() + (screen.getWidth() - 640.f * scale) / 2.f, screen.getY()};
+
+    for(auto layer = (uSz)first; layer <= (uSz)last; layer++) {
+        if(((Layer)layer == Layer::FAIL && sb.passing) || ((Layer)layer == Layer::PASS && !sb.passing)) continue;
+
+        for(const u32 index : sb.layers[layer]) {
+            const auto state = sb.stateAt(index, sb.time);
+            if(!state || state->alpha <= 0.f || state->scale.x == 0.f || state->scale.y == 0.f) continue;
+            const Sprite &sprite = sb.sprites[index];
+            const Image *image = sb.frames[sprite.firstImage + state->frame];
+            if(!image || !image->isReady()) continue;
+
+            // a sprite is mirrored in place: where it is stays the same, flipped or with a negative scale
+            const vec2 size{(f32)image->getWidth(), (f32)image->getHeight()};
+            const vec2 originFromCenter = (sprite.origin - 0.5f) * size;
+            const bool mirrorX = state->flipH != (state->scale.x < 0.f);
+            const bool mirrorY = state->flipV != (state->scale.y < 0.f);
+
+            g->setColor(argb(state->alpha, state->colour.x, state->colour.y, state->colour.z));
+            if(state->additive) g->setBlendMode(DrawBlendMode::ADDITIVE);
+            g->pushTransform();
+            {
+                g->scale(mirrorX ? -1.f : 1.f, mirrorY ? -1.f : 1.f);
+                g->translate(-originFromCenter);
+                g->scale(std::abs(state->scale.x), std::abs(state->scale.y));
+                g->rotate(glm::degrees(state->rotation));
+                g->translate(state->pos);
+                g->scale(scale, scale);
+                g->translate(topLeft);
+                view.transform();
+                g->drawImage(image);
+            }
+            g->popTransform();
+            if(state->additive) g->setBlendMode(DrawBlendMode::ALPHA);
+        }
+    }
+}

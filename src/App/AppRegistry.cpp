@@ -22,6 +22,7 @@
 #include "PacketTest.h"
 #include "PlayfieldTest.h"
 #include "SliderRenderTest.h"
+#include "StoryboardTest.h"
 #include "ToolUITest.h"
 
 #include <array>
@@ -45,6 +46,7 @@ static constexpr std::array sDescriptors{
     AppDescriptor{"PacketTest", [] -> App * { return new Mc::Tests::PacketTest(); }},
     AppDescriptor{"PlayfieldTest", [] -> App * { return new Mc::Tests::PlayfieldTest(); }},
     AppDescriptor{"SliderRenderTest", [] -> App * { return new Mc::Tests::SliderRenderTest(); }},
+    AppDescriptor{"StoryboardTest", [] -> App * { return new Mc::Tests::StoryboardTest(); }},
     AppDescriptor{"ToolUITest", [] -> App * { return new Mc::Tests::ToolUITest(); }},
 };
 

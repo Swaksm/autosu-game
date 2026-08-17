@@ -8,11 +8,156 @@
 #include "Vectors.h"
 
 #include <algorithm>
+#include <cmath>
+#include <numbers>
 
 namespace AnimationHandler {
 static bool s_doLogging{false};
 
 void onDebugAnimChange(float newVal) { s_doLogging = !!static_cast<int>(newVal); }
+
+namespace {
+
+template <AnimatableType T>
+T easeIn(Ease type, T x) {
+    constexpr T one{1};
+    switch(type) {
+        case Ease::QuadIn:
+            return x * x;
+        case Ease::CubicIn:
+            return x * x * x;
+        case Ease::QuartIn:
+            return x * x * x * x;
+        case Ease::QuintIn:
+            return x * x * x * x * x;
+        case Ease::SineIn:
+            return one - std::cos(x * std::numbers::pi_v<T> / T{2});
+        case Ease::ExpoIn:
+            return std::pow(T{2}, T{10} * x - T{10});
+        case Ease::CircIn:
+            return one - std::sqrt(one - x * x);
+        case Ease::ElasticIn:
+            return one - (std::pow(T{2}, T{-10} * (one - x)) *
+                              std::sin(((one - x) - T{0.075}) * T{2} * std::numbers::pi_v<T> / T{0.3}) +
+                          one);
+        case Ease::BackIn:
+            return x * x * ((T{1.70158} + one) * x - T{1.70158});
+        case Ease::BounceIn: {
+            x = one - x;
+            T out;
+            if(x < T{1 / 2.75}) {
+                out = T{7.5625} * x * x;
+            } else if(x < T{2 / 2.75}) {
+                x -= T{1.5 / 2.75};
+                out = T{7.5625} * x * x + T{0.75};
+            } else if(x < T{2.5 / 2.75}) {
+                x -= T{2.25 / 2.75};
+                out = T{7.5625} * x * x + T{0.9375};
+            } else {
+                x -= T{2.625 / 2.75};
+                out = T{7.5625} * x * x + T{0.984375};
+            }
+            return one - out;
+        }
+        default:
+            return x;
+    }
+}
+
+}  // namespace
+
+template <AnimatableType T>
+T ease(Ease type, T x) {
+    constexpr T half{0.5};
+    constexpr T one{1};
+    constexpr T two{2};
+
+    const auto out = [x](Ease in) -> T { return one - easeIn(in, one - x); };
+    const auto inOut = [x](Ease in) -> T {
+        return half * (x < half ? easeIn(in, two * x) : two - easeIn(in, two - two * x));
+    };
+    const auto elasticOut = [x](T periods) -> T {
+        return std::pow(two, T{-10} * x) * std::sin((periods * x - T{0.075}) * two * std::numbers::pi_v<T> / T{0.3}) +
+               one;
+    };
+
+    switch(type) {
+        case Ease::LegacyIn:
+            return easeIn(Ease::QuadIn, x);
+        case Ease::LegacyOut:
+            return out(Ease::QuadIn);
+        case Ease::QuadIn:
+        case Ease::CubicIn:
+        case Ease::QuartIn:
+        case Ease::QuintIn:
+        case Ease::SineIn:
+        case Ease::ExpoIn:
+        case Ease::CircIn:
+        case Ease::ElasticIn:
+        case Ease::BackIn:
+        case Ease::BounceIn:
+            return easeIn(type, x);
+        case Ease::QuadOut:
+            return out(Ease::QuadIn);
+        case Ease::CubicOut:
+            return out(Ease::CubicIn);
+        case Ease::QuartOut:
+            return out(Ease::QuartIn);
+        case Ease::QuintOut:
+            return out(Ease::QuintIn);
+        case Ease::SineOut:
+            return out(Ease::SineIn);
+        case Ease::ExpoOut:
+            return out(Ease::ExpoIn);
+        case Ease::CircOut:
+            return out(Ease::CircIn);
+        case Ease::ElasticOut:
+            return elasticOut(one);
+        case Ease::ElasticHalfOut:
+            return elasticOut(half);
+        case Ease::ElasticQuarterOut:
+            return elasticOut(T{0.25});
+        case Ease::BackOut:
+            return out(Ease::BackIn);
+        case Ease::BounceOut:
+            return out(Ease::BounceIn);
+        case Ease::QuadInOut:
+            return inOut(Ease::QuadIn);
+        case Ease::CubicInOut:
+            return inOut(Ease::CubicIn);
+        case Ease::QuartInOut:
+            return inOut(Ease::QuartIn);
+        case Ease::QuintInOut:
+            return inOut(Ease::QuintIn);
+        case Ease::SineInOut:
+            return inOut(Ease::SineIn);
+        case Ease::ExpoInOut:
+            return inOut(Ease::ExpoIn);
+        case Ease::CircInOut:
+            return inOut(Ease::CircIn);
+        case Ease::BounceInOut:
+            return inOut(Ease::BounceIn);
+        case Ease::ElasticInOut: {
+            constexpr T c = two * std::numbers::pi_v<T> / T{0.3} / T{1.5};
+            const T t = x * two;
+            if(t < one) return -half * std::pow(two, T{-10} + T{10} * t) * std::sin((one - t - T{0.075 * 1.5}) * c);
+            return half * std::pow(two, T{-10} * (t - one)) * std::sin((t - one - T{0.075 * 1.5}) * c) + one;
+        }
+        case Ease::BackInOut: {
+            constexpr T s = T{1.70158 * 1.525};
+            const T t = x < half ? two * x : two - two * x;
+            const T in = t * t * ((s + one) * t - s);
+            return half * (x < half ? in : two - in);
+        }
+        case Ease::Linear:
+        case Ease::COUNT:
+            break;
+    }
+    return x;
+}
+
+template f32 ease<f32>(Ease type, f32 percent);
+template f64 ease<f64>(Ease type, f64 percent);
 
 namespace {
 

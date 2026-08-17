@@ -585,6 +585,10 @@ msgstr "スピード/BPM 倍率"
 msgid " Experimental Mods (!)"
 msgstr " 実験的モッド (!)"
 
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/OsuDirectScreen.cpp
+msgid "Storyboard"
+msgstr ""
+
 #: src/App/Neomod/ModSelector.cpp
 msgid "Flip Up/Down"
 msgstr "上下反転"
@@ -3057,10 +3061,6 @@ msgstr ""
 
 #: src/App/Neomod/OsuDirectScreen.cpp
 msgid "Video"
-msgstr ""
-
-#: src/App/Neomod/OsuDirectScreen.cpp
-msgid "Storyboard"
 msgstr ""
 
 #: src/App/Neomod/OsuDirectScreen.cpp

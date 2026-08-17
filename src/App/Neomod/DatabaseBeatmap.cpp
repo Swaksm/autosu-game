@@ -536,7 +536,7 @@ DatabaseBeatmap::LOAD_GAMEPLAY_RESULT DatabaseBeatmap::loadGameplay(PlayedMap &p
     // custom override for forcing a hard number cap and/or sequence (visually only)
     // NOTE: this is done after we have already calculated/set isEndOfCombos
     {
-        if(cv::ignore_beatmap_combo_numbers.getBool()) {
+        if(cv::ignore_beatmap_combo_numbers.getBool() && !cv::mod_storyboard.getBool()) {
             // NOTE: spinners don't increment the combo number
             int comboNumber = 1;
             for(const auto &currentHitObject : result.hitobjects) {
@@ -589,7 +589,7 @@ namespace neomod::BPMCalc {
 template <typename T>
 BPMInfo getBPM(const T &timing_points, std::vector<BPMTuple> &bpm_buffer)
     requires((std::is_same_v<T, std::vector<DB_TIMINGPOINT>> || std::is_same_v<T, std::vector<DBType::TIMINGPOINT>>) ||
-             (std::is_same_v<T, FixedSizeArray<DB_TIMINGPOINT>> || std::is_same_v<T, Primitives::TimingPoints>))
+             (std::is_same_v<T, FixedSizeArray<DB_TIMINGPOINT>> || std::is_same_v<T, neomod::Primitives::TimingPoints>))
 {
     if(timing_points.empty()) {
         return {};

@@ -167,6 +167,7 @@ class GameplayJudge final {
     [[nodiscard]] inline i32 getPreviousHitObjectTime() const { return this->iPreviousHitObjectTime; }
     [[nodiscard]] inline i32 getPreviousFollowPointObjectIndex() const { return this->iPreviousFollowPointObjectIndex; }
     [[nodiscard]] inline bool isInBreak() const { return this->bInBreak; }
+    [[nodiscard]] bool isPassing() const;  // section pass/fail state for storyboards
     [[nodiscard]] inline bool isInSkippableSection() const { return this->bIsInSkippableSection; }
     [[nodiscard]] inline bool isSpinnerActive() const { return this->bIsSpinnerActive; }
     [[nodiscard]] inline int getNPS() const { return this->iNPS; }
@@ -250,6 +251,10 @@ class GameplayJudge final {
     // breaks and sections
     std::vector<DBBreak> breaks;
     bool bInBreak = false;
+    bool bLastComboPerfect = true;
+    bool bBreakPassed = true;
+    i32 iNumBreaksPassed = 0;
+    i32 iNumBreaksStarted = 0;
     bool bIsInSkippableSection = false;
     bool bIsSpinnerActive = false;
     neomod::HitObject *currentHitObject = nullptr;

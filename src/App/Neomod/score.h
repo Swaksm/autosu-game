@@ -61,6 +61,7 @@ struct FinishedScore final {
     const DatabaseBeatmap *map{nullptr};  // NOTE: do NOT assume this is set
 
     MD5Hash beatmap_hash;
+    MD5Hash storyboard_hash;
     Replay::Mods mods;
 
     u64 score = 0;

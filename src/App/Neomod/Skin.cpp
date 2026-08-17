@@ -762,8 +762,8 @@ void Skin::loadBeatmapOverride(std::string_view folder, std::span<const std::str
                                std::optional<Color> sliderBorder, std::optional<Color> sliderTrackOverride) {
     this->unloadBeatmapOverride();
 
-    const bool images = !cv::ignore_beatmap_skins.getBool();
-    const bool sounds = !cv::ignore_beatmap_samples.getBool();
+    const bool images = !cv::ignore_beatmap_skins.getBool() || cv::mod_storyboard.getBool();
+    const bool sounds = !cv::ignore_beatmap_samples.getBool() || cv::mod_storyboard.getBool();
     if(!images && !sounds) return;
 
     auto o = std::make_unique<BeatmapOverride>();
@@ -1162,7 +1162,7 @@ Color Skin::getComboColorForCounter(int i, int offset, std::span<const Color> be
     i += cv::skin_color_index_add.getInt();
     i = std::max(i, 0);
 
-    if(beatmapColors.size() > 0 && !cv::ignore_beatmap_combo_colors.getBool())
+    if(beatmapColors.size() > 0 && (!cv::ignore_beatmap_combo_colors.getBool() || cv::mod_storyboard.getBool()))
         return beatmapColors[(i + offset) % beatmapColors.size()];
     else if(this->c_combo_colors.size() > 0)
         return this->c_combo_colors[(i + offset) % this->c_combo_colors.size()];

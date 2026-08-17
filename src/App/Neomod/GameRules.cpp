@@ -6,6 +6,7 @@
 #include "Osu.h"
 #include "GameplayJudge.h"
 #include "ConVar.h"
+#include "OsuConVars/DiffCalcDefaults.h"
 
 namespace cv {
 extern ConVar approachtime_max;
@@ -17,6 +18,7 @@ extern ConVar hitobject_fade_out_time;
 extern ConVar mod_fps;
 extern ConVar mod_millhioref_multiplier;
 extern ConVar mod_millhioref;
+extern ConVar mod_storyboard;
 extern ConVar playfield_border_bottom_percent;
 extern ConVar playfield_border_top_percent;
 }  // namespace cv
@@ -30,8 +32,12 @@ extern ConVar playfield_border_top_percent;
 #define MOD_FPS cv::mod_fps.getBool()
 #define MOD_MILLHIOREF_MULTIPLIER cv::mod_millhioref_multiplier.getFloat()
 #define MOD_MILLHIOREF cv::mod_millhioref.getBool()
-#define PLAYFIELD_BORDER_BOTTOM_PERCENT cv::playfield_border_bottom_percent.getFloat()
-#define PLAYFIELD_BORDER_TOP_PERCENT cv::playfield_border_top_percent.getFloat()
+#define PLAYFIELD_BORDER_BOTTOM_PERCENT                                           \
+    (cv::mod_storyboard.getBool() ? cv::defaults::playfield_border_bottom_percent \
+                                  : cv::playfield_border_bottom_percent.getFloat())
+#define PLAYFIELD_BORDER_TOP_PERCENT                                           \
+    (cv::mod_storyboard.getBool() ? cv::defaults::playfield_border_top_percent \
+                                  : cv::playfield_border_top_percent.getFloat())
 
 #define OSU_RES likely(osu) ? osu->getVirtScreenSize() : Osu::osuBaseResolution
 

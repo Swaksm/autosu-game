@@ -115,6 +115,10 @@ void GameplayJudge::resetScore() {
     this->bFailed = false;
     this->bTempSeekNF = false;
     this->holding_slider = false;
+    this->bLastComboPerfect = true;
+    this->bBreakPassed = true;
+    this->iNumBreaksPassed = 0;
+    this->iNumBreaksStarted = 0;
     this->score.reset();
 }
 
@@ -571,10 +575,20 @@ LiveHitResult GameplayJudge::addHitResult(HitObject *hitObject, LiveHitResult hi
                 this->addHealth(this->score.getHealthIncrease(this, HIT_MU), true);
 
             this->score.setComboEndBitmask(0);
+            this->bLastComboPerfect = returnedHit == HIT_300G;
         }
     }
 
     return returnedHit;
+}
+
+bool GameplayJudge::isPassing() const {
+    if(this->hitobjects.empty() || this->iCurMusicPos < this->hitobjects.front()->getClickTime()) return true;
+    if(this->iCurMusicPos > this->hitobjectsSortedByEndTime.back()->getEndTime()) {
+        if(this->iNumBreaksStarted == 0) return this->fHealth > 0.5;
+        else return this->iNumBreaksPassed * 2 >= this->iNumBreaksStarted;
+    }
+    return this->bInBreak ? this->bBreakPassed : this->bLastComboPerfect;
 }
 
 void GameplayJudge::addSliderBreak() {
@@ -1009,7 +1023,13 @@ void GameplayJudge::update(f64 frameTimeSecs) {
     // break time detection
     const DBType::BREAK breakEvent =
         this->getBreakForTimeRange(this->iPreviousHitObjectTime, this->iCurMusicPos, this->iNextHitObjectTime);
-    this->bInBreak = (this->iCurMusicPos >= breakEvent.startTime && this->iCurMusicPos <= breakEvent.endTime);
+    const bool inBreak = (this->iCurMusicPos >= breakEvent.startTime && this->iCurMusicPos <= breakEvent.endTime);
+    if(inBreak && !this->bInBreak) {
+        this->bBreakPassed = this->fHealth > 0.5;
+        this->iNumBreaksStarted++;
+        if(this->bBreakPassed) this->iNumBreaksPassed++;
+    }
+    this->bInBreak = inBreak;
 
     // hp drain & failing
     // handle constant drain

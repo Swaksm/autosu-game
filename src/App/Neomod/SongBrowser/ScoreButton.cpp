@@ -891,6 +891,7 @@ std::string ScoreButton::getModsStringForDisplay(const Replay::Mods &mods) {
     if(flags::has<HardRock>(mods.flags)) modsString.append("HR,");
     if(flags::has<FreezeFrame>(mods.flags)) modsString.append("FR,");
     if(flags::has<Traceable>(mods.flags)) modsString.append("TC,");
+    if(flags::has<Storyboard>(mods.flags)) modsString.append("SB,");
     if(sd) modsString.append("SD,");
     if(dt) modsString.append("DT,");
     if(nc) modsString.append("NC,");

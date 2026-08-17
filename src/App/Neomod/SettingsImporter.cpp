@@ -419,7 +419,7 @@ bool import_from_osu_stable() {
         else if(Parsing::parse(line, "AutoSendNowPlaying", '=', &b))
             cv::spec_share_map.setValue(b);
         else if(Parsing::parse(line, "ShowStoryboard", '=', &b))
-            cv::draw_storyboard.setValue(b);
+            cv::mod_storyboard.setValue(b);
         else if(Parsing::parse(line, "Skin", '=', &str))
             cv::skin.setValue(str);
         else if(Parsing::parse(line, "SkinSamples", '=', &b))

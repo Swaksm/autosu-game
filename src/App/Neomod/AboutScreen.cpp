@@ -397,17 +397,18 @@ void AboutScreen::onChangeClicked(CBaseUIButton *button) {
 void AboutScreen::buildChangelog() {
     std::vector<CHANGELOG> changelogs;
 
-    CHANGELOG v43_14;
-    v43_14.title = "43.14 (" CHANGELOG_TIMESTAMP ")";
-    v43_14.changes = {
+    CHANGELOG v44_0;
+    v44_0.title = "44.0 (" CHANGELOG_TIMESTAMP ")";
+    v44_0.changes = {
+        R"(- Added the Storyboard mod)",
         R"(- Added a preview panel to online beatmaps screen)",
         R"(- Added audio previews to online beatmaps screen)",
-        R"(  - NOTE: You can disable them by setting "direct_autoplay_preview 0" if you really want to)",
+        R"(  - You can disable them by setting "direct_autoplay_preview 0" if you really want to)",
         R"(- Added music controls to main menu)",
         R"(- Added skin exporting ("Export Skin" in the skin options, or "skin_export" in the console))",
         R"(- Adjusted slider judgement to match stable more closely)",
         R"(- Added support for beatmap skins (sounds/images))",
-        R"(  - NOTE: Disabled by default, enable them in the skins section in the options menu)",
+        R"(  - Disabled by default, enable them in the skins section in the options menu)",
         R"(- Exposed "direct_autoselect" behavior as a checkbox)",
         R"(- Fixed hit windows being off my 1ms depending on OD)",
         R"(- Fixed multiplayer room beatmap info being stale on newly downloaded/imported maps)",
@@ -422,7 +423,7 @@ void AboutScreen::buildChangelog() {
         R"(- Fixed the wrong audio playing when changing beatmap selection very quickly)",
         R"(- Improved replay playback to match the recorded gameplay (less replaybugs))",
     };
-    changelogs.push_back(std::move(v43_14));
+    changelogs.push_back(std::move(v44_0));
 
     CHANGELOG v43_13;
     v43_13.title = "43.13 (2026-09-13)";

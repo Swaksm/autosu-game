@@ -585,6 +585,10 @@ msgstr "Mnożnik Prędkości/BPM"
 msgid " Experimental Mods (!)"
 msgstr " Mody Eksperymentalne (!)"
 
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/OsuDirectScreen.cpp
+msgid "Storyboard"
+msgstr ""
+
 #: src/App/Neomod/ModSelector.cpp
 msgid "Flip Up/Down"
 msgstr "Odwróć Góra/Dół"
@@ -3074,10 +3078,6 @@ msgstr ""
 
 #: src/App/Neomod/OsuDirectScreen.cpp
 msgid "Video"
-msgstr ""
-
-#: src/App/Neomod/OsuDirectScreen.cpp
-msgid "Storyboard"
 msgstr ""
 
 #: src/App/Neomod/OsuDirectScreen.cpp

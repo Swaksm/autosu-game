@@ -90,6 +90,7 @@ TEST_SOURCES := \
 	src/App/Tests/Neomod/PlayfieldTest.cpp \
 	src/App/Tests/Neomod/SkinLoadTest.cpp \
 	src/App/Tests/Neomod/SliderRenderTest.cpp \
+	src/App/Tests/Neomod/StoryboardTest.cpp \
 	src/App/Tests/NetworkTest.cpp \
 	src/App/Tests/TestMacros.cpp \
 	src/App/Tests/ToolUITest.cpp \
@@ -204,6 +205,7 @@ neomod_SOURCES = \
 	src/App/Neomod/SongBrowser/SongDifficultyButton.cpp \
 	src/App/Neomod/SongBrowser/VolNormalization.cpp \
 	src/App/Neomod/SpectatorScreen.cpp \
+	src/App/Neomod/Storyboard.cpp \
 	src/App/Neomod/StrainGraph.cpp \
 	src/App/Neomod/ThumbnailManager.cpp \
 	src/App/Neomod/Tools/DiffCalcSuite.cpp \
