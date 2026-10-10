@@ -370,9 +370,9 @@ am__neomod_SOURCES_DIST = libraries/MD5.cpp libraries/demoji.c \
 	src/GUI/CBaseUISelectableTextView.cpp \
 	src/GUI/CBaseUISlider.cpp src/GUI/CBaseUIStyledButton.cpp \
 	src/GUI/CBaseUIStyledLabel.cpp \
-	src/GUI/CBaseUIStyledTextbox.cpp src/GUI/CBaseUITextbox.cpp \
-	src/GUI/CBaseUIWindow.cpp src/GUI/UIStyle.cpp \
-	src/GUI/Windows/ConsoleBox.cpp \
+	src/GUI/CBaseUIStyledTextbox.cpp src/GUI/CBaseUITabBar.cpp \
+	src/GUI/CBaseUITextbox.cpp src/GUI/CBaseUIWindow.cpp \
+	src/GUI/UIStyle.cpp src/GUI/Windows/ConsoleBox.cpp \
 	src/GUI/Windows/ConsoleWidgets.cpp \
 	src/GUI/Windows/ConsoleWindow.cpp \
 	src/GUI/Windows/VisualProfiler.cpp \
@@ -680,6 +680,7 @@ am_neomod_OBJECTS = libraries/neomod-MD5.$(OBJEXT) \
 	src/GUI/neomod-CBaseUIStyledButton.$(OBJEXT) \
 	src/GUI/neomod-CBaseUIStyledLabel.$(OBJEXT) \
 	src/GUI/neomod-CBaseUIStyledTextbox.$(OBJEXT) \
+	src/GUI/neomod-CBaseUITabBar.$(OBJEXT) \
 	src/GUI/neomod-CBaseUITextbox.$(OBJEXT) \
 	src/GUI/neomod-CBaseUIWindow.$(OBJEXT) \
 	src/GUI/neomod-UIStyle.$(OBJEXT) \
@@ -974,6 +975,7 @@ am__depfiles_remade = $(DEPS_PREFIX)/mimalloc/$(DEPDIR)/neomod-mimalloc_new_dele
 	src/GUI/$(DEPDIR)/neomod-CBaseUIStyledButton.Po \
 	src/GUI/$(DEPDIR)/neomod-CBaseUIStyledLabel.Po \
 	src/GUI/$(DEPDIR)/neomod-CBaseUIStyledTextbox.Po \
+	src/GUI/$(DEPDIR)/neomod-CBaseUITabBar.Po \
 	src/GUI/$(DEPDIR)/neomod-CBaseUITextbox.Po \
 	src/GUI/$(DEPDIR)/neomod-CBaseUIWindow.Po \
 	src/GUI/$(DEPDIR)/neomod-UIStyle.Po \
@@ -1661,9 +1663,9 @@ neomod_SOURCES = libraries/MD5.cpp libraries/demoji.c \
 	src/GUI/CBaseUISelectableTextView.cpp \
 	src/GUI/CBaseUISlider.cpp src/GUI/CBaseUIStyledButton.cpp \
 	src/GUI/CBaseUIStyledLabel.cpp \
-	src/GUI/CBaseUIStyledTextbox.cpp src/GUI/CBaseUITextbox.cpp \
-	src/GUI/CBaseUIWindow.cpp src/GUI/UIStyle.cpp \
-	src/GUI/Windows/ConsoleBox.cpp \
+	src/GUI/CBaseUIStyledTextbox.cpp src/GUI/CBaseUITabBar.cpp \
+	src/GUI/CBaseUITextbox.cpp src/GUI/CBaseUIWindow.cpp \
+	src/GUI/UIStyle.cpp src/GUI/Windows/ConsoleBox.cpp \
 	src/GUI/Windows/ConsoleWidgets.cpp \
 	src/GUI/Windows/ConsoleWindow.cpp \
 	src/GUI/Windows/VisualProfiler.cpp \
@@ -2896,6 +2898,8 @@ src/GUI/neomod-CBaseUIStyledLabel.$(OBJEXT): src/GUI/$(am__dirstamp) \
 	src/GUI/$(DEPDIR)/$(am__dirstamp)
 src/GUI/neomod-CBaseUIStyledTextbox.$(OBJEXT):  \
 	src/GUI/$(am__dirstamp) src/GUI/$(DEPDIR)/$(am__dirstamp)
+src/GUI/neomod-CBaseUITabBar.$(OBJEXT): src/GUI/$(am__dirstamp) \
+	src/GUI/$(DEPDIR)/$(am__dirstamp)
 src/GUI/neomod-CBaseUITextbox.$(OBJEXT): src/GUI/$(am__dirstamp) \
 	src/GUI/$(DEPDIR)/$(am__dirstamp)
 src/GUI/neomod-CBaseUIWindow.$(OBJEXT): src/GUI/$(am__dirstamp) \
@@ -3531,6 +3535,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@src/GUI/$(DEPDIR)/neomod-CBaseUIStyledButton.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@src/GUI/$(DEPDIR)/neomod-CBaseUIStyledLabel.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@src/GUI/$(DEPDIR)/neomod-CBaseUIStyledTextbox.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@src/GUI/$(DEPDIR)/neomod-CBaseUITabBar.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@src/GUI/$(DEPDIR)/neomod-CBaseUITextbox.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@src/GUI/$(DEPDIR)/neomod-CBaseUIWindow.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@src/GUI/$(DEPDIR)/neomod-UIStyle.Po@am__quote@ # am--include-marker
@@ -6300,6 +6305,20 @@ src/GUI/neomod-CBaseUIStyledTextbox.obj: src/GUI/CBaseUIStyledTextbox.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(neomod_CPPFLAGS) $(CPPFLAGS) $(neomod_CXXFLAGS) $(CXXFLAGS) -c -o src/GUI/neomod-CBaseUIStyledTextbox.obj `if test -f 'src/GUI/CBaseUIStyledTextbox.cpp'; then $(CYGPATH_W) 'src/GUI/CBaseUIStyledTextbox.cpp'; else $(CYGPATH_W) '$(srcdir)/src/GUI/CBaseUIStyledTextbox.cpp'; fi`
 
+src/GUI/neomod-CBaseUITabBar.o: src/GUI/CBaseUITabBar.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(neomod_CPPFLAGS) $(CPPFLAGS) $(neomod_CXXFLAGS) $(CXXFLAGS) -MT src/GUI/neomod-CBaseUITabBar.o -MD -MP -MF src/GUI/$(DEPDIR)/neomod-CBaseUITabBar.Tpo -c -o src/GUI/neomod-CBaseUITabBar.o `test -f 'src/GUI/CBaseUITabBar.cpp' || echo '$(srcdir)/'`src/GUI/CBaseUITabBar.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/GUI/$(DEPDIR)/neomod-CBaseUITabBar.Tpo src/GUI/$(DEPDIR)/neomod-CBaseUITabBar.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/GUI/CBaseUITabBar.cpp' object='src/GUI/neomod-CBaseUITabBar.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(neomod_CPPFLAGS) $(CPPFLAGS) $(neomod_CXXFLAGS) $(CXXFLAGS) -c -o src/GUI/neomod-CBaseUITabBar.o `test -f 'src/GUI/CBaseUITabBar.cpp' || echo '$(srcdir)/'`src/GUI/CBaseUITabBar.cpp
+
+src/GUI/neomod-CBaseUITabBar.obj: src/GUI/CBaseUITabBar.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(neomod_CPPFLAGS) $(CPPFLAGS) $(neomod_CXXFLAGS) $(CXXFLAGS) -MT src/GUI/neomod-CBaseUITabBar.obj -MD -MP -MF src/GUI/$(DEPDIR)/neomod-CBaseUITabBar.Tpo -c -o src/GUI/neomod-CBaseUITabBar.obj `if test -f 'src/GUI/CBaseUITabBar.cpp'; then $(CYGPATH_W) 'src/GUI/CBaseUITabBar.cpp'; else $(CYGPATH_W) '$(srcdir)/src/GUI/CBaseUITabBar.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/GUI/$(DEPDIR)/neomod-CBaseUITabBar.Tpo src/GUI/$(DEPDIR)/neomod-CBaseUITabBar.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/GUI/CBaseUITabBar.cpp' object='src/GUI/neomod-CBaseUITabBar.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(neomod_CPPFLAGS) $(CPPFLAGS) $(neomod_CXXFLAGS) $(CXXFLAGS) -c -o src/GUI/neomod-CBaseUITabBar.obj `if test -f 'src/GUI/CBaseUITabBar.cpp'; then $(CYGPATH_W) 'src/GUI/CBaseUITabBar.cpp'; else $(CYGPATH_W) '$(srcdir)/src/GUI/CBaseUITabBar.cpp'; fi`
+
 src/GUI/neomod-CBaseUITextbox.o: src/GUI/CBaseUITextbox.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(neomod_CPPFLAGS) $(CPPFLAGS) $(neomod_CXXFLAGS) $(CXXFLAGS) -MT src/GUI/neomod-CBaseUITextbox.o -MD -MP -MF src/GUI/$(DEPDIR)/neomod-CBaseUITextbox.Tpo -c -o src/GUI/neomod-CBaseUITextbox.o `test -f 'src/GUI/CBaseUITextbox.cpp' || echo '$(srcdir)/'`src/GUI/CBaseUITextbox.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/GUI/$(DEPDIR)/neomod-CBaseUITextbox.Tpo src/GUI/$(DEPDIR)/neomod-CBaseUITextbox.Po
@@ -8038,6 +8057,7 @@ distclean: distclean-am
 	-rm -f src/GUI/$(DEPDIR)/neomod-CBaseUIStyledButton.Po
 	-rm -f src/GUI/$(DEPDIR)/neomod-CBaseUIStyledLabel.Po
 	-rm -f src/GUI/$(DEPDIR)/neomod-CBaseUIStyledTextbox.Po
+	-rm -f src/GUI/$(DEPDIR)/neomod-CBaseUITabBar.Po
 	-rm -f src/GUI/$(DEPDIR)/neomod-CBaseUITextbox.Po
 	-rm -f src/GUI/$(DEPDIR)/neomod-CBaseUIWindow.Po
 	-rm -f src/GUI/$(DEPDIR)/neomod-UIStyle.Po
@@ -8356,6 +8376,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f src/GUI/$(DEPDIR)/neomod-CBaseUIStyledButton.Po
 	-rm -f src/GUI/$(DEPDIR)/neomod-CBaseUIStyledLabel.Po
 	-rm -f src/GUI/$(DEPDIR)/neomod-CBaseUIStyledTextbox.Po
+	-rm -f src/GUI/$(DEPDIR)/neomod-CBaseUITabBar.Po
 	-rm -f src/GUI/$(DEPDIR)/neomod-CBaseUITextbox.Po
 	-rm -f src/GUI/$(DEPDIR)/neomod-CBaseUIWindow.Po
 	-rm -f src/GUI/$(DEPDIR)/neomod-UIStyle.Po

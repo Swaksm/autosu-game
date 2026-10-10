@@ -305,6 +305,7 @@ neomod_SOURCES = \
 	src/GUI/CBaseUIStyledButton.cpp \
 	src/GUI/CBaseUIStyledLabel.cpp \
 	src/GUI/CBaseUIStyledTextbox.cpp \
+	src/GUI/CBaseUITabBar.cpp \
 	src/GUI/CBaseUITextbox.cpp \
 	src/GUI/CBaseUIWindow.cpp \
 	src/GUI/UIStyle.cpp \

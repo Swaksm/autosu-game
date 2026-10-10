@@ -10,6 +10,7 @@
 #include "CBaseUIStyledButton.h"
 #include "CBaseUIStyledLabel.h"
 #include "CBaseUIStyledTextbox.h"
+#include "CBaseUITabBar.h"
 #include "CBaseUITextbox.h"
 #include "Engine.h"
 #include "Environment.h"
@@ -209,6 +210,22 @@ void ToolUITest::testStyledWidgets() {
     const vec2 unchecked = button.getNaturalSize();
     button.setChecked(true);
     TEST_ASSERT(button.isChecked() && button.getNaturalSize() == unchecked, "a checked button keeps its size");
+
+    CBaseUITabBar bar("tabs");
+    bar.add("tab_first", "First")->add("tab_second", "Second");
+    auto *first = static_cast<CBaseUIStyledButton *>(bar.getElements()[0]);
+    auto *second = static_cast<CBaseUIStyledButton *>(bar.getElements()[1]);
+    int heard = -1;
+    bar.setChangeCallback([&](int index) { heard = index; });
+    TEST_ASSERT(bar.getChosen() == 0 && first->isChecked() && !second->isChecked(), "a tab bar's first tab is chosen");
+    second->click();
+    TEST_ASSERT(heard == 1 && bar.getChosen() == 1 && !first->isChecked() && second->isChecked(),
+                "a click on another tab chooses it and tells the bar's user");
+    heard = -1;
+    second->click();
+    bar.setChosen(0);
+    TEST_ASSERT(heard == -1 && bar.getChosen() == 0 && first->isChecked(),
+                "...which a click on the chosen tab or a tab set doesn't");
 }
 
 void ToolUITest::testTextboxes() {
