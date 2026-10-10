@@ -297,6 +297,7 @@ neomod_SOURCES = \
 	src/GUI/CBaseUILabel.cpp \
 	src/GUI/CBaseUIMenu.cpp \
 	src/GUI/CBaseUIMenuBar.cpp \
+	src/GUI/CBaseUINumberField.cpp \
 	src/GUI/CBaseUIPopupLayer.cpp \
 	src/GUI/CBaseUIScrollView.cpp \
 	src/GUI/CBaseUISelectableTextView.cpp \

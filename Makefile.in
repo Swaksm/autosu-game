@@ -365,7 +365,8 @@ am__neomod_SOURCES_DIST = libraries/MD5.cpp libraries/demoji.c \
 	src/GUI/CBaseUIEventCtx.cpp src/GUI/CBaseUIImage.cpp \
 	src/GUI/CBaseUIImageButton.cpp src/GUI/CBaseUILabel.cpp \
 	src/GUI/CBaseUIMenu.cpp src/GUI/CBaseUIMenuBar.cpp \
-	src/GUI/CBaseUIPopupLayer.cpp src/GUI/CBaseUIScrollView.cpp \
+	src/GUI/CBaseUINumberField.cpp src/GUI/CBaseUIPopupLayer.cpp \
+	src/GUI/CBaseUIScrollView.cpp \
 	src/GUI/CBaseUISelectableTextView.cpp \
 	src/GUI/CBaseUISlider.cpp src/GUI/CBaseUIStyledButton.cpp \
 	src/GUI/CBaseUIStyledLabel.cpp \
@@ -671,6 +672,7 @@ am_neomod_OBJECTS = libraries/neomod-MD5.$(OBJEXT) \
 	src/GUI/neomod-CBaseUILabel.$(OBJEXT) \
 	src/GUI/neomod-CBaseUIMenu.$(OBJEXT) \
 	src/GUI/neomod-CBaseUIMenuBar.$(OBJEXT) \
+	src/GUI/neomod-CBaseUINumberField.$(OBJEXT) \
 	src/GUI/neomod-CBaseUIPopupLayer.$(OBJEXT) \
 	src/GUI/neomod-CBaseUIScrollView.$(OBJEXT) \
 	src/GUI/neomod-CBaseUISelectableTextView.$(OBJEXT) \
@@ -964,6 +966,7 @@ am__depfiles_remade = $(DEPS_PREFIX)/mimalloc/$(DEPDIR)/neomod-mimalloc_new_dele
 	src/GUI/$(DEPDIR)/neomod-CBaseUILabel.Po \
 	src/GUI/$(DEPDIR)/neomod-CBaseUIMenu.Po \
 	src/GUI/$(DEPDIR)/neomod-CBaseUIMenuBar.Po \
+	src/GUI/$(DEPDIR)/neomod-CBaseUINumberField.Po \
 	src/GUI/$(DEPDIR)/neomod-CBaseUIPopupLayer.Po \
 	src/GUI/$(DEPDIR)/neomod-CBaseUIScrollView.Po \
 	src/GUI/$(DEPDIR)/neomod-CBaseUISelectableTextView.Po \
@@ -1653,7 +1656,8 @@ neomod_SOURCES = libraries/MD5.cpp libraries/demoji.c \
 	src/GUI/CBaseUIEventCtx.cpp src/GUI/CBaseUIImage.cpp \
 	src/GUI/CBaseUIImageButton.cpp src/GUI/CBaseUILabel.cpp \
 	src/GUI/CBaseUIMenu.cpp src/GUI/CBaseUIMenuBar.cpp \
-	src/GUI/CBaseUIPopupLayer.cpp src/GUI/CBaseUIScrollView.cpp \
+	src/GUI/CBaseUINumberField.cpp src/GUI/CBaseUIPopupLayer.cpp \
+	src/GUI/CBaseUIScrollView.cpp \
 	src/GUI/CBaseUISelectableTextView.cpp \
 	src/GUI/CBaseUISlider.cpp src/GUI/CBaseUIStyledButton.cpp \
 	src/GUI/CBaseUIStyledLabel.cpp \
@@ -2876,6 +2880,8 @@ src/GUI/neomod-CBaseUIMenu.$(OBJEXT): src/GUI/$(am__dirstamp) \
 	src/GUI/$(DEPDIR)/$(am__dirstamp)
 src/GUI/neomod-CBaseUIMenuBar.$(OBJEXT): src/GUI/$(am__dirstamp) \
 	src/GUI/$(DEPDIR)/$(am__dirstamp)
+src/GUI/neomod-CBaseUINumberField.$(OBJEXT): src/GUI/$(am__dirstamp) \
+	src/GUI/$(DEPDIR)/$(am__dirstamp)
 src/GUI/neomod-CBaseUIPopupLayer.$(OBJEXT): src/GUI/$(am__dirstamp) \
 	src/GUI/$(DEPDIR)/$(am__dirstamp)
 src/GUI/neomod-CBaseUIScrollView.$(OBJEXT): src/GUI/$(am__dirstamp) \
@@ -3517,6 +3523,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@src/GUI/$(DEPDIR)/neomod-CBaseUILabel.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@src/GUI/$(DEPDIR)/neomod-CBaseUIMenu.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@src/GUI/$(DEPDIR)/neomod-CBaseUIMenuBar.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@src/GUI/$(DEPDIR)/neomod-CBaseUINumberField.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@src/GUI/$(DEPDIR)/neomod-CBaseUIPopupLayer.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@src/GUI/$(DEPDIR)/neomod-CBaseUIScrollView.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@src/GUI/$(DEPDIR)/neomod-CBaseUISelectableTextView.Po@am__quote@ # am--include-marker
@@ -6181,6 +6188,20 @@ src/GUI/neomod-CBaseUIMenuBar.obj: src/GUI/CBaseUIMenuBar.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(neomod_CPPFLAGS) $(CPPFLAGS) $(neomod_CXXFLAGS) $(CXXFLAGS) -c -o src/GUI/neomod-CBaseUIMenuBar.obj `if test -f 'src/GUI/CBaseUIMenuBar.cpp'; then $(CYGPATH_W) 'src/GUI/CBaseUIMenuBar.cpp'; else $(CYGPATH_W) '$(srcdir)/src/GUI/CBaseUIMenuBar.cpp'; fi`
 
+src/GUI/neomod-CBaseUINumberField.o: src/GUI/CBaseUINumberField.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(neomod_CPPFLAGS) $(CPPFLAGS) $(neomod_CXXFLAGS) $(CXXFLAGS) -MT src/GUI/neomod-CBaseUINumberField.o -MD -MP -MF src/GUI/$(DEPDIR)/neomod-CBaseUINumberField.Tpo -c -o src/GUI/neomod-CBaseUINumberField.o `test -f 'src/GUI/CBaseUINumberField.cpp' || echo '$(srcdir)/'`src/GUI/CBaseUINumberField.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/GUI/$(DEPDIR)/neomod-CBaseUINumberField.Tpo src/GUI/$(DEPDIR)/neomod-CBaseUINumberField.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/GUI/CBaseUINumberField.cpp' object='src/GUI/neomod-CBaseUINumberField.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(neomod_CPPFLAGS) $(CPPFLAGS) $(neomod_CXXFLAGS) $(CXXFLAGS) -c -o src/GUI/neomod-CBaseUINumberField.o `test -f 'src/GUI/CBaseUINumberField.cpp' || echo '$(srcdir)/'`src/GUI/CBaseUINumberField.cpp
+
+src/GUI/neomod-CBaseUINumberField.obj: src/GUI/CBaseUINumberField.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(neomod_CPPFLAGS) $(CPPFLAGS) $(neomod_CXXFLAGS) $(CXXFLAGS) -MT src/GUI/neomod-CBaseUINumberField.obj -MD -MP -MF src/GUI/$(DEPDIR)/neomod-CBaseUINumberField.Tpo -c -o src/GUI/neomod-CBaseUINumberField.obj `if test -f 'src/GUI/CBaseUINumberField.cpp'; then $(CYGPATH_W) 'src/GUI/CBaseUINumberField.cpp'; else $(CYGPATH_W) '$(srcdir)/src/GUI/CBaseUINumberField.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/GUI/$(DEPDIR)/neomod-CBaseUINumberField.Tpo src/GUI/$(DEPDIR)/neomod-CBaseUINumberField.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/GUI/CBaseUINumberField.cpp' object='src/GUI/neomod-CBaseUINumberField.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(neomod_CPPFLAGS) $(CPPFLAGS) $(neomod_CXXFLAGS) $(CXXFLAGS) -c -o src/GUI/neomod-CBaseUINumberField.obj `if test -f 'src/GUI/CBaseUINumberField.cpp'; then $(CYGPATH_W) 'src/GUI/CBaseUINumberField.cpp'; else $(CYGPATH_W) '$(srcdir)/src/GUI/CBaseUINumberField.cpp'; fi`
+
 src/GUI/neomod-CBaseUIPopupLayer.o: src/GUI/CBaseUIPopupLayer.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(neomod_CPPFLAGS) $(CPPFLAGS) $(neomod_CXXFLAGS) $(CXXFLAGS) -MT src/GUI/neomod-CBaseUIPopupLayer.o -MD -MP -MF src/GUI/$(DEPDIR)/neomod-CBaseUIPopupLayer.Tpo -c -o src/GUI/neomod-CBaseUIPopupLayer.o `test -f 'src/GUI/CBaseUIPopupLayer.cpp' || echo '$(srcdir)/'`src/GUI/CBaseUIPopupLayer.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/GUI/$(DEPDIR)/neomod-CBaseUIPopupLayer.Tpo src/GUI/$(DEPDIR)/neomod-CBaseUIPopupLayer.Po
@@ -8009,6 +8030,7 @@ distclean: distclean-am
 	-rm -f src/GUI/$(DEPDIR)/neomod-CBaseUILabel.Po
 	-rm -f src/GUI/$(DEPDIR)/neomod-CBaseUIMenu.Po
 	-rm -f src/GUI/$(DEPDIR)/neomod-CBaseUIMenuBar.Po
+	-rm -f src/GUI/$(DEPDIR)/neomod-CBaseUINumberField.Po
 	-rm -f src/GUI/$(DEPDIR)/neomod-CBaseUIPopupLayer.Po
 	-rm -f src/GUI/$(DEPDIR)/neomod-CBaseUIScrollView.Po
 	-rm -f src/GUI/$(DEPDIR)/neomod-CBaseUISelectableTextView.Po
@@ -8326,6 +8348,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f src/GUI/$(DEPDIR)/neomod-CBaseUILabel.Po
 	-rm -f src/GUI/$(DEPDIR)/neomod-CBaseUIMenu.Po
 	-rm -f src/GUI/$(DEPDIR)/neomod-CBaseUIMenuBar.Po
+	-rm -f src/GUI/$(DEPDIR)/neomod-CBaseUINumberField.Po
 	-rm -f src/GUI/$(DEPDIR)/neomod-CBaseUIPopupLayer.Po
 	-rm -f src/GUI/$(DEPDIR)/neomod-CBaseUIScrollView.Po
 	-rm -f src/GUI/$(DEPDIR)/neomod-CBaseUISelectableTextView.Po

@@ -5,6 +5,7 @@
 #include "CBaseUIDropdown.h"
 #include "CBaseUIMenu.h"
 #include "CBaseUIMenuBar.h"
+#include "CBaseUINumberField.h"
 #include "CBaseUIPopupLayer.h"
 #include "CBaseUIStyledButton.h"
 #include "CBaseUIStyledLabel.h"
@@ -16,6 +17,7 @@
 #include "KeyBindings.h"
 #include "KeyboardEvent.h"
 #include "Logging.h"
+#include "Mouse.h"
 #include "Shortcut.h"
 #include "TestMacros.h"
 #include "UIStyle.h"
@@ -47,6 +49,16 @@ struct Probe final : CBaseUIElement {
     bool &deleted;
 };
 
+// a number field its test presses, drags and releases
+struct PressedNumberField final : CBaseUINumberField {
+    using CBaseUINumberField::CBaseUINumberField;
+    using CBaseUINumberField::onCapturedMouseMove;
+    using CBaseUINumberField::onMouseCancel;
+    using CBaseUINumberField::onMouseDownInside;
+    using CBaseUINumberField::onMouseUpInside;
+    using CBaseUINumberField::onMouseUpOutside;
+};
+
 std::string rect(const CBaseUIElement *e) {
     return fmt::format("{},{} {}x{}", e->getRelPos().x, e->getRelPos().y, e->getSize().x, e->getSize().y);
 }
@@ -69,6 +81,7 @@ void ToolUITest::update() {
     this->testStyledWidgets();
     this->testTextboxes();
     this->testTextFields();
+    this->testNumberFields();
     this->testMenus();
 
     TEST_PRINT_RESULTS("ToolUITest");
@@ -340,6 +353,127 @@ void ToolUITest::testTextFields() {
     TEST_ASSERT_EQ(field.getText(), "abcz123", "...nor pasted, and neither are control characters");
     field.stealFocus();
     TEST_ASSERT(heard == std::vector<std::string>({"abc", "abcz", "abcz123"}), "the focus leaving ends a visit too");
+}
+
+void ToolUITest::testNumberFields() {
+    TEST_SECTION("number fields");
+    uiStyle().setScale(1.f);
+
+    PressedNumberField field("number");
+    field.setRange(0.0, 10.0)->setStep(0.1, 0.01)->setDecimals(2);
+    std::vector<f64> heard;
+    field.setChangeCallback([&](f64 value) { heard.push_back(value); });
+    const auto press = [&](SCANCODE scancode, KEYMOD modifiers = KEYMOD_NONE) {
+        KeyboardEvent e = key(scancode, modifiers);
+        field.onKeyDown(e);
+    };
+    const auto type = [&](std::u32string_view characters) {
+        for(const char32_t character : characters) {
+            KeyboardEvent e{0, 0, character, 0, KEYMOD_NONE};
+            field.onChar(e);
+        }
+    };
+
+    field.setValue(5.0);
+    TEST_ASSERT(field.getText() == "5" && heard.empty(),
+                "a number field shows its value without zeros after it, and a value set isn't a change");
+    field.setSuffix("x");
+    field.setValue(4.125);
+    TEST_ASSERT_EQ(field.getText(), "4.125x", "...with its suffix, and with all the decimals it has");
+
+    field.setValue(5.0);
+    field.visit();
+    TEST_ASSERT(field.isFocused() && field.getText() == "5" && field.hasSelectedText(),
+                "visited, it has the number alone, selected");
+    type(U"7,5");
+    TEST_ASSERT(heard.empty(), "what's typed isn't the value yet");
+    press(KEY_ENTER);
+    TEST_ASSERT(
+        field.getValue() == 7.5 && heard == std::vector<f64>({7.5}) && field.getText() == "7.5x" && !field.isFocused(),
+        "Enter takes it");
+    field.visit();
+    type(U"99");
+    field.stealFocus();
+    TEST_ASSERT(field.getValue() == 10.0 && field.getText() == "10x",
+                "...and so does the focus leaving, within the range");
+    field.visit();
+    type(U"-");
+    press(KEY_ENTER);
+    field.visit();
+    type(U"3");
+    press(KEY_ESCAPE);
+    TEST_ASSERT(field.getValue() == 10.0 && heard.size() == 2 && field.getText() == "10x",
+                "what's no number changes nothing, nor does Escape");
+    field.setValue(4.125);
+    field.visit();
+    press(KEY_ENTER);
+    TEST_ASSERT(field.getValue() == 4.125 && heard.size() == 2, "a visit without typing leaves the value as it is");
+
+    field.setValue(5.0);
+    field.visit();
+    press(KEY_UP);
+    press(KEY_DOWN, KEYMOD_LSHIFT);
+    TEST_ASSERT(field.getValue() == 5.09 && field.getText() == "5.09" && field.isFocused() && heard.size() == 2,
+                "Up and Down step it while it's visited, with Shift by the fine step, untold");
+    field.commit();
+    TEST_ASSERT(heard.back() == 5.09 && heard.size() == 3 && field.isFocused(),
+                "...before the visit is committed, which keeps the focus");
+    press(KEY_UP);
+    press(KEY_ESCAPE);
+    TEST_ASSERT(field.getValue() == 5.09 && heard.size() == 3 && field.getText() == "5.09x",
+                "...and Escape takes back what wasn't");
+    field.setValue(4.125);
+    field.visit();
+    press(KEY_UP);
+    press(KEY_ESCAPE);
+    TEST_ASSERT(field.getValue() == 4.125 && heard.size() == 3, "...to the value as it was, off its decimals or not");
+
+    // (100 steps in the range: 4 units each)
+    field.setSize(72.f, 28.f);
+    field.setValue(5.0);
+    heard.clear();
+    mouse->setPos({10.f, 10.f});
+    field.onMouseDownInside(true, false);
+    mouse->setPos({12.f, 10.f});
+    field.onCapturedMouseMove();
+    TEST_ASSERT(!field.isAdjusting() && heard.empty(), "a press isn't a drag before the cursor went some way");
+    mouse->setPos({30.f, 10.f});
+    field.onCapturedMouseMove();
+    TEST_ASSERT(field.isAdjusting() && field.getValue() == 5.5 && field.getText() == "5.5x",
+                "a drag to the right raises the value by steps");
+    mouse->setPos({-70.f, 10.f});
+    field.onCapturedMouseMove();
+    TEST_ASSERT(field.getValue() == 3.0 && heard.empty(), "...one to the left lowers it, untold while it lasts");
+    mouse->setPos({10.f, 10.f});
+    field.onCapturedMouseMove();
+    TEST_ASSERT_EQ(field.getValue(), 5.0, "back where it started it's the value it was");
+    mouse->setPos({1000.f, 10.f});
+    field.onCapturedMouseMove();
+    field.onMouseUpOutside(true, false);
+    TEST_ASSERT(heard == std::vector<f64>({10.0}) && !field.isAdjusting() && !field.isFocused(),
+                "the value it ends at is told, within the range");
+
+    mouse->setPos({10.f, 10.f});
+    field.onMouseDownInside(true, false);
+    mouse->setPos({-30.f, 10.f});
+    field.onCapturedMouseMove();
+    mouse->setPos({10.f, 10.f});
+    field.onCapturedMouseMove();
+    field.onMouseUpInside(true, false);
+    TEST_ASSERT(heard.size() == 1 && !field.isFocused(), "a drag that ends where it started is no change");
+    mouse->setPos({10.f, 10.f});
+    field.onMouseDownInside(true, false);
+    mouse->setPos({-30.f, 10.f});
+    field.onCapturedMouseMove();
+    field.onMouseCancel();
+    TEST_ASSERT(field.getValue() == 10.0 && heard.size() == 1 && !field.isAdjusting(),
+                "...and neither is one that's cancelled");
+
+    mouse->setPos({10.f, 10.f});
+    field.onMouseDownInside(true, false);
+    field.onMouseUpInside(true, false);
+    TEST_ASSERT(field.isFocused() && field.getText() == "10" && field.hasSelectedText(), "a click visits it");
+    field.stealFocus();
 }
 
 void ToolUITest::testMenus() {

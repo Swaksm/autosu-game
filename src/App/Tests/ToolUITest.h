@@ -20,6 +20,7 @@ class ToolUITest : public App {
     void testStyledWidgets();
     void testTextboxes();
     void testTextFields();
+    void testNumberFields();
     void testMenus();
 
     int m_passes{0};
