@@ -8,6 +8,7 @@
 #include "MakeDelegateWrapper.h"
 
 #include "CBaseUIScrollView.h"
+#include "CBaseUIStyledButton.h"
 #include "CBaseUITextbox.h"
 #include "PromptOverlay.h"
 #include "Parsing.h"
@@ -296,6 +297,12 @@ void UIDebug::debugAssert(std::string_view args) {
         actual = elem->isMouseInside();
     else if(pred == "active"sv)
         actual = elem->isActive();
+    else if(pred == "focused"sv)
+        actual = elem->isFocused();
+    else if(pred == "enabled"sv)
+        actual = elem->isEnabled();
+    else if(const auto *button = dynamic_cast<CBaseUIStyledButton *>(elem); pred == "checked"sv && button)
+        actual = button->isChecked();
     else {
         logRaw("UITEST FAIL {} {} (unknown predicate)", pred, parts[1]);
         return;
