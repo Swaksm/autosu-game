@@ -17,20 +17,11 @@ vec2 CBaseUISelectableTextView::getContentOrigin() const {
     return vec2{vec::round(dvec2{this->getPos()} + dvec2{this->vScrollPos})};
 }
 
-void CBaseUISelectableTextView::updateInput(CBaseUIEventCtx &c) {
-    CBaseUIScrollView::updateInput(c);
-
+std::optional<CURSORTYPE> CBaseUISelectableTextView::getCursorShape() {
     // text cursor over the text, the scrollbar keeps the arrow
-    if(this->isMouseInside()) {
-        const bool overScrollbar =
-            this->vScrollSize.y > this->getSize().y && this->verticalScrollbar.contains(mouse->getPos());
-        env->setCursor(overScrollbar ? CURSORTYPE::CURSOR_NORMAL : CURSORTYPE::CURSOR_TEXT);
-    }
-}
-
-void CBaseUISelectableTextView::onMouseOutside() {
-    CBaseUIScrollView::onMouseOutside();
-    env->setCursor(CURSORTYPE::CURSOR_NORMAL);
+    const bool overScrollbar =
+        this->vScrollSize.y > this->getSize().y && this->verticalScrollbar.contains(mouse->getPos());
+    return overScrollbar ? CURSORTYPE::CURSOR_NORMAL : CURSORTYPE::CURSOR_TEXT;
 }
 
 CBaseUISelectableTextView::TextPos CBaseUISelectableTextView::hitTest(vec2 pos) const {

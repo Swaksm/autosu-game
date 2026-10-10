@@ -197,6 +197,15 @@ void UIDebug::debugAssert(std::string_view args) {
         return;
     }
 
+    if(pred == "os_cursor"sv && parts[1] == "shape"sv) {
+        // (in the order of CURSORTYPE)
+        static constexpr std::array<std::string_view, (uSz)CURSORTYPE::CURSORTYPE_MAX> SHAPES{
+            "normal", "wait", "size_h", "size_v", "size_hv", "size_vh", "text"};
+        const std::string_view actual = SHAPES[(uSz)env->getCursor()];
+        logRaw("UITEST {} os_cursor shape expected={} actual={}", actual == parts[2] ? "OK" : "FAIL", parts[2], actual);
+        return;
+    }
+
     if(pred == "os_cursor"sv) {
         // the os cursor state the engine settled on (headless keeps the state without an actual cursor)
         const bool expected = Parsing::strto<int>(parts[2]) != 0;
@@ -206,7 +215,7 @@ void UIDebug::debugAssert(std::string_view args) {
         else if(parts[1] == "clipped"sv)
             actual = env->isCursorClipped();
         else {
-            logRaw("UITEST FAIL os_cursor {} (unknown state, expected visible|clipped)", parts[1]);
+            logRaw("UITEST FAIL os_cursor {} (unknown state, expected visible|clipped|shape)", parts[1]);
             return;
         }
         logRaw("UITEST {} os_cursor {} expected={:d} actual={:d}", actual == expected ? "OK" : "FAIL", parts[1],

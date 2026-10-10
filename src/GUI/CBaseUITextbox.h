@@ -17,6 +17,7 @@ class CBaseUITextbox : public CBaseUIElement {
     void updateInput(CBaseUIEventCtx &c) override;
     void onFocusStolen() override;
     void onResized() override;
+    [[nodiscard]] std::optional<CURSORTYPE> getCursorShape() override;
 
     // a textbox is "active" while it holds the keyboard focus, on top of the base pressed/busy
     // states (focus is the dispatcher pointer now; bActive is only the transient press)
@@ -103,7 +104,6 @@ class CBaseUITextbox : public CBaseUIElement {
     virtual void drawText();
 
     // events
-    void onMouseOutside() override;
     void onMouseDownInside(bool left = true, bool right = false) override;
     void onMouseDownOutside(bool left = true, bool right = false) override;
     void onMouseUpInside(bool left = true, bool right = false) override;

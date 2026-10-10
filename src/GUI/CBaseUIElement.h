@@ -6,7 +6,9 @@
 #include "Vectors.h"
 #include "Rect.h"
 #include "CBaseUIEventCtx.h"
+#include "Cursors.h"
 
+#include <optional>
 #include <string>
 #include <string_view>
 #include <span>
@@ -140,6 +142,9 @@ class CBaseUIElement : public KeyboardListener {
     [[nodiscard]] virtual vec2 getNaturalSize();
     [[nodiscard]] const BoxItem &getBoxItem() const { return this->boxItem; }
     CBaseUIElement *setBoxItem(BoxItem item);
+    // the shape the cursor gets over it, where the cursor is now: asked while it's the hovered element or around it, or
+    // holds the mouse. none: what it's in decides, and an arrow it is if nothing does
+    [[nodiscard]] virtual std::optional<CURSORTYPE> getCursorShape();
     // its natural size, its BoxItem or whether it's visible changed: the box it is in (see CBaseUIBox) lays out again at
     // its next tick. an element calls it when its natural size changes
     void requestLayout();

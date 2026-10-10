@@ -73,6 +73,8 @@ bool CBaseUIElement::isVisibleOnScreen() const { return CBaseUIElement::isVisibl
 
 vec2 CBaseUIElement::getNaturalSize() { return {0.f, 0.f}; }
 
+std::optional<CURSORTYPE> CBaseUIElement::getCursorShape() { return std::nullopt; }
+
 CBaseUIElement *CBaseUIElement::setBoxItem(BoxItem item) {
     this->boxItem = item;
     this->requestLayout();

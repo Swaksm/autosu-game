@@ -103,8 +103,8 @@ class CBaseUIWindow : public CBaseUIElement {
     void onMouseUpInside(bool left = true, bool right = false) override;
     void onMouseUpOutside(bool left = true, bool right = false) override;
     void onMouseCancel() override;
-    void onMouseOutside() override;
     void onCapturedMouseMove() override;
+    [[nodiscard]] std::optional<CURSORTYPE> getCursorShape() override;
     bool onWheel(WheelDelta vertical, WheelDelta horizontal) override;
 
     void onMoved() override;
@@ -168,6 +168,9 @@ class CBaseUIWindow : public CBaseUIElement {
         TOPRIGHT = 7,
         TOP = 8,
     };
+
+    // the frame's handle at a position, if one is there
+    [[nodiscard]] RESIZETYPE resizeHandleAt(vec2 pos) const;
 
     RESIZETYPE iResizeType : 4;
 

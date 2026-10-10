@@ -480,6 +480,7 @@ void Engine::onUpdate() {
         VPROF_BUDGET("App::update", VPROF_BUDGETGROUP_UPDATE);
         app->update();
     }
+    CBaseUIDispatch::applyCursorShape();
 
     // update discord presence
     {

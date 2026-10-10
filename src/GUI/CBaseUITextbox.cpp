@@ -167,17 +167,12 @@ void CBaseUITextbox::updateInput(CBaseUIEventCtx &c) {
     if(!this->bVisible) return;
     CBaseUIElement::updateInput(c);
 
-    const bool mleft = mouse->isLeftDown();
-    const bool mright = mouse->isRightDown();
-
     // HACKHACK: should do this with the proper events! this will only work properly though if we can event.consume()
     // charDown's
-    if(!this->bEnabled && this->isFocused() && mleft && !this->isMouseInside()) this->stealFocus();
-
-    if(this->bEnabled && (this->isFocused() || (!mleft && !mright)) &&
-       ((this->bBusy && (mleft || mright)) || this->isMouseInside()))
-        env->setCursor(CURSORTYPE::CURSOR_TEXT);
+    if(!this->bEnabled && this->isFocused() && mouse->isLeftDown() && !this->isMouseInside()) this->stealFocus();
 }
+
+std::optional<CURSORTYPE> CBaseUITextbox::getCursorShape() { return CURSORTYPE::CURSOR_TEXT; }
 
 // find the codepoint boundary closest to the mouse position
 int CBaseUITextbox::hitTestCaret(std::string_view vt, int mx) const {
@@ -594,11 +589,6 @@ void CBaseUITextbox::onResized() {
 
     // HACKHACK: brute force fix layout
     this->setText(this->text);
-}
-
-void CBaseUITextbox::onMouseOutside() {
-    CBaseUIElement::onMouseOutside();
-    env->setCursor(CURSORTYPE::CURSOR_NORMAL);
 }
 
 void CBaseUITextbox::onMouseDownInside(bool left, bool right) {

@@ -3,10 +3,13 @@
 
 #include "CBaseUIElement.h"
 #include "Engine.h"
+#include "Environment.h"
 #include "Mouse.h"
 
 #include <algorithm>
 #include <array>
+#include <optional>
+#include <ranges>
 #include <span>
 #include <cassert>
 
@@ -41,6 +44,7 @@ struct State final {
     // if it hovers something it suppresses the app root). hover LOSS on rect-leave stays
     // element-local (CBaseUIElement::updateInput); a held capture freezes gains for its own root.
     void resolveHover(CBaseUIEventCtx &c, Root root);
+    void applyCursorShape();
 
     // capture ends without an up: onMouseCancel to the captor + observation end (cancelCapture),
     // or observation end alone (endObservation, captor handled separately by the caller)
@@ -74,6 +78,8 @@ struct State final {
     // frame (engine before app), so a lower root suppresses its hover when an upper root already has it
     u64 lastHoverFrame{0};
     bool hoverClaimed{false};
+    // what the frame's hovered element (or the captor) wants the cursor to look like
+    std::optional<CURSORTYPE> cursorShape;
 
     // mouse capture: whichever element receives a down receives the matching up(s). one captor
     // globally (there is one pointer device), tagged with the UI root that owns it so the other
@@ -273,6 +279,7 @@ void State::resolveHover(CBaseUIEventCtx &c, Root root) {
     const u64 frame = engine->getFrameCount();
     if(frame != this->lastHoverFrame) {
         this->hoverClaimed = false;
+        this->cursorShape.reset();
         this->lastHoverFrame = frame;
     }
 
@@ -282,6 +289,7 @@ void State::resolveHover(CBaseUIEventCtx &c, Root root) {
     // root's capture still claims the pointer, so the app beneath a dragged window retracts
     if(this->captor != nullptr && this->captorRoot == root) {
         if(root == Root::ENGINE) this->hoverClaimed = true;
+        this->cursorShape = this->captor->getCursorShape();
         return;
     }
 
@@ -296,6 +304,14 @@ void State::resolveHover(CBaseUIEventCtx &c, Root root) {
             set = top->path;
             set.push_back(top->elem);
             this->hoverClaimed = true;
+        }
+    }
+
+    // the cursor's shape is the innermost hovered element's that has one
+    if(!set.empty()) {
+        this->cursorShape.reset();
+        for(CBaseUIElement *e : set | std::views::reverse) {
+            if((this->cursorShape = e->getCursorShape())) break;
         }
     }
 
@@ -317,6 +333,11 @@ void State::resolveHover(CBaseUIEventCtx &c, Root root) {
             e->onMouseOutside();
         }
     }
+}
+
+void State::applyCursorShape() {
+    env->setCursor(this->cursorShape.value_or(CURSORTYPE::CURSOR_NORMAL));
+    this->cursorShape.reset();
 }
 
 void State::dispatchEvents(CBaseUIEventCtx &c, Root root) {
@@ -535,6 +556,7 @@ void setWheelSink(CBaseUIElement *sink) { return state.setWheelSink(sink); }
 void setFocus(CBaseUIElement *elem) { return state.setFocus(elem); }
 CBaseUIElement *getFocus() { return state.getFocus(); }
 void clearFocusIf(const CBaseUIElement *elem) { return state.clearFocusIf(elem); }
+void applyCursorShape() { return state.applyCursorShape(); }
 void lockCapture(const CBaseUIElement *who) { return state.lockCapture(who); }
 bool stealCapture(CBaseUIElement *thief) { return state.stealCapture(thief); }
 CBaseUIElement *getCaptor() { return state.getCaptor(); }

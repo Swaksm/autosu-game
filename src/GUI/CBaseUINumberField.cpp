@@ -97,6 +97,10 @@ void CBaseUINumberField::revert() {
     }
 }
 
+std::optional<CURSORTYPE> CBaseUINumberField::getCursorShape() {
+    return this->typing ? CURSORTYPE::CURSOR_TEXT : CURSORTYPE::CURSOR_SIZE_H;
+}
+
 void CBaseUINumberField::onKeyDown(KeyboardEvent &e) {
     if(this->typing && this->isVisible() && (e == KEY_UP || e == KEY_DOWN)) {
         e.consume();

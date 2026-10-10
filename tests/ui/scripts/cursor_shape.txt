@@ -1,0 +1,27 @@
+# the os cursor's shape is the hovered element's: the text cursor over a textbox and an arrow beside it, also when
+# the textbox goes away under the cursor (which leaves no hover to lose)
+options_save_on_back 0
+debug_fixed_frametime 0.0166667
+mouse_raw_input 0
+mouse_sensitivity 1
+ui_scale_to_dpi 0
+windowed_resolution 1280x720
+mouse_to 10 10
+@wait 30
+ui_prompt test_message
+@wait 3
+ui_assert os_cursor shape normal
+mouse_to 640 380
+@wait 3
+ui_assert os_cursor shape text
+mouse_to 100 600
+@wait 3
+ui_assert os_cursor shape normal
+mouse_to 640 380
+@wait 3
+ui_assert os_cursor shape text
+sendkey Escape
+@wait 5
+ui_assert visible promptoverlay 0
+ui_assert os_cursor shape normal
+exit

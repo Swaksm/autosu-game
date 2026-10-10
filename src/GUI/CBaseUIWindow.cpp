@@ -278,6 +278,57 @@ void CBaseUIWindow::updateWindowLogic() {
     }
 }
 
+CBaseUIWindow::RESIZETYPE CBaseUIWindow::resizeHandleAt(vec2 pos) const {
+    int resizeHandleSize = 5;
+    McRect resizeTopLeft = McRect(this->getPos().x, this->getPos().y, resizeHandleSize, resizeHandleSize);
+    McRect resizeLeft = McRect(this->getPos().x, this->getPos().y, resizeHandleSize, this->getSize().y);
+    McRect resizeBottomLeft = McRect(this->getPos().x, this->getPos().y + this->getSize().y - resizeHandleSize,
+                                     resizeHandleSize, resizeHandleSize);
+    McRect resizeBottom = McRect(this->getPos().x, this->getPos().y + this->getSize().y - resizeHandleSize,
+                                 this->getSize().x, resizeHandleSize);
+    McRect resizeBottomRight =
+        McRect(this->getPos().x + this->getSize().x - resizeHandleSize,
+               this->getPos().y + this->getSize().y - resizeHandleSize, resizeHandleSize, resizeHandleSize);
+    McRect resizeRight = McRect(this->getPos().x + this->getSize().x - resizeHandleSize, this->getPos().y,
+                                resizeHandleSize, this->getSize().y);
+    McRect resizeTopRight = McRect(this->getPos().x + this->getSize().x - resizeHandleSize, this->getPos().y,
+                                   resizeHandleSize, resizeHandleSize);
+    McRect resizeTop = McRect(this->getPos().x, this->getPos().y, this->getSize().x, resizeHandleSize);
+
+    if(resizeTopLeft.contains(pos)) return RESIZETYPE::TOPLEFT;
+    if(resizeBottomLeft.contains(pos)) return RESIZETYPE::BOTLEFT;
+    if(resizeBottomRight.contains(pos)) return RESIZETYPE::BOTRIGHT;
+    if(resizeTopRight.contains(pos)) return RESIZETYPE::TOPRIGHT;
+    if(resizeLeft.contains(pos)) return RESIZETYPE::LEFT;
+    if(resizeRight.contains(pos)) return RESIZETYPE::RIGHT;
+    if(resizeBottom.contains(pos)) return RESIZETYPE::BOT;
+    if(resizeTop.contains(pos)) return RESIZETYPE::TOP;
+    return RESIZETYPE::UNKNOWN;
+}
+
+std::optional<CURSORTYPE> CBaseUIWindow::getCursorShape() {
+    // over a handle of the frame, and the handle's while a resize goes on
+    switch(this->bResizing     ? (RESIZETYPE)this->iResizeType
+           : this->bResizeable ? this->resizeHandleAt(mouse->getPos())
+                               : RESIZETYPE::UNKNOWN) {
+        case RESIZETYPE::TOPLEFT:
+        case RESIZETYPE::BOTRIGHT:
+            return CURSORTYPE::CURSOR_SIZE_VH;
+        case RESIZETYPE::BOTLEFT:
+        case RESIZETYPE::TOPRIGHT:
+            return CURSORTYPE::CURSOR_SIZE_HV;
+        case RESIZETYPE::LEFT:
+        case RESIZETYPE::RIGHT:
+            return CURSORTYPE::CURSOR_SIZE_H;
+        case RESIZETYPE::BOT:
+        case RESIZETYPE::TOP:
+            return CURSORTYPE::CURSOR_SIZE_V;
+        case RESIZETYPE::UNKNOWN:
+            return std::nullopt;
+    }
+    return std::nullopt;
+}
+
 void CBaseUIWindow::updateResizeAndMoveLogic(bool captureMouse) {
     // backup
     this->vLastSize = this->getSize();
@@ -285,63 +336,7 @@ void CBaseUIWindow::updateResizeAndMoveLogic(bool captureMouse) {
     this->vLastPos = this->getPos();
 
     if(this->bResizeable) {
-        // reset
-        this->iResizeType = RESIZETYPE::UNKNOWN;
-
-        int resizeHandleSize = 5;
-        McRect resizeTopLeft = McRect(this->getPos().x, this->getPos().y, resizeHandleSize, resizeHandleSize);
-        McRect resizeLeft = McRect(this->getPos().x, this->getPos().y, resizeHandleSize, this->getSize().y);
-        McRect resizeBottomLeft = McRect(this->getPos().x, this->getPos().y + this->getSize().y - resizeHandleSize,
-                                         resizeHandleSize, resizeHandleSize);
-        McRect resizeBottom = McRect(this->getPos().x, this->getPos().y + this->getSize().y - resizeHandleSize,
-                                     this->getSize().x, resizeHandleSize);
-        McRect resizeBottomRight =
-            McRect(this->getPos().x + this->getSize().x - resizeHandleSize,
-                   this->getPos().y + this->getSize().y - resizeHandleSize, resizeHandleSize, resizeHandleSize);
-        McRect resizeRight = McRect(this->getPos().x + this->getSize().x - resizeHandleSize, this->getPos().y,
-                                    resizeHandleSize, this->getSize().y);
-        McRect resizeTopRight = McRect(this->getPos().x + this->getSize().x - resizeHandleSize, this->getPos().y,
-                                       resizeHandleSize, resizeHandleSize);
-        McRect resizeTop = McRect(this->getPos().x, this->getPos().y, this->getSize().x, resizeHandleSize);
-
-        if(resizeTopLeft.contains(this->vMousePosBackup)) {
-            if(captureMouse) this->iResizeType = RESIZETYPE::TOPLEFT;
-
-            env->setCursor(CURSORTYPE::CURSOR_SIZE_VH);
-        } else if(resizeBottomLeft.contains(this->vMousePosBackup)) {
-            if(captureMouse) this->iResizeType = RESIZETYPE::BOTLEFT;
-
-            env->setCursor(CURSORTYPE::CURSOR_SIZE_HV);
-        } else if(resizeBottomRight.contains(this->vMousePosBackup)) {
-            if(captureMouse) this->iResizeType = RESIZETYPE::BOTRIGHT;
-
-            env->setCursor(CURSORTYPE::CURSOR_SIZE_VH);
-        } else if(resizeTopRight.contains(this->vMousePosBackup)) {
-            if(captureMouse) this->iResizeType = RESIZETYPE::TOPRIGHT;
-
-            env->setCursor(CURSORTYPE::CURSOR_SIZE_HV);
-        } else if(resizeLeft.contains(this->vMousePosBackup)) {
-            if(captureMouse) this->iResizeType = RESIZETYPE::LEFT;
-
-            env->setCursor(CURSORTYPE::CURSOR_SIZE_H);
-        } else if(resizeRight.contains(this->vMousePosBackup)) {
-            if(captureMouse) this->iResizeType = RESIZETYPE::RIGHT;
-
-            env->setCursor(CURSORTYPE::CURSOR_SIZE_H);
-        } else if(resizeBottom.contains(this->vMousePosBackup)) {
-            if(captureMouse) this->iResizeType = RESIZETYPE::BOT;
-
-            env->setCursor(CURSORTYPE::CURSOR_SIZE_V);
-        } else if(resizeTop.contains(this->vMousePosBackup)) {
-            if(captureMouse) this->iResizeType = RESIZETYPE::TOP;
-
-            env->setCursor(CURSORTYPE::CURSOR_SIZE_V);
-        } else if(const CURSORTYPE cursor = env->getCursor();
-                  cursor >= CURSORTYPE::CURSOR_SIZE_H && cursor <= CURSORTYPE::CURSOR_SIZE_VH) {
-            // back over the body: the resize cursor from the handles must not stick (children set
-            // their own, e.g. the textbox's text cursor, after this probe)
-            env->setCursor(CURSORTYPE::CURSOR_NORMAL);
-        }
+        this->iResizeType = captureMouse ? this->resizeHandleAt(this->vMousePosBackup) : RESIZETYPE::UNKNOWN;
     }
 
     // handle resizing
@@ -409,12 +404,6 @@ void CBaseUIWindow::onMouseCancel() {
     this->bBusy = false;
     this->bResizing = false;
     this->bMoving = false;
-}
-
-void CBaseUIWindow::onMouseOutside() {
-    CBaseUIElement::onMouseOutside();
-    // a resize cursor from the frame handles must not follow the pointer out of the window
-    if(!this->bResizing) env->setCursor(CURSORTYPE::CURSOR_NORMAL);
 }
 
 bool CBaseUIWindow::onWheel(WheelDelta /*vertical*/, WheelDelta /*horizontal*/) {

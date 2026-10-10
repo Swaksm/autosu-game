@@ -17,7 +17,7 @@ class CBaseUISelectableTextView : public CBaseUIScrollView {
     using CBaseUIScrollView::CBaseUIScrollView;
     ~CBaseUISelectableTextView() override = default;
 
-    void updateInput(CBaseUIEventCtx &c) override;
+    [[nodiscard]] std::optional<CURSORTYPE> getCursorShape() override;
 
     CBaseUISelectableTextView *setSelectionColor(Color color) {
         this->selectionColor = color;
@@ -56,7 +56,6 @@ class CBaseUISelectableTextView : public CBaseUIScrollView {
     void onMouseUpInside(bool left, bool right) override;
     void onMouseUpOutside(bool left, bool right) override;
     void onMouseCancel() override;
-    void onMouseOutside() override;
     void onCapturedMouseMove() override;
     void onCapturedMoveThrough() override;
 

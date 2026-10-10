@@ -114,6 +114,10 @@ bool stealCapture(CBaseUIElement *thief);
 // time and distance
 [[nodiscard]] u8 getClicks();
 
+// gives the cursor the shape this frame's hovered element wants (CBaseUIElement::getCursorShape(): the innermost one
+// with a shape, the mouse's captor while there is one), an arrow otherwise. once a frame, after both roots' dispatch
+void applyCursorShape();
+
 struct State;  // internal per-frame state (for CBaseUIElement friend access)
 void clear();  // reset all state (sanity cleanup on engine shutdown)
 
