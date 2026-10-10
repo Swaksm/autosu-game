@@ -84,6 +84,7 @@ class CBaseUITextbox : public CBaseUIElement {
 
     bool hitEnter();
     [[nodiscard]] bool hasSelectedText() const;
+    void selectAll();
     void clear();
     void focus(bool move_caret = true);
 
@@ -112,6 +113,8 @@ class CBaseUITextbox : public CBaseUIElement {
 
     [[nodiscard]] int hitTestCaret(std::string_view vt, int mx) const;
 
+    // puts the caret at a byte position of the text; `select` extends the selection to there (starting one at the caret)
+    void moveCaret(int position, bool select);
     void handleCaretKeyboardMove();
     void handleCaretKeyboardDelete();
     void updateCaretX();

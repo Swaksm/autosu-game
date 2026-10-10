@@ -1,7 +1,4 @@
 // Copyright (c) 2015, PG, All rights reserved.
-// TODO: support SHIFT + LEFT/RIGHT selection adjustments
-// TODO: support CTRL + LEFT/RIGHT word caret jumping (to next space)
-// TODO: support both SHIFT + CTRL + LEFT/RIGHT selection word jumping
 // TODO: make scrolling anims fps independent
 
 #include "CBaseUITextbox.h"
@@ -26,6 +23,22 @@
 #include "crypto.h"
 
 // #include "Logging.h"
+
+namespace {
+// where a word jump from `pos` goes: back to the start of the word before it, forward to the start of the next one
+int wordJump(std::string_view text, int pos, bool forward) {
+    const auto isSpace = [&](uSz from, uSz to) { return SString::is_wspace_only(text.substr(from, to - from)); };
+    uSz at = pos;
+    if(forward) {
+        while(at < text.size() && !isSpace(at, UniString::next(text, at))) at = UniString::next(text, at);
+        while(at < text.size() && isSpace(at, UniString::next(text, at))) at = UniString::next(text, at);
+    } else {
+        while(at > 0 && isSpace(UniString::prev(text, at), at)) at = UniString::prev(text, at);
+        while(at > 0 && !isSpace(UniString::prev(text, at), at)) at = UniString::prev(text, at);
+    }
+    return (int)at;
+}
+}  // namespace
 
 CBaseUITextbox::CBaseUITextbox(float xPos, float yPos, float xSize, float ySize, std::string name)
     : CBaseUIElement(xPos, yPos, xSize, ySize, std::move(name)) {
@@ -235,6 +248,10 @@ void CBaseUITextbox::onKeyDown(KeyboardEvent &e) {
 
     e.consume();
 
+    const bool control = e.getModifiers() & KEYMOD_CONTROL;
+    const bool shift = e.getModifiers() & KEYMOD_SHIFT;
+    const int length = (int)this->text.length();
+
     switch(e.getScanCode()) {
         case KEY_DELETE:
             soundEngine->play(app->getSound(ActionSound::DELETING_TEXT));
@@ -266,30 +283,14 @@ void CBaseUITextbox::onKeyDown(KeyboardEvent &e) {
                 if(this->hasSelectedText())
                     this->handleDeleteSelectedText();
                 else if(this->caretPosition - 1 >= 0) {
-                    if(keyboard->isControlDown()) {
-                        if(this->is_password) {
-                            this->setText("");
-                        }
+                    if(control && this->is_password) this->setText("");
 
-                        // delete everything from the current caret position to the left, until after the first
-                        // non-space character (but including it)
-                        bool foundNonSpaceChar = false;
-                        while(this->text.length() > 0 && this->caretPosition > 0) {
-                            const uSz prev = UniString::prev(this->text, this->caretPosition);
-                            std::string_view curChar =
-                                std::string_view(this->text).substr(prev, this->caretPosition - prev);
-
-                            if(foundNonSpaceChar && SString::is_wspace_only(curChar)) break;
-
-                            if(!SString::is_wspace_only(curChar)) foundNonSpaceChar = true;
-
-                            this->text.erase(prev, this->caretPosition - prev);
-                            this->caretPosition = prev;
-                        }
-                    } else {
-                        const uSz prev = UniString::prev(this->text, this->caretPosition);
-                        this->text.erase(prev, this->caretPosition - prev);
-                        this->caretPosition = prev;
+                    // with control the word before the caret, with the spaces between them
+                    const int from = control ? wordJump(this->text, this->caretPosition, false)
+                                             : (int)UniString::prev(this->text, this->caretPosition);
+                    if(from < this->caretPosition) {
+                        this->text.erase(from, this->caretPosition - from);
+                        this->caretPosition = from;
                     }
 
                     this->setText(this->text);
@@ -298,68 +299,39 @@ void CBaseUITextbox::onKeyDown(KeyboardEvent &e) {
             this->tickCaret();
             break;
 
-        case KEY_LEFT: {
-            const bool hadSelectedText = this->hasSelectedText();
-            const int prevSelectPos = std::min(this->iSelectStart, this->iSelectEnd);
-
-            this->deselectText();
-
-            if(!hadSelectedText)
-                this->caretPosition = UniString::prev(this->text, this->caretPosition);
+        // with shift the selection goes along, with control the caret jumps by words (a password's to its ends)
+        case KEY_LEFT:
+            if(control)
+                this->moveCaret(this->is_password ? 0 : wordJump(this->text, this->caretPosition, false), shift);
+            else if(!shift && this->hasSelectedText())
+                this->moveCaret(std::clamp(std::min(this->iSelectStart, this->iSelectEnd), 0, length), false);
             else
-                this->caretPosition = std::clamp<int>(prevSelectPos, 0, this->text.length());
+                this->moveCaret((int)UniString::prev(this->text, this->caretPosition), shift);
+            break;
 
-            this->tickCaret();
-            this->handleCaretKeyboardMove();
-            this->updateCaretX();
-
-            soundEngine->play(app->getSound(ActionSound::MOVE_TEXT_CURSOR));
-        } break;
-
-        case KEY_RIGHT: {
-            const bool hadSelectedText = this->hasSelectedText();
-            const int prevSelectPos = std::max(this->iSelectStart, this->iSelectEnd);
-
-            this->deselectText();
-
-            if(!hadSelectedText)
-                this->caretPosition = UniString::next(this->text, this->caretPosition);
+        case KEY_RIGHT:
+            if(control)
+                this->moveCaret(this->is_password ? length : wordJump(this->text, this->caretPosition, true), shift);
+            else if(!shift && this->hasSelectedText())
+                this->moveCaret(std::clamp(std::max(this->iSelectStart, this->iSelectEnd), 0, length), false);
             else
-                this->caretPosition = std::clamp<int>(prevSelectPos, 0, this->text.length());
-
-            this->tickCaret();
-            this->handleCaretKeyboardMove();
-            this->updateCaretX();
-
-            soundEngine->play(app->getSound(ActionSound::MOVE_TEXT_CURSOR));
-        } break;
+                this->moveCaret((int)UniString::next(this->text, this->caretPosition), shift);
+            break;
 
         case KEY_C:
-            if(keyboard->isControlDown() && this->hasSelectedText()) env->setClipBoardText(this->getSelectedText());
+            if(control && this->hasSelectedText()) env->setClipBoardText(this->getSelectedText());
             break;
 
         case KEY_V:
-            if(keyboard->isControlDown()) this->insertTextFromClipboard();
+            if(control) this->insertTextFromClipboard();
             break;
 
         case KEY_A:
-            if(keyboard->isControlDown()) {
-                // HACKHACK: make proper setSelectedText() function
-                this->iSelectStart = 0;
-                this->iSelectEnd = this->text.length();
-
-                this->caretPosition = this->iSelectEnd;
-                this->iSelectX = this->font->getStringWidth(this->getVisibleText());
-                this->iCaretX = 0;
-                this->fTextScrollAddX =
-                    this->fTextWidth < this->getSize().x
-                        ? 0
-                        : this->fTextWidth - this->getSize().x + cv::ui_textbox_text_offset_x.getInt() * 2;
-            }
+            if(control) this->selectAll();
             break;
 
         case KEY_X:
-            if(keyboard->isControlDown() && this->hasSelectedText()) {
+            if(control && this->hasSelectedText()) {
                 soundEngine->play(app->getSound(ActionSound::DELETING_TEXT));
                 env->setClipBoardText(this->getSelectedText());
                 this->handleDeleteSelectedText();
@@ -367,23 +339,11 @@ void CBaseUITextbox::onKeyDown(KeyboardEvent &e) {
             break;
 
         case KEY_HOME:
-            this->deselectText();
-            this->caretPosition = 0;
-            this->tickCaret();
-            this->handleCaretKeyboardMove();
-            this->updateCaretX();
-
-            soundEngine->play(app->getSound(ActionSound::MOVE_TEXT_CURSOR));
+            this->moveCaret(0, shift);
             break;
 
         case KEY_END:
-            this->deselectText();
-            this->caretPosition = this->text.length();
-            this->tickCaret();
-            this->handleCaretKeyboardMove();
-            this->updateCaretX();
-
-            soundEngine->play(app->getSound(ActionSound::MOVE_TEXT_CURSOR));
+            this->moveCaret(length, shift);
             break;
         default:
             break;
@@ -424,6 +384,23 @@ void CBaseUITextbox::onChar(KeyboardEvent &e) {
     soundEngine->play(sounds[prand() % 4]);
 }
 
+void CBaseUITextbox::moveCaret(int position, bool select) {
+    if(!select) {
+        this->deselectText();
+    } else if(!this->hasSelectedText()) {
+        this->iSelectStart = this->caretPosition;
+        this->iSelectX = this->font->getStringWidth(this->getVisibleText().substr(0, this->iSelectStart));
+    }
+    this->caretPosition = position;
+    if(select) this->iSelectEnd = position;
+
+    this->tickCaret();
+    this->handleCaretKeyboardMove();
+    this->updateCaretX();
+
+    soundEngine->play(app->getSound(ActionSound::MOVE_TEXT_CURSOR));
+}
+
 void CBaseUITextbox::handleCaretKeyboardMove() {
     const int caretPosition = this->iTextAddX +
                               this->font->getStringWidth(this->getVisibleText().substr(0, this->caretPosition)) +
@@ -459,6 +436,15 @@ bool CBaseUITextbox::hitEnter() {
 }
 
 bool CBaseUITextbox::hasSelectedText() const { return ((this->iSelectStart - this->iSelectEnd) != 0); }
+
+void CBaseUITextbox::selectAll() {
+    this->iSelectStart = 0;
+    this->iSelectX = 0;
+    this->caretPosition = this->iSelectEnd = this->text.length();
+
+    this->handleCaretKeyboardMove();
+    this->updateCaretX();
+}
 
 void CBaseUITextbox::clear() {
     this->deselectText();

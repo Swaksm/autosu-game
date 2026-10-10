@@ -8,6 +8,7 @@
 #include "CBaseUIPopupLayer.h"
 #include "CBaseUIStyledButton.h"
 #include "CBaseUIStyledLabel.h"
+#include "CBaseUITextbox.h"
 #include "Engine.h"
 #include "Font.h"
 #include "KeyBindings.h"
@@ -49,6 +50,8 @@ std::string rect(const CBaseUIElement *e) {
 }
 
 KeyboardEvent key(SCANCODE scancode, KEYMOD modifiers) { return {scancode, 0, 0, 0, modifiers}; }
+
+constexpr KEYMOD CTRL_SHIFT{(KEYMOD)(KEYMOD_LCONTROL | KEYMOD_LSHIFT)};
 }  // namespace
 
 ToolUITest::ToolUITest() { logRaw("ToolUITest created"); }
@@ -62,6 +65,7 @@ void ToolUITest::update() {
     this->testShortcuts();
     this->testBoxes();
     this->testStyledWidgets();
+    this->testTextboxes();
     this->testMenus();
 
     TEST_PRINT_RESULTS("ToolUITest");
@@ -189,6 +193,72 @@ void ToolUITest::testStyledWidgets() {
     const vec2 unchecked = button.getNaturalSize();
     button.setChecked(true);
     TEST_ASSERT(button.isChecked() && button.getNaturalSize() == unchecked, "a checked button keeps its size");
+}
+
+void ToolUITest::testTextboxes() {
+    TEST_SECTION("textboxes");
+
+    CBaseUITextbox box(0, 0, 400, 30, "box");
+    const auto press = [&](SCANCODE scancode, KEYMOD modifiers = KEYMOD_NONE) {
+        KeyboardEvent e = key(scancode, modifiers);
+        box.onKeyDown(e);
+    };
+    const auto type = [&](char32_t character) {
+        KeyboardEvent e{0, 0, character, 0, KEYMOD_NONE};
+        box.onChar(e);
+    };
+
+    box.setText("one two  three");
+    box.focus();
+    TEST_ASSERT(box.isFocused() && box.caretPosition == 14, "a focused textbox has its caret after its text");
+
+    press(KEY_LEFT, KEYMOD_LCONTROL);
+    TEST_ASSERT_EQ(box.caretPosition, 9, "Ctrl+Left goes to the start of the word before the caret");
+    press(KEY_LEFT, KEYMOD_LCONTROL);
+    TEST_ASSERT_EQ(box.caretPosition, 4, "...over the spaces between two words");
+    press(KEY_RIGHT, KEYMOD_LCONTROL);
+    TEST_ASSERT_EQ(box.caretPosition, 9, "Ctrl+Right goes to the start of the next word");
+    press(KEY_RIGHT, KEYMOD_LCONTROL);
+    TEST_ASSERT_EQ(box.caretPosition, 14, "...and from the last word to the end");
+
+    press(KEY_HOME);
+    press(KEY_RIGHT, KEYMOD_LSHIFT);
+    press(KEY_RIGHT, KEYMOD_LSHIFT);
+    TEST_ASSERT(box.hasSelectedText() && box.caretPosition == 2, "Shift+Right selects from the caret on");
+    press(KEY_LEFT, KEYMOD_LSHIFT);
+    press(KEY_DELETE);
+    TEST_ASSERT_EQ(box.getText(), "ne two  three", "...Shift+Left gives a character back, Delete removes the rest");
+
+    press(KEY_END, KEYMOD_LSHIFT);
+    TEST_ASSERT(box.hasSelectedText() && box.caretPosition == 13, "Shift+End selects to the end");
+    press(KEY_LEFT);
+    TEST_ASSERT(!box.hasSelectedText() && box.caretPosition == 0,
+                "Left alone puts the caret where the selection began");
+    press(KEY_RIGHT, CTRL_SHIFT);
+    press(KEY_BACKSPACE);
+    TEST_ASSERT_EQ(box.getText(), "two  three", "Ctrl+Shift+Right selects a word with the spaces after it");
+
+    press(KEY_END);
+    press(KEY_BACKSPACE, KEYMOD_LCONTROL);
+    TEST_ASSERT_EQ(box.getText(), "two  ", "Ctrl+Backspace removes the word before the caret");
+    press(KEY_BACKSPACE, KEYMOD_LCONTROL);
+    TEST_ASSERT_EQ(box.getText(), "", "...with the spaces after it, when the caret is behind them");
+
+    box.setText("abc");
+    press(KEY_A, KEYMOD_LCONTROL);
+    TEST_ASSERT(box.hasSelectedText() && box.caretPosition == 3, "Ctrl+A selects everything");
+    type(U'x');
+    TEST_ASSERT_EQ(box.getText(), "x", "...which what's typed replaces");
+
+    box.setText("a\u00f1b");
+    press(KEY_END);
+    press(KEY_LEFT);
+    press(KEY_LEFT, KEYMOD_LSHIFT);
+    press(KEY_DELETE);
+    TEST_ASSERT_EQ(box.getText(), "ab", "the caret and the selection step by characters, not bytes");
+
+    box.stealFocus();
+    TEST_ASSERT(!box.isFocused(), "a textbox gives the focus back");
 }
 
 void ToolUITest::testMenus() {

@@ -17,6 +17,7 @@ class ToolUITest : public App {
     void testShortcuts();
     void testBoxes();
     void testStyledWidgets();
+    void testTextboxes();
     void testMenus();
 
     int m_passes{0};
