@@ -134,10 +134,11 @@ class AbstractBeatmapInterface {
     // Potentially Visible Set gate time size, for optimizing draw() and update() when iterating over all hitobjects
     [[nodiscard]] i32 getPVS() const;
 
-    [[nodiscard]] f32 getHitWindow300() const;
+    // (in double precision from the float OD like osu!stable, where e.g. OD 8.8 has a 111.99999 ms window, not 112)
+    [[nodiscard]] f64 getHitWindow300() const;
     [[nodiscard]] f32 getRawHitWindow300() const;
-    [[nodiscard]] f32 getHitWindow100() const;
-    [[nodiscard]] f32 getHitWindow50() const;
+    [[nodiscard]] f64 getHitWindow100() const;
+    [[nodiscard]] f64 getHitWindow50() const;
     [[nodiscard]] f32 getApproachRateForSpeedMultiplier() const;
     [[nodiscard]] f32 getRawARForSpeedMultiplier() const;
     [[nodiscard]] f32 getConstantApproachRateForSpeedMultiplier() const;

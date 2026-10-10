@@ -1,5 +1,6 @@
 #include "HitObjects.h"
 
+#include <algorithm>
 #include <cmath>
 #include <utility>
 #include <variant>
@@ -1086,6 +1087,9 @@ Slider::Slider(SLIDERCURVETYPE stype, i32 repeat, f32 pixelLength, std::vector<v
         }
     }
 
+    // in time order, which is the order they are judged in (see update())
+    std::ranges::stable_sort(m_clicks, {}, &SLIDERCLICK::timeMS);
+
     m_durationMS = (i32)m_sliderTimeMS;
     m_durationMS = m_durationMS >= 0 ? m_durationMS : 1;  // force clamp to positive range
 }
@@ -1572,6 +1576,7 @@ void Slider::update(i32 curPosMS, f64 frameTimeSecs) {
 
     // handle dynamic followradius
     f32 followRadius = m_cursorLeft ? m_judge->fHitcircleDiameter / 2.0f : m_judge->fSliderFollowCircleDiameter / 2.0f;
+    const bool wasTrackingCorrectly = !m_cursorLeft;
     const bool isPlayfieldCursorInside = (vec::length(m_judge->getCursorPos() - m_curPoint) < followRadius);
     const bool isAutoCursorInside =
         ((flags::has<ModFlags::Autoplay>(curIFaceMods)) &&
@@ -1579,6 +1584,9 @@ void Slider::update(i32 curPosMS, f64 frameTimeSecs) {
     m_cursorInside = (isAutoCursorInside || isPlayfieldCursorInside);
     m_cursorLeft = !m_cursorInside;
     this->updateTracking();
+
+    // don't carry the followcircle state over from the approach phase, the cursor has to be inside the hitcircle first
+    if(curPosMS < m_clickTimeMS) m_cursorLeft = true;
 
     // handle slider start
     if(!m_startFinished) {
@@ -1611,18 +1619,24 @@ void Slider::update(i32 curPosMS, f64 frameTimeSecs) {
                     }
                 }
             }
-
-            // wait for a miss
-            if(deltaMS >= 0) {
-                // if this is a miss after waiting
-                if(deltaMS > (i32)m_judge->getHitWindow50()) {
-                    m_startResult = LiveHitResult::HIT_MISS;
-                    onHit(m_startResult, deltaMS, false);
-                    m_judge->holding_slider = false;
-                }
-            }
         }
     }
+
+    // wait for a startcircle miss: osu!stable checks for it every frame, so a miss window that ended before this update
+    // already missed before anything else here, while one that ends with it misses after its repeats, ticks and tail
+    const auto missStartCircleAfter = [&](i32 windowMS) {
+        if(m_startFinished || flags::has<ModFlags::Autoplay>(curIFaceMods)) return;
+        const i32 deltaMS = curPosMS - m_clickTimeMS;
+        if(deltaMS > windowMS) {
+            m_startResult = LiveHitResult::HIT_MISS;
+            onHit(m_startResult, deltaMS, false);
+            m_judge->holding_slider = false;
+
+            // no key tapped the startcircle, so all held keys count as holding the slider (like osu!stable)
+            m_ignoredKeys = 0;
+        }
+    };
+    missStartCircleAfter((i32)m_judge->getHitWindow50() + 1);
 
     // handle slider end, repeats, ticks
     if(!m_endFinished) {
@@ -1638,10 +1652,21 @@ void Slider::update(i32 curPosMS, f64 frameTimeSecs) {
         // https://github.com/ppy/osu/blob/master/osu.Game.Rulesets.Osu/Objects/Slider.cs#L123 being "inside the slider"
         // (for the end of the slider) is NOT checked at the exact end of the slider, but somewhere random before,
         // because fuck you
+        const bool hadTailCheck = m_heldTillEndForLenienceHackCheck;
         const i32 offsetMS = (i32)cv::slider_end_inside_check_offset.getInt();
         const i32 lenienceHackEndTimeMS = std::max(m_clickTimeMS + m_durationMS / 2, (getEndTime()) - offsetMS);
         const bool isTrackingCorrectly =
             (isClickHeldSlider() || (flags::has<ModFlags::Relax>(curIFaceMods))) && m_cursorInside;
+
+        // like osu!stable, judge at most one point per update, in order: the repeats and ticks, then the tail (even if
+        // its check time comes before the last tick)
+        const auto nextClick = std::ranges::find_if(m_clicks, [](const SLIDERCLICK &click) { return !click.finished; });
+        const bool tailIsNext = nextClick == m_clicks.end();
+
+        // we should only credit ticks/repeats/tails that passed after tracking began:
+        // if tracking starts at the frame we notice a point, that point already passed.
+        if(isTrackingCorrectly && !wasTrackingCorrectly) m_slideStartTimeMS = curPosMS;
+
         if(isTrackingCorrectly) {
             if(isTrackingStrictTrackingMod) {
                 m_strictTrackingModLastClickHeldTime = curPosMS;
@@ -1652,12 +1677,12 @@ void Slider::update(i32 curPosMS, f64 frameTimeSecs) {
             }
 
             // only check it at the exact point in time ...
-            if(curPosMS >= lenienceHackEndTimeMS) {
+            if(tailIsNext && curPosMS >= lenienceHackEndTimeMS) {
                 // ... once (like a tick)
                 if(!m_heldTillEndForLenienceHackCheck) {
                     // player was correctly clicking/holding inside slider at lenienceHackEndTime
                     m_heldTillEndForLenienceHackCheck = true;
-                    m_heldTillEndForLenienceHack = true;
+                    if(m_slideStartTimeMS <= lenienceHackEndTimeMS) m_heldTillEndForLenienceHack = true;
                 }
             }
         } else {
@@ -1668,7 +1693,7 @@ void Slider::update(i32 curPosMS, f64 frameTimeSecs) {
 
         // can't be "inside the slider" after lenienceHackEndTime
         // (even though the slider is still going, which is madness)
-        if(curPosMS >= lenienceHackEndTimeMS) m_heldTillEndForLenienceHackCheck = true;
+        if(tailIsNext && curPosMS >= lenienceHackEndTimeMS) m_heldTillEndForLenienceHackCheck = true;
 
         // handle strict tracking mod
         if(isTrackingStrictTrackingMod) {
@@ -1695,21 +1720,41 @@ void Slider::update(i32 curPosMS, f64 frameTimeSecs) {
             }
         }
 
-        // handle repeats and ticks
-        for(auto &click : m_clicks) {
-            if(!click.finished && curPosMS >= click.timeMS) {
-                click.finished = true;
-                click.successful = (isClickHeldSlider() && m_cursorInside) ||
-                                   (flags::has<ModFlags::Autoplay>(curIFaceMods)) ||
-                                   ((flags::has<ModFlags::Relax>(curIFaceMods)) && m_cursorInside);
-
-                if(click.type == 0) {
-                    onRepeatHit(click);
-                } else {
-                    onTickHit(click);
-                }
+        // judge the endcircle at its check time like osu!stable's tail point, so that its combo comes before e.g. a
+        // late startcircle miss
+        if(!hadTailCheck && m_heldTillEndForLenienceHackCheck && m_endResult == LiveHitResult::HIT_NULL) {
+            if(m_heldTillEndForLenienceHack || flags::has<ModFlags::Autoplay>(curIFaceMods)) {
+                m_judge->addHitResult(this, LiveHitResult::HIT_SLIDER30, 0, false, true, true, false, true,
+                                      false);  // increase combo and health
+                m_judge->addScorePoints(30);
+            } else {
+                // special case: missing the endcircle drains HIT_MISS_SLIDERBREAK health (and not HIT_MISS health)
+                // NOTE: yes, this will drain twice for the end of a slider (once here, and once for the judgement of
+                // the whole slider)
+                m_judge->addHitResult(this, LiveHitResult::HIT_MISS_SLIDERBREAK, 0, false, true, true, true, true,
+                                      false);  // only decrease health
             }
         }
+
+        // handle repeats and ticks
+        if(nextClick != m_clicks.end() && curPosMS >= nextClick->timeMS) {
+            SLIDERCLICK &click = *nextClick;
+            click.finished = true;
+            click.successful = (isClickHeldSlider() && m_cursorInside) ||
+                               (flags::has<ModFlags::Autoplay>(curIFaceMods)) ||
+                               ((flags::has<ModFlags::Relax>(curIFaceMods)) && m_cursorInside);
+
+            // same as the tail: only count points that passed after tracking began
+            if(click.successful && m_slideStartTimeMS > click.timeMS) click.successful = false;
+
+            if(click.type == 0) {
+                onRepeatHit(click);
+            } else {
+                onTickHit(click);
+            }
+        }
+
+        missStartCircleAfter((i32)m_judge->getHitWindow50());
 
         // handle auto, and the last circle
         if((flags::has<ModFlags::Autoplay>(curIFaceMods))) {
@@ -2028,6 +2073,13 @@ void Slider::miss(i32 curPosMS) {
 
             if(!m_heldTillEnd && cv::slider_end_miss_breaks_combo.getBool()) onSliderBreak();
 
+            // (a missed endcircle drains like in update(), unless it was already judged there)
+            if(!m_heldTillEndForLenienceHackCheck) {
+                m_heldTillEndForLenienceHackCheck = true;
+                m_judge->addHitResult(this, LiveHitResult::HIT_MISS_SLIDERBREAK, 0, false, true, true, true, true,
+                                      false);  // only decrease health
+            }
+
             m_endResult = LiveHitResult::HIT_MISS;
             onHit(m_endResult, 0, true);
             m_judge->holding_slider = false;
@@ -2188,7 +2240,10 @@ void Slider::onHit(LiveHitResult result, i32 delta, bool isEndCircle, f32 target
             m_judge->addScorePoints(30);
         } else {
             // special case: missing the startcircle drains HIT_MISS_SLIDERBREAK health (and not HIT_MISS health)
-            m_judge->addHitResult(this, LiveHitResult::HIT_MISS_SLIDERBREAK, 0, false, true, true, true, true,
+            // (in osu!stable, letting the startcircle of a combo's last slider pass also ends that combo's geki/katu
+            // state, so only the results after it count for the slider's own geki/katu)
+            m_judge->addHitResult(this, LiveHitResult::HIT_MISS_SLIDERBREAK, 0, m_endOfCombo && delta > 0, true, true,
+                                  true, true,
                                   false);  // only decrease health
         }
     } else {
@@ -2205,22 +2260,10 @@ void Slider::onHit(LiveHitResult result, i32 delta, bool isEndCircle, f32 target
             // XXX: remove this
             const bool isLazer2020Drain = false;
 
-            addHitResult(result, delta, m_endOfCombo, getRawPosAt(getEndTime()), -1.0f, 0.0f, true, !m_heldTillEnd,
-                         isLazer2020Drain);  // end of combo, ignore in hiterrorbar, depending on heldTillEnd increase
-                                             // combo or not, increase score, increase health depending on drain type
-
-            // add bonus score + extra health manually
-            if(m_heldTillEnd) {
-                m_judge->addHitResult(this, LiveHitResult::HIT_SLIDER30, 0, false, true, true, true, true,
-                                      false);  // only increase health
-                m_judge->addScorePoints(30);
-            } else {
-                // special case: missing the endcircle drains HIT_MISS_SLIDERBREAK health (and not HIT_MISS health)
-                // NOTE: yes, this will drain twice for the end of a slider (once for the judgement of the whole slider
-                // above, and once for the endcircle here)
-                m_judge->addHitResult(this, LiveHitResult::HIT_MISS_SLIDERBREAK, 0, false, true, true, true, true,
-                                      false);  // only decrease health
-            }
+            // (the endcircle's bonus score, combo and health were already added at its check time, see update())
+            addHitResult(result, delta, m_endOfCombo, getRawPosAt(getEndTime()), -1.0f, 0.0f, true, true,
+                         isLazer2020Drain);  // end of combo, ignore in hiterrorbar, ignore combo, increase score,
+                                             // increase health depending on drain type
         }
     }
 
@@ -2350,6 +2393,7 @@ void Slider::onReset(i32 curPosMS) {
     m_lastSliderSampleSets.clear();
     m_strictTrackingModLastClickHeldTime = 0;
     m_ignoredKeys = 0;
+    m_slideStartTimeMS = -1;
     m_cursorLeft = true;
     m_heldTillEnd = false;
     m_heldTillEndForLenienceHack = false;

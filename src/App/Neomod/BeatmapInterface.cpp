@@ -1301,23 +1301,20 @@ LiveHitResult BeatmapInterface::addHitResult(HitObject *hitObject, LiveHitResult
 
     // Frames are already written on every keypress/release.
     // For some edge cases, we need to write extra frames to avoid replaybugs.
-    if(!hitErrorBarOnly) {
-        const bool should_write_frame =
-            // Slider interactions
-            // Surely buzz sliders won't be an issue... Clueless
-            (hit == HIT_SLIDER10)             //
-            || (hit == HIT_SLIDER30)          //
-            || (hit == HIT_MISS_SLIDERBREAK)  //
-            // Relax: no keypresses, instead we write on every hitresult
-            || (osu->getModRelax() && ((hit == HIT_50)        //
-                                       || (hit == HIT_100)    //
-                                       || (hit == HIT_300)    //
-                                       || (hit == HIT_MISS))  //
-               );
-
-        if(should_write_frame) {
-            this->write_frame();
-        }
+    const bool should_write_frame =
+        // Slider interactions
+        // Surely buzz sliders won't be an issue... Clueless
+        (hit == HIT_SLIDER10)             //
+        || (hit == HIT_SLIDER30)          //
+        || (hit == HIT_MISS_SLIDERBREAK)  //
+        // Relax: no keypresses, instead we write on every hitresult
+        || (osu->getModRelax() && ((hit == HIT_50)        //
+                                   || (hit == HIT_100)    //
+                                   || (hit == HIT_300)    //
+                                   || (hit == HIT_MISS))  //
+           );
+    if(should_write_frame) {
+        this->write_frame();
     }
 
     // handle perfect & sudden death
@@ -1352,7 +1349,8 @@ LiveHitResult BeatmapInterface::addHitResult(HitObject *hitObject, LiveHitResult
 
         // geki/katu handling
         if(isEndOfCombo) {
-            const int comboEndBitmask = osu->getScore()->getComboEndBitmask();
+            // (a combo end without a hit result, see Slider::onHit(), awards nothing)
+            const int comboEndBitmask = hit == HIT_MISS_SLIDERBREAK ? 2 : osu->getScore()->getComboEndBitmask();
 
             if(comboEndBitmask == 0) {
                 returnedHit = HIT_300G;
@@ -1368,7 +1366,7 @@ LiveHitResult BeatmapInterface::addHitResult(HitObject *hitObject, LiveHitResult
                     this->addHealth(osu->getScore()->getHealthIncrease(this, returnedHit), true);
                     osu->getScore()->addHitResultComboEnd(returnedHit);
                 }
-            } else if(hit != HIT_MISS)
+            } else if(hit != HIT_MISS && hit != HIT_MISS_SLIDERBREAK)
                 this->addHealth(osu->getScore()->getHealthIncrease(this, HIT_MU), true);
 
             osu->getScore()->setComboEndBitmask(0);

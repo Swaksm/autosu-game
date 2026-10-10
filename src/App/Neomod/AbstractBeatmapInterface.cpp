@@ -50,9 +50,9 @@ void AbstractBeatmapInterface::stopSpinnerSpinSound() {}
 void AbstractBeatmapInterface::playSpinnerBonusSound() {}
 void AbstractBeatmapInterface::addTargetHit(f32 /*delta*/, f32 /*angle*/) {}
 
-f32 AbstractBeatmapInterface::getHitWindow300() const {
-    return GameRules::mapDifficultyRange(this->getOD(), GameRules::MIN_HITWINDOW_300, GameRules::MID_HITWINDOW_300,
-                                         GameRules::MAX_HITWINDOW_300);
+f64 AbstractBeatmapInterface::getHitWindow300() const {
+    return GameRules::mapDifficultyRange<f64>(this->getOD(), GameRules::MIN_HITWINDOW_300, GameRules::MID_HITWINDOW_300,
+                                              GameRules::MAX_HITWINDOW_300);
 }
 
 f32 AbstractBeatmapInterface::getRawHitWindow300() const {
@@ -60,14 +60,14 @@ f32 AbstractBeatmapInterface::getRawHitWindow300() const {
                                          GameRules::MAX_HITWINDOW_300);
 }
 
-f32 AbstractBeatmapInterface::getHitWindow100() const {
-    return GameRules::mapDifficultyRange(this->getOD(), GameRules::MIN_HITWINDOW_100, GameRules::MID_HITWINDOW_100,
-                                         GameRules::MAX_HITWINDOW_100);
+f64 AbstractBeatmapInterface::getHitWindow100() const {
+    return GameRules::mapDifficultyRange<f64>(this->getOD(), GameRules::MIN_HITWINDOW_100, GameRules::MID_HITWINDOW_100,
+                                              GameRules::MAX_HITWINDOW_100);
 }
 
-f32 AbstractBeatmapInterface::getHitWindow50() const {
-    return GameRules::mapDifficultyRange(this->getOD(), GameRules::MIN_HITWINDOW_50, GameRules::MID_HITWINDOW_50,
-                                         GameRules::MAX_HITWINDOW_50);
+f64 AbstractBeatmapInterface::getHitWindow50() const {
+    return GameRules::mapDifficultyRange<f64>(this->getOD(), GameRules::MIN_HITWINDOW_50, GameRules::MID_HITWINDOW_50,
+                                              GameRules::MAX_HITWINDOW_50);
 }
 
 f32 AbstractBeatmapInterface::getApproachRateForSpeedMultiplier() const {

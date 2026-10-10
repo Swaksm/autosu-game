@@ -440,6 +440,7 @@ class Slider final : public HitObject, public SliderRenderer::BodySource {
     bool m_cursorLeft{true};
     bool m_cursorInside{false};
     bool m_tracking{false};  // inside and held: the follow circle shows
+    i32 m_slideStartTimeMS{-1};
     bool m_heldTillEnd{false};
     bool m_heldTillEndForLenienceHack{false};
     bool m_heldTillEndForLenienceHackCheck{false};
