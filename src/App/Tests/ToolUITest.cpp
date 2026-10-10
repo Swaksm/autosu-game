@@ -8,8 +8,10 @@
 #include "CBaseUIPopupLayer.h"
 #include "CBaseUIStyledButton.h"
 #include "CBaseUIStyledLabel.h"
+#include "CBaseUIStyledTextbox.h"
 #include "CBaseUITextbox.h"
 #include "Engine.h"
+#include "Environment.h"
 #include "Font.h"
 #include "KeyBindings.h"
 #include "KeyboardEvent.h"
@@ -66,6 +68,7 @@ void ToolUITest::update() {
     this->testBoxes();
     this->testStyledWidgets();
     this->testTextboxes();
+    this->testTextFields();
     this->testMenus();
 
     TEST_PRINT_RESULTS("ToolUITest");
@@ -259,6 +262,84 @@ void ToolUITest::testTextboxes() {
 
     box.stealFocus();
     TEST_ASSERT(!box.isFocused(), "a textbox gives the focus back");
+}
+
+void ToolUITest::testTextFields() {
+    TEST_SECTION("text fields");
+    uiStyle().setScale(1.f);
+
+    CBaseUIStyledTextbox field("field");
+    field.setNaturalWidth(100.f);
+    TEST_ASSERT(field.getNaturalSize() == vec2(100.f, uiStyle().metrics.controlHeight),
+                "a text field is as wide as its user says and as high as a control");
+
+    std::vector<std::string> heard;
+    field.setChangeCallback([&](std::string_view text) { heard.emplace_back(text); });
+    const auto press = [&](SCANCODE scancode, KEYMOD modifiers = KEYMOD_NONE) {
+        KeyboardEvent e = key(scancode, modifiers);
+        field.onKeyDown(e);
+        return e.isConsumed();
+    };
+    const auto type = [&](char32_t character) {
+        KeyboardEvent e{0, 0, character, 0, KEYMOD_NONE};
+        field.onChar(e);
+        return e.isConsumed();
+    };
+
+    field.setText("ab");
+    TEST_ASSERT(heard.empty(), "a text set isn't an edit");
+    TEST_ASSERT(!press(KEY_A) && !type(U'a'), "a field without the focus takes no key");
+
+    field.focus();
+    type(U'c');
+    type(U'd');
+    press(KEY_BACKSPACE);
+    press(KEY_LEFT);
+    TEST_ASSERT(field.getText() == "abc" && heard.empty(), "what's typed during a visit isn't told");
+    field.commit();
+    TEST_ASSERT(heard == std::vector<std::string>({"abc"}) && field.isFocused(),
+                "...before the visit is committed, which keeps the focus");
+    type(U'd');
+    press(KEY_BACKSPACE);
+    field.commit();
+    TEST_ASSERT_EQ(heard.size(), 1u, "a visit that ends with the text it started with is no change");
+
+    TEST_ASSERT(
+        press(KEY_S) && press(KEY_SPACE) && press(KEY_UP) && press(KEY_E, (KEYMOD)(KEYMOD_LCONTROL | KEYMOD_RALT)),
+        "a focused field takes the keys that type or edit");
+    TEST_ASSERT(!press(KEY_S, KEYMOD_LCONTROL) && !press(KEY_F5) && !press(KEY_TAB) && !press(KEY_A, KEYMOD_LSUPER),
+                "...but not the function keys, Tab, or what's pressed with Ctrl or Cmd");
+    TEST_ASSERT(press(KEY_A, KEYMOD_LCONTROL) && field.hasSelectedText(), "...unless it has a use for it");
+
+    type(U'x');
+    TEST_ASSERT_EQ(field.getText(), "x", "what's typed replaces the selection");
+    press(KEY_ESCAPE);
+    TEST_ASSERT(field.getText() == "abc" && heard.size() == 1 && !field.isFocused(),
+                "Escape ends the visit with the text it started with, untold");
+
+    field.focus();
+    type(U'!');
+    TEST_ASSERT(press(KEY_Z) && field.isFocused(), "a z is a key that types");
+    press(KEY_Z, KEYMOD_LCONTROL);
+    TEST_ASSERT(field.getText() == "abc" && heard.size() == 1 && !field.isFocused(), "...and Ctrl+Z is Escape");
+
+    field.focus();
+    type(U'z');
+    press(KEY_ENTER);
+    TEST_ASSERT(field.getText() == "abcz" && heard.back() == "abcz" && !field.isFocused(),
+                "Enter ends the visit with the text as it is");
+    field.focus();
+    press(KEY_ESCAPE);
+    TEST_ASSERT_EQ(field.getText(), "abcz", "...which the next visit starts with");
+
+    field.setFilter([](char32_t character) { return character < 127; });
+    field.focus();
+    TEST_ASSERT(type(U'\u00f1') && field.getText() == "abcz", "a character its filter refuses isn't typed");
+    env->setClipBoardText("1\n2\u00f13");
+    press(KEY_V, KEYMOD_LCONTROL);
+    TEST_ASSERT_EQ(field.getText(), "abcz123", "...nor pasted, and neither are control characters");
+    field.stealFocus();
+    TEST_ASSERT(heard == std::vector<std::string>({"abc", "abcz", "abcz123"}), "the focus leaving ends a visit too");
 }
 
 void ToolUITest::testMenus() {

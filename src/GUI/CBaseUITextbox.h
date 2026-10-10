@@ -119,6 +119,8 @@ class CBaseUITextbox : public CBaseUIElement {
     void handleCaretKeyboardDelete();
     void updateCaretX();
 
+    [[nodiscard]] int getTextOffsetX() const;
+
     void handleDeleteSelectedText();
     void insertTextFromClipboard();
     void deselectText();
@@ -145,6 +147,10 @@ class CBaseUITextbox : public CBaseUIElement {
     Color frameDarkColor;
     Color caretColor;
     Color backgroundColor;
+    Color selectionColor{0xff56bcff};
+
+    // between the left edge and the text (negative: ui_textbox_text_offset_x)
+    int iTextOffsetX{-1};
 
     TEXT_JUSTIFICATION textJustification{TEXT_JUSTIFICATION::LEFT};
 

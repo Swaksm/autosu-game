@@ -33,6 +33,7 @@ class UIStyle {
         float gap{6.f};              // between neighbours
         float controlPadding{10.f};  // between a control's edge and its text, horizontally
         float controlHeight{28.f};
+        float fieldPadding{6.f};     // between a field's edge and its text, horizontally
         float rowHeight{24.f};       // a row of a menu or a list
         float separatorHeight{7.f};  // a menu's separator row
         float markWidth{18.f};       // the space a row keeps for a mark (see drawMark)
@@ -53,6 +54,8 @@ class UIStyle {
     void drawPanel(const McRect &rect) const;
     // checked: the chosen one of a group, or a toggle that's on
     void drawControl(const McRect &rect, ControlState state, bool checked = false) const;
+    // what a field to type in is drawn on; focused: it has the keyboard
+    void drawField(const McRect &rect, ControlState state, bool focused) const;
     // text in a rect, vertically centered
     void drawText(const McRect &rect, std::string_view text, TEXT_JUSTIFICATION justification, ControlState state,
                   bool dim = false) const;

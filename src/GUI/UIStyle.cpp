@@ -43,6 +43,15 @@ void UIStyle::drawControl(const McRect &rect, ControlState state, bool checked) 
     g->drawRect(rect);
 }
 
+void UIStyle::drawField(const McRect &rect, ControlState state, bool focused) const {
+    g->setColor(state == ControlState::DISABLED ? this->palette.panel : this->palette.background);
+    g->fillRect(rect);
+    g->setColor(focused                          ? this->palette.accent
+                : state == ControlState::HOVERED ? this->palette.controlHovered
+                                                 : this->palette.border);
+    g->drawRect(rect);
+}
+
 void UIStyle::drawText(const McRect &rect, std::string_view text, TEXT_JUSTIFICATION justification, ControlState state,
                        bool dim) const {
     McFont *font = this->font();
