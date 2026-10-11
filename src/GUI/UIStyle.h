@@ -62,8 +62,8 @@ class UIStyle {
     // the surface of a popup (a menu)
     void drawPopup(const McRect &rect) const;
     // what's behind a row of a menu or a list, or a menu bar's title: nothing unless it's hovered (or highlighted by the
-    // keyboard) or pressed (an open menu's title)
-    void drawRow(const McRect &rect, ControlState state) const;
+    // keyboard), pressed (an open menu's title) or selected (a list's)
+    void drawRow(const McRect &rect, ControlState state, bool selected = false) const;
     // a line across the middle of rect
     void drawSeparator(const McRect &rect) const;
     enum class Mark : u8 { CHECK, SUBMENU, DROPDOWN };

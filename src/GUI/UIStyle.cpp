@@ -79,9 +79,14 @@ void UIStyle::drawPopup(const McRect &rect) const {
     g->drawRect(rect);
 }
 
-void UIStyle::drawRow(const McRect &rect, ControlState state) const {
-    if(state != ControlState::HOVERED && state != ControlState::PRESSED) return;
-    g->setColor(state == ControlState::PRESSED ? this->palette.accent : this->palette.controlHovered);
+void UIStyle::drawRow(const McRect &rect, ControlState state, bool selected) const {
+    if(selected) {
+        g->setColor(state == ControlState::HOVERED ? this->palette.accentHovered : this->palette.accent);
+    } else if(state == ControlState::HOVERED || state == ControlState::PRESSED) {
+        g->setColor(state == ControlState::PRESSED ? this->palette.accent : this->palette.controlHovered);
+    } else {
+        return;
+    }
     g->fillRect(rect);
 }
 

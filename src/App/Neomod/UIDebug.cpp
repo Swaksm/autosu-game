@@ -7,6 +7,7 @@
 #include "ConVarHandler.h"
 #include "MakeDelegateWrapper.h"
 
+#include "CBaseUIList.h"
 #include "CBaseUIScrollView.h"
 #include "CBaseUIStyledButton.h"
 #include "CBaseUITextbox.h"
@@ -287,6 +288,32 @@ void UIDebug::debugAssert(std::string_view args) {
         const std::string_view actualText = tb->getText();
         logRaw("UITEST {} text {} expected='{}' actual='{}'", actualText == parts[2] ? "OK" : "FAIL", parts[1],
                parts[2], actualText);
+        return;
+    }
+
+    if(pred == "rows"sv || pred == "selected"sv || pred == "cell"sv) {
+        // ui_assert rows|selected <name> <count>, ui_assert cell <name> <row> <column> <expected>
+        const auto *list = dynamic_cast<CBaseUIList *>(elem);
+        if(!list) {
+            logRaw("UITEST FAIL {} {} (not a list)", pred, parts[1]);
+            return;
+        }
+        if(pred == "cell"sv) {
+            const uSz row = Parsing::strto<uSz>(parts[2]);
+            const uSz column = parts.size() > 3 ? Parsing::strto<uSz>(parts[3]) : 0;
+            // (the rest of the line)
+            const std::string_view wanted =
+                parts.size() > 4 ? args.substr(parts[4].data() - args.data()) : std::string_view{};
+            const std::string actualText =
+                row < list->getModel().getRowCount() ? list->getModel().getCellText(row, column) : "(no such row)";
+            logRaw("UITEST {} cell {} {} {} expected='{}' actual='{}'", actualText == wanted ? "OK" : "FAIL", parts[1],
+                   row, column, wanted, actualText);
+            return;
+        }
+        const uSz wanted = Parsing::strto<uSz>(parts[2]);
+        const uSz actualCount = pred == "rows"sv ? list->getModel().getRowCount() : list->getSelection().size();
+        logRaw("UITEST {} {} {} expected={} actual={}", actualCount == wanted ? "OK" : "FAIL", pred, parts[1], wanted,
+               actualCount);
         return;
     }
 

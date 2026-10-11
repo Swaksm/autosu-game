@@ -21,6 +21,7 @@ class ToolUITest : public App {
     void testTextboxes();
     void testTextFields();
     void testNumberFields();
+    void testLists();
     void testMenus();
 
     int m_passes{0};

@@ -295,6 +295,7 @@ neomod_SOURCES = \
 	src/GUI/CBaseUIImage.cpp \
 	src/GUI/CBaseUIImageButton.cpp \
 	src/GUI/CBaseUILabel.cpp \
+	src/GUI/CBaseUIList.cpp \
 	src/GUI/CBaseUIMenu.cpp \
 	src/GUI/CBaseUIMenuBar.cpp \
 	src/GUI/CBaseUINumberField.cpp \

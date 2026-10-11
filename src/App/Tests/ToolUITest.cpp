@@ -3,6 +3,7 @@
 
 #include "CBaseUIBox.h"
 #include "CBaseUIDropdown.h"
+#include "CBaseUIList.h"
 #include "CBaseUIMenu.h"
 #include "CBaseUIMenuBar.h"
 #include "CBaseUINumberField.h"
@@ -60,6 +61,24 @@ struct PressedNumberField final : CBaseUINumberField {
     using CBaseUINumberField::onMouseUpOutside;
 };
 
+// a list its test presses, with rows its test makes (a row's key is its text)
+struct PressedList final : CBaseUIList {
+    using CBaseUIList::CBaseUIList;
+    using CBaseUIList::onMouseDownInside;
+    using CBaseUIList::onMouseUpInside;
+    using CBaseUIList::onWheel;
+};
+struct Rows final : CBaseUIList::Model {
+    [[nodiscard]] uSz getRowCount() const override { return this->keys.size(); }
+    [[nodiscard]] u64 getRowKey(uSz row) const override { return this->keys[row]; }
+    [[nodiscard]] std::string getCellText(uSz row, uSz column) const override {
+        this->asked.push_back(row);
+        return fmt::format("{}:{}", this->keys[row], column);
+    }
+    std::vector<u64> keys;
+    mutable std::vector<uSz> asked;
+};
+
 std::string rect(const CBaseUIElement *e) {
     return fmt::format("{},{} {}x{}", e->getRelPos().x, e->getRelPos().y, e->getSize().x, e->getSize().y);
 }
@@ -83,6 +102,7 @@ void ToolUITest::update() {
     this->testTextboxes();
     this->testTextFields();
     this->testNumberFields();
+    this->testLists();
     this->testMenus();
 
     TEST_PRINT_RESULTS("ToolUITest");
@@ -491,6 +511,85 @@ void ToolUITest::testNumberFields() {
     field.onMouseUpInside(true, false);
     TEST_ASSERT(field.isFocused() && field.getText() == "10" && field.hasSelectedText(), "a click visits it");
     field.stealFocus();
+}
+
+void ToolUITest::testLists() {
+    TEST_SECTION("lists");
+    uiStyle().setScale(1.f);
+    const float rowHeight = uiStyle().metrics.rowHeight;
+
+    Rows rows;
+    for(u64 key = 100; key < 200; key++) rows.keys.push_back(key);
+    PressedList list(rows, {{"a", 50.f}, {"b", 0.f}}, "list");
+    // a header and five rows
+    list.setPos(0.f, 0.f);
+    list.setSize(200.f, rowHeight * 6.f);
+    int changes = 0;
+    std::vector<uSz> activated;
+    list.setSelectionCallback([&] { changes++; });
+    list.setActivateCallback([&](uSz row) { activated.push_back(row); });
+    const auto selected = [&] {
+        std::vector<u64> keys{list.getSelection().begin(), list.getSelection().end()};
+        std::ranges::sort(keys);
+        return keys;
+    };
+    const auto click = [&](uSz rowInView) {
+        mouse->setPos({20.f, rowHeight * ((float)rowInView + 1.5f)});
+        list.onMouseDownInside(true, false);
+        list.onMouseUpInside(true, false);
+    };
+    const auto press = [&](SCANCODE scancode, KEYMOD modifiers = KEYMOD_NONE) {
+        KeyboardEvent e = key(scancode, modifiers);
+        list.onKeyDown(e);
+        return e.isConsumed();
+    };
+    const auto inView = [&](uSz first, uSz last) { return list.getRowsInView() == std::pair{first, last}; };
+
+    TEST_ASSERT(inView(0, 5), "a list shows the rows that fit under its header");
+    TEST_ASSERT(!press(KEY_DOWN), "...and takes no key without the focus");
+    click(1);
+    TEST_ASSERT(selected() == std::vector<u64>({101}) && changes == 1 && list.isFocused(),
+                "a click selects a row and gives the list the focus");
+    press(KEY_DOWN);
+    press(KEY_DOWN, KEYMOD_LSHIFT);
+    TEST_ASSERT(selected() == std::vector<u64>({102, 103}) && changes == 3,
+                "Down picks the next row, with Shift all from the one picked without it");
+    press(KEY_END);
+    TEST_ASSERT(selected() == std::vector<u64>({199}) && inView(95, 100), "End picks the last row, scrolled into view");
+    press(KEY_PAGEUP);
+    TEST_ASSERT(selected() == std::vector<u64>({195}), "a page is a row less than what fits");
+    TEST_ASSERT(press(KEY_ENTER) && activated == std::vector<uSz>({95}), "Enter activates the row picked");
+    TEST_ASSERT(press(KEY_A, KEYMOD_LCONTROL) && list.getSelection().size() == 100, "Ctrl+A selects every row");
+    TEST_ASSERT(!press(KEY_S, KEYMOD_LCONTROL) && !press(KEY_SPACE) && !press(KEY_DELETE),
+                "the keys it has no use for go on");
+
+    // rows going and coming
+    press(KEY_HOME);
+    press(KEY_DOWN, KEYMOD_LSHIFT);
+    rows.keys.erase(rows.keys.begin());
+    rows.keys.insert(rows.keys.begin() + 3, 500);
+    TEST_ASSERT(selected() == std::vector<u64>({100, 101}), "the selection is the keys', whatever the rows do");
+    press(KEY_DOWN);
+    TEST_ASSERT(selected() == std::vector<u64>({102}), "...and the keys go on from where the row picked is now");
+    list.setSelection(std::vector<u64>{500, 103});
+    TEST_ASSERT(selected() == std::vector<u64>({103, 500}) && changes == 9, "a selection set isn't the user's change");
+
+    // only what shows is asked for
+    list.scrollTo(50);
+    rows.asked.clear();
+    list.draw();
+    std::ranges::sort(rows.asked);
+    rows.asked.erase(std::ranges::unique(rows.asked).begin(), rows.asked.end());
+    TEST_ASSERT(rows.asked == std::vector<uSz>({46, 47, 48, 49, 50}), "only the rows in view are asked for their text");
+    list.onWheel({.delta = 120, .ticks = 1}, {});
+    TEST_ASSERT_EQ(list.getRowsInView().first, 43u, "the wheel scrolls by three rows");
+    click(0);
+    TEST_ASSERT(selected() == std::vector<u64>({rows.keys[43]}), "a click picks the row under it, scrolled or not");
+
+    rows.keys.resize(2);
+    click(3);
+    TEST_ASSERT(list.getSelection().empty() && inView(0, 2), "a click under the last row drops the selection");
+    list.stealFocus();
 }
 
 void ToolUITest::testMenus() {
