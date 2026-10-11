@@ -25,7 +25,8 @@ class CBaseUINumberField : public CBaseUIStyledTextbox {
     // shown after the number while it isn't being typed in
     CBaseUINumberField *setSuffix(std::string suffix);
     // shows it as it is (the range and the decimals only bind what the user sets). while the user types, what's typed
-    // stays
+    // stays. a value that's no number (NaN) shows as nothing, for what there are several of: it can be typed over,
+    // not dragged or stepped
     CBaseUINumberField *setValue(f64 value);
     // what it shows: during a drag, and after steps while it's typed in, not yet what its user was told
     [[nodiscard]] f64 getValue() const { return this->value; }

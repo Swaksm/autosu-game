@@ -23,6 +23,9 @@ constexpr float DRAG_THRESHOLD{3.f};
 constexpr float STEP_WIDTH{4.f};
 constexpr float MAX_STEP_WIDTH{20.f};
 constexpr float RANGE_WIDTH{200.f};
+
+// (no number is the same as no number)
+bool same(f64 a, f64 b) { return a == b || (std::isnan(a) && std::isnan(b)); }
 }  // namespace
 
 CBaseUINumberField::CBaseUINumberField(std::string name) : CBaseUIStyledTextbox(std::move(name)) {
@@ -60,7 +63,7 @@ CBaseUINumberField *CBaseUINumberField::setSuffix(std::string suffix) {
 
 CBaseUINumberField *CBaseUINumberField::setValue(f64 value) {
     this->settled = value;
-    if(value == this->value) return this;
+    if(same(value, this->value)) return this;
     this->value = value;
     if(!this->typing) this->setText(this->format(false));
     return this;
@@ -98,7 +101,7 @@ void CBaseUINumberField::revert() {
 }
 
 std::optional<CURSORTYPE> CBaseUINumberField::getCursorShape() {
-    return this->typing ? CURSORTYPE::CURSOR_TEXT : CURSORTYPE::CURSOR_SIZE_H;
+    return this->typing || std::isnan(this->value) ? CURSORTYPE::CURSOR_TEXT : CURSORTYPE::CURSOR_SIZE_H;
 }
 
 void CBaseUINumberField::onKeyDown(KeyboardEvent &e) {
@@ -106,6 +109,7 @@ void CBaseUINumberField::onKeyDown(KeyboardEvent &e) {
         e.consume();
         // (from what's typed so far)
         this->takeTyped();
+        if(std::isnan(this->value)) return;
         const f64 by = (e.getModifiers() & KEYMOD_SHIFT) ? this->fine : this->step;
         this->value = this->fit(this->value + (e == KEY_UP ? by : -by));
         this->setText(this->format(true));
@@ -147,7 +151,7 @@ void CBaseUINumberField::onCapturedMouseMove() {
     }
     const UIStyle &style = uiStyle();
     const float moved = mouse->getPos().x - this->pressX;
-    if(!this->dragging && std::abs(moved) <= style.px(DRAG_THRESHOLD)) return;
+    if(std::isnan(this->pressValue) || (!this->dragging && std::abs(moved) <= style.px(DRAG_THRESHOLD))) return;
     this->dragging = true;
 
     // the steps the cursor made since the last update count as fine ones with Shift; back where it was pressed, with
@@ -194,6 +198,7 @@ void CBaseUINumberField::onMouseCancel() {
 }
 
 std::string CBaseUINumberField::format(bool typing) const {
+    if(std::isnan(this->value)) return {};
     // (a value with more decimals than the user can set shows them all)
     const f64 scale = std::pow(10.0, this->decimals);
     std::string out = std::round(this->value * scale) / scale == this->value
@@ -214,13 +219,13 @@ f64 CBaseUINumberField::fit(f64 v) const {
 }
 
 void CBaseUINumberField::show(f64 v) {
-    if(v == this->value) return;
+    if(same(v, this->value)) return;
     this->value = v;
     if(!this->typing) this->setText(this->format(false));
 }
 
 void CBaseUINumberField::settle() {
-    if(this->value == this->settled) return;
+    if(same(this->value, this->settled)) return;
     this->settled = this->value;
     if(this->changeCallback) this->changeCallback(this->value);
 }

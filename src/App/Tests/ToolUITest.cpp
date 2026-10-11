@@ -26,6 +26,8 @@
 
 #include "fmt/format.h"
 
+#include <cmath>
+#include <limits>
 #include <string>
 #include <vector>
 
@@ -511,6 +513,25 @@ void ToolUITest::testNumberFields() {
     field.onMouseUpInside(true, false);
     TEST_ASSERT(field.isFocused() && field.getText() == "10" && field.hasSelectedText(), "a click visits it");
     field.stealFocus();
+
+    // no value
+    const uSz told = heard.size();
+    field.setValue(std::numeric_limits<f64>::quiet_NaN());
+    TEST_ASSERT(field.getText().empty() && heard.size() == told, "a value that's no number shows as nothing");
+    field.onMouseDownInside(true, false);
+    mouse->setPos({60.f, 10.f});
+    field.onCapturedMouseMove();
+    field.onMouseUpInside(true, false);
+    TEST_ASSERT(!field.isAdjusting() && field.isFocused() && field.getText().empty(),
+                "...which a drag doesn't change: it's a click");
+    press(KEY_UP);
+    press(KEY_ENTER);
+    TEST_ASSERT(std::isnan(field.getValue()) && heard.size() == told, "...nor does a step, or a visit without typing");
+    field.visit();
+    type(U"3");
+    press(KEY_ENTER);
+    TEST_ASSERT(field.getValue() == 3.0 && heard.back() == 3.0 && field.getText() == "3x",
+                "...but a number typed is its value");
 }
 
 void ToolUITest::testLists() {
