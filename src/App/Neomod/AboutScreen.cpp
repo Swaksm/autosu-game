@@ -405,7 +405,9 @@ void AboutScreen::buildChangelog() {
         R"(  - NOTE: You can disable them by setting "direct_autoplay_preview 0" if you really want to)",
         R"(- Added music controls to main menu)",
         R"(- Added skin exporting ("Export Skin" in the skin options, or "skin_export" in the console))",
+        R"(- Adjusted slider judgement to match stable more closely)",
         R"(- Exposed "direct_autoselect" behavior as a checkbox)",
+        R"(- Fixed hit windows being off my 1ms depending on OD)",
         R"(- Fixed multiplayer room beatmap info being stale on newly downloaded/imported maps)",
         R"(- Fixed DT/HT on replays not being applied correctly)",
         R"(- Allowed force disabling skins from setting convars)",
@@ -416,6 +418,7 @@ void AboutScreen::buildChangelog() {
         R"(- Fixed options menu being too small for some languages)",
         R"(- Fixed song browser scroll position being broken when searching the selected beatmap)",
         R"(- Fixed the wrong audio playing when changing beatmap selection very quickly)",
+        R"(- Improved replay playback to match the recorded gameplay (less replaybugs))",
     };
     changelogs.push_back(std::move(v43_14));
 
