@@ -5,7 +5,7 @@
 #include "types.h"
 #include "Vectors.h"
 
-class AbstractBeatmapInterface;
+class GameplayJudge;
 
 namespace GameRules {
 
@@ -104,9 +104,9 @@ constexpr inline float getApproachTimeForStacking(float AR) {
 }
 
 // raw spins required per second
-float getSpinnerSpinsPerSecond(const AbstractBeatmapInterface *beatmap);
+float getSpinnerSpinsPerSecond(const GameplayJudge *beatmap);
 
-inline float getSpinnerRotationsForSpeedMultiplier(const AbstractBeatmapInterface *beatmap, i32 spinnerDuration,
+inline float getSpinnerRotationsForSpeedMultiplier(const GameplayJudge *beatmap, i32 spinnerDuration,
                                                    float speedMultiplier) {
     /// return (int)((float)spinnerDuration / 1000.0f * getSpinnerSpinsPerSecond(beatmap)); // actual
     return (int)((((float)spinnerDuration / 1000.0f * getSpinnerSpinsPerSecond(beatmap)) * 0.5f) *
@@ -115,7 +115,7 @@ inline float getSpinnerRotationsForSpeedMultiplier(const AbstractBeatmapInterfac
 
 // spinner length compensated rotations
 // respect all mods and overrides
-float getSpinnerRotationsForSpeedMultiplier(const AbstractBeatmapInterface *beatmap, i32 spinnerDuration);
+float getSpinnerRotationsForSpeedMultiplier(const GameplayJudge *beatmap, i32 spinnerDuration);
 
 //*************//
 //	Playfield  //

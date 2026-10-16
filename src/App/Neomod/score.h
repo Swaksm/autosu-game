@@ -7,7 +7,7 @@
 
 class ConVar;
 class DatabaseBeatmap;
-class AbstractBeatmapInterface;
+class GameplayJudge;
 namespace neomod {
 class HitObject;
 }  // namespace neomod
@@ -187,8 +187,8 @@ class LiveScore final {
 
     void reset();  // only Beatmap may call this function!
 
-    // only Beatmap/SimulatedBeatmapInterface may call this function!
-    void addHitResult(AbstractBeatmapInterface *beatmap, neomod::HitObject *hitObject, LiveHitResult hit, i32 delta,
+    // only GameplayJudge may call this function!
+    void addHitResult(GameplayJudge *judge, neomod::HitObject *hitObject, LiveHitResult hit, i32 delta,
                       bool ignoreOnHitErrorBar, bool hitErrorBarOnly, bool ignoreCombo, bool ignoreScore);
 
     void addHitResultComboEnd(LiveHitResult hit);
@@ -245,12 +245,11 @@ class LiveScore final {
     void setCheated() { this->bIsUnranked = true; }
     void setTouchDevice();
 
-    static double getHealthIncrease(AbstractBeatmapInterface *beatmap, LiveHitResult hit);
+    static double getHealthIncrease(GameplayJudge *judge, LiveHitResult hit);
     static double getHealthIncrease(LiveHitResult hit, double HP = 5.0f, double hpMultiplierNormal = 1.0f,
                                     double hpMultiplierComboEnd = 1.0f, double hpBarMaximumForNormalization = 200.0f);
 
     [[nodiscard]] int getKeyCount(GameplayKeys key_flag) const;
-    [[nodiscard]] LegacyFlags getModsLegacy() const;
     [[nodiscard]] std::string getModsStringForRichPresence() const;
     Replay::Mods mods;
     bool simulating;

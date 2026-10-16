@@ -1,5 +1,6 @@
 // Copyright (c) 2020, PG, All rights reserved.
 #include "DatabaseBeatmap.h"
+#include "GameplayJudge.h"
 #include "BeatmapFile.h"
 #include "DifficultyCalculator.h"
 
@@ -444,8 +445,7 @@ DatabaseBeatmap::LOAD_META_RESULT DatabaseBeatmap::loadMetadata(bool compute_md5
     return ret(Primitives::LoadError::NONE);
 }
 
-DatabaseBeatmap::LOAD_GAMEPLAY_RESULT DatabaseBeatmap::loadGameplay(PlayedMap &played,
-                                                                    AbstractBeatmapInterface *beatmap,
+DatabaseBeatmap::LOAD_GAMEPLAY_RESULT DatabaseBeatmap::loadGameplay(PlayedMap &played, GameplayJudge *judge,
                                                                     const PlayfieldView *view) {
     LOAD_GAMEPLAY_RESULT result = LOAD_GAMEPLAY_RESULT();
     Primitives::PRIMITIVE_CONTAINER &c = played.primitives;
@@ -496,13 +496,13 @@ DatabaseBeatmap::LOAD_GAMEPLAY_RESULT DatabaseBeatmap::loadGameplay(PlayedMap &p
             maxPossibleCombo += 2 + repeats + (repeats + 1) * s->ticks.size();  // start/end + repeat arrow + ticks
         }
 
-        beatmap->iMaxPossibleCombo = maxPossibleCombo;
+        judge->iMaxPossibleCombo = maxPossibleCombo;
 
-        result.hitobjects = HitObjects::create(c, beatmap, view);
+        result.hitobjects = HitObjects::create(c, judge, view);
     }
 
     // precalculate Score v2 combo portion maximum
-    if(beatmap != nullptr) {
+    if(judge != nullptr) {
         u32 scoreV2ComboPortionMaximum = 1;
 
         if(result.hitobjects.size() > 0) {
@@ -525,7 +525,7 @@ DatabaseBeatmap::LOAD_GAMEPLAY_RESULT DatabaseBeatmap::loadGameplay(PlayedMap &p
             }
         }
 
-        beatmap->iScoreV2ComboPortionMaximum = scoreV2ComboPortionMaximum;
+        judge->iScoreV2ComboPortionMaximum = scoreV2ComboPortionMaximum;
     }
 
     // special rule for first hitobject (for 1 approach circle with HD)

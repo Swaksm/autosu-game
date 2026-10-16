@@ -8,6 +8,7 @@
 #include "BanchoProtocol.h"
 #include "BanchoUsers.h"
 #include "BeatmapInterface.h"
+#include "GameplayJudge.h"
 #include "Database.h"
 #include "DatabaseBeatmap.h"
 #include "CBaseUILabel.h"
@@ -163,7 +164,7 @@ void SpectatorScreen::controlClientState() {
     // a "gameplay" frame is any frame that doesn't require us to do an action (such as seeking or dying)
     if(osu->isInPlayMode()) {
         i32 last_music_pos = -1000;
-        if(!map_iface->spectated_replay.empty()) last_music_pos = map_iface->spectated_replay.back().cur_music_pos;
+        if(!map_iface->judge->replay.empty()) last_music_pos = map_iface->judge->replay.back().cur_music_pos;
 
         auto it =
             std::find_if(this->player_updates.begin(), this->player_updates.end(), [&](const RemotePlayerUpdate &u) {
@@ -172,7 +173,7 @@ void SpectatorScreen::controlClientState() {
             });
         for(auto u = this->player_updates.begin(); u != it; u++) {
             for(auto frame : u->replay_frames) {
-                map_iface->spectated_replay.push_back(frame);
+                map_iface->judge->replay.push_back(frame);
             }
             map_iface->score_frames.push_back(u->score);
         }
@@ -200,8 +201,8 @@ void SpectatorScreen::controlClientState() {
                 map_iface->is_buffering = false;
             }
         } else {
-            neomod::HitObject *lastHitObject =
-                map_iface->hitobjectsSortedByEndTime.size() > 0 ? map_iface->hitobjectsSortedByEndTime.back() : nullptr;
+            const auto sortedByEndTime = map_iface->judge->getHitObjectsSortedByEndTime();
+            const neomod::HitObject *lastHitObject = !sortedByEndTime.empty() ? sortedByEndTime.back() : nullptr;
             bool is_finished = lastHitObject != nullptr && lastHitObject->isFinished();
 
             if(leeway <= 0 && !is_finished) {
@@ -214,12 +215,12 @@ void SpectatorScreen::controlClientState() {
         }
 
         // make sure we're not too far behind the liveplay
-        if(!map_iface->spectated_replay.empty()) {
+        if(!map_iface->judge->replay.empty()) {
             if(leeway > 2 * cv::spec_buffer.getInt()) {
-                i32 target = std::max(map_iface->spectated_replay.front().cur_music_pos,
-                                      map_iface->spectated_replay.back().cur_music_pos - cv::spec_buffer.getInt());
+                i32 target = std::max(map_iface->judge->replay.front().cur_music_pos,
+                                      map_iface->judge->replay.back().cur_music_pos - cv::spec_buffer.getInt());
                 debugLog("We're {:d}ms behind, seeking to catch up to player...", target - map_iface->iCurMusicPos);
-                map_iface->bTempSeekNF = true;
+                map_iface->judge->bTempSeekNF = true;
                 map_iface->seekMS(std::max(0, target));
                 return;
             }
@@ -262,18 +263,18 @@ void SpectatorScreen::controlClientState() {
 
     // check if we need to seek backwards
     i32 last_music_pos = -1000;
-    if(!map_iface->spectated_replay.empty()) last_music_pos = map_iface->spectated_replay.back().cur_music_pos;
+    if(!map_iface->judge->replay.empty()) last_music_pos = map_iface->judge->replay.back().cur_music_pos;
     if(update.music_pos < last_music_pos) {
         i32 target = update.music_pos - cv::spec_buffer.getInt();
         if(target <= 0) {
             debugLog("Remote player seeked to {:d}ms, restarting map", update.music_pos);
-            map_iface->spectated_replay.clear();
+            map_iface->judge->replay.clear();
             map_iface->score_frames.clear();
             map_iface->is_buffering = true;
             map_iface->restart(true);
         } else {
             debugLog("Remote player seeked backwards, seeking to {:d}ms", target);
-            map_iface->bTempSeekNF = true;
+            map_iface->judge->bTempSeekNF = true;
             map_iface->seekMS(target);
         }
 
@@ -440,8 +441,8 @@ void SpectatorScreen::handleFrameBundle(PacketReader &packet) {
     update.map_md5 = info->map_md5;
 
     update.music_pos = -1000;
-    if(map_iface->beatmap && map_iface->beatmap->getID() == update.map_id && !map_iface->spectated_replay.empty()) {
-        update.music_pos = map_iface->spectated_replay.back().cur_music_pos;
+    if(map_iface->beatmap && map_iface->beatmap->getID() == update.map_id && !map_iface->judge->replay.empty()) {
+        update.music_pos = map_iface->judge->replay.back().cur_music_pos;
     }
 
     i32 extra = packet.read<i32>();

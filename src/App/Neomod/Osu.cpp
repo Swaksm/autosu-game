@@ -9,6 +9,7 @@
 #include "Bancho.h"
 #include "BanchoNetworking.h"
 #include "BeatmapInterface.h"
+#include "GameplayJudge.h"
 #include "CBaseUIScrollView.h"
 #include "CBaseUISlider.h"
 #include "CBaseUITextbox.h"
@@ -656,9 +657,10 @@ void Osu::update() {
             const bool isLoading = this->map_iface->isLoading();
 
             if(this->map_iface->isInSkippableSection() && !this->map_iface->isPaused() && !isLoading) {
-                bool can_skip_intro = (cv::skip_intro_enabled.getBool() && this->map_iface->iCurrentHitObjectIndex < 1);
+                bool can_skip_intro =
+                    (cv::skip_intro_enabled.getBool() && this->map_iface->getCurrentHitObjectIndex() < 1);
                 bool can_skip_break =
-                    (cv::skip_breaks_enabled.getBool() && this->map_iface->iCurrentHitObjectIndex > 0);
+                    (cv::skip_breaks_enabled.getBool() && this->map_iface->getCurrentHitObjectIndex() > 0);
                 if(BanchoState::is_playing_a_multi_map()) {
                     can_skip_intro = this->map_iface->all_players_skipped;
                     can_skip_break = false;
@@ -952,8 +954,8 @@ void Osu::onKeyDown(KeyboardEvent &key) {
            (!key.isConsumed() && key == binds::INSTANT_REPLAY) &&            //
            (!this->map_iface->is_watching && !BanchoState::spectating)) {
             FinishedScore score;
-            score.replay = this->map_iface->live_replay;
-            score.beatmap_hash = this->map_iface->getPlayed()->md5;
+            score.replay = this->map_iface->getJudge()->replay;
+            score.beatmap_hash = this->map_iface->getJudge()->getMapData()->md5;
             score.mods = this->score->mods;
 
             score.playerName = BanchoState::get_username();

@@ -5,7 +5,7 @@
 #include <utility>
 #include <variant>
 
-#include "AbstractBeatmapInterface.h"
+#include "GameplayJudge.h"
 #include "AnimationHandler.h"
 #include "BeatmapPrimitives.h"
 #include "BeatmapStacking.h"
@@ -254,7 +254,7 @@ void HitObject::drawHitResult(const PlayfieldView &view, vec2 pos, LiveHitResult
 }
 
 HitObject::HitObject(i32 timeMS, DatabaseBeatmapTypes::HITSAMPLE_BITS samples, i32 comboNumber, bool isEndOfCombo,
-                     i32 colorCounter, i32 colorOffset, AbstractBeatmapInterface *judge, const PlayfieldView *view)
+                     i32 colorCounter, i32 colorOffset, GameplayJudge *judge, const PlayfieldView *view)
     : m_judge(judge),
       m_view(view),
       m_clickTimeMS(timeMS),
@@ -297,10 +297,13 @@ void HitObject::drawHitResultAnim(const HITRESULTANIM &hitresultanim) {
     }
 }
 
-void HitObject::update(i32 curPosMS, f64 /*frame_time*/) {
+void HitObject::update(i32 curPosMS, f64 /*frame_time*/) { HitObject::animate(curPosMS); }
+
+void HitObject::animate(i32 curPosMS) {
     // (the view's mods include the experimental ones; objects without a view aren't drawn)
     this->updateLook(curPosMS, m_view ? m_view->getModFlags() : m_judge->getMods().flags,
-                     m_judge->getCachedApproachTimeForUpdate(), m_judge->getSpeedAdjustedAnimationSpeed());
+                     m_judge->getCachedApproachTimeForUpdate(),
+                     m_view ? m_view->getSpeedAdjustedAnimationSpeed() : m_judge->getSpeedMultiplier());
 }
 
 void HitObject::updateLook(i32 curPosMS, ModFlags mods, f32 approachTimeMS, f32 speedAdjustedAnimationSpeed) {
@@ -757,7 +760,7 @@ void Circle::drawHitCircleNumber(const Skin *skin, f32 numberScale, f32 overlapS
 }
 
 Circle::Circle(vec2 pos, i32 timeMS, DatabaseBeatmapTypes::HITSAMPLE_BITS samples, i32 comboNumber, bool isEndOfCombo,
-               i32 colorCounter, i32 colorOffset, AbstractBeatmapInterface *judge, const PlayfieldView *view)
+               i32 colorCounter, i32 colorOffset, GameplayJudge *judge, const PlayfieldView *view)
     : HitObject(timeMS, samples, comboNumber, isEndOfCombo, colorCounter, colorOffset, judge, view),
       m_rawPos(pos),
       m_originalRawPos(m_rawPos) {
@@ -888,8 +891,7 @@ void Circle::update(i32 curPosMS, f64 frameTimeSecs) {
     }
 
     if(flags::has<ModFlags::Relax>(curIFaceMods)) {
-        if(curPosMS >= m_clickTimeMS + (i32)cv::relax_offset.getInt() && !m_judge->isPaused() &&
-           !m_judge->isContinueScheduled()) {
+        if(curPosMS >= m_clickTimeMS + (i32)cv::relax_offset.getInt()) {
             const vec2 pos = m_judge->osuCoords2Pixels(m_rawPos);
             const f32 cursorDelta = vec::length(m_judge->getCursorPos() - pos);
             if((cursorDelta < m_judge->fHitcircleDiameter / 2.0f && (flags::has<ModFlags::Relax>(curIFaceMods)))) {
@@ -1031,7 +1033,7 @@ Slider::Slider(SLIDERCURVETYPE stype, i32 repeat, f32 pixelLength, std::vector<v
                const std::vector<f32> &ticks, f32 sliderTimeMS, f32 sliderTimeMSWithoutRepeats, i32 timeMS,
                DatabaseBeatmapTypes::HITSAMPLE_BITS hoverSamples,
                std::vector<DatabaseBeatmapTypes::HITSAMPLE_BITS> edgeSamples, i32 comboNumber, bool isEndOfCombo,
-               i32 colorCounter, i32 colorOffset, AbstractBeatmapInterface *judge, const PlayfieldView *view)
+               i32 colorCounter, i32 colorOffset, GameplayJudge *judge, const PlayfieldView *view)
     : HitObject(timeMS, hoverSamples, comboNumber, isEndOfCombo, colorCounter, colorOffset, judge, view),
       m_ctrlPoints(std::move(points)),
       m_edgeSamples(std::move(edgeSamples)),
@@ -1548,16 +1550,17 @@ std::pair<f32, f32> Slider::getSnakeRange() const {
     return {from, to};
 }
 
-void Slider::update(i32 curPosMS, f64 frameTimeSecs) {
-    HitObject::update(curPosMS, frameTimeSecs);
-
-    // stop slide sound while paused
-    if(m_judge->isPaused() || !m_judge->isPlaying() || m_judge->hasFailed()) {
-        m_judge->stopSliderSounds(m_lastSliderSampleSets);
-    }
+void Slider::animate(i32 curPosMS) {
+    HitObject::animate(curPosMS);
 
     // animations must be updated even if we are finished
     if(m_view != nullptr) updateAnimations(curPosMS, m_view->getSpeedAdjustedAnimationSpeed());
+
+    if(!m_finished) this->updateSlideLook(curPosMS, m_judge->getMods().flags);
+}
+
+void Slider::update(i32 curPosMS, f64 /*frameTimeSecs*/) {
+    this->animate(curPosMS);
 
     // all further calculations are only done while we are active
     if(m_finished) {
@@ -1567,7 +1570,6 @@ void Slider::update(i32 curPosMS, f64 frameTimeSecs) {
 
     const ModFlags curIFaceMods = m_judge->getMods().flags;
 
-    this->updateSlideLook(curPosMS, curIFaceMods);
     m_curPoint = m_judge->osuCoords2Pixels(m_curPointRaw);
 
     // No longer ignore keys that were released since entering the slider
@@ -1599,8 +1601,7 @@ void Slider::update(i32 curPosMS, f64 frameTimeSecs) {
             i32 deltaMS = curPosMS - m_clickTimeMS;
 
             if((flags::has<ModFlags::Relax>(curIFaceMods))) {
-                if(curPosMS >= m_clickTimeMS + (i32)cv::relax_offset.getInt() && !m_judge->isPaused() &&
-                   !m_judge->isContinueScheduled()) {
+                if(curPosMS >= m_clickTimeMS + (i32)cv::relax_offset.getInt()) {
                     const vec2 pos = m_judge->osuCoords2Pixels(curvePointAt(0.0f));
                     const f32 cursorDelta = vec::length(m_judge->getCursorPos() - pos);
                     if((cursorDelta < m_judge->fHitcircleDiameter / 2.0f &&
@@ -1665,7 +1666,10 @@ void Slider::update(i32 curPosMS, f64 frameTimeSecs) {
 
         // we should only credit ticks/repeats/tails that passed after tracking began:
         // if tracking starts at the frame we notice a point, that point already passed.
-        if(isTrackingCorrectly && !wasTrackingCorrectly) m_slideStartTimeMS = curPosMS;
+        if(curPosMS >= m_clickTimeMS && isTrackingCorrectly && !wasTrackingCorrectly) {
+            m_slideStartTimeMS = curPosMS;
+            m_judge->markReplayFrame();
+        }
 
         if(isTrackingCorrectly) {
             if(isTrackingStrictTrackingMod) {
@@ -1838,8 +1842,7 @@ void Slider::update(i32 curPosMS, f64 frameTimeSecs) {
         const ModFlags curGameplayFlags = m_judge->getMods().flags;
         const bool sliding = m_startFinished && !m_endFinished && m_cursorInside && m_deltaMS <= 0             //
                              && (isClickHeldSlider() || (flags::has<ModFlags::Autoplay>(curGameplayFlags)) ||  //
-                                 (flags::has<ModFlags::Relax>(curGameplayFlags)))                              //
-                             && !m_judge->isPaused() && !m_judge->isWaiting() && m_judge->isPlaying();
+                                 (flags::has<ModFlags::Relax>(curGameplayFlags)));
         m_lastSliderSampleSets =
             m_judge->updateSliderSlideSounds(sliding, m_hitSamples, m_curPointRaw, m_lastSliderSampleSets);
     }
@@ -2493,7 +2496,7 @@ bool Slider::isClickHeldSlider() const {
 static CONSTINIT VertexArrayObject spinnerMetreVAO{DrawPrimitive::QUADS};
 
 Spinner::Spinner(vec2 pos, i32 timeMS, DatabaseBeatmapTypes::HITSAMPLE_BITS samples, bool isEndOfCombo, i32 endTimeMS,
-                 AbstractBeatmapInterface *judge, const PlayfieldView *view)
+                 GameplayJudge *judge, const PlayfieldView *view)
     : HitObject(timeMS, samples, -1, isEndOfCombo, -1, -1, judge, view), m_rawPos(pos), m_originalRawPos(m_rawPos) {
     m_type = HitObjectType::SPINNER;
     m_durationMS = endTimeMS - timeMS;
@@ -2811,12 +2814,6 @@ void Spinner::draw() {
 void Spinner::update(i32 curPosMS, f64 frameTimeSecs) {
     HitObject::update(curPosMS, frameTimeSecs);
 
-    // stop spinner sound and don't update() while paused
-    if(m_judge->isPaused() || !m_judge->isPlaying() || m_judge->hasFailed()) {
-        m_judge->stopSpinnerSpinSound();
-        return;
-    }
-
     // if we have not been clicked yet, check if we are in the timeframe of a miss, also handle auto and relax
     if(!m_finished) {
         // handle spinner ending
@@ -3049,8 +3046,8 @@ vec2 Spinner::getAutoCursorPos(i32 curPosMS) const {
 
 namespace HitObjects {
 
-std::vector<std::unique_ptr<HitObject>> create(const Primitives::PRIMITIVE_CONTAINER &primitives,
-                                               AbstractBeatmapInterface *judge, const PlayfieldView *view) {
+std::vector<std::unique_ptr<HitObject>> create(const Primitives::PRIMITIVE_CONTAINER &primitives, GameplayJudge *judge,
+                                               const PlayfieldView *view) {
     std::vector<std::unique_ptr<HitObject>> objects;
     objects.reserve(primitives.objects.size());
     i32 comboStartTime = 0;

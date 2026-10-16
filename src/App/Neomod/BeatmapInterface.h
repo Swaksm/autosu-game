@@ -2,7 +2,7 @@
 // Copyright (c) 2015, PG, All rights reserved.
 
 #include "AnimationHandler.h"
-#include "AbstractBeatmapInterface.h"
+#include "GameplayJudge.h"
 #include "AsyncPPCalculator.h"
 #include "LegacyReplay.h"
 #include "score.h"
@@ -25,11 +25,13 @@ class HitObject;
 
 class DatabaseBeatmap;
 class SpectatorScreen;
-class SimulatedBeatmapInterface;
 struct LiveReplayFrame;
 struct ScoreFrame;
 
-class BeatmapInterface final : public AbstractBeatmapInterface, public PlayfieldView {
+// this class handles the beatmap and general state of a play:
+// music, intro, pausing, skipping, failing, drawing, recording and spectating
+// the gameplay itself is handled by GameplayJudge, which this class forwards input to
+class BeatmapInterface final : public GameplayJudge::Listener, public PlayfieldView {
     NOCOPY_NOMOVE(BeatmapInterface)
    public:
     using DBTimingInfo = neomod::DatabaseBeatmapTypes::TIMING_INFO;
@@ -71,12 +73,16 @@ class BeatmapInterface final : public AbstractBeatmapInterface, public Playfield
                          // the static slider mesh) centered at (0, 0, 0)
     [[nodiscard]] f32 osuAngle2PixelAngle(f32 degrees) const override;
 
+    // this sounds redundant to osu pixels, but the difference is, replay coords don't include playfield flip/rotation.
+    // and that's only a thing because i wanted mirror mod to be usable on vanilla servers 2+ years ago
+    [[nodiscard]] vec2 pixels2ReplayCoords(vec2 pixelCoords) const;
+    [[nodiscard]] vec2 replayCoords2Pixels(vec2 coords) const;
+
     // cursor
     [[nodiscard]] vec2 getMousePos() const;
-    [[nodiscard]] vec2 getCursorPos() const override;
+    [[nodiscard]] vec2 getCursorPos() const;
 
-    [[nodiscard]] const Replay::Mods &getMods() const override;
-    [[nodiscard]] LegacyFlags getModsLegacy() const override;
+    [[nodiscard]] const Replay::Mods &getMods() const;
     [[nodiscard]] vec2 getFirstPersonCursorDelta() const override;
 
     // playfield
@@ -84,7 +90,6 @@ class BeatmapInterface final : public AbstractBeatmapInterface, public Playfield
     [[nodiscard]] inline vec2 getPlayfieldSize() const override { return this->vPlayfieldSize; }
     [[nodiscard]] inline vec2 getPlayfieldCenter() const override { return this->vPlayfieldCenter; }
     [[nodiscard]] vec2 getScreenSize() const override;
-    [[nodiscard]] inline f32 getPlayfieldRotation() const { return this->fPlayfieldRotation; }
 
     // hitobjects
     [[nodiscard]] inline f32 getHitcircleXMultiplier() const {
@@ -100,19 +105,22 @@ class BeatmapInterface final : public AbstractBeatmapInterface, public Playfield
     [[nodiscard]] inline bool isInMafhamRenderChunk() const override { return this->bInMafhamRenderChunk; }
     [[nodiscard]] bool slidersRenderDynamically() const override;
 
+    // null without a selected beatmap
+    // XXX: this means we have nullptr checks splattered everywhere, which i'm not totally happy with
+    [[nodiscard]] inline GameplayJudge *getJudge() const { return this->judge.get(); }
+
     // score
-    [[nodiscard]] inline int getNumHitObjects() const { return this->hitobjects.size(); }
     [[nodiscard]] inline f32 getAimStars() const { return this->fAimStars; }
     [[nodiscard]] inline f32 getAimSliderFactor() const { return this->fAimSliderFactor; }
     [[nodiscard]] inline f32 getSpeedStars() const { return this->fSpeedStars; }
     [[nodiscard]] inline f32 getSpeedNotes() const { return this->fSpeedNotes; }
-    [[nodiscard]] f32 getSpeedMultiplier() const override;
-    [[nodiscard]] f32 getPitchMultiplier() const override;
+    [[nodiscard]] f32 getSpeedMultiplier() const;
+    [[nodiscard]] f32 getPitchMultiplier() const;
 
     const AsyncPPC::pp_res &getWholeMapPPInfo() const;
 
     // hud
-    [[nodiscard]] inline bool isSpinnerActive() const { return this->bIsSpinnerActive; }
+    [[nodiscard]] bool isSpinnerActive() const;
 
     // callbacks called by the Osu class (osu!standard)
     void skipEmptySection();
@@ -141,26 +149,24 @@ class BeatmapInterface final : public AbstractBeatmapInterface, public Playfield
     void setMusicSpeed(f32 speed);
     void seekMS(u32 ms);
     [[nodiscard]] inline DBTimingInfo getCurrentTimingInfo() const { return this->cur_timing_info; }
-    [[nodiscard]] inline u8 getDefaultSampleSet() const { return this->default_sample_set; }
 
     [[nodiscard]] u32 getTime() const;
     [[nodiscard]] u32 getStartTimePlayable() const;
-    [[nodiscard]] u32 getLength() const override;
-    [[nodiscard]] u32 getLengthPlayable() const override;
+    [[nodiscard]] u32 getLength() const;
+    [[nodiscard]] u32 getLengthPlayable() const;
     [[nodiscard]] f32 getPercentFinished() const;
     [[nodiscard]] f32 getPercentFinishedPlayable() const;
 
     // live statistics
     [[nodiscard]] int getMostCommonBPM() const;
-    [[nodiscard]] inline int getNPS() const { return this->iNPS; }
-    [[nodiscard]] inline int getND() const { return this->iND; }
 
     // set to false when using protected cvars
     bool is_submittable = true;
 
+    f32 fHitcircleDiameter{0.f};  // screen px
+
     // replay recording
-    void write_frame();
-    std::vector<LegacyReplay::Frame> live_replay;
+    void write_frame(const LegacyReplay::Frame &frame, bool force);
     f64 last_event_time = 0.0;
     i32 last_event_ms = 0;
     u8 current_keys = 0;
@@ -168,13 +174,10 @@ class BeatmapInterface final : public AbstractBeatmapInterface, public Playfield
     u8 last_keys = 0;
 
     // replay replaying (prerecorded)
-    // current_keys, last_keys also reused
     FinishedScore replay_data;
-    std::vector<LegacyReplay::Frame> spectated_replay;
     vec2 interpolatedMousePos{0.f};
     bool is_watching = false;
     i32 current_frame_idx = 0;
-    std::unique_ptr<SimulatedBeatmapInterface> sim{nullptr};
 
     // getting spectated (live)
     void broadcast_spectator_frames();
@@ -201,50 +204,46 @@ class BeatmapInterface final : public AbstractBeatmapInterface, public Playfield
     // NOTE: these may not be current outside of gameplay!
     [[nodiscard]] inline i32 getCurMusicPos() const override { return this->iCurMusicPos; }
     [[nodiscard]] inline i32 getCurMusicPosWithOffsets() const override { return this->iCurMusicPosWithOffsets; }
-    [[nodiscard]] inline f32 getBaseAnimationSpeed() const override { return this->fBaseAnimationSpeedFactor; }
-    [[nodiscard]] inline f32 getSpeedAdjustedAnimationSpeed() const override {
-        return this->fSpeedAdjustedAnimationSpeedFactor;
-    }
+    [[nodiscard]] f32 getBaseAnimationSpeed() const override;
+    [[nodiscard]] f32 getSpeedAdjustedAnimationSpeed() const override;
     [[nodiscard]] ModFlags getModFlags() const override;
     [[nodiscard]] Color getComboColor(i32 colorCounter, i32 colorOffset) const override;
 
-    [[nodiscard]] f32 getRawAR() const override;
-    [[nodiscard]] f32 getAR() const override;
-    [[nodiscard]] f32 getCS() const override;
-    [[nodiscard]] f32 getHP() const override;
-    [[nodiscard]] f32 getRawOD() const override;
-    [[nodiscard]] f32 getOD() const override;
+    [[nodiscard]] f32 getRawAR() const;
+    [[nodiscard]] f32 getAR() const;
+    [[nodiscard]] f32 getCS() const;
+    [[nodiscard]] f32 getHP() const;
+    [[nodiscard]] f32 getRawOD() const;
+    [[nodiscard]] f32 getOD() const;
     [[nodiscard]] f32 getApproachTime() const override;
-    [[nodiscard]] f32 getRawApproachTime() const override;
+    [[nodiscard]] f64 getHitWindow300() const;
+    [[nodiscard]] f64 getHitWindow100() const;
+    [[nodiscard]] f64 getHitWindow50() const;
+    [[nodiscard]] f32 getApproachRateForSpeedMultiplier() const;
+    [[nodiscard]] f32 getRawARForSpeedMultiplier() const;
+    [[nodiscard]] f32 getOverallDifficultyForSpeedMultiplier() const;
+    [[nodiscard]] f32 getRawODForSpeedMultiplier() const;
+    [[nodiscard]] i32 getCurrentHitObjectIndex() const;
+    [[nodiscard]] inline const BeatmapDifficulty *getBeatmap() const { return this->beatmap; }
+    [[nodiscard]] inline BeatmapDifficulty *getBeatmapMutable() const { return this->beatmap; }
 
     // health
-    [[nodiscard]] inline f64 getHealth() const { return this->fHealth; }
-    [[nodiscard]] inline bool hasFailed() const override { return this->bFailed; }
+    [[nodiscard]] f64 getHealth() const;
+    [[nodiscard]] bool hasFailed() const override;
 
     // generic state
-    [[nodiscard]] u8 getKeys() const override { return this->current_keys; }
-    [[nodiscard]] inline bool isPlaying() const override { return this->bIsPlaying; }
-    [[nodiscard]] inline bool isPaused() const override { return this->bIsPaused; }
+    [[nodiscard]] u8 getKeys() const { return this->current_keys; }
+    [[nodiscard]] bool isClickHeld() const { return this->current_keys & ~LegacyReplay::Smoke; }
+    [[nodiscard]] inline bool isPlaying() const { return this->bIsPlaying; }
+    [[nodiscard]] inline bool isPaused() const { return this->bIsPaused; }
     [[nodiscard]] inline bool isRestartScheduled() const { return this->bIsRestartScheduled; }
-    [[nodiscard]] inline bool isContinueScheduled() const override { return this->bContinueScheduled; }
+    [[nodiscard]] inline bool isContinueScheduled() const { return this->bContinueScheduled; }
     [[nodiscard]] inline bool isInSkippableSection() const { return this->bIsInSkippableSection; }
     [[nodiscard]] inline bool isInBreak() const { return this->bInBreak; }
     [[nodiscard]] inline bool shouldFlashWarningArrows() const { return this->bShouldFlashWarningArrows; }
     [[nodiscard]] inline f32 shouldFlashSectionPass() const { return this->fShouldFlashSectionPass; }
     [[nodiscard]] inline f32 shouldFlashSectionFail() const { return this->fShouldFlashSectionFail; }
-    [[nodiscard]] bool isWaiting() const override { return this->bIsWaiting; }
-
-    [[nodiscard]] inline const std::vector<DBBreak> &getBreaks() const { return this->breaks; }
-    [[nodiscard]] u32 getBreakDurationTotal() const override;
-    [[nodiscard]] DBBreak getBreakForTimeRange(i64 startMS, i64 positionMS, i64 endMS) const;
-
-    // HitObject and other helper functions
-    LiveHitResult addHitResult(neomod::HitObject *hitObject, LiveHitResult hit, i32 delta, bool isEndOfCombo = false,
-                               bool ignoreOnHitErrorBar = false, bool hitErrorBarOnly = false, bool ignoreCombo = false,
-                               bool ignoreScore = false, bool ignoreHealth = false) override;
-    void addSliderBreak() override;
-    void addScorePoints(int points, bool isSpinner = false) override;
-    void addHealth(f64 percent, bool isFromHitResult);
+    [[nodiscard]] bool isWaiting() const { return this->bIsWaiting; }
 
     void playHitSound(neomod::DatabaseBeatmapTypes::HITSAMPLE_BITS samples, vec2 rawPos, i32 delta,
                       i32 timeMS) override;
@@ -257,6 +256,9 @@ class BeatmapInterface final : public AbstractBeatmapInterface, public Playfield
     void stopSpinnerSpinSound() override;
     void playSpinnerBonusSound() override;
     void addTargetHit(f32 delta, f32 angle) override;
+    void onComboBreak() override;
+    void onHealthGain(f64 healthBefore) override;
+    bool onFail(bool byMods) override;
 
     void invalidateWholeMapPPInfo();
     [[nodiscard]] inline f32 live_pp() const { return this->ppv2_calc.get_pp(); }
@@ -264,11 +266,6 @@ class BeatmapInterface final : public AbstractBeatmapInterface, public Playfield
 
     // ILLEGAL:
     [[nodiscard]] inline f32 getBreakBackgroundFadeAnim() const { return this->fBreakBackgroundFade; }
-
-    int iCurrentHitObjectIndex;
-    int iCurrentNumCircles;
-    int iCurrentNumSliders;
-    int iCurrentNumSpinners;
 
     // beatmap state
     bool bIsPlaying;
@@ -289,11 +286,9 @@ class BeatmapInterface final : public AbstractBeatmapInterface, public Playfield
 
     void unloadObjects();
 
-    void resetHitObjects(i32 curPos = 0);
+    void step(f64 frametime);
+    void stopObjectSounds();
 
-    void playMissSound();
-
-    bool bIsInSkippableSection;
     bool bShouldFlashWarningArrows;
     f32 fShouldFlashSectionPass;
     f32 fShouldFlashSectionFail;
@@ -305,50 +300,35 @@ class BeatmapInterface final : public AbstractBeatmapInterface, public Playfield
     u64 iLastMusicPosUpdateTime{0};
     bool bIsFirstMissSound;
     DBTimingInfo cur_timing_info{};
-    u8 default_sample_set{1};
 
-    // health
-    bool bFailed;
+    // contains hitobjects, score, health
+    std::unique_ptr<GameplayJudge> judge;
+
     AnimFloat fFailAnim;
-    f64 fHealth;
-    AnimFloat fHealth2;
-
-    // drain
-    f64 fDrainRate;
-
-    // the map's combo colours
-    std::vector<Color> comboColors;
-
-    // breaks
-    std::vector<DBBreak> breaks;
     AnimFloat fBreakBackgroundFade;
     bool bInBreak;
-    neomod::HitObject *currentHitObject;
-    i32 iNextHitObjectTime;
-    i32 iPreviousHitObjectTime;
+    bool bIsInSkippableSection;
     i32 iPreviousSectionPassFailTime;
 
-    // player input
-    bool bClickedContinue;
-    int iAllowAnyNextKeyUntilHitObjectIndex;
-    std::vector<Click> clicks;
+    struct KeyEvent {
+        Click click;  // when and where (screen px)
+        u8 keys;      // the keys held after it
+        u8 clickKey;  // the key it clicks with (0: none)
+    };
+    std::vector<KeyEvent> key_events;
     std::vector<Click> all_clicks;
+    bool bClickedContinue;
+    u8 lastPressedKey{0};
+    int iAllowAnyNextKeyUntilHitObjectIndex;
 
-    // hitobjects
-    std::vector<std::unique_ptr<neomod::HitObject>> hitobjects;
-    // these are non-owning views of "hitobjects" in different arrangements
-    std::vector<neomod::HitObject *> hitobjectsSortedByEndTime;  // for hitObject->draw/draw2()
-    std::vector<neomod::HitObject *> objectsToDraw;              // for drawHitObjects, temp buffer
-    std::vector<neomod::HitObject *> misaimObjects;
-
-    // statistics
-    int iNPS;
-    int iND;
-
-    // custom
-    int iPreviousFollowPointObjectIndex;  // TODO: this shouldn't be in this class
+    std::vector<neomod::HitObject *> objectsToDraw;  // for drawHitObjects, temp buffer
 
    private:
+    // yes, you're looking at the third fail method (not counting cancelFailing).
+    // but between regular dying, replay watching, spectating, multiplayer and others...
+    // the complexity really is hard to eliminate.
+    bool failPlay(bool force_death);
+
     static inline vec2 mapNormalizedCoordsOntoUnitCircle(const vec2 &in) {
         return vec2(in.x * std::sqrt(1.0f - in.y * in.y / 2.0f), in.y * std::sqrt(1.0f - in.x * in.x / 2.0f));
     }
@@ -375,34 +355,30 @@ class BeatmapInterface final : public AbstractBeatmapInterface, public Playfield
 
     void drawContinue();
 
-    void updateAutoCursorPos();
     void updatePlayfieldMetrics();
     void updateHitobjectMetrics();
     void updateSliderVertexBuffers();
 
-    void calculateStacks();
-    void computeDrainRate();
-
     // beatmap
-    bool bIsSpinnerActive;
+    BeatmapDifficulty *beatmap{nullptr};
     vec2 vContinueCursorPoint{0.f};
     MusicTrack &music;
 
     // playfield
-    f32 fPlayfieldRotation;
     f32 fScaleFactor;
     vec2 vPlayfieldCenter{0.f};
     vec2 vPlayfieldOffset{0.f};
     vec2 vPlayfieldSize{0.f};
 
-    // hitobject scaling
+    // hitobject scaling (screen px)
     f32 fXMultiplier;
+    f32 fRawHitcircleDiameter{0.f};  // osu!px
+    f32 fSliderFollowCircleDiameter{0.f};
     f32 fNumberScale;
     f32 fHitcircleOverlapScale;
 
     // auto
     vec2 vAutoCursorPos{0.f};
-    int iAutoCursorDanceIndex;
 
     // live and precomputed pp/stars
     void resetLiveStarsTasks();

@@ -33,7 +33,7 @@ using namespace std::string_literals;
 // 3) allow async calculations/loaders to work on the contained data (e.g. background image loader)
 // 4) be a container for difficulties (all top level DatabaseBeatmap objects are containers)
 
-class AbstractBeatmapInterface;
+class GameplayJudge;
 class PlayfieldView;
 namespace neomod {
 class HitObject;
@@ -128,10 +128,9 @@ class DatabaseBeatmap final {
         u8 defaultSampleSet{1};
     };
 
-    // a play's objects from what it read (the convar mods applied to its primitives on the way), judged by beatmap and
+    // a play's objects from what it read (the convar mods applied to its primitives on the way), judged by judge and
     // drawn on view (NULL: never drawn)
-    static LOAD_GAMEPLAY_RESULT loadGameplay(PlayedMap &played, AbstractBeatmapInterface *beatmap,
-                                             const PlayfieldView *view);
+    static LOAD_GAMEPLAY_RESULT loadGameplay(PlayedMap &played, GameplayJudge *judge, const PlayfieldView *view);
 
     [[nodiscard]] MapOverrides get_overrides() const;
 

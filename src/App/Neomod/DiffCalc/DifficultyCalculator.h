@@ -23,7 +23,6 @@
 enum class ModFlags : u64;
 
 class ConVar;
-class AbstractBeatmapInterface;
 class DatabaseBeatmap;
 
 struct FinishedScore;

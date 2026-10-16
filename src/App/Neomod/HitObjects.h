@@ -19,7 +19,7 @@ class ConVar;
 class ModFPoSu;
 class SkinImage;
 class Image;
-class AbstractBeatmapInterface;
+class GameplayJudge;
 class PlayfieldView;
 class RenderTarget;
 
@@ -72,7 +72,7 @@ class HitObject {
    protected:  // only constructable through subclasses
     // judge: what judges it (NULL: never updated), view: what it's drawn on (NULL: never drawn)
     HitObject(i32 timeMS, DatabaseBeatmapTypes::HITSAMPLE_BITS samples, i32 comboNumber, bool isEndOfCombo,
-              i32 colorCounter, i32 colorOffset, AbstractBeatmapInterface *judge, const PlayfieldView *view);
+              i32 colorCounter, i32 colorOffset, GameplayJudge *judge, const PlayfieldView *view);
 
    public:
     HitObject() = delete;
@@ -83,6 +83,7 @@ class HitObject {
     HitObject(HitObject &&) noexcept = default;
     HitObject &operator=(HitObject &&) noexcept = default;
 
+    virtual void animate(i32 curPosMS);
     virtual void draw() {}
     virtual void draw2();
     virtual void update(i32 curPosMS, f64 frameTimeMS);
@@ -175,8 +176,8 @@ class HitObject {
     HITRESULTANIM m_hitresultanim2;
 
    protected:
-    AbstractBeatmapInterface *m_judge;  // the play judging it (NULL: never updated)
-    const PlayfieldView *m_view;        // what it's drawn on (NULL: never drawn, no draw-only animations)
+    GameplayJudge *m_judge;       // what judges it (NULL: never updated)
+    const PlayfieldView *m_view;  // what it's drawn on (NULL: never drawn, no draw-only animations)
 
     i32 m_comboStartMS{0};  // for freeze time mod
     i32 m_clickTimeMS;
@@ -252,7 +253,7 @@ class Circle final : public HitObject {
     ~Circle() override;
 
     Circle(vec2 pos, i32 timeMS, DatabaseBeatmapTypes::HITSAMPLE_BITS samples, i32 comboNumber, bool isEndOfCombo,
-           i32 colorCounter, i32 colorOffset, AbstractBeatmapInterface *judge, const PlayfieldView *view);
+           i32 colorCounter, i32 colorOffset, GameplayJudge *judge, const PlayfieldView *view);
 
     Circle(const Circle &) = delete;
     Circle &operator=(const Circle &) = delete;
@@ -311,13 +312,14 @@ class Slider final : public HitObject, public SliderRenderer::BodySource {
            const std::vector<f32> &ticks, f32 sliderTimeMS, f32 sliderTimeMSWithoutRepeats, i32 timeMS,
            DatabaseBeatmapTypes::HITSAMPLE_BITS hoverSamples,
            std::vector<DatabaseBeatmapTypes::HITSAMPLE_BITS> edgeSamples, i32 comboNumber, bool isEndOfCombo,
-           i32 colorCounter, i32 colorOffset, AbstractBeatmapInterface *judge, const PlayfieldView *view);
+           i32 colorCounter, i32 colorOffset, GameplayJudge *judge, const PlayfieldView *view);
 
     Slider(const Slider &) = delete;
     Slider &operator=(const Slider &) = delete;
     Slider(Slider &&) noexcept = default;
     Slider &operator=(Slider &&) noexcept = default;
 
+    void animate(i32 curPosMS) override;
     void draw() override;
     inline void draw2() override { draw2(true, false); }
     void draw2(bool drawApproachCircle, bool drawOnlyApproachCircle);
@@ -452,7 +454,7 @@ class Spinner final : public HitObject {
    public:
     Spinner() = delete;
     Spinner(vec2 pos, i32 timeMS, DatabaseBeatmapTypes::HITSAMPLE_BITS samples, bool isEndOfCombo, i32 endTimeMS,
-            AbstractBeatmapInterface *judge, const PlayfieldView *view);
+            GameplayJudge *judge, const PlayfieldView *view);
     ~Spinner() override;
 
     Spinner(const Spinner &) = delete;
@@ -513,8 +515,8 @@ namespace HitObjects {
 
 // from the map's primitives (with timing points if it has sliders), in the order they're played, their combo ends and
 // combo start times set; judged by judge and drawn on view (see HitObject's constructor)
-std::vector<std::unique_ptr<HitObject>> create(const Primitives::PRIMITIVE_CONTAINER &primitives,
-                                               AbstractBeatmapInterface *judge, const PlayfieldView *view);
+std::vector<std::unique_ptr<HitObject>> create(const Primitives::PRIMITIVE_CONTAINER &primitives, GameplayJudge *judge,
+                                               const PlayfieldView *view);
 
 // osu!'s stacking: moved up and left by a twentieth of the circle diameter per stack level, down and left with Hard Rock
 // (which flips the playfield)

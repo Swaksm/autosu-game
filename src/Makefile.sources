@@ -126,7 +126,6 @@ neomod_SOURCES = \
 	src/App/AppRegistry.cpp \
 	src/App/AppRunner.cpp \
 	src/App/Neomod/AboutScreen.cpp \
-	src/App/Neomod/AbstractBeatmapInterface.cpp \
 	src/App/Neomod/BackgroundImageHandler.cpp \
 	src/App/Neomod/Bancho.cpp \
 	src/App/Neomod/BanchoAes.cpp \
@@ -154,6 +153,7 @@ neomod_SOURCES = \
 	src/App/Neomod/DiffCalc/StarPrecalc.cpp \
 	src/App/Neomod/Downloader.cpp \
 	src/App/Neomod/GameRules.cpp \
+	src/App/Neomod/GameplayJudge.cpp \
 	src/App/Neomod/HUD.cpp \
 	src/App/Neomod/HitObjects.cpp \
 	src/App/Neomod/HitSounds.cpp \
@@ -187,7 +187,6 @@ neomod_SOURCES = \
 	src/App/Neomod/ScoreboardSlot.cpp \
 	src/App/Neomod/ScreenBackable.cpp \
 	src/App/Neomod/SettingsImporter.cpp \
-	src/App/Neomod/SimulatedBeatmapInterface.cpp \
 	src/App/Neomod/Skin.cpp \
 	src/App/Neomod/SkinArchive.cpp \
 	src/App/Neomod/SkinImage.cpp \

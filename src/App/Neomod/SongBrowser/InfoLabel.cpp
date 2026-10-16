@@ -10,6 +10,7 @@
 // ---
 
 #include "BeatmapInterface.h"
+#include "GameplayJudge.h"
 #include "OsuConVars.h"
 #include "DatabaseBeatmap.h"
 #include "Engine.h"
@@ -185,8 +186,13 @@ void InfoLabel::updateInput(CBaseUIEventCtx &c) {
             tooltipOverlay->addLine(fmt::format("300: +-{:.2f}ms", hitWindow300RoundedCompensated));
             tooltipOverlay->addLine(fmt::format("100: +-{:.2f}ms", hitWindow100RoundedCompensated));
             tooltipOverlay->addLine(fmt::format(" 50: +-{:.2f}ms", hitWindow50RoundedCompensated));
-            tooltipOverlay->addLine(fmt::format("Spinner difficulty: {:.2f}", GameRules::getSpinnerSpinsPerSecond(pf)));
             tooltipOverlay->addLine(fmt::format("Hit object radius: {:.2f}", hitobjectRadiusRoundedCompensated));
+
+            const auto *judge = pf->getJudge();
+            if(judge != nullptr) {
+                tooltipOverlay->addLine(
+                    fmt::format("Spinner difficulty: {:.2f}", GameRules::getSpinnerSpinsPerSecond(judge)));
+            }
 
             if(bmDiff2 != nullptr) {
                 i32 numObjects{bmDiff2->getNumObjects()};

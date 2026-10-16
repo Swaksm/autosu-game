@@ -1,5 +1,6 @@
 // Copyright (c) 2015, PG, All rights reserved.
 #include "score.h"
+#include "GameplayJudge.h"
 
 #include "Bancho.h"
 #include "BanchoProtocol.h"
@@ -79,7 +80,7 @@ void LiveScore::reset() {
 
 f64 LiveScore::getScoreMultiplier() const { return this->mods.get_scorev1_multiplier(); }
 
-void LiveScore::addHitResult(AbstractBeatmapInterface *beatmap, HitObject * /*hitObject*/, LiveHitResult hit, i32 delta,
+void LiveScore::addHitResult(GameplayJudge *judge, HitObject * /*hitObject*/, LiveHitResult hit, i32 delta,
                              bool ignoreOnHitErrorBar, bool hitErrorBarOnly, bool ignoreCombo, bool ignoreScore) {
     // current combo, excluding the current hitobject which caused the addHitResult() call
     const int scoreComboMultiplier = std::max(this->iCombo - 1, 0);
@@ -88,7 +89,7 @@ void LiveScore::addHitResult(AbstractBeatmapInterface *beatmap, HitObject * /*hi
         this->iCombo = 0;
 
         if(!this->simulating && !ignoreOnHitErrorBar && cv::hiterrorbar_misses.getBool() &&
-           delta <= (i32)beatmap->getHitWindow50()) {
+           delta <= (i32)judge->getHitWindow50()) {
             ui->getHUD()->addHitError(delta, true);
         }
     } else {
@@ -142,7 +143,7 @@ void LiveScore::addHitResult(AbstractBeatmapInterface *beatmap, HitObject * /*hi
 
     // add hitValue to score, recalculate score v1
     if(!ignoreScore) {
-        const int difficultyMultiplier = beatmap->getScoreV1DifficultyMultiplier();
+        const int difficultyMultiplier = judge->getScoreV1DifficultyMultiplier();
         this->iScoreV1 += hitValue;
         this->iScoreV1 += ((hitValue * (u32)((f64)scoreComboMultiplier * (f64)difficultyMultiplier *
                                              (f64)this->getScoreMultiplier())) /
@@ -164,11 +165,11 @@ void LiveScore::addHitResult(AbstractBeatmapInterface *beatmap, HitObject * /*hi
     // recalculate score v2
     this->iScoreV2ComboPortion += (u64)((double)hitValue * (1.0 + (double)scoreComboMultiplier / 10.0));
     if(this->mods.has(ModFlags::ScoreV2)) {
-        const double maximumAccurateHits = beatmap->nb_hitobjects;
+        const double maximumAccurateHits = judge->nb_hitobjects;
 
         if(totalNumHits > 0) {
             this->iScoreV2 =
-                (u64)(((f64)this->iScoreV2ComboPortion / (f64)beatmap->iScoreV2ComboPortionMaximum * 700000.0 +
+                (u64)(((f64)this->iScoreV2ComboPortion / (f64)judge->iScoreV2ComboPortionMaximum * 700000.0 +
                        pow((f64)this->fAccuracy, 10.0) * ((f64)totalNumHits / maximumAccurateHits) * 300000.0 +
                        (f64)this->iBonusPoints) *
                       (f64)this->getScoreMultiplier());
@@ -257,7 +258,7 @@ void LiveScore::addHitResult(AbstractBeatmapInterface *beatmap, HitObject * /*hi
         this->fUnstableRate = std::sqrt(this->fUnstableRate) * 10;
 
         // compensate for speed
-        this->fUnstableRate /= beatmap->getSpeedMultiplier();
+        this->fUnstableRate /= judge->getSpeedMultiplier();
     }
 
     // recalculate max combo
@@ -334,9 +335,8 @@ void LiveScore::addKeyCount(GameplayKeys key_flag) {
     }
 }
 
-double LiveScore::getHealthIncrease(AbstractBeatmapInterface *beatmap, LiveHitResult hit) {
-    return getHealthIncrease(hit, beatmap->getHP(), beatmap->fHpMultiplierNormal, beatmap->fHpMultiplierComboEnd,
-                             200.0);
+double LiveScore::getHealthIncrease(GameplayJudge *judge, LiveHitResult hit) {
+    return getHealthIncrease(hit, judge->getHP(), judge->fHpMultiplierNormal, judge->fHpMultiplierComboEnd, 200.0);
 }
 
 double LiveScore::getHealthIncrease(LiveHitResult hit, double HP, double hpMultiplierNormal,
@@ -404,8 +404,6 @@ int LiveScore::getKeyCount(GameplayKeys key_flag) const {
     }
     std::unreachable();
 }
-
-LegacyFlags LiveScore::getModsLegacy() const { return this->mods.to_legacy(); }
 
 std::string LiveScore::getModsStringForRichPresence() const {
     std::string modsString;

@@ -7,6 +7,7 @@
 #include "Bancho.h"
 #include "BanchoUsers.h"
 #include "BeatmapInterface.h"
+#include "GameplayJudge.h"
 #include "CBaseUIContainer.h"
 #include "Logging.h"
 #include "OsuConVars.h"
@@ -175,7 +176,7 @@ void HUD::draw() {
             const auto &whole_pp = pf->getWholeMapPPInfo();
             this->drawStatistics({.misses = score->getNumMisses(),
                                   .sliderbreaks = score->getNumSliderBreaks(),
-                                  .maxPossibleCombo = pf->iMaxPossibleCombo,
+                                  .maxPossibleCombo = pf->getJudge()->iMaxPossibleCombo,
                                   .liveStars = pf->live_stars(),
                                   .totalStars = (f32)whole_pp.total_stars,
                                   .bpm = pf->getMostCommonBPM(),
@@ -183,8 +184,8 @@ void HUD::draw() {
                                   .cs = pf->getCS(),
                                   .od = pf->getOverallDifficultyForSpeedMultiplier(),
                                   .hp = pf->getHP(),
-                                  .nps = pf->getNPS(),
-                                  .nd = pf->getND(),
+                                  .nps = pf->getJudge()->getNPS(),
+                                  .nd = pf->getJudge()->getND(),
                                   .ur = (i32)score->getUnstableRate(),
                                   .pp = pf->live_pp(),
                                   .ppfc = (f32)whole_pp.pp,
@@ -285,7 +286,7 @@ void HUD::draw() {
             const u32 startTimePlayableMS = pf->getStartTimePlayable();
             const u32 endTimePlayableMS = startTimePlayableMS + lengthPlayableMS;
 
-            const auto &beatmapBreaks = pf->getBreaks();
+            const auto &beatmapBreaks = pf->getJudge()->getBreaks();
 
             breaks.reserve(beatmapBreaks.size());
 
@@ -318,8 +319,8 @@ void HUD::draw() {
     }
 
     if(!osu->isSkipScheduled() && pf->isInSkippableSection() &&
-       ((cv::skip_intro_enabled.getBool() && pf->iCurrentHitObjectIndex < 1) ||
-        (cv::skip_breaks_enabled.getBool() && pf->iCurrentHitObjectIndex > 0)))
+       ((cv::skip_intro_enabled.getBool() && pf->getCurrentHitObjectIndex() < 1) ||
+        (cv::skip_breaks_enabled.getBool() && pf->getCurrentHitObjectIndex() > 0)))
         this->drawSkip();
 
     u32 nb_spectators =
@@ -1326,7 +1327,7 @@ std::span<const SCORE_ENTRY> HUD::updateAndGetCurrentScores() {
             if(slot.has_quit()) {
                 slot.current_hp = 0;
                 scoreEntry.name = tformat("{} [quit]", user_info->name.c_str());
-            } else if(pf->isInSkippableSection() && pf->iCurrentHitObjectIndex < 1) {
+            } else if(pf->isInSkippableSection() && pf->getCurrentHitObjectIndex() < 1) {
                 if(slot.skipped) {
                     // XXX: Draw pretty "Skip" image instead
                     scoreEntry.name = tformat("{} [skip]", user_info->name.c_str());
@@ -1818,7 +1819,7 @@ void HUD::drawStatistics(const HUDStats &s) {
         const i32 local = bmi->getBeatmap()->getLocalOffset();
         const i32 online = bmi->getBeatmap()->getOnlineOffset();
         return fmt::format("off: {}ms ((({}peppy+{}us)*{:.1f}spd)+{}uu-{}l-{}lo)",
-                           music->getOffset(bmi->getBeatmap(), bmi->getMapVersion()),
+                           music->getOffset(bmi->getBeatmap(), bmi->getJudge()->getMapVersion()),
                            cv::universal_offset_hardcoded_blamepeppy.getFloat(), cv::universal_offset.getFloat(),
                            music->getSpeed(), uniUnscaled, local, online);
     };

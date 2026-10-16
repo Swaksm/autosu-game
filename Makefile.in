@@ -240,7 +240,6 @@ am__neomod_SOURCES_DIST = libraries/MD5.cpp libraries/demoji.c \
 	libraries/neotrace/src/symbolize_posix.cpp \
 	libraries/sha256.cpp src/App/AppRegistry.cpp \
 	src/App/AppRunner.cpp src/App/Neomod/AboutScreen.cpp \
-	src/App/Neomod/AbstractBeatmapInterface.cpp \
 	src/App/Neomod/BackgroundImageHandler.cpp \
 	src/App/Neomod/Bancho.cpp src/App/Neomod/BanchoAes.cpp \
 	src/App/Neomod/BanchoApi.cpp \
@@ -263,8 +262,9 @@ am__neomod_SOURCES_DIST = libraries/MD5.cpp libraries/demoji.c \
 	src/App/Neomod/DiffCalc/LivePPCalc.cpp \
 	src/App/Neomod/DiffCalc/StarPrecalc.cpp \
 	src/App/Neomod/Downloader.cpp src/App/Neomod/GameRules.cpp \
-	src/App/Neomod/HUD.cpp src/App/Neomod/HitObjects.cpp \
-	src/App/Neomod/HitSounds.cpp src/App/Neomod/LegacyReplay.cpp \
+	src/App/Neomod/GameplayJudge.cpp src/App/Neomod/HUD.cpp \
+	src/App/Neomod/HitObjects.cpp src/App/Neomod/HitSounds.cpp \
+	src/App/Neomod/LegacyReplay.cpp \
 	src/App/Neomod/LoadingScreen.cpp src/App/Neomod/Lobby.cpp \
 	src/App/Neomod/MainMenu.cpp \
 	src/App/Neomod/MainMenuNowPlaying.cpp \
@@ -285,10 +285,9 @@ am__neomod_SOURCES_DIST = libraries/MD5.cpp libraries/demoji.c \
 	src/App/Neomod/RichPresence.cpp src/App/Neomod/RoomScreen.cpp \
 	src/App/Neomod/ScoreboardSlot.cpp \
 	src/App/Neomod/ScreenBackable.cpp \
-	src/App/Neomod/SettingsImporter.cpp \
-	src/App/Neomod/SimulatedBeatmapInterface.cpp \
-	src/App/Neomod/Skin.cpp src/App/Neomod/SkinArchive.cpp \
-	src/App/Neomod/SkinImage.cpp src/App/Neomod/SliderCurves.cpp \
+	src/App/Neomod/SettingsImporter.cpp src/App/Neomod/Skin.cpp \
+	src/App/Neomod/SkinArchive.cpp src/App/Neomod/SkinImage.cpp \
+	src/App/Neomod/SliderCurves.cpp \
 	src/App/Neomod/SliderRenderer.cpp \
 	src/App/Neomod/SongBrowser/AsyncSongButtonMatcher.cpp \
 	src/App/Neomod/SongBrowser/BeatmapCarousel.cpp \
@@ -500,7 +499,6 @@ am_neomod_OBJECTS = libraries/neomod-MD5.$(OBJEXT) \
 	src/App/neomod-AppRegistry.$(OBJEXT) \
 	src/App/neomod-AppRunner.$(OBJEXT) \
 	src/App/Neomod/neomod-AboutScreen.$(OBJEXT) \
-	src/App/Neomod/neomod-AbstractBeatmapInterface.$(OBJEXT) \
 	src/App/Neomod/neomod-BackgroundImageHandler.$(OBJEXT) \
 	src/App/Neomod/neomod-Bancho.$(OBJEXT) \
 	src/App/Neomod/neomod-BanchoAes.$(OBJEXT) \
@@ -528,6 +526,7 @@ am_neomod_OBJECTS = libraries/neomod-MD5.$(OBJEXT) \
 	src/App/Neomod/DiffCalc/neomod-StarPrecalc.$(OBJEXT) \
 	src/App/Neomod/neomod-Downloader.$(OBJEXT) \
 	src/App/Neomod/neomod-GameRules.$(OBJEXT) \
+	src/App/Neomod/neomod-GameplayJudge.$(OBJEXT) \
 	src/App/Neomod/neomod-HUD.$(OBJEXT) \
 	src/App/Neomod/neomod-HitObjects.$(OBJEXT) \
 	src/App/Neomod/neomod-HitSounds.$(OBJEXT) \
@@ -561,7 +560,6 @@ am_neomod_OBJECTS = libraries/neomod-MD5.$(OBJEXT) \
 	src/App/Neomod/neomod-ScoreboardSlot.$(OBJEXT) \
 	src/App/Neomod/neomod-ScreenBackable.$(OBJEXT) \
 	src/App/Neomod/neomod-SettingsImporter.$(OBJEXT) \
-	src/App/Neomod/neomod-SimulatedBeatmapInterface.$(OBJEXT) \
 	src/App/Neomod/neomod-Skin.$(OBJEXT) \
 	src/App/Neomod/neomod-SkinArchive.$(OBJEXT) \
 	src/App/Neomod/neomod-SkinImage.$(OBJEXT) \
@@ -748,7 +746,6 @@ am__depfiles_remade = $(DEPS_PREFIX)/mimalloc/$(DEPDIR)/neomod-mimalloc_new_dele
 	src/App/$(DEPDIR)/neomod-AppRegistry.Po \
 	src/App/$(DEPDIR)/neomod-AppRunner.Po \
 	src/App/Neomod/$(DEPDIR)/neomod-AboutScreen.Po \
-	src/App/Neomod/$(DEPDIR)/neomod-AbstractBeatmapInterface.Po \
 	src/App/Neomod/$(DEPDIR)/neomod-BackgroundImageHandler.Po \
 	src/App/Neomod/$(DEPDIR)/neomod-Bancho.Po \
 	src/App/Neomod/$(DEPDIR)/neomod-BanchoAes.Po \
@@ -769,6 +766,7 @@ am__depfiles_remade = $(DEPS_PREFIX)/mimalloc/$(DEPDIR)/neomod-mimalloc_new_dele
 	src/App/Neomod/$(DEPDIR)/neomod-DatabaseBeatmap.Po \
 	src/App/Neomod/$(DEPDIR)/neomod-Downloader.Po \
 	src/App/Neomod/$(DEPDIR)/neomod-GameRules.Po \
+	src/App/Neomod/$(DEPDIR)/neomod-GameplayJudge.Po \
 	src/App/Neomod/$(DEPDIR)/neomod-HUD.Po \
 	src/App/Neomod/$(DEPDIR)/neomod-HitObjects.Po \
 	src/App/Neomod/$(DEPDIR)/neomod-HitSounds.Po \
@@ -801,7 +799,6 @@ am__depfiles_remade = $(DEPS_PREFIX)/mimalloc/$(DEPDIR)/neomod-mimalloc_new_dele
 	src/App/Neomod/$(DEPDIR)/neomod-ScoreboardSlot.Po \
 	src/App/Neomod/$(DEPDIR)/neomod-ScreenBackable.Po \
 	src/App/Neomod/$(DEPDIR)/neomod-SettingsImporter.Po \
-	src/App/Neomod/$(DEPDIR)/neomod-SimulatedBeatmapInterface.Po \
 	src/App/Neomod/$(DEPDIR)/neomod-Skin.Po \
 	src/App/Neomod/$(DEPDIR)/neomod-SkinArchive.Po \
 	src/App/Neomod/$(DEPDIR)/neomod-SkinImage.Po \
@@ -1528,7 +1525,6 @@ neomod_SOURCES = libraries/MD5.cpp libraries/demoji.c \
 	libraries/neotrace/src/symbolize_posix.cpp \
 	libraries/sha256.cpp src/App/AppRegistry.cpp \
 	src/App/AppRunner.cpp src/App/Neomod/AboutScreen.cpp \
-	src/App/Neomod/AbstractBeatmapInterface.cpp \
 	src/App/Neomod/BackgroundImageHandler.cpp \
 	src/App/Neomod/Bancho.cpp src/App/Neomod/BanchoAes.cpp \
 	src/App/Neomod/BanchoApi.cpp \
@@ -1551,8 +1547,9 @@ neomod_SOURCES = libraries/MD5.cpp libraries/demoji.c \
 	src/App/Neomod/DiffCalc/LivePPCalc.cpp \
 	src/App/Neomod/DiffCalc/StarPrecalc.cpp \
 	src/App/Neomod/Downloader.cpp src/App/Neomod/GameRules.cpp \
-	src/App/Neomod/HUD.cpp src/App/Neomod/HitObjects.cpp \
-	src/App/Neomod/HitSounds.cpp src/App/Neomod/LegacyReplay.cpp \
+	src/App/Neomod/GameplayJudge.cpp src/App/Neomod/HUD.cpp \
+	src/App/Neomod/HitObjects.cpp src/App/Neomod/HitSounds.cpp \
+	src/App/Neomod/LegacyReplay.cpp \
 	src/App/Neomod/LoadingScreen.cpp src/App/Neomod/Lobby.cpp \
 	src/App/Neomod/MainMenu.cpp \
 	src/App/Neomod/MainMenuNowPlaying.cpp \
@@ -1573,10 +1570,9 @@ neomod_SOURCES = libraries/MD5.cpp libraries/demoji.c \
 	src/App/Neomod/RichPresence.cpp src/App/Neomod/RoomScreen.cpp \
 	src/App/Neomod/ScoreboardSlot.cpp \
 	src/App/Neomod/ScreenBackable.cpp \
-	src/App/Neomod/SettingsImporter.cpp \
-	src/App/Neomod/SimulatedBeatmapInterface.cpp \
-	src/App/Neomod/Skin.cpp src/App/Neomod/SkinArchive.cpp \
-	src/App/Neomod/SkinImage.cpp src/App/Neomod/SliderCurves.cpp \
+	src/App/Neomod/SettingsImporter.cpp src/App/Neomod/Skin.cpp \
+	src/App/Neomod/SkinArchive.cpp src/App/Neomod/SkinImage.cpp \
+	src/App/Neomod/SliderCurves.cpp \
 	src/App/Neomod/SliderRenderer.cpp \
 	src/App/Neomod/SongBrowser/AsyncSongButtonMatcher.cpp \
 	src/App/Neomod/SongBrowser/BeatmapCarousel.cpp \
@@ -2291,9 +2287,6 @@ src/App/Neomod/$(DEPDIR)/$(am__dirstamp):
 src/App/Neomod/neomod-AboutScreen.$(OBJEXT):  \
 	src/App/Neomod/$(am__dirstamp) \
 	src/App/Neomod/$(DEPDIR)/$(am__dirstamp)
-src/App/Neomod/neomod-AbstractBeatmapInterface.$(OBJEXT):  \
-	src/App/Neomod/$(am__dirstamp) \
-	src/App/Neomod/$(DEPDIR)/$(am__dirstamp)
 src/App/Neomod/neomod-BackgroundImageHandler.$(OBJEXT):  \
 	src/App/Neomod/$(am__dirstamp) \
 	src/App/Neomod/$(DEPDIR)/$(am__dirstamp)
@@ -2384,6 +2377,9 @@ src/App/Neomod/neomod-Downloader.$(OBJEXT):  \
 	src/App/Neomod/$(am__dirstamp) \
 	src/App/Neomod/$(DEPDIR)/$(am__dirstamp)
 src/App/Neomod/neomod-GameRules.$(OBJEXT):  \
+	src/App/Neomod/$(am__dirstamp) \
+	src/App/Neomod/$(DEPDIR)/$(am__dirstamp)
+src/App/Neomod/neomod-GameplayJudge.$(OBJEXT):  \
 	src/App/Neomod/$(am__dirstamp) \
 	src/App/Neomod/$(DEPDIR)/$(am__dirstamp)
 src/App/Neomod/neomod-HUD.$(OBJEXT): src/App/Neomod/$(am__dirstamp) \
@@ -2486,9 +2482,6 @@ src/App/Neomod/neomod-ScreenBackable.$(OBJEXT):  \
 	src/App/Neomod/$(am__dirstamp) \
 	src/App/Neomod/$(DEPDIR)/$(am__dirstamp)
 src/App/Neomod/neomod-SettingsImporter.$(OBJEXT):  \
-	src/App/Neomod/$(am__dirstamp) \
-	src/App/Neomod/$(DEPDIR)/$(am__dirstamp)
-src/App/Neomod/neomod-SimulatedBeatmapInterface.$(OBJEXT):  \
 	src/App/Neomod/$(am__dirstamp) \
 	src/App/Neomod/$(DEPDIR)/$(am__dirstamp)
 src/App/Neomod/neomod-Skin.$(OBJEXT): src/App/Neomod/$(am__dirstamp) \
@@ -3302,7 +3295,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@src/App/$(DEPDIR)/neomod-AppRegistry.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@src/App/$(DEPDIR)/neomod-AppRunner.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@src/App/Neomod/$(DEPDIR)/neomod-AboutScreen.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@src/App/Neomod/$(DEPDIR)/neomod-AbstractBeatmapInterface.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@src/App/Neomod/$(DEPDIR)/neomod-BackgroundImageHandler.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@src/App/Neomod/$(DEPDIR)/neomod-Bancho.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@src/App/Neomod/$(DEPDIR)/neomod-BanchoAes.Po@am__quote@ # am--include-marker
@@ -3323,6 +3315,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@src/App/Neomod/$(DEPDIR)/neomod-DatabaseBeatmap.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@src/App/Neomod/$(DEPDIR)/neomod-Downloader.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@src/App/Neomod/$(DEPDIR)/neomod-GameRules.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@src/App/Neomod/$(DEPDIR)/neomod-GameplayJudge.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@src/App/Neomod/$(DEPDIR)/neomod-HUD.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@src/App/Neomod/$(DEPDIR)/neomod-HitObjects.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@src/App/Neomod/$(DEPDIR)/neomod-HitSounds.Po@am__quote@ # am--include-marker
@@ -3355,7 +3348,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@src/App/Neomod/$(DEPDIR)/neomod-ScoreboardSlot.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@src/App/Neomod/$(DEPDIR)/neomod-ScreenBackable.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@src/App/Neomod/$(DEPDIR)/neomod-SettingsImporter.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@src/App/Neomod/$(DEPDIR)/neomod-SimulatedBeatmapInterface.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@src/App/Neomod/$(DEPDIR)/neomod-Skin.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@src/App/Neomod/$(DEPDIR)/neomod-SkinArchive.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@src/App/Neomod/$(DEPDIR)/neomod-SkinImage.Po@am__quote@ # am--include-marker
@@ -3788,20 +3780,6 @@ src/App/Neomod/neomod-AboutScreen.obj: src/App/Neomod/AboutScreen.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(neomod_CPPFLAGS) $(CPPFLAGS) $(neomod_CXXFLAGS) $(CXXFLAGS) -c -o src/App/Neomod/neomod-AboutScreen.obj `if test -f 'src/App/Neomod/AboutScreen.cpp'; then $(CYGPATH_W) 'src/App/Neomod/AboutScreen.cpp'; else $(CYGPATH_W) '$(srcdir)/src/App/Neomod/AboutScreen.cpp'; fi`
 
-src/App/Neomod/neomod-AbstractBeatmapInterface.o: src/App/Neomod/AbstractBeatmapInterface.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(neomod_CPPFLAGS) $(CPPFLAGS) $(neomod_CXXFLAGS) $(CXXFLAGS) -MT src/App/Neomod/neomod-AbstractBeatmapInterface.o -MD -MP -MF src/App/Neomod/$(DEPDIR)/neomod-AbstractBeatmapInterface.Tpo -c -o src/App/Neomod/neomod-AbstractBeatmapInterface.o `test -f 'src/App/Neomod/AbstractBeatmapInterface.cpp' || echo '$(srcdir)/'`src/App/Neomod/AbstractBeatmapInterface.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/App/Neomod/$(DEPDIR)/neomod-AbstractBeatmapInterface.Tpo src/App/Neomod/$(DEPDIR)/neomod-AbstractBeatmapInterface.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/App/Neomod/AbstractBeatmapInterface.cpp' object='src/App/Neomod/neomod-AbstractBeatmapInterface.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(neomod_CPPFLAGS) $(CPPFLAGS) $(neomod_CXXFLAGS) $(CXXFLAGS) -c -o src/App/Neomod/neomod-AbstractBeatmapInterface.o `test -f 'src/App/Neomod/AbstractBeatmapInterface.cpp' || echo '$(srcdir)/'`src/App/Neomod/AbstractBeatmapInterface.cpp
-
-src/App/Neomod/neomod-AbstractBeatmapInterface.obj: src/App/Neomod/AbstractBeatmapInterface.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(neomod_CPPFLAGS) $(CPPFLAGS) $(neomod_CXXFLAGS) $(CXXFLAGS) -MT src/App/Neomod/neomod-AbstractBeatmapInterface.obj -MD -MP -MF src/App/Neomod/$(DEPDIR)/neomod-AbstractBeatmapInterface.Tpo -c -o src/App/Neomod/neomod-AbstractBeatmapInterface.obj `if test -f 'src/App/Neomod/AbstractBeatmapInterface.cpp'; then $(CYGPATH_W) 'src/App/Neomod/AbstractBeatmapInterface.cpp'; else $(CYGPATH_W) '$(srcdir)/src/App/Neomod/AbstractBeatmapInterface.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/App/Neomod/$(DEPDIR)/neomod-AbstractBeatmapInterface.Tpo src/App/Neomod/$(DEPDIR)/neomod-AbstractBeatmapInterface.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/App/Neomod/AbstractBeatmapInterface.cpp' object='src/App/Neomod/neomod-AbstractBeatmapInterface.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(neomod_CPPFLAGS) $(CPPFLAGS) $(neomod_CXXFLAGS) $(CXXFLAGS) -c -o src/App/Neomod/neomod-AbstractBeatmapInterface.obj `if test -f 'src/App/Neomod/AbstractBeatmapInterface.cpp'; then $(CYGPATH_W) 'src/App/Neomod/AbstractBeatmapInterface.cpp'; else $(CYGPATH_W) '$(srcdir)/src/App/Neomod/AbstractBeatmapInterface.cpp'; fi`
-
 src/App/Neomod/neomod-BackgroundImageHandler.o: src/App/Neomod/BackgroundImageHandler.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(neomod_CPPFLAGS) $(CPPFLAGS) $(neomod_CXXFLAGS) $(CXXFLAGS) -MT src/App/Neomod/neomod-BackgroundImageHandler.o -MD -MP -MF src/App/Neomod/$(DEPDIR)/neomod-BackgroundImageHandler.Tpo -c -o src/App/Neomod/neomod-BackgroundImageHandler.o `test -f 'src/App/Neomod/BackgroundImageHandler.cpp' || echo '$(srcdir)/'`src/App/Neomod/BackgroundImageHandler.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/App/Neomod/$(DEPDIR)/neomod-BackgroundImageHandler.Tpo src/App/Neomod/$(DEPDIR)/neomod-BackgroundImageHandler.Po
@@ -4179,6 +4157,20 @@ src/App/Neomod/neomod-GameRules.obj: src/App/Neomod/GameRules.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/App/Neomod/GameRules.cpp' object='src/App/Neomod/neomod-GameRules.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(neomod_CPPFLAGS) $(CPPFLAGS) $(neomod_CXXFLAGS) $(CXXFLAGS) -c -o src/App/Neomod/neomod-GameRules.obj `if test -f 'src/App/Neomod/GameRules.cpp'; then $(CYGPATH_W) 'src/App/Neomod/GameRules.cpp'; else $(CYGPATH_W) '$(srcdir)/src/App/Neomod/GameRules.cpp'; fi`
+
+src/App/Neomod/neomod-GameplayJudge.o: src/App/Neomod/GameplayJudge.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(neomod_CPPFLAGS) $(CPPFLAGS) $(neomod_CXXFLAGS) $(CXXFLAGS) -MT src/App/Neomod/neomod-GameplayJudge.o -MD -MP -MF src/App/Neomod/$(DEPDIR)/neomod-GameplayJudge.Tpo -c -o src/App/Neomod/neomod-GameplayJudge.o `test -f 'src/App/Neomod/GameplayJudge.cpp' || echo '$(srcdir)/'`src/App/Neomod/GameplayJudge.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/App/Neomod/$(DEPDIR)/neomod-GameplayJudge.Tpo src/App/Neomod/$(DEPDIR)/neomod-GameplayJudge.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/App/Neomod/GameplayJudge.cpp' object='src/App/Neomod/neomod-GameplayJudge.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(neomod_CPPFLAGS) $(CPPFLAGS) $(neomod_CXXFLAGS) $(CXXFLAGS) -c -o src/App/Neomod/neomod-GameplayJudge.o `test -f 'src/App/Neomod/GameplayJudge.cpp' || echo '$(srcdir)/'`src/App/Neomod/GameplayJudge.cpp
+
+src/App/Neomod/neomod-GameplayJudge.obj: src/App/Neomod/GameplayJudge.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(neomod_CPPFLAGS) $(CPPFLAGS) $(neomod_CXXFLAGS) $(CXXFLAGS) -MT src/App/Neomod/neomod-GameplayJudge.obj -MD -MP -MF src/App/Neomod/$(DEPDIR)/neomod-GameplayJudge.Tpo -c -o src/App/Neomod/neomod-GameplayJudge.obj `if test -f 'src/App/Neomod/GameplayJudge.cpp'; then $(CYGPATH_W) 'src/App/Neomod/GameplayJudge.cpp'; else $(CYGPATH_W) '$(srcdir)/src/App/Neomod/GameplayJudge.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/App/Neomod/$(DEPDIR)/neomod-GameplayJudge.Tpo src/App/Neomod/$(DEPDIR)/neomod-GameplayJudge.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/App/Neomod/GameplayJudge.cpp' object='src/App/Neomod/neomod-GameplayJudge.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(neomod_CPPFLAGS) $(CPPFLAGS) $(neomod_CXXFLAGS) $(CXXFLAGS) -c -o src/App/Neomod/neomod-GameplayJudge.obj `if test -f 'src/App/Neomod/GameplayJudge.cpp'; then $(CYGPATH_W) 'src/App/Neomod/GameplayJudge.cpp'; else $(CYGPATH_W) '$(srcdir)/src/App/Neomod/GameplayJudge.cpp'; fi`
 
 src/App/Neomod/neomod-HUD.o: src/App/Neomod/HUD.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(neomod_CPPFLAGS) $(CPPFLAGS) $(neomod_CXXFLAGS) $(CXXFLAGS) -MT src/App/Neomod/neomod-HUD.o -MD -MP -MF src/App/Neomod/$(DEPDIR)/neomod-HUD.Tpo -c -o src/App/Neomod/neomod-HUD.o `test -f 'src/App/Neomod/HUD.cpp' || echo '$(srcdir)/'`src/App/Neomod/HUD.cpp
@@ -4641,20 +4633,6 @@ src/App/Neomod/neomod-SettingsImporter.obj: src/App/Neomod/SettingsImporter.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/App/Neomod/SettingsImporter.cpp' object='src/App/Neomod/neomod-SettingsImporter.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(neomod_CPPFLAGS) $(CPPFLAGS) $(neomod_CXXFLAGS) $(CXXFLAGS) -c -o src/App/Neomod/neomod-SettingsImporter.obj `if test -f 'src/App/Neomod/SettingsImporter.cpp'; then $(CYGPATH_W) 'src/App/Neomod/SettingsImporter.cpp'; else $(CYGPATH_W) '$(srcdir)/src/App/Neomod/SettingsImporter.cpp'; fi`
-
-src/App/Neomod/neomod-SimulatedBeatmapInterface.o: src/App/Neomod/SimulatedBeatmapInterface.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(neomod_CPPFLAGS) $(CPPFLAGS) $(neomod_CXXFLAGS) $(CXXFLAGS) -MT src/App/Neomod/neomod-SimulatedBeatmapInterface.o -MD -MP -MF src/App/Neomod/$(DEPDIR)/neomod-SimulatedBeatmapInterface.Tpo -c -o src/App/Neomod/neomod-SimulatedBeatmapInterface.o `test -f 'src/App/Neomod/SimulatedBeatmapInterface.cpp' || echo '$(srcdir)/'`src/App/Neomod/SimulatedBeatmapInterface.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/App/Neomod/$(DEPDIR)/neomod-SimulatedBeatmapInterface.Tpo src/App/Neomod/$(DEPDIR)/neomod-SimulatedBeatmapInterface.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/App/Neomod/SimulatedBeatmapInterface.cpp' object='src/App/Neomod/neomod-SimulatedBeatmapInterface.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(neomod_CPPFLAGS) $(CPPFLAGS) $(neomod_CXXFLAGS) $(CXXFLAGS) -c -o src/App/Neomod/neomod-SimulatedBeatmapInterface.o `test -f 'src/App/Neomod/SimulatedBeatmapInterface.cpp' || echo '$(srcdir)/'`src/App/Neomod/SimulatedBeatmapInterface.cpp
-
-src/App/Neomod/neomod-SimulatedBeatmapInterface.obj: src/App/Neomod/SimulatedBeatmapInterface.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(neomod_CPPFLAGS) $(CPPFLAGS) $(neomod_CXXFLAGS) $(CXXFLAGS) -MT src/App/Neomod/neomod-SimulatedBeatmapInterface.obj -MD -MP -MF src/App/Neomod/$(DEPDIR)/neomod-SimulatedBeatmapInterface.Tpo -c -o src/App/Neomod/neomod-SimulatedBeatmapInterface.obj `if test -f 'src/App/Neomod/SimulatedBeatmapInterface.cpp'; then $(CYGPATH_W) 'src/App/Neomod/SimulatedBeatmapInterface.cpp'; else $(CYGPATH_W) '$(srcdir)/src/App/Neomod/SimulatedBeatmapInterface.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/App/Neomod/$(DEPDIR)/neomod-SimulatedBeatmapInterface.Tpo src/App/Neomod/$(DEPDIR)/neomod-SimulatedBeatmapInterface.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/App/Neomod/SimulatedBeatmapInterface.cpp' object='src/App/Neomod/neomod-SimulatedBeatmapInterface.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(neomod_CPPFLAGS) $(CPPFLAGS) $(neomod_CXXFLAGS) $(CXXFLAGS) -c -o src/App/Neomod/neomod-SimulatedBeatmapInterface.obj `if test -f 'src/App/Neomod/SimulatedBeatmapInterface.cpp'; then $(CYGPATH_W) 'src/App/Neomod/SimulatedBeatmapInterface.cpp'; else $(CYGPATH_W) '$(srcdir)/src/App/Neomod/SimulatedBeatmapInterface.cpp'; fi`
 
 src/App/Neomod/neomod-Skin.o: src/App/Neomod/Skin.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(neomod_CPPFLAGS) $(CPPFLAGS) $(neomod_CXXFLAGS) $(CXXFLAGS) -MT src/App/Neomod/neomod-Skin.o -MD -MP -MF src/App/Neomod/$(DEPDIR)/neomod-Skin.Tpo -c -o src/App/Neomod/neomod-Skin.o `test -f 'src/App/Neomod/Skin.cpp' || echo '$(srcdir)/'`src/App/Neomod/Skin.cpp
@@ -7794,7 +7772,6 @@ distclean: distclean-am
 	-rm -f src/App/$(DEPDIR)/neomod-AppRegistry.Po
 	-rm -f src/App/$(DEPDIR)/neomod-AppRunner.Po
 	-rm -f src/App/Neomod/$(DEPDIR)/neomod-AboutScreen.Po
-	-rm -f src/App/Neomod/$(DEPDIR)/neomod-AbstractBeatmapInterface.Po
 	-rm -f src/App/Neomod/$(DEPDIR)/neomod-BackgroundImageHandler.Po
 	-rm -f src/App/Neomod/$(DEPDIR)/neomod-Bancho.Po
 	-rm -f src/App/Neomod/$(DEPDIR)/neomod-BanchoAes.Po
@@ -7815,6 +7792,7 @@ distclean: distclean-am
 	-rm -f src/App/Neomod/$(DEPDIR)/neomod-DatabaseBeatmap.Po
 	-rm -f src/App/Neomod/$(DEPDIR)/neomod-Downloader.Po
 	-rm -f src/App/Neomod/$(DEPDIR)/neomod-GameRules.Po
+	-rm -f src/App/Neomod/$(DEPDIR)/neomod-GameplayJudge.Po
 	-rm -f src/App/Neomod/$(DEPDIR)/neomod-HUD.Po
 	-rm -f src/App/Neomod/$(DEPDIR)/neomod-HitObjects.Po
 	-rm -f src/App/Neomod/$(DEPDIR)/neomod-HitSounds.Po
@@ -7847,7 +7825,6 @@ distclean: distclean-am
 	-rm -f src/App/Neomod/$(DEPDIR)/neomod-ScoreboardSlot.Po
 	-rm -f src/App/Neomod/$(DEPDIR)/neomod-ScreenBackable.Po
 	-rm -f src/App/Neomod/$(DEPDIR)/neomod-SettingsImporter.Po
-	-rm -f src/App/Neomod/$(DEPDIR)/neomod-SimulatedBeatmapInterface.Po
 	-rm -f src/App/Neomod/$(DEPDIR)/neomod-Skin.Po
 	-rm -f src/App/Neomod/$(DEPDIR)/neomod-SkinArchive.Po
 	-rm -f src/App/Neomod/$(DEPDIR)/neomod-SkinImage.Po
@@ -8111,7 +8088,6 @@ maintainer-clean: maintainer-clean-am
 	-rm -f src/App/$(DEPDIR)/neomod-AppRegistry.Po
 	-rm -f src/App/$(DEPDIR)/neomod-AppRunner.Po
 	-rm -f src/App/Neomod/$(DEPDIR)/neomod-AboutScreen.Po
-	-rm -f src/App/Neomod/$(DEPDIR)/neomod-AbstractBeatmapInterface.Po
 	-rm -f src/App/Neomod/$(DEPDIR)/neomod-BackgroundImageHandler.Po
 	-rm -f src/App/Neomod/$(DEPDIR)/neomod-Bancho.Po
 	-rm -f src/App/Neomod/$(DEPDIR)/neomod-BanchoAes.Po
@@ -8132,6 +8108,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f src/App/Neomod/$(DEPDIR)/neomod-DatabaseBeatmap.Po
 	-rm -f src/App/Neomod/$(DEPDIR)/neomod-Downloader.Po
 	-rm -f src/App/Neomod/$(DEPDIR)/neomod-GameRules.Po
+	-rm -f src/App/Neomod/$(DEPDIR)/neomod-GameplayJudge.Po
 	-rm -f src/App/Neomod/$(DEPDIR)/neomod-HUD.Po
 	-rm -f src/App/Neomod/$(DEPDIR)/neomod-HitObjects.Po
 	-rm -f src/App/Neomod/$(DEPDIR)/neomod-HitSounds.Po
@@ -8164,7 +8141,6 @@ maintainer-clean: maintainer-clean-am
 	-rm -f src/App/Neomod/$(DEPDIR)/neomod-ScoreboardSlot.Po
 	-rm -f src/App/Neomod/$(DEPDIR)/neomod-ScreenBackable.Po
 	-rm -f src/App/Neomod/$(DEPDIR)/neomod-SettingsImporter.Po
-	-rm -f src/App/Neomod/$(DEPDIR)/neomod-SimulatedBeatmapInterface.Po
 	-rm -f src/App/Neomod/$(DEPDIR)/neomod-Skin.Po
 	-rm -f src/App/Neomod/$(DEPDIR)/neomod-SkinArchive.Po
 	-rm -f src/App/Neomod/$(DEPDIR)/neomod-SkinImage.Po

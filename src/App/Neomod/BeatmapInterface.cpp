@@ -43,7 +43,7 @@
 #include "ResourceManager.h"
 #include "RichPresence.h"
 #include "RoomScreen.h"
-#include "SimulatedBeatmapInterface.h"
+#include "GameplayJudge.h"
 #include "Sound.h"
 #include "Font.h"
 #include "Shader.h"
@@ -73,7 +73,7 @@ static void end_watched_mod_session() {
     }
 }
 
-BeatmapInterface::BeatmapInterface(MusicTrack &music) : AbstractBeatmapInterface(), music(music), ppv2_calc(this) {
+BeatmapInterface::BeatmapInterface(MusicTrack &music) : music(music), ppv2_calc(this) {
     // vars
     this->bIsPlaying = false;
     this->bIsPaused = false;
@@ -94,36 +94,15 @@ BeatmapInterface::BeatmapInterface(MusicTrack &music) : AbstractBeatmapInterface
     this->bWasSeekFrame = false;
     this->bIsFirstMissSound = true;
 
-    this->bFailed = false;
     this->fFailAnim = 1.0f;
-    this->fHealth = 1.0;
-    this->fHealth2 = 1.0f;
-
-    this->fDrainRate = 0.0;
 
     this->fBreakBackgroundFade = 0.0f;
     this->bInBreak = false;
-    this->currentHitObject = nullptr;
-    this->iNextHitObjectTime = 0;
-    this->iPreviousHitObjectTime = 0;
     this->iPreviousSectionPassFailTime = -1;
 
     this->bClickedContinue = false;
-    this->lastPressedKey = 0;
     this->iAllowAnyNextKeyUntilHitObjectIndex = 0;
 
-    this->iNPS = 0;
-    this->iND = 0;
-    this->iCurrentHitObjectIndex = 0;
-    this->iCurrentNumCircles = 0;
-    this->iCurrentNumSliders = 0;
-    this->iCurrentNumSpinners = 0;
-
-    this->iPreviousFollowPointObjectIndex = -1;
-
-    this->bIsSpinnerActive = false;
-
-    this->fPlayfieldRotation = 0.0f;
     this->fScaleFactor = 1.0f;
 
     this->fXMultiplier = 1.0f;
@@ -131,8 +110,6 @@ BeatmapInterface::BeatmapInterface(MusicTrack &music) : AbstractBeatmapInterface
     this->fHitcircleOverlapScale = 1.0f;
     this->fRawHitcircleDiameter = 27.35f * 2.0f;
     this->fSliderFollowCircleDiameter = 0.0f;
-
-    this->iAutoCursorDanceIndex = 0;
 
     this->fAimStars = 0.0f;
     this->fAimSliderFactor = 0.0f;
@@ -166,7 +143,8 @@ void BeatmapInterface::drawDebug() {
     static constexpr Color shadowColor = argb(255, 0, 0, 0);
     static constexpr Color textColor = argb(255, 255, 232, 255);
 
-    const auto &alltp = this->getMapTimingPoints();
+    if(!this->judge) return;
+    const auto &alltp = this->judge->getMapTimingPoints();
     if(alltp.empty()) return;
 
     McFont *debugFont = engine->getConsoleFont();
@@ -273,8 +251,8 @@ void BeatmapInterface::drawBackground() {
 
         y += 100;
 
-        if(this->hitobjectsSortedByEndTime.size() > 0) {
-            HitObject *lastHitObject = this->hitobjectsSortedByEndTime.back();
+        if(this->judge && !this->judge->getHitObjectsSortedByEndTime().empty()) {
+            const HitObject *lastHitObject = this->judge->getHitObjectsSortedByEndTime().back();
             if(lastHitObject->isFinished() &&
                this->iCurMusicPos > lastHitObject->getEndTime() + (i32)cv::end_skip_time.getInt()) {
                 g->setColor(0xff00ffff);
@@ -305,13 +283,14 @@ void BeatmapInterface::skipEmptySection() {
         if(offsetMultiplier <= 0.2f) offsetMultiplier = 0.2f;
     }
 
-    const i32 nextHitObjectDelta = this->iNextHitObjectTime - (i32)this->iCurMusicPosWithOffsets;
+    const i32 nextHitObjectTime = this->judge->getNextHitObjectTime();
+    const i32 nextHitObjectDelta = nextHitObjectTime - (i32)this->iCurMusicPosWithOffsets;
 
     if(!cv::end_skip.getBool() && nextHitObjectDelta < 0) {
         this->music.setPosition(std::max(this->music.getLengthMS(), (u32)1) - 1);
         this->bWasSeekFrame = true;
     } else {
-        this->music.setPosition(std::max(this->iNextHitObjectTime - (i32)(offset * offsetMultiplier), (i32)0));
+        this->music.setPosition(std::max(nextHitObjectTime - (i32)(offset * offsetMultiplier), (i32)0));
         this->bWasSeekFrame = true;
     }
 
@@ -336,9 +315,6 @@ void BeatmapInterface::skipEmptySection() {
 void BeatmapInterface::onKey(GameplayKeys key_flag, bool down, u64 timestamp) {
     if(this->is_watching || BanchoState::spectating) return;
 
-    bool hasAnyHitObjects = (likely(!this->hitobjects.empty()));
-    bool is_too_early = hasAnyHitObjects && this->iCurMusicPosWithOffsets < this->hitobjects[0]->getClickTime();
-    bool should_count_keypress = !is_too_early && !this->bInBreak && !this->bIsInSkippableSection && this->bIsPlaying;
     bool should_click = (!osu->getModAuto() && !osu->getModRelax()) || !cv::auto_and_relax_block_user_input.getBool();
 
     // music position to be interped to next update (in update2())
@@ -374,14 +350,14 @@ void BeatmapInterface::onKey(GameplayKeys key_flag, bool down, u64 timestamp) {
         }
 
         if(cv::mod_singletap.getBool() && !(this->lastPressedKey & key_flag)) {
-            if(this->iCurrentHitObjectIndex > this->iAllowAnyNextKeyUntilHitObjectIndex) {
+            if(this->getCurrentHitObjectIndex() > this->iAllowAnyNextKeyUntilHitObjectIndex) {
                 soundEngine->play(this->getSkin()->s_combobreak);
                 return;
             }
         }
 
         if(cv::mod_fullalternate.getBool() && (this->lastPressedKey & key_flag)) {
-            if(this->iCurrentHitObjectIndex > this->iAllowAnyNextKeyUntilHitObjectIndex) {
+            if(this->getCurrentHitObjectIndex() > this->iAllowAnyNextKeyUntilHitObjectIndex) {
                 return;
             }
         }
@@ -389,25 +365,25 @@ void BeatmapInterface::onKey(GameplayKeys key_flag, bool down, u64 timestamp) {
         // key overlay & counter
         ui->getHUD()->animateInputOverlay(key_flag, true);
 
-        if(this->bFailed) return;
+        if(this->judge && this->judge->hasFailed()) return;
 
-        if(should_count_keypress) osu->getScore()->addKeyCount(key_flag);
         this->lastPressedKey = key_flag;
-        if(should_click) {
-            this->clicks.push_back(click);
-        }
+        this->key_events.push_back(
+            KeyEvent{.click = click, .keys = this->current_keys, .clickKey = should_click ? (u8)key_flag : (u8)0});
     } else {  // released
+        bool clicks = false;
         if(osu->getModDKS()) {
-            if(should_count_keypress) osu->getScore()->addKeyCount(key_flag);
             this->lastPressedKey = key_flag;
-            if(should_click) {
-                this->clicks.push_back(click);
-            }
+            clicks = should_click;
         }
 
         // always allow released key to animate
         ui->getHUD()->animateInputOverlay(key_flag, false);
         this->current_keys &= ~key_flag;
+        if(osu->isInPlayMode()) {
+            this->key_events.push_back(
+                KeyEvent{.click = click, .keys = this->current_keys, .clickKey = clicks ? (u8)key_flag : (u8)0});
+        }
     }
 }
 
@@ -424,7 +400,9 @@ void BeatmapInterface::selectBeatmap(DatabaseBeatmap *map) {
     if(map != nullptr) {
         this->beatmap = map;
 
-        this->nb_hitobjects = map->getNumObjects();
+        // (the judge plays with the score's mods, so it also answers for the map outside of a play)
+        if(!this->judge || this->judge->getBeatmap() != map)
+            this->judge = std::make_unique<GameplayJudge>(map, *osu->getScore(), this, this);
     }
 
     if(cv::beatmap_preview_mods_live.getBool()) {
@@ -438,6 +416,7 @@ void BeatmapInterface::selectBeatmap(DatabaseBeatmap *map) {
 void BeatmapInterface::deselectBeatmap() {
     this->beatmap = nullptr;
     this->unloadObjects();
+    this->judge.reset();
 }
 
 bool BeatmapInterface::play() {
@@ -472,7 +451,6 @@ bool BeatmapInterface::play() {
 }
 
 bool BeatmapInterface::watch(const FinishedScore &score, u32 start_ms) {
-    this->sim.reset();
     if(score.replay.size() < 3) {
         // Replay is invalid
         return false;
@@ -499,15 +477,12 @@ bool BeatmapInterface::watch(const FinishedScore &score, u32 start_ms) {
         return false;
     }
 
-    this->spectated_replay = score.replay;
+    this->judge->replay = score.replay;
 
     // Don't seek to beginning, since that would skip waiting time
     if(start_ms > 0) {
         this->seekMS(start_ms);
     }
-
-    this->sim = std::make_unique<SimulatedBeatmapInterface>(this->beatmap, score.mods);
-    this->sim->spectated_replay = score.replay;
 
     // update url history
     if(i64 score_id = score.bancho_score_id; score_id != 0) {
@@ -544,12 +519,8 @@ bool BeatmapInterface::spectate() {
         return false;
     }
 
-    this->spectated_replay.clear();
+    this->judge->replay.clear();
     this->score_frames.clear();
-
-    score.mods.flags |= ModFlags::NoFail;
-    this->sim = std::make_unique<SimulatedBeatmapInterface>(this->beatmap, score.mods);
-    this->sim->spectated_replay.clear();
 
     return true;
 }
@@ -558,7 +529,7 @@ bool BeatmapInterface::start() {
     // set it to false to catch early returns first
     osu->bIsPlayingASelectedBeatmap = false;
 
-    if(unlikely(!this->beatmap)) return false;
+    if(unlikely(!this->beatmap || !this->judge)) return false;
 
     osu->bIsPlayingASelectedBeatmap = true;
     osu->setShouldPauseBGThreads(true);
@@ -604,15 +575,13 @@ bool BeatmapInterface::start() {
     this->updateHitobjectMetrics();
     this->bIsPreLoading = false;
 
-    // actually load the difficulty (and the hitobjects): the play goes by what it reads from the file now (objects ask for
-    // the map's settings while they're made)
+    // actually load the difficulty (and the hitobjects)
     {
-        this->played = std::make_unique<PlayedMap>(DatabaseBeatmap::readPlayedMap(this->beatmap->getFilePath()));
-        DatabaseBeatmap::LOAD_GAMEPLAY_RESULT result = DatabaseBeatmap::loadGameplay(*this->played, this, this);
-        if(result.error.errc) {
+        const Primitives::LoadError error = this->judge->load();
+        if(error.errc) {
             using enum Primitives::LoadError::code;
             std::string errorMessage;
-            switch(result.error.errc) {
+            switch(error.errc) {
                 case METADATA:
                 case LOADMETADATA_ON_BEATMAPSET:
                 case NON_STD_GAMEMODE:
@@ -642,9 +611,9 @@ bool BeatmapInterface::start() {
                 } break;
 
                 default: {
-                    if(result.error.errc != LOAD_INTERRUPTED) errorMessage = "Error: Couldn't load beatmap :(";
+                    if(error.errc != LOAD_INTERRUPTED) errorMessage = "Error: Couldn't load beatmap :(";
                     debugLog("Osu Error: Couldn't load beatmap {}: {}", this->beatmap->getFilePath(),
-                             result.error.error_string());
+                             error.error_string());
                 } break;
             }
 
@@ -652,7 +621,6 @@ bool BeatmapInterface::start() {
                 ui->getNotificationOverlay()->addToast(errorMessage, ERROR_TOAST);
             }
 
-            this->played.reset();
             osu->bIsPlayingASelectedBeatmap = false;
             osu->setShouldPauseBGThreads(false);
 
@@ -661,38 +629,16 @@ bool BeatmapInterface::start() {
 
         // the file changed since the database read it: the database catches up after the play (osu!.db's maps once
         // osu!stable rescans, a raw-loaded songs folder's at the next F5)
-        if(this->played->md5 != this->beatmap->getMD5() &&
+        if(this->judge->getMapData()->md5 != this->beatmap->getMD5() &&
            this->beatmap->type == DatabaseBeatmap::BeatmapType::NEOMOD_DIFFICULTY) {
             osu->getBeatmapInstaller()->enqueue_folder(db->locate(*this->beatmap).folder, /*changed=*/true);
         }
 
-        // move temp result data into beatmap
-        this->nb_hitobjects = this->played->primitives.getNumObjects();
-        this->hitobjects = std::move(result.hitobjects);
-        this->breaks = std::move(result.breaks);
-        this->comboColors = std::move(result.combocolors);
-
         this->cur_timing_info = {};
-        this->default_sample_set = result.defaultSampleSet;
 
         // load beatmap skin
         this->getSkinMutable()->loadBeatmapOverride(this->beatmap->getFolder());
     }
-
-    // the drawing order is different from the playing/input order.
-    // for drawing, if multiple hitobjects occupy the exact same time (duration) then they get drawn on top of the
-    // active hitobject
-    this->hitobjectsSortedByEndTime.clear();
-    this->hitobjectsSortedByEndTime.reserve(this->hitobjects.size());
-    for(const auto &unq : this->hitobjects) {
-        this->hitobjectsSortedByEndTime.push_back(unq.get());
-    }
-
-    std::ranges::stable_sort(this->hitobjectsSortedByEndTime, {}, &HitObject::getEndTime);
-
-    // after the hitobjects have been loaded we can calculate the stacks
-    this->calculateStacks();
-    this->computeDrainRate();
 
     // start preloading (delays the play start until it's set to false, see isLoading())
     this->bIsPreLoading = true;
@@ -777,7 +723,8 @@ void BeatmapInterface::restart(bool quick) {
 void BeatmapInterface::actualRestart() {
     // reset everything
     this->resetScore();
-    this->resetHitObjects(-1000);
+    this->judge->reset(-1000);
+    ui->getHUD()->resetHitErrorBar();
     this->smoke_trail.clear();
     this->all_clicks.clear();
 
@@ -811,7 +758,6 @@ void BeatmapInterface::actualRestart() {
     this->iCurMusicPos = 0;
 
     this->bIsPlaying = true;
-    this->bTempSeekNF = false;
 }
 
 void BeatmapInterface::pause(bool quitIfWaiting) {
@@ -834,8 +780,8 @@ void BeatmapInterface::pause(bool quitIfWaiting) {
             // case 1: the beatmap is already "finished", jump to the ranking screen if some small amount of time past
             //         the last objects endTime
             // case 2: in the middle somewhere, pause as usual
-            HitObject *lastHitObject =
-                this->hitobjectsSortedByEndTime.size() > 0 ? this->hitobjectsSortedByEndTime.back() : nullptr;
+            const auto sortedByEndTime = this->judge->getHitObjectsSortedByEndTime();
+            const HitObject *lastHitObject = !sortedByEndTime.empty() ? sortedByEndTime.back() : nullptr;
             if(lastHitObject != nullptr && lastHitObject->isFinished() &&
                (this->iCurMusicPos > lastHitObject->getEndTime() + (i32)cv::end_skip_time.getInt()) &&
                cv::end_skip.getBool()) {
@@ -899,7 +845,7 @@ void BeatmapInterface::pause(bool quitIfWaiting) {
     }
 
     // if we have failed, and the user early exits to the pause menu, stop the failing animation
-    if(this->bFailed) this->fFailAnim.stop();
+    if(this->judge->hasFailed()) this->fFailAnim.stop();
 }
 
 void BeatmapInterface::stop(bool quit) {
@@ -943,11 +889,10 @@ void BeatmapInterface::stop(bool quit) {
     }
 
     this->is_watching = false;
-    this->spectated_replay.clear();
+    this->judge->replay.clear();
     this->score_frames.clear();
-    this->sim.reset();
 
-    if(this->bFailed) this->music.endSlowdown();
+    if(this->judge->hasFailed()) this->music.endSlowdown();
 
     this->unloadObjects();
 
@@ -972,26 +917,40 @@ void BeatmapInterface::stop(bool quit) {
 }
 
 void BeatmapInterface::fail(bool force_death) {
-    if(this->bFailed) return;
-    if((this->is_watching || BanchoState::spectating) && !force_death) return;
+    if(!this->judge || this->judge->hasFailed()) return;
+    if(this->failPlay(force_death)) this->judge->markFailed();
+}
+
+bool BeatmapInterface::onFail(bool byMods) {
+    // perfect restarts instead of failing, and so can sudden death
+    if(byMods && !this->is_watching && !BanchoState::spectating &&
+       (osu->getModSS() || cv::mod_suddendeath_restart.getBool())) {
+        this->restart();
+        return false;
+    }
+
+    return this->failPlay(false);
+}
+
+bool BeatmapInterface::failPlay(bool force_death) {
+    if((this->is_watching || BanchoState::spectating) && !force_death) return false;
 
     // Change behavior of relax mod when online
-    if(BanchoState::is_online() && osu->getModRelax()) return;
+    if(BanchoState::is_online() && osu->getModRelax()) return false;
 
+    bool failed = false;
     if(!BanchoState::is_playing_a_multi_map() && cv::drain_kill.getBool()) {
         soundEngine->play(this->getSkin()->s_fail);
 
         // trigger music slowdown and delayed menu, see update()
-        this->bFailed = true;
+        failed = true;
         this->fFailAnim = 1.0f;
         this->fFailAnim.set(0.0f, cv::fail_time.getFloat(), anim::Linear);
     } else if(!osu->getScore()->isDead()) {
         debugLog("Disabling score submission due to death");
         this->is_submittable = false;
 
-        this->fHealth = 0.0;
-        this->fHealth2.stop();
-        this->fHealth2 = 0.0f;
+        this->judge->setHealth(0.0);
 
         // Send a score update with health = 0 so server knows we died
         ui->getRoomScreen()->onClientScoreChange(true);
@@ -1004,12 +963,14 @@ void BeatmapInterface::fail(bool force_death) {
     }
 
     if(!osu->getScore()->isDead()) osu->getScore()->setDead(true);
+
+    return failed;
 }
 
 void BeatmapInterface::cancelFailing() {
-    if(!this->bFailed || this->fFailAnim <= 0.0f) return;
+    if(!this->judge || !this->judge->hasFailed() || this->fFailAnim <= 0.0f) return;
 
-    this->bFailed = false;
+    this->judge->cancelFailing();
 
     this->fFailAnim.stop();
     this->fFailAnim = 1.0f;
@@ -1027,8 +988,7 @@ void BeatmapInterface::setMusicSpeed(f32 speed) {
 }
 
 void BeatmapInterface::seekMS(u32 ms) {
-    this->bTempSeekNF = false;
-    if(unlikely(!this->beatmap) || this->music.isEmpty() || this->bFailed) return;
+    if(unlikely(!this->beatmap) || this->music.isEmpty() || this->judge->hasFailed()) return;
 
     // this->resetScore() resets this->is_submittable
     bool was_submittable = this->is_submittable;
@@ -1038,9 +998,10 @@ void BeatmapInterface::seekMS(u32 ms) {
     this->music.setPosition(ms);
     this->setMusicSpeed(this->getSpeedMultiplier());
 
-    this->resetHitObjects(ms);
+    const bool backwards = std::cmp_less(ms, this->iCurMusicPos);
     this->resetScore();
     this->is_submittable = false;
+    ui->getHUD()->resetHitErrorBar();
 
     this->iPreviousSectionPassFailTime = -1;
 
@@ -1055,20 +1016,23 @@ void BeatmapInterface::seekMS(u32 ms) {
         this->onModUpdate(false, false);
     }
 
-    if(this->is_watching) {
-        // When seeking backwards, restart simulation from beginning
-        if(std::cmp_less(ms, this->iCurMusicPos)) {
-            this->sim = std::make_unique<SimulatedBeatmapInterface>(this->beatmap, osu->getScore()->mods);
-            this->sim->spectated_replay = this->spectated_replay;
-            osu->getScore()->reset();
-        }
+    if(this->is_watching || BanchoState::spectating) {
+        // a replay is judged up to where it was seeked to (from the start again when seeking backwards), without
+        // showing every hit on the way
+        if(backwards) this->judge->reset();
+        osu->getScore()->simulating = true;
+        this->judge->simulate_to((i32)ms);
+        osu->getScore()->simulating = false;
+    } else {
+        // the play goes on from there, with everything before it done
+        this->judge->reset((i32)ms);
     }
 
     if(!this->is_watching && !BanchoState::spectating) {  // score submission already disabled when watching replay
         if(was_submittable && BanchoState::can_submit_scores()) {
             ui->getNotificationOverlay()->addToast("Score will not submit due to seeking", ERROR_TOAST);
         }
-        this->bTempSeekNF = true;
+        this->judge->bTempSeekNF = true;
     }
 
     // clear outgoing spectator frames so that neomod clients are able to tell when we seek backwards
@@ -1081,8 +1045,8 @@ void BeatmapInterface::seekMS(u32 ms) {
 u32 BeatmapInterface::getTime() const { return (u32)std::max(this->music.getTime(), 0); }
 
 u32 BeatmapInterface::getStartTimePlayable() const {
-    if(likely(!this->hitobjects.empty()))
-        return (u32)this->hitobjects[0]->getClickTime();
+    if(this->judge && !this->judge->getHitObjects().empty())
+        return (u32)this->judge->getHitObjects()[0]->getClickTime();
     else
         return 0;
 }
@@ -1097,8 +1061,8 @@ u32 BeatmapInterface::getLength() const {
 }
 
 u32 BeatmapInterface::getLengthPlayable() const {
-    if(likely(!this->hitobjects.empty()))
-        return (u32)(this->hitobjects.back()->getEndTime() - this->hitobjects.front()->getClickTime());
+    if(this->judge && !this->judge->getHitObjects().empty())
+        return this->judge->getLengthPlayable();
     else
         return this->getLength();
 }
@@ -1134,34 +1098,13 @@ int BeatmapInterface::getMostCommonBPM() const {
         return 0;
 }
 
-f32 BeatmapInterface::getSpeedMultiplier() const {
-    if(f32 speed_override = osu->getScore()->mods.speed; speed_override >= 0.05f) {
-        return std::max(speed_override, 0.05f);
-    } else {
-        return 1.f;
-    }
-}
-
-f32 BeatmapInterface::getPitchMultiplier() const {
-    // if pitch compensation is off, keep pitch constant (do not apply daycore/nightcore pitch)
-    if(!cv::snd_speed_compensate_pitch.getBool()) return 1.f;
-
-    float pitchMultiplier = 1.0f;
-
-    // TODO: re-add actual nightcore/daycore mods
-    const float speedMult = this->getSpeedMultiplier();
-    if(cv::nightcore_enjoyer.getBool() && speedMult != 1.f) {
-        pitchMultiplier = speedMult < 1.f ? 0.92f /* daycore */ : 1.1166f /* nightcore */;
-    }
-
-    return pitchMultiplier;
-}
+f32 BeatmapInterface::getSpeedMultiplier() const { return this->judge ? this->judge->getSpeedMultiplier() : 1.f; }
+f32 BeatmapInterface::getPitchMultiplier() const { return this->judge ? this->judge->getPitchMultiplier() : 1.f; }
 
 // currently just a passthrough for the main skin, might return beatmap skins in the future
 const Skin *BeatmapInterface::getSkin() const { return osu->getSkin(); }
 
 const Replay::Mods &BeatmapInterface::getMods() const { return osu->getScore()->mods; }
-LegacyFlags BeatmapInterface::getModsLegacy() const { return osu->getScore()->getModsLegacy(); }
 Skin *BeatmapInterface::getSkinMutable() { return osu->getSkinMutable(); }
 
 ModFlags BeatmapInterface::getModFlags() const {
@@ -1174,230 +1117,56 @@ ModFlags BeatmapInterface::getModFlags() const {
 }
 
 Color BeatmapInterface::getComboColor(i32 colorCounter, i32 colorOffset) const {
-    return this->getSkin()->getComboColorForCounter(colorCounter, colorOffset, this->comboColors);
+    static const std::vector<Color> none;
+    return this->getSkin()->getComboColorForCounter(colorCounter, colorOffset,
+                                                    this->judge ? this->judge->getComboColors() : none);
 }
 
 bool BeatmapInterface::slidersRenderDynamically() const { return osu->slidersRenderDynamically(); }
 
 vec2 BeatmapInterface::getScreenSize() const { return osu->getVirtScreenSize(); }
 
-f32 BeatmapInterface::getRawAR() const {
-    if(unlikely(!this->beatmap)) return 5.0f;
-
-    return std::clamp<f32>(this->getMapAR() * Osu::getDifficultyMultiplier(), 0.0f, 10.0f);
+f32 BeatmapInterface::getRawAR() const { return this->judge ? this->judge->getRawAR() : 5.f; }
+f32 BeatmapInterface::getAR() const { return this->judge ? this->judge->getAR() : 5.f; }
+f32 BeatmapInterface::getCS() const { return this->judge ? this->judge->getCS() : 5.f; }
+f32 BeatmapInterface::getHP() const { return this->judge ? this->judge->getHP() : 5.f; }
+f32 BeatmapInterface::getRawOD() const { return this->judge ? this->judge->getRawOD() : 5.f; }
+f32 BeatmapInterface::getOD() const { return this->judge ? this->judge->getOD() : 5.f; }
+f32 BeatmapInterface::getApproachTime() const { return this->judge ? this->judge->getApproachTime() : 0.f; }
+f64 BeatmapInterface::getHitWindow300() const { return this->judge ? this->judge->getHitWindow300() : 0.0; }
+f64 BeatmapInterface::getHitWindow100() const { return this->judge ? this->judge->getHitWindow100() : 0.0; }
+f64 BeatmapInterface::getHitWindow50() const { return this->judge ? this->judge->getHitWindow50() : 0.0; }
+f32 BeatmapInterface::getApproachRateForSpeedMultiplier() const {
+    return this->judge ? this->judge->getApproachRateForSpeedMultiplier() : 5.f;
 }
+f32 BeatmapInterface::getRawARForSpeedMultiplier() const {
+    return this->judge ? this->judge->getRawARForSpeedMultiplier() : 5.f;
+}
+f32 BeatmapInterface::getRawODForSpeedMultiplier() const {
+    return this->judge ? this->judge->getRawODForSpeedMultiplier() : 5.f;
+}
+f32 BeatmapInterface::getOverallDifficultyForSpeedMultiplier() const {
+    return this->judge ? this->judge->getOverallDifficultyForSpeedMultiplier() : 5.f;
+}
+i32 BeatmapInterface::getCurrentHitObjectIndex() const {
+    return this->judge ? this->judge->getCurrentHitObjectIndex() : 0;
+}
+bool BeatmapInterface::isSpinnerActive() const { return this->judge && this->judge->isSpinnerActive(); }
+f64 BeatmapInterface::getHealth() const { return this->judge ? this->judge->getHealth() : 1.0; }
+bool BeatmapInterface::hasFailed() const { return this->judge && this->judge->hasFailed(); }
 
-f32 BeatmapInterface::getAR() const {
-    if(unlikely(!this->beatmap)) return 5.0f;
-
-    f32 AR;
-    if(f32 ar_overridenegative = cv::ar_overridenegative.getFloat(); ar_overridenegative < 0.0f)
-        AR = ar_overridenegative;
-    else if(f32 ar_override = cv::ar_override.getFloat(); ar_override >= 0.0f)
-        AR = ar_override;
-    else
-        AR = this->getRawAR();
-
-    if(cv::ar_override_lock.getBool()) AR = GameRules::arWithSpeed(AR, 1.f / this->getSpeedMultiplier());
-
-    if(cv::mod_artimewarp.getBool() && likely(!this->hitobjects.empty())) {
-        const f32 percent =
-            1.0f - ((f64)(this->iCurMusicPos - this->hitobjects[0]->getClickTime()) /
-                    (f64)(this->hitobjects.back()->getClickTime() + this->hitobjects.back()->getDuration() -
-                          this->hitobjects[0]->getClickTime())) *
-                       (1.0f - cv::mod_artimewarp_multiplier.getFloat());
-        AR *= percent;
+void BeatmapInterface::onComboBreak() {
+    if((this->bIsFirstMissSound && osu->getScore()->getCombo() > 0) ||
+       osu->getScore()->getCombo() > cv::combobreak_sound_combo.getInt()) {
+        this->bIsFirstMissSound = false;
+        soundEngine->play(this->getSkin()->s_combobreak);
     }
-
-    if(cv::mod_arwobble.getBool())
-        AR += std::sin((this->iCurMusicPos / 1000.0f) * cv::mod_arwobble_interval.getFloat()) *
-              cv::mod_arwobble_strength.getFloat();
-
-    return AR;
 }
 
-f32 BeatmapInterface::getCS() const {
-    if(unlikely(!this->beatmap)) return 5.0f;
-
-    f32 CS;
-    if(f32 cs_overridenegative = cv::cs_overridenegative.getFloat(); cs_overridenegative < 0.0f)
-        CS = cs_overridenegative;
-    else if(f32 cs_override = cv::cs_override.getFloat(); cs_override >= 0.0f)
-        CS = cs_override;
-    else
-        CS = std::clamp<f32>(this->getMapCS() * Osu::getCSDifficultyMultiplier(), 0.0f, 10.0f);
-
-    if(cv::mod_minimize.getBool() && likely(!this->hitobjects.empty())) {
-        const f32 percent =
-            1.0f + ((f64)(this->iCurMusicPos - this->hitobjects[0]->getClickTime()) /
-                    (f64)(this->hitobjects.back()->getClickTime() + this->hitobjects.back()->getDuration() -
-                          this->hitobjects[0]->getClickTime())) *
-                       cv::mod_minimize_multiplier.getFloat();
-        CS *= percent;
-    }
-
-    if(cv::cs_cap_sanity.getBool()) CS = std::min(CS, 12.1429f);
-
-    return CS;
+void BeatmapInterface::onHealthGain(f64 healthBefore) {
+    ui->getHUD()->animateKiBulge();
+    if(healthBefore > 0.9) ui->getHUD()->animateKiExplode();
 }
-
-f32 BeatmapInterface::getHP() const {
-    if(unlikely(!this->beatmap)) return 5.0f;
-
-    f32 HP;
-    if(f32 hp_override = cv::hp_override.getFloat(); hp_override >= 0.0f)
-        HP = hp_override;
-    else
-        HP = std::clamp<f32>(this->getMapHP() * Osu::getDifficultyMultiplier(), 0.0f, 10.0f);
-
-    return HP;
-}
-
-f32 BeatmapInterface::getRawOD() const {
-    if(unlikely(!this->beatmap)) return 5.0f;
-
-    return std::clamp<f32>(this->getMapOD() * Osu::getDifficultyMultiplier(), 0.0f, 10.0f);
-}
-
-f32 BeatmapInterface::getOD() const {
-    f32 OD;
-    if(f32 od_override = cv::od_override.getFloat(); od_override >= 0.0f)
-        OD = od_override;
-    else
-        OD = this->getRawOD();
-
-    if(cv::od_override_lock.getBool()) OD = GameRules::odWithSpeed(OD, 1.f / this->getSpeedMultiplier());
-
-    return OD;
-}
-
-u32 BeatmapInterface::getBreakDurationTotal() const {
-    if(unlikely(!this->beatmap && this->breaks.empty())) return 0;
-
-    u32 breakDurationTotal = 0;
-    for(auto i : this->breaks) {
-        breakDurationTotal += (u32)(i.endTime - i.startTime);
-    }
-
-    return breakDurationTotal;
-}
-
-DBType::BREAK BeatmapInterface::getBreakForTimeRange(i64 startMS, i64 positionMS, i64 endMS) const {
-    DBType::BREAK curBreak{.startTime = -1, .endTime = -1};
-
-    for(const auto &i : this->breaks) {
-        if(i.startTime >= startMS && i.endTime <= endMS) {
-            if(positionMS >= curBreak.startTime) curBreak = i;
-        }
-    }
-
-    return curBreak;
-}
-
-LiveHitResult BeatmapInterface::addHitResult(HitObject *hitObject, LiveHitResult hit, i32 delta, bool isEndOfCombo,
-                                             bool ignoreOnHitErrorBar, bool hitErrorBarOnly, bool ignoreCombo,
-                                             bool ignoreScore, bool ignoreHealth) {
-    using enum LiveHitResult;
-
-    // Frames are already written on every keypress/release.
-    // For some edge cases, we need to write extra frames to avoid replaybugs.
-    const bool should_write_frame =
-        // Slider interactions
-        // Surely buzz sliders won't be an issue... Clueless
-        (hit == HIT_SLIDER10)             //
-        || (hit == HIT_SLIDER30)          //
-        || (hit == HIT_MISS_SLIDERBREAK)  //
-        // Relax: no keypresses, instead we write on every hitresult
-        || (osu->getModRelax() && ((hit == HIT_50)        //
-                                   || (hit == HIT_100)    //
-                                   || (hit == HIT_300)    //
-                                   || (hit == HIT_MISS))  //
-           );
-    if(should_write_frame) {
-        this->write_frame();
-    }
-
-    // handle perfect & sudden death
-    if(osu->getModSS()) {
-        if(!hitErrorBarOnly && hit != HIT_300 && hit != HIT_300G && hit != HIT_SLIDER10 && hit != HIT_SLIDER30 &&
-           hit != HIT_SPINNERSPIN && hit != HIT_SPINNERBONUS) {
-            this->restart();
-            return HIT_MISS;
-        }
-    } else if(osu->getModSD()) {
-        if(hit == HIT_MISS) {
-            if(cv::mod_suddendeath_restart.getBool())
-                this->restart();
-            else
-                this->fail();
-
-            return HIT_MISS;
-        }
-    }
-
-    // miss sound
-    if(hit == HIT_MISS) this->playMissSound();
-
-    // score
-    osu->getScore()->addHitResult(this, hitObject, hit, delta, ignoreOnHitErrorBar, hitErrorBarOnly, ignoreCombo,
-                                  ignoreScore);
-
-    // health
-    LiveHitResult returnedHit = HIT_MISS;
-    if(!ignoreHealth) {
-        this->addHealth(osu->getScore()->getHealthIncrease(this, hit), true);
-
-        // geki/katu handling
-        if(isEndOfCombo) {
-            // (a combo end without a hit result, see Slider::onHit(), awards nothing)
-            const int comboEndBitmask = hit == HIT_MISS_SLIDERBREAK ? 2 : osu->getScore()->getComboEndBitmask();
-
-            if(comboEndBitmask == 0) {
-                returnedHit = HIT_300G;
-                this->addHealth(osu->getScore()->getHealthIncrease(this, returnedHit), true);
-                osu->getScore()->addHitResultComboEnd(returnedHit);
-            } else if((comboEndBitmask & 2) == 0) {
-                if(hit == HIT_100) {
-                    returnedHit = HIT_100K;
-                    this->addHealth(osu->getScore()->getHealthIncrease(this, returnedHit), true);
-                    osu->getScore()->addHitResultComboEnd(returnedHit);
-                } else if(hit == HIT_300) {
-                    returnedHit = HIT_300K;
-                    this->addHealth(osu->getScore()->getHealthIncrease(this, returnedHit), true);
-                    osu->getScore()->addHitResultComboEnd(returnedHit);
-                }
-            } else if(hit != HIT_MISS && hit != HIT_MISS_SLIDERBREAK)
-                this->addHealth(osu->getScore()->getHealthIncrease(this, HIT_MU), true);
-
-            osu->getScore()->setComboEndBitmask(0);
-        }
-    }
-
-    return returnedHit;
-}
-
-void BeatmapInterface::addSliderBreak() {
-    // handle perfect & sudden death
-    if(osu->getModSS()) {
-        this->restart();
-        return;
-    } else if(osu->getModSD()) {
-        if(cv::mod_suddendeath_restart.getBool())
-            this->restart();
-        else
-            this->fail();
-
-        return;
-    }
-
-    // miss sound
-    this->playMissSound();
-
-    // score
-    osu->getScore()->addSliderBreak();
-}
-
-void BeatmapInterface::addScorePoints(int points, bool isSpinner) { osu->getScore()->addPoints(points, isSpinner); }
 
 namespace {
 // a sound's panning from where it happens on the playfield as drawn (mirrors, rotation, mods), as played
@@ -1407,11 +1176,11 @@ f32 soundPanAt(const BeatmapInterface &play, vec2 rawPos) {
 
 // the context of a hitsound at `timeMS` (-1: now)
 HitSoundUtils::HitSoundContext hitSoundContext(const BeatmapInterface &play, const Skin &skin, i32 timeMS) {
-    const DatabaseBeatmap *map = play.getBeatmap();
-    return HitSoundUtils::makeContext((timeMS != -1 && map)
-                                          ? HitSoundUtils::samplesAt(play.getMapTimingPoints(), timeMS)
+    const GameplayJudge *judge = play.getJudge();
+    return HitSoundUtils::makeContext((timeMS != -1 && judge)
+                                          ? HitSoundUtils::samplesAt(judge->getMapTimingPoints(), timeMS)
                                           : play.getCurrentTimingInfo(),
-                                      play.getDefaultSampleSet(), skin.o_layered_hitsounds);
+                                      judge ? judge->getDefaultSampleSet() : 1, skin.o_layered_hitsounds);
 }
 }  // namespace
 
@@ -1494,52 +1263,6 @@ void BeatmapInterface::playSpinnerBonusSound() {
 
 void BeatmapInterface::addTargetHit(f32 delta, f32 angle) { ui->getHUD()->addTarget(delta, angle); }
 
-void BeatmapInterface::addHealth(f64 percent, bool isFromHitResult) {
-    // never drain before first hitobject (or if drain is disabled)
-    if(this->bTempSeekNF || cv::drain_disabled.getBool() || osu->getScore()->mods.has(ModFlags::NoHP) ||
-       (likely(!this->hitobjects.empty()) && this->iCurMusicPosWithOffsets < this->hitobjects[0]->getClickTime()))
-        return;
-
-    // never drain after last hitobject
-    if(this->hitobjectsSortedByEndTime.size() > 0 &&
-       this->iCurMusicPosWithOffsets > (this->hitobjectsSortedByEndTime.back()->getClickTime() +
-                                        this->hitobjectsSortedByEndTime.back()->getDuration()))
-        return;
-
-    if(this->bFailed) {
-        this->fHealth = 0.0;
-        this->fHealth2.stop();
-        this->fHealth2 = 0.0f;
-
-        return;
-    }
-
-    if(isFromHitResult && percent > 0.0) {
-        ui->getHUD()->animateKiBulge();
-
-        if(this->fHealth > 0.9) ui->getHUD()->animateKiExplode();
-    }
-
-    this->fHealth = std::clamp<f64>(this->fHealth + percent, 0.0, 1.0);
-
-    // handle generic fail state (2)
-    const bool isDead = this->fHealth < 0.001;
-    if(isDead && !osu->getModNF()) {
-        if(osu->getModEZ() && osu->getScore()->getNumEZRetries() > 0)  // retries with ez
-        {
-            osu->getScore()->setNumEZRetries(osu->getScore()->getNumEZRetries() - 1);
-
-            // special case: set health to 160/200 (osu!stable behavior, seems fine for all drains)
-            this->fHealth = 160.0f / 200.f;
-            this->fHealth2.stop();
-            this->fHealth2 = (f32)this->fHealth;
-        } else if(isFromHitResult && percent < 0.0)  // judgement fail
-        {
-            this->fail();
-        }
-    }
-}
-
 bool BeatmapInterface::canDraw() {
     if(!this->bIsPlaying && !this->bIsPaused && !this->bContinueScheduled && !this->bIsWaiting) return false;
     if(unlikely(!this->beatmap) || this->music.isEmpty())  // sanity check
@@ -1549,51 +1272,37 @@ bool BeatmapInterface::canDraw() {
 }
 
 void BeatmapInterface::unloadObjects() {
-    this->played.reset();
     this->resetLiveStarsTasks();
-    this->currentHitObject = nullptr;
-    this->iCurrentHitObjectIndex = 0;
-    this->iCurrentNumCircles = 0;
-    this->iCurrentNumSliders = 0;
-    this->iCurrentNumSpinners = 0;
-    this->hitobjects.clear();
-    this->hitobjectsSortedByEndTime.clear();
-    this->misaimObjects.clear();
-    this->breaks.clear();
-    this->clicks.clear();
+    if(this->judge) this->judge->unload();
+    this->key_events.clear();
     this->all_clicks.clear();
-}
-
-void BeatmapInterface::resetHitObjects(i32 curPos) {
-    for(auto &hitobject : this->hitobjects) {
-        hitobject->onReset(curPos);
-        hitobject->update(curPos, engine->getFrameTime());
-        hitobject->onReset(curPos);
-    }
-    ui->getHUD()->resetHitErrorBar();
 }
 
 void BeatmapInterface::resetScore() {
     this->is_submittable = BanchoState::are_settings_submittable();
 
-    this->live_replay.clear();
-    this->live_replay.push_back(LegacyReplay::Frame{
-        .cur_music_pos = -1,
-        .milliseconds_since_last_frame = 0,
-        .x = 256,
-        .y = -500,
-        .key_flags = 0,
-    });
-    this->live_replay.push_back(LegacyReplay::Frame{
-        .cur_music_pos = -1,
-        .milliseconds_since_last_frame = -1,
-        .x = 256,
-        .y = -500,
-        .key_flags = 0,
-    });
+    // don't clear the replay when we're watching/spectating
+    if(!this->is_watching && !BanchoState::spectating) {
+        this->judge->replay = {
+            LegacyReplay::Frame{
+                .cur_music_pos = -1,
+                .milliseconds_since_last_frame = 0,
+                .x = 256,
+                .y = -500,
+                .key_flags = 0,
+            },
+            LegacyReplay::Frame{
+                .cur_music_pos = -1,
+                .milliseconds_since_last_frame = -1,
+                .x = 256,
+                .y = -500,
+                .key_flags = 0,
+            },
+        };
+    }
 
     this->last_event_time = Timing::getTimeReal();
-    this->last_event_ms = 0;
+    this->last_event_ms = -1;
     this->current_keys = 0;
     this->last_keys = 0;
     this->raw_gameplay_keys = 0;
@@ -1601,28 +1310,13 @@ void BeatmapInterface::resetScore() {
     this->iCurMusicPos = 0;
     this->iCurMusicPosWithOffsets = 0;
 
-    this->fHealth = 1.0;
-    this->fHealth2.stop();
-    this->fHealth2 = 1.0f;
-    this->bFailed = false;
     this->fFailAnim.stop();
     this->fFailAnim = 1.0f;
-    this->bTempSeekNF = false;
 
-    osu->getScore()->reset();
     ui->getHUD()->resetScoreboard();
     ui->getHUD()->resetInputOverlayTrail();
 
-    this->holding_slider = false;
     this->bIsFirstMissSound = true;
-}
-
-void BeatmapInterface::playMissSound() {
-    if((this->bIsFirstMissSound && osu->getScore()->getCombo() > 0) ||
-       osu->getScore()->getCombo() > cv::combobreak_sound_combo.getInt()) {
-        this->bIsFirstMissSound = false;
-        soundEngine->play(this->getSkin()->s_combobreak);
-    }
 }
 
 void BeatmapInterface::draw() {
@@ -1665,13 +1359,6 @@ void BeatmapInterface::draw() {
         }
     }
 
-    if(this->is_watching) {
-        this->sim->simulate_to(this->iCurMusicPosWithOffsets);
-        *osu->getScore() = this->sim->live_score;
-        osu->getScore()->simulating = false;
-        osu->getScore()->setCheated();
-    }
-
     // draw playfield border
     if(cv::draw_playfield_border.getBool() && !cv::mod_fps.getBool()) {
         ui->getHUD()->drawPlayfieldBorder(this->vPlayfieldCenter, this->vPlayfieldSize, this->fHitcircleDiameter);
@@ -1691,7 +1378,8 @@ void BeatmapInterface::draw() {
 
     // draw followpoints
     if(cv::draw_followpoints.getBool() && !cv::mod_mafham.getBool())
-        HitObjects::drawFollowPoints(*this, this->hitobjects, (uSz)std::max(0, this->iPreviousFollowPointObjectIndex));
+        HitObjects::drawFollowPoints(*this, this->judge->getHitObjects(),
+                                     (uSz)std::max(0, this->judge->getPreviousFollowPointObjectIndex()));
 
     // draw all hitobjects in reverse
     if(cv::draw_hitobjects.getBool()) this->drawHitObjects();
@@ -1712,7 +1400,7 @@ void BeatmapInterface::draw() {
 
     // debug stuff
     if(cv::debug_hiterrorbar_misaims.getBool()) {
-        for(auto &misaimObject : this->misaimObjects) {
+        for(const auto *misaimObject : this->judge->getMisaimObjects()) {
             g->setColor(0xbb00ff00);
             vec2 pos = this->osuCoords2Pixels(misaimObject->getRawPosAt(0));
             g->fillRect(pos.x - 50, pos.y - 50, 100, 100);
@@ -1763,7 +1451,7 @@ void BeatmapInterface::drawFlashlight(FLType type) {
 
         // Dim screen when holding a slider
         float opacity = 1.f;
-        if(this->holding_slider && !cv::avoid_flashes.getBool()) {
+        if(this->judge->holding_slider && !cv::avoid_flashes.getBool()) {
             opacity = 0.2f;
         }
 
@@ -1792,7 +1480,7 @@ void BeatmapInterface::drawFlashlight(FLType type) {
 
         // Brighten screen when holding a slider
         float opacity = 1.f;
-        if(this->holding_slider && !cv::avoid_flashes.getBool()) {
+        if(this->judge->holding_slider && !cv::avoid_flashes.getBool()) {
             opacity = 0.8f;
         }
 
@@ -1924,7 +1612,9 @@ void BeatmapInterface::drawContinue() {
 
 void BeatmapInterface::drawHitObjects() {
     const i32 curPos = this->iCurMusicPosWithOffsets;
-    const i32 pvs = this->getPVS();
+    const i32 pvs = this->judge->getPVS();
+    const auto hitobjectsSortedByEndTime = this->judge->getHitObjectsSortedByEndTime();
+    const i32 currentHitObjectIndex = this->judge->getCurrentHitObjectIndex();
     const bool usePVS = cv::pvs.getBool();
 
     // the slider bodies are queued before any of the objects is drawn, so their fields render together
@@ -1939,9 +1629,9 @@ void BeatmapInterface::drawHitObjects() {
         this->objectsToDraw.clear();
         i32 mostDistantEndTimeDrawn = 0;
 
-        for(sSz i = static_cast<sSz>(this->hitobjectsSortedByEndTime.size()) - 1; i >= 0; i--) {
+        for(sSz i = static_cast<sSz>(hitobjectsSortedByEndTime.size()) - 1; i >= 0; i--) {
             // PVS optimization (reversed)
-            HitObject *obj = this->hitobjectsSortedByEndTime[i];
+            HitObject *obj = hitobjectsSortedByEndTime[i];
             if(usePVS) {
                 const i32 endTime = obj->getEndTime();
 
@@ -1964,7 +1654,7 @@ void BeatmapInterface::drawHitObjects() {
         const i32 mostDistantFutureObjectPVS = std::max(mostDistantEndTimeDrawn, curPos + pvs);
 
         // this doesn't need the spinner front-to-back thing because spinners have no draw2
-        for(auto *obj : this->hitobjectsSortedByEndTime) {
+        for(auto *obj : hitobjectsSortedByEndTime) {
             // NOTE: to fix mayday simultaneous sliders with increasing endtime getting culled here, would have to
             // switch from m_hitobjectsSortedByEndTime to m_hitobjects PVS optimization
             if(usePVS) {
@@ -1985,42 +1675,40 @@ void BeatmapInterface::drawHitObjects() {
         if(this->mafhamFinishedRenderTarget == nullptr) this->mafhamFinishedRenderTarget = osu->getFrameBuffer2();
 
         // if we have a chunk to render into the scene buffer
-        const bool shouldDrawBuffer =
-            (this->hitobjectsSortedByEndTime.size() - this->iCurrentHitObjectIndex) > mafhamRenderLiveSize;
+        const bool shouldDrawBuffer = (hitobjectsSortedByEndTime.size() - currentHitObjectIndex) > mafhamRenderLiveSize;
         bool shouldRenderChunk =
-            this->iMafhamHitObjectRenderIndex < this->hitobjectsSortedByEndTime.size() && shouldDrawBuffer;
+            this->iMafhamHitObjectRenderIndex < hitobjectsSortedByEndTime.size() && shouldDrawBuffer;
         if(shouldRenderChunk) {
             const bool firstChunk = this->iMafhamHitObjectRenderIndex == 0;
 
             this->objectsToDraw.clear();
             int chunkCounter = 0;
-            for(int i = this->hitobjectsSortedByEndTime.size() - 1 - this->iMafhamHitObjectRenderIndex; i >= 0;
+            for(int i = hitobjectsSortedByEndTime.size() - 1 - this->iMafhamHitObjectRenderIndex; i >= 0;
                 i--, this->iMafhamHitObjectRenderIndex++) {
                 chunkCounter++;
                 if(chunkCounter > cv::mod_mafham_render_chunksize.getInt())
                     break;  // continue chunk render in next frame
 
-                if(i <= this->iCurrentHitObjectIndex + mafhamRenderLiveSize)  // skip live objects
+                if(i <= currentHitObjectIndex + mafhamRenderLiveSize)  // skip live objects
                 {
-                    this->iMafhamHitObjectRenderIndex = this->hitobjectsSortedByEndTime.size();  // stop chunk render
+                    this->iMafhamHitObjectRenderIndex = hitobjectsSortedByEndTime.size();  // stop chunk render
                     break;
                 }
 
                 // PVS optimization (reversed)
                 if(usePVS) {
-                    if(this->hitobjectsSortedByEndTime[i]->isFinished() &&
-                       (curPos - pvs > this->hitobjectsSortedByEndTime[i]->getClickTime() +
-                                           this->hitobjectsSortedByEndTime[i]->getDuration()))  // past objects
+                    if(hitobjectsSortedByEndTime[i]->isFinished() &&
+                       (curPos - pvs > hitobjectsSortedByEndTime[i]->getClickTime() +
+                                           hitobjectsSortedByEndTime[i]->getDuration()))  // past objects
                     {
-                        this->iMafhamHitObjectRenderIndex =
-                            this->hitobjectsSortedByEndTime.size();  // stop chunk render
+                        this->iMafhamHitObjectRenderIndex = hitobjectsSortedByEndTime.size();  // stop chunk render
                         break;
                     }
-                    if(this->hitobjectsSortedByEndTime[i]->getClickTime() > curPos + pvs)  // future objects
+                    if(hitobjectsSortedByEndTime[i]->getClickTime() > curPos + pvs)  // future objects
                         continue;
                 }
 
-                this->objectsToDraw.push_back(this->hitobjectsSortedByEndTime[i]);
+                this->objectsToDraw.push_back(hitobjectsSortedByEndTime[i]);
 
                 this->iMafhamActiveRenderHitObjectIndex = i;
             }
@@ -2037,8 +1725,7 @@ void BeatmapInterface::drawHitObjects() {
 
             this->bInMafhamRenderChunk = false;
         }
-        shouldRenderChunk =
-            this->iMafhamHitObjectRenderIndex < this->hitobjectsSortedByEndTime.size() && shouldDrawBuffer;
+        shouldRenderChunk = this->iMafhamHitObjectRenderIndex < hitobjectsSortedByEndTime.size() && shouldDrawBuffer;
         if(!shouldRenderChunk && this->bMafhamRenderScheduled) {
             // finished, we can now swap the active framebuffer with the one we just finished
             this->bMafhamRenderScheduled = false;
@@ -2048,7 +1735,7 @@ void BeatmapInterface::drawHitObjects() {
             this->mafhamActiveRenderTarget = temp;
 
             this->iMafhamFinishedRenderHitObjectIndex = this->iMafhamActiveRenderHitObjectIndex;
-            this->iMafhamActiveRenderHitObjectIndex = this->hitobjectsSortedByEndTime.size();  // reset
+            this->iMafhamActiveRenderHitObjectIndex = hitobjectsSortedByEndTime.size();  // reset
         }
 
         // draw scene buffer
@@ -2062,47 +1749,47 @@ void BeatmapInterface::drawHitObjects() {
 
         // draw followpoints
         if(cv::draw_followpoints.getBool())
-            HitObjects::drawFollowPoints(*this, this->hitobjects,
-                                         (uSz)std::max(0, this->iPreviousFollowPointObjectIndex));
+            HitObjects::drawFollowPoints(*this, this->judge->getHitObjects(),
+                                         (uSz)std::max(0, this->judge->getPreviousFollowPointObjectIndex()));
 
         // draw live hitobjects (also, code duplication yay)
         {
             this->objectsToDraw.clear();
-            for(int i = this->hitobjectsSortedByEndTime.size() - 1; i >= 0; i--) {
+            for(int i = hitobjectsSortedByEndTime.size() - 1; i >= 0; i--) {
                 // PVS optimization (reversed)
                 if(usePVS) {
-                    if(this->hitobjectsSortedByEndTime[i]->isFinished() &&
-                       (curPos - pvs > this->hitobjectsSortedByEndTime[i]->getClickTime() +
-                                           this->hitobjectsSortedByEndTime[i]->getDuration()))  // past objects
+                    if(hitobjectsSortedByEndTime[i]->isFinished() &&
+                       (curPos - pvs > hitobjectsSortedByEndTime[i]->getClickTime() +
+                                           hitobjectsSortedByEndTime[i]->getDuration()))  // past objects
                         break;
-                    if(this->hitobjectsSortedByEndTime[i]->getClickTime() > curPos + pvs)  // future objects
+                    if(hitobjectsSortedByEndTime[i]->getClickTime() > curPos + pvs)  // future objects
                         continue;
                 }
 
-                if(i > this->iCurrentHitObjectIndex + mafhamRenderLiveSize ||
+                if(i > currentHitObjectIndex + mafhamRenderLiveSize ||
                    (i > this->iMafhamFinishedRenderHitObjectIndex - 1 && shouldDrawBuffer))  // skip non-live objects
                     continue;
 
-                this->objectsToDraw.push_back(this->hitobjectsSortedByEndTime[i]);
+                this->objectsToDraw.push_back(hitobjectsSortedByEndTime[i]);
             }
             drawObjects(this->objectsToDraw);
 
-            for(int i = 0; i < this->hitobjectsSortedByEndTime.size(); i++) {
+            for(int i = 0; i < hitobjectsSortedByEndTime.size(); i++) {
                 // PVS optimization
                 if(usePVS) {
-                    if(this->hitobjectsSortedByEndTime[i]->isFinished() &&
-                       (curPos - pvs > this->hitobjectsSortedByEndTime[i]->getClickTime() +
-                                           this->hitobjectsSortedByEndTime[i]->getDuration()))  // past objects
+                    if(hitobjectsSortedByEndTime[i]->isFinished() &&
+                       (curPos - pvs > hitobjectsSortedByEndTime[i]->getClickTime() +
+                                           hitobjectsSortedByEndTime[i]->getDuration()))  // past objects
                         continue;
-                    if(this->hitobjectsSortedByEndTime[i]->getClickTime() > curPos + pvs)  // future objects
+                    if(hitobjectsSortedByEndTime[i]->getClickTime() > curPos + pvs)  // future objects
                         break;
                 }
 
-                if(i >= this->iCurrentHitObjectIndex + mafhamRenderLiveSize ||
+                if(i >= currentHitObjectIndex + mafhamRenderLiveSize ||
                    (i >= this->iMafhamFinishedRenderHitObjectIndex - 1 && shouldDrawBuffer))  // skip non-live objects
                     break;
 
-                this->hitobjectsSortedByEndTime[i]->draw2();
+                hitobjectsSortedByEndTime[i]->draw2();
             }
         }
     }
@@ -2117,18 +1804,8 @@ void BeatmapInterface::update() {
     this->updateHitobjectMetrics();
     this->updatePlayfieldMetrics();
 
-    // wobble mod
-    if(cv::mod_wobble.getBool()) {
-        const f32 speedMultiplierCompensation = 1.0f / this->getSpeedMultiplier();
-        this->fPlayfieldRotation = (this->iCurMusicPos / 1000.0f) * 30.0f * speedMultiplierCompensation *
-                                   cv::mod_wobble_rotation_speed.getFloat();
-        this->fPlayfieldRotation = std::fmod(this->fPlayfieldRotation, 360.0f);
-    } else {
-        this->fPlayfieldRotation = 0.0f;
-    }
-
     // do hitobject updates among other things
-    // yes, this needs to happen after updating metrics and playfield rotation
+    // yes, this needs to happen after updating metrics
     this->update2();
 
     // handle preloading (only for distributed slider vertexbuffer generation atm)
@@ -2141,13 +1818,14 @@ void BeatmapInterface::update() {
         f64 delta = 0.0;
 
         // hardcoded deadline of 10 ms, will temporarily bring us down to 45fps on average (better than freezing)
+        const auto hitobjects = this->judge->getHitObjects();
         while(delta < 0.010 && this->bIsPreLoading) {
-            if(this->iPreLoadingIndex >= this->hitobjects.size()) {
+            if(this->iPreLoadingIndex >= hitobjects.size()) {
                 this->bIsPreLoading = false;
                 debugLog("Beatmap: Preloading done.");
                 break;
             } else {
-                this->hitobjects[this->iPreLoadingIndex]->rebuildVertexBuffer();
+                hitobjects[this->iPreLoadingIndex]->rebuildVertexBuffer();
             }
 
             this->iPreLoadingIndex++;
@@ -2177,36 +1855,22 @@ void BeatmapInterface::update() {
         this->ppv2_calc.update(*osu->getScore());
     }
 
-    // update auto (after having updated the hitobjects)
-    if(osu->getModAuto() || osu->getModAutopilot()) this->updateAutoCursorPos();
-
-    // spinner detection (used by osu!stable drain, and by HUD for not drawing the hiterrorbar)
-    if(this->currentHitObject != nullptr) {
-        this->bIsSpinnerActive = this->currentHitObject->getType() == HitObjectType::SPINNER;
-        this->bIsSpinnerActive &= this->iCurMusicPosWithOffsets > this->currentHitObject->getClickTime();
-        this->bIsSpinnerActive &= this->iCurMusicPosWithOffsets <
-                                  this->currentHitObject->getClickTime() + this->currentHitObject->getDuration();
-    }
-
     // scene buffering logic
     if(cv::mod_mafham.getBool()) {
         if(!this->bMafhamRenderScheduled &&
-           this->iCurrentHitObjectIndex !=
+           this->judge->getCurrentHitObjectIndex() !=
                this->iMafhamPrevHitObjectIndex)  // if we are not already rendering and the index changed
         {
-            this->iMafhamPrevHitObjectIndex = this->iCurrentHitObjectIndex;
+            this->iMafhamPrevHitObjectIndex = this->judge->getCurrentHitObjectIndex();
             this->iMafhamHitObjectRenderIndex = 0;
             this->bMafhamRenderScheduled = true;
         }
     }
 
     // singletap/fullalternate mod lenience
-    if(this->bInBreak || this->bIsInSkippableSection || this->bIsSpinnerActive || this->iCurrentHitObjectIndex < 1) {
-        this->iAllowAnyNextKeyUntilHitObjectIndex = this->iCurrentHitObjectIndex + 1;
-    }
-
-    if(this->last_keys != this->current_keys || (this->last_event_time + 0.01666666666 <= Timing::getTimeReal())) {
-        this->write_frame();
+    if(this->bInBreak || this->bIsInSkippableSection || this->judge->isSpinnerActive() ||
+       this->judge->getCurrentHitObjectIndex() < 1) {
+        this->iAllowAnyNextKeyUntilHitObjectIndex = this->judge->getCurrentHitObjectIndex() + 1;
     }
 }
 
@@ -2229,7 +1893,7 @@ void BeatmapInterface::update2() {
                                       // since we are continuing we can assume that everything works
 
             // for nightmare mod, to avoid a miss because of the continue click
-            this->clicks.clear();
+            this->key_events.clear();
         }
     }
 
@@ -2249,13 +1913,13 @@ void BeatmapInterface::update2() {
     const bool wasSeekFrame = this->bWasSeekFrame;
     this->bWasSeekFrame = false;
 
+    const auto hitobjects = this->judge->getHitObjects();
+
     // handle timewarp
     if(cv::mod_timewarp.getBool()) {
-        if(likely(!this->hitobjects.empty()) && this->iCurMusicPos > this->hitobjects[0]->getClickTime()) {
-            const f32 percentFinished =
-                ((f64)(this->iCurMusicPos - this->hitobjects[0]->getClickTime()) /
-                 (f64)(this->hitobjects.back()->getClickTime() + this->hitobjects.back()->getDuration() -
-                       this->hitobjects[0]->getClickTime()));
+        if(likely(!hitobjects.empty()) && this->iCurMusicPos > hitobjects[0]->getClickTime()) {
+            const f32 percentFinished = ((f64)(this->iCurMusicPos - hitobjects[0]->getClickTime()) /
+                                         (f64)(hitobjects.back()->getEndTime() - hitobjects[0]->getClickTime()));
             f32 warp_multiplier = std::max(cv::mod_timewarp_multiplier.getFloat(), 1.f);
             const f32 speed =
                 this->getSpeedMultiplier() + percentFinished * this->getSpeedMultiplier() * (warp_multiplier - 1.0f);
@@ -2277,14 +1941,14 @@ void BeatmapInterface::update2() {
             // early_note_time of lead-in
             i32 start_ms = 0;
             if(this->bIsRestartScheduledQuick) {
-                if(likely(!this->hitobjects.empty())) {
+                if(likely(!hitobjects.empty())) {
                     const i32 retry_time = std::max(0, cv::quick_retry_time.getInt());
-                    start_ms = std::max(this->hitobjects[0]->getClickTime() - retry_time, 0);
+                    start_ms = std::max(hitobjects[0]->getClickTime() - retry_time, 0);
                 }
                 this->bIsRestartScheduledQuick = false;
             }
-            if(start_ms == 0 && likely(!this->hitobjects.empty()) &&
-               this->hitobjects[0]->getClickTime() < cv::early_note_time.getInt()) {
+            if(start_ms == 0 && likely(!hitobjects.empty()) &&
+               hitobjects[0]->getClickTime() < cv::early_note_time.getInt()) {
                 start_ms = -(i32)(cv::early_note_time.getFloat() * this->getSpeedMultiplier());
             }
             this->iLeadInMS = -std::min(start_ms, 0);
@@ -2305,14 +1969,12 @@ void BeatmapInterface::update2() {
         }
 
         // ugh. force update all hitobjects while waiting (necessary because of pvs optimization)
-        i32 curPos = this->iCurMusicPos + this->music.getOffset(this->beatmap, this->getMapVersion());
+        i32 curPos = this->iCurMusicPos + this->music.getOffset(this->beatmap, this->judge->getMapVersion());
         if(curPos > -1)  // otherwise auto would already click elements that start at exactly 0 (while the map has not
                          // even started)
             curPos = -1;
 
-        for(auto &hitobject : this->hitobjects) {
-            hitobject->update(curPos, current_frametime);
-        }
+        this->judge->updateAll(curPos, current_frametime);
     }
 
     // only continue updating hitobjects etc. if we have loaded everything
@@ -2330,15 +1992,14 @@ void BeatmapInterface::update2() {
     if(!this->bIsWaiting && this->music.isReady()) {
         const bool isMusicFinished = this->music.isFinished();
 
-        const bool hasAnyHitObjects = (likely(!this->hitobjects.empty()));
+        const bool hasAnyHitObjects = (likely(!hitobjects.empty()));
+        const auto sortedByEndTime = this->judge->getHitObjectsSortedByEndTime();
         const bool isTimePastLastHitObjectPlusLenience =
-            !this->hitobjectsSortedByEndTime.empty() &&
-            (this->iCurMusicPos >
-             (this->hitobjectsSortedByEndTime.back()->getClickTime() +
-              this->hitobjectsSortedByEndTime.back()->getDuration() + (i32)cv::end_delay_time.getInt()));
+            !sortedByEndTime.empty() &&
+            (this->iCurMusicPos > (sortedByEndTime.back()->getEndTime() + (i32)cv::end_delay_time.getInt()));
         if(!hasAnyHitObjects || (cv::end_skip.getBool() && isTimePastLastHitObjectPlusLenience) ||
            (!cv::end_skip.getBool() && isMusicFinished)) {
-            if(!this->bFailed) {
+            if(!this->judge->hasFailed()) {
                 this->stop(false);
                 return;
             }
@@ -2346,7 +2007,8 @@ void BeatmapInterface::update2() {
     }
 
     // update timing (with offsets)
-    this->iCurMusicPosWithOffsets = this->iCurMusicPos + this->music.getOffset(this->beatmap, this->getMapVersion());
+    this->iCurMusicPosWithOffsets =
+        this->iCurMusicPos + this->music.getOffset(this->beatmap, this->judge->getMapVersion());
 
     // get timestamp from the previous update cycle
     const u64 lastUpdateTime = this->iLastMusicPosUpdateTime;
@@ -2357,14 +2019,17 @@ void BeatmapInterface::update2() {
 
     // update current timingpoint
     if(this->iCurMusicPosWithOffsets >= 0) {
-        this->cur_timing_info = HitSoundUtils::samplesAt(this->getMapTimingPoints(), this->iCurMusicPosWithOffsets);
+        this->cur_timing_info =
+            HitSoundUtils::samplesAt(this->judge->getMapTimingPoints(), this->iCurMusicPosWithOffsets);
     }
 
-    // interpolate clicks that occurred between the last update and now
+    // interpolate the key changes that occurred between the last update and now
     // (except if we are paused)
-    if(!isIdlePaused && !this->is_watching && !BanchoState::spectating && !this->clicks.empty()) {
+    if(!isIdlePaused && !this->is_watching && !BanchoState::spectating && !this->key_events.empty()) {
         if(const u64 timeSinceLastUpdate = currentUpdateTime - lastUpdateTime; timeSinceLastUpdate > 0) {
-            for(auto &click : this->clicks) {
+            for(auto &event : this->key_events) {
+                Click &click = event.click;
+
                 // how long after the last music update did this click occur?
                 const u64 clickDeltaSinceLastUpdate = click.timestampNS - lastUpdateTime;
                 const f64 percent = std::clamp((f64)clickDeltaSinceLastUpdate / (f64)timeSinceLastUpdate, 0.0, 1.0);
@@ -2377,20 +2042,21 @@ void BeatmapInterface::update2() {
         }
     }
 
+    // the cursor and keys shown while watching (the judge judges the frames, below)
     // don't advance replay frames if we are paused unless this was a seek
-    if((!isIdlePaused || wasSeekFrame) && (this->is_watching || BanchoState::spectating) &&
-       this->spectated_replay.size() >= 2) {
-        LegacyReplay::Frame current_frame = this->spectated_replay[this->current_frame_idx];
-        LegacyReplay::Frame next_frame = this->spectated_replay[this->current_frame_idx + 1];
+    const auto &replay = this->judge->replay;
+    if((!isIdlePaused || wasSeekFrame) && (this->is_watching || BanchoState::spectating) && replay.size() >= 2) {
+        LegacyReplay::Frame current_frame = replay[this->current_frame_idx];
+        LegacyReplay::Frame next_frame = replay[this->current_frame_idx + 1];
 
         while(next_frame.cur_music_pos <= this->iCurMusicPosWithOffsets) {
-            if(this->current_frame_idx + 2 >= this->spectated_replay.size()) break;
+            if(this->current_frame_idx + 2 >= replay.size()) break;
 
             this->last_keys = this->current_keys;
 
             this->current_frame_idx++;
-            current_frame = this->spectated_replay[this->current_frame_idx];
-            next_frame = this->spectated_replay[this->current_frame_idx + 1];
+            current_frame = replay[this->current_frame_idx];
+            next_frame = replay[this->current_frame_idx + 1];
 
             // There is a big gap in the replay, it is safe to assume it was made from a neomod client
             // and that the player skipped an empty section.
@@ -2403,43 +2069,15 @@ void BeatmapInterface::update2() {
             this->current_keys = current_frame.key_flags;
 
             // Replays have both K1 and M1 set when K1 is pressed, fix it now
-            const auto &mods = osu->getScore()->mods;
-            if(!mods.has(ModFlags::NoKeylock)) {
+            if(!this->getMods().has(ModFlags::NoKeylock)) {
                 if(this->current_keys & LegacyReplay::K1) this->current_keys &= ~LegacyReplay::M1;
                 if(this->current_keys & LegacyReplay::K2) this->current_keys &= ~LegacyReplay::M2;
             }
 
-            Click click{
-                .timestampNS = Timing::getTicksNS(),
-                .cursorPos = (vec2{current_frame.x, current_frame.y} * GameRules::getPlayfieldScaleFactor()) +
-                             GameRules::getPlayfieldOffset(),
-                .musicPosMS = current_frame.cur_music_pos,
-            };
-
-            bool hasAnyHitObjects = (likely(!this->hitobjects.empty()));
-            bool is_too_early = hasAnyHitObjects && this->iCurMusicPosWithOffsets < this->hitobjects[0]->getClickTime();
-            bool should_count_keypress = !is_too_early && !this->bInBreak && !this->bIsInSkippableSection;
-
-            // Key presses
             for(auto key : {GameplayKeys::K1, GameplayKeys::K2, GameplayKeys::M1, GameplayKeys::M2}) {
-                if(!(this->last_keys & key) && (this->current_keys & key)) {
-                    this->lastPressedKey = key;
-                    this->clicks.push_back(click);
-                    ui->getHUD()->animateInputOverlay(key, true, current_frame.cur_music_pos);
-                    if(should_count_keypress) osu->getScore()->addKeyCount(key);
-                }
-            }
-
-            // Key releases
-            for(auto key : {GameplayKeys::K1, GameplayKeys::K2, GameplayKeys::M1, GameplayKeys::M2}) {
-                if((this->last_keys & key) && !(this->current_keys & key)) {
-                    if(mods.has(ModFlags::DKS)) {
-                        this->lastPressedKey = key;
-                        this->clicks.push_back(click);
-                        if(should_count_keypress) osu->getScore()->addKeyCount(key);
-                    }
-                    ui->getHUD()->animateInputOverlay(key, false, current_frame.cur_music_pos);
-                }
+                const bool wasDown = this->last_keys & key;
+                const bool isDown = this->current_keys & key;
+                if(wasDown != isDown) ui->getHUD()->animateInputOverlay(key, isDown, current_frame.cur_music_pos);
             }
         }
 
@@ -2449,418 +2087,56 @@ void BeatmapInterface::update2() {
             percent = (f32)ms_since_last_frame / (f32)next_frame.milliseconds_since_last_frame;
         }
 
-        this->interpolatedMousePos =
-            vec2{std::lerp(current_frame.x, next_frame.x, percent), std::lerp(current_frame.y, next_frame.y, percent)};
-
-        if(cv::playfield_mirror_horizontal.getBool())
-            this->interpolatedMousePos.y = GameRules::OSU_COORD_HEIGHT - this->interpolatedMousePos.y;
-        if(cv::playfield_mirror_vertical.getBool())
-            this->interpolatedMousePos.x = GameRules::OSU_COORD_WIDTH - this->interpolatedMousePos.x;
-
-        if(cv::playfield_rotation.getFloat() != 0.0f) {
-            this->interpolatedMousePos.x -= GameRules::OSU_COORD_WIDTH / 2;
-            this->interpolatedMousePos.y -= GameRules::OSU_COORD_HEIGHT / 2;
-            vec3 coords3 = vec3(this->interpolatedMousePos.x, this->interpolatedMousePos.y, 0);
-            Matrix4 rot;
-            rot.rotateZ(cv::playfield_rotation.getFloat());
-            coords3 = coords3 * rot;
-            coords3.x += GameRules::OSU_COORD_WIDTH / 2;
-            coords3.y += GameRules::OSU_COORD_HEIGHT / 2;
-            this->interpolatedMousePos.x = coords3.x;
-            this->interpolatedMousePos.y = coords3.y;
-        }
-
-        this->interpolatedMousePos *= GameRules::getPlayfieldScaleFactor();
-        this->interpolatedMousePos += GameRules::getPlayfieldOffset();
+        this->interpolatedMousePos = this->replayCoords2Pixels(
+            vec2{std::lerp(current_frame.x, next_frame.x, percent), std::lerp(current_frame.y, next_frame.y, percent)});
     }
 
     // add current clicks to all_clicks for debug
     if(cv::debug_draw_gameplay_clicks.getBool()) {
-        this->all_clicks.insert(this->all_clicks.end(), this->clicks.cbegin(), this->clicks.cend());
-    }
-
-    // for performance reasons, a lot of operations are crammed into 1 loop over all hitobjects:
-    // update all hitobjects,
-    // handle click events,
-    // also get the time of the next/previous hitobject and their indices for later,
-    // and get the current hitobject,
-    // also handle miss hiterrorbar slots,
-    // also calculate nps and nd,
-    // also handle note blocking
-    this->currentHitObject = nullptr;
-    this->iNextHitObjectTime = 0;
-    this->iPreviousHitObjectTime = 0;
-    this->iPreviousFollowPointObjectIndex = 0;
-    this->iNPS = 0;
-    this->iND = 0;
-    this->iCurrentNumCircles = 0;
-    this->iCurrentNumSliders = 0;
-    this->iCurrentNumSpinners = 0;
-    {
-        bool blockNextNotes = false;
-        bool spinner_active = false;
-
-        // to avoid recalculating in HitObject::update every call
-        this->fCachedApproachTimeForUpdate = this->getApproachTime();
-        this->fBaseAnimationSpeedFactor = osu->getAnimationSpeedMultiplier();
-        this->fSpeedAdjustedAnimationSpeedFactor = this->getSpeedMultiplier() / this->fBaseAnimationSpeedFactor;
-
-        const i32 pvs = [&]() -> i32 {
-            if(unlikely(this->hitobjects.empty())) {
-                return this->getPVS();
-            }
-            if(unlikely(cv::mod_mafham.getBool())) {
-                const i32 objIdx =
-                    std::clamp<i32>(this->iCurrentHitObjectIndex + cv::mod_mafham_render_livesize.getInt() + 1, 0,
-                                    (i32)this->hitobjects.size() - 1);
-                return this->hitobjects[objIdx]->getClickTime() - this->iCurMusicPosWithOffsets + 1500;
-            }
-            if(unlikely(cv::mod_freeze_frame.getBool())) {
-                // For freeze frame, we want to extend PVS to encompass the whole combo group
-                // Find the next combo group, then get the difference from our current combo group
-                const auto &current_hitobject = this->hitobjects[this->iCurrentHitObjectIndex];
-                for(int i = this->iCurrentHitObjectIndex; i < this->hitobjects.size(); i++) {
-                    const auto &future_hitobject = this->hitobjects[i];
-                    if(future_hitobject->getComboStartTime() > current_hitobject->getComboStartTime()) {
-                        return this->getPVS() +
-                               (future_hitobject->getClickTime() - current_hitobject->getComboStartTime());
-                    }
-                }
-
-                // Oops! We are on the last combo group.
-                const auto &last_hitobject = this->hitobjects.back();
-                return this->getPVS() + (last_hitobject->getClickTime() - current_hitobject->getComboStartTime());
-            }
-
-            return this->getPVS();
-        }();
-        const bool usePVS = cv::pvs.getBool();
-
-        const int notelockType = cv::notelock_type.getInt();
-        const i32 tolerance2B = (i32)cv::notelock_stable_tolerance2b.getInt();
-
-        this->iCurrentHitObjectIndex = 0;  // reset below here, since it's needed for mafham pvs
-
-        for(int i = -1; const auto &hobjptr : this->hitobjects) {
-            ++i;
-            HitObject *curHobj = hobjptr.get();
-            // the order must be like this:
-            // 0) miscellaneous stuff (minimal performance impact)
-            // 1) prev + next time vars
-            // 2) PVS optimization
-            // 3) main hitobject update
-            // 4) note blocking
-            // 5) click events
-            //
-            // (because the hitobjects need to know about note blocking before handling the click events)
-
-            // ************ live pp block start ************ //
-            const bool isCircle = curHobj->getType() == HitObjectType::CIRCLE;
-            const bool isSlider = curHobj->getType() == HitObjectType::SLIDER;
-            const bool isSpinner = curHobj->getType() == HitObjectType::SPINNER;
-            // ************ live pp block end ************** //
-
-            // determine previous & next object time, used for auto + followpoints + warning arrows + empty section
-            // skipping
-            if(this->iNextHitObjectTime == 0) {
-                if(curHobj->getClickTime() > this->iCurMusicPosWithOffsets)
-                    this->iNextHitObjectTime = curHobj->getClickTime();
-                else {
-                    this->currentHitObject = curHobj;
-                    const i32 actualPrevHitObjectTime = curHobj->getEndTime();
-                    this->iPreviousHitObjectTime = actualPrevHitObjectTime;
-
-                    if(this->iCurMusicPosWithOffsets >
-                       actualPrevHitObjectTime + (i32)cv::followpoints_prevfadetime.getFloat())
-                        this->iPreviousFollowPointObjectIndex = i;
-                }
-            }
-
-            // PVS optimization
-            if(usePVS) {
-                if(curHobj->isFinished() &&
-                   (this->iCurMusicPosWithOffsets - pvs > curHobj->getEndTime()))  // past objects
-                {
-                    // ************ live pp block start ************ //
-                    if(isCircle) this->iCurrentNumCircles++;
-                    if(isSlider) this->iCurrentNumSliders++;
-                    if(isSpinner) this->iCurrentNumSpinners++;
-
-                    this->iCurrentHitObjectIndex = i;
-                    // ************ live pp block end ************** //
-
-                    continue;
-                }
-                if(curHobj->getClickTime() > this->iCurMusicPosWithOffsets + pvs)  // future objects
-                    break;
-            }
-
-            // ************ live pp block start ************ //
-            if(this->iCurMusicPosWithOffsets >= curHobj->getEndTime()) this->iCurrentHitObjectIndex = i;
-            // ************ live pp block end ************** //
-
-            // main hitobject update
-            curHobj->update(this->iCurMusicPosWithOffsets, current_frametime);
-
-            // spinner visibility detection
-            // XXX: there might be a "better" way to do it?
-            if(isSpinner) {
-                bool spinner_started = this->iCurMusicPosWithOffsets >= curHobj->getClickTime();
-                bool spinner_ended = this->iCurMusicPosWithOffsets > curHobj->getEndTime();
-                spinner_active |= (spinner_started && !spinner_ended);
-            }
-
-            // note blocking / notelock (1)
-            const Slider *currentSliderPointer = isSlider ? static_cast<Slider *>(curHobj) : nullptr;
-            if(notelockType > 0) {
-                curHobj->setBlocked(blockNextNotes);
-
-                if(notelockType == 1)  // mcosu
-                {
-                    // (nothing, handled in (2) block)
-                } else if(notelockType == 2)  // osu!stable
-                {
-                    if(!curHobj->isFinished()) {
-                        blockNextNotes = true;
-
-                        // Sliders are "finished" after they end
-                        // Extra handling for simultaneous/2b hitobjects, as these would otherwise get blocked
-                        // NOTE: this will still unlock some simultaneous/2b patterns too early
-                        //       (slider slider circle [circle]), but nobody from that niche has complained so far
-                        {
-                            const bool isSlider = (currentSliderPointer != nullptr);
-                            const bool isSpinner = (!isSlider && !isCircle);
-
-                            if(isSlider || isSpinner) {
-                                if((i + 1) < this->hitobjects.size()) {
-                                    if((isSpinner || currentSliderPointer->isStartCircleFinished()) &&
-                                       (this->hitobjects[i + 1]->getClickTime() <=
-                                        (curHobj->getEndTime() + tolerance2B)))
-                                        blockNextNotes = false;
-                                }
-                            }
-                        }
-                    }
-                } else if(notelockType == 3)  // osu!lazer 2020
-                {
-                    if(!curHobj->isFinished()) {
-                        const bool isSlider = (currentSliderPointer != nullptr);
-                        const bool isSpinner = (!isSlider && !isCircle);
-
-                        if(!isSpinner)  // spinners are completely ignored (transparent)
-                        {
-                            blockNextNotes = (this->iCurMusicPosWithOffsets <= curHobj->getClickTime());
-
-                            // sliders are "finished" after their startcircle
-                            {
-                                // sliders with finished startcircles do not block
-                                if(currentSliderPointer != nullptr && currentSliderPointer->isStartCircleFinished())
-                                    blockNextNotes = false;
-                            }
-                        }
-                    }
-                }
-            } else
-                curHobj->setBlocked(false);
-
-            // click events (this also handles hitsounds!)
-            const bool isCurrentHitObjectASliderAndHasItsStartCircleFinishedBeforeClickEvents =
-                (currentSliderPointer != nullptr && currentSliderPointer->isStartCircleFinished());
-            const bool isCurrentHitObjectFinishedBeforeClickEvents = curHobj->isFinished();
-            if(!this->clicks.empty()) {
-                curHobj->onClickEvent(this->clicks);
-            }
-            const bool isCurrentHitObjectFinishedAfterClickEvents = curHobj->isFinished();
-            const bool isCurrentHitObjectASliderAndHasItsStartCircleFinishedAfterClickEvents =
-                (currentSliderPointer != nullptr && currentSliderPointer->isStartCircleFinished());
-
-            // note blocking / notelock (2.1)
-            if(!isCurrentHitObjectASliderAndHasItsStartCircleFinishedBeforeClickEvents &&
-               isCurrentHitObjectASliderAndHasItsStartCircleFinishedAfterClickEvents) {
-                // in here if a slider had its startcircle clicked successfully in this update iteration
-
-                if(notelockType == 2)  // osu!stable
-                {
-                    // edge case: frame perfect double tapping on overlapping sliders would incorrectly eat the second
-                    // input, because the isStartCircleFinished() 2b edge case check handling happens before
-                    // m_hitobjects[i]->onClickEvent(this->clicks); so, we check if the currentSliderPointer got its
-                    // isStartCircleFinished() within this m_hitobjects[i]->onClickEvent(this->clicks); and unlock
-                    // blockNextNotes if that is the case note that we still only unlock within duration + tolerance2B
-                    // (same as in (1))
-                    if((i + 1) < this->hitobjects.size()) {
-                        if((this->hitobjects[i + 1]->getClickTime() <= (curHobj->getEndTime() + tolerance2B)))
-                            blockNextNotes = false;
-                    }
-                }
-            }
-
-            // note blocking / notelock (2.2)
-            if(!isCurrentHitObjectFinishedBeforeClickEvents && isCurrentHitObjectFinishedAfterClickEvents) {
-                // in here if a hitobject has been clicked (and finished completely) successfully in this update
-                // iteration
-
-                blockNextNotes = false;
-
-                if(notelockType == 1)  // mcosu
-                {
-                    // auto miss all previous unfinished hitobjects, always
-                    // (can stop reverse iteration once we get to the first finished hitobject)
-
-                    for(int m = i - 1; m >= 0; m--) {
-                        if(!this->hitobjects[m]->isFinished()) {
-                            const bool isSlider = this->hitobjects[m]->getType() == HitObjectType::SLIDER;
-                            const bool isSpinner = (!isSlider && !isCircle);
-
-                            if(!isSpinner)  // spinners are completely ignored (transparent)
-                            {
-                                if(curHobj->getClickTime() >
-                                   (this->hitobjects[m]->getClickTime() +
-                                    this->hitobjects[m]
-                                        ->getDuration()))  // NOTE: 2b exception. only force miss if objects
-                                                           // are not overlapping.
-                                    this->hitobjects[m]->miss(this->iCurMusicPosWithOffsets);
-                            }
-                        } else
-                            break;
-                    }
-                } else if(notelockType == 2)  // osu!stable
-                {
-                    // (nothing, handled in (1) and (2.1) blocks)
-                } else if(notelockType == 3)  // osu!lazer 2020
-                {
-                    // auto miss all previous unfinished hitobjects if the current music time is > their time (center)
-                    // (can stop reverse iteration once we get to the first finished hitobject)
-
-                    for(int m = i - 1; m >= 0; m--) {
-                        if(!this->hitobjects[m]->isFinished()) {
-                            const bool isSlider = this->hitobjects[m]->getType() == HitObjectType::SLIDER;
-                            const bool isSpinner = (!isSlider && !isCircle);
-
-                            if(!isSpinner)  // spinners are completely ignored (transparent)
-                            {
-                                if(this->iCurMusicPosWithOffsets > this->hitobjects[m]->getClickTime()) {
-                                    if(curHobj->getClickTime() >
-                                       this->hitobjects[m]->getEndTime())  // NOTE: 2b exception. only force miss if
-                                                                           // objects are not overlapping.
-                                        this->hitobjects[m]->miss(this->iCurMusicPosWithOffsets);
-                                }
-                            }
-                        } else
-                            break;
-                    }
-                }
-            }
-
-            // ************ live pp block start ************ //
-            if(isCircle && curHobj->isFinished()) this->iCurrentNumCircles++;
-            if(isSlider && curHobj->isFinished()) this->iCurrentNumSliders++;
-            if(isSpinner && curHobj->isFinished()) this->iCurrentNumSpinners++;
-
-            if(curHobj->isFinished()) this->iCurrentHitObjectIndex = i;
-            // ************ live pp block end ************** //
-
-            // notes per second
-            const i32 npsHalfGateSizeMS = (i32)(500.0f * this->getSpeedMultiplier());
-            if(curHobj->getClickTime() > this->iCurMusicPosWithOffsets - npsHalfGateSizeMS &&
-               curHobj->getClickTime() < this->iCurMusicPosWithOffsets + npsHalfGateSizeMS)
-                this->iNPS++;
-
-            // note density
-            if(curHobj->isVisible()) this->iND++;
-        }
-
-        // miss hiterrorbar slots
-        // this gets the closest previous unfinished hitobject, as well as all following hitobjects which are in 50
-        // range and could be clicked
-        if(cv::hiterrorbar_misaims.getBool()) {
-            this->misaimObjects.clear();
-            HitObject *lastUnfinishedHitObject = nullptr;
-            const i32 hitWindow50 = (i32)this->getHitWindow50();
-            for(const auto &hitobject : this->hitobjects)  // this shouldn't hurt performance too much, since no
-                                                           // expensive operations are happening within the loop
-            {
-                if(!hitobject->isFinished()) {
-                    if(this->iCurMusicPosWithOffsets >= hitobject->getClickTime())
-                        lastUnfinishedHitObject = hitobject.get();
-                    else if(std::abs(hitobject->getClickTime() - this->iCurMusicPosWithOffsets) < hitWindow50)
-                        this->misaimObjects.push_back(hitobject.get());
-                    else
-                        break;
-                }
-            }
-            if(lastUnfinishedHitObject != nullptr &&
-               std::abs(lastUnfinishedHitObject->getClickTime() - this->iCurMusicPosWithOffsets) < hitWindow50)
-                this->misaimObjects.insert(this->misaimObjects.begin(), lastUnfinishedHitObject);
-
-            // now, go through the remaining clicks, and go through the unfinished hitobjects.
-            // handle misaim clicks sequentially (setting the misaim flag on the hitobjects to only allow 1 entry in the
-            // hiterrorbar for misses per object) clicks don't have to be consumed here, as they are deleted below
-            // anyway
-            for(const auto &click : this->clicks) {
-                for(auto *misaimObject : this->misaimObjects) {
-                    if(misaimObject->hasMisAimed())  // only 1 slot per object!
-                        continue;
-
-                    misaimObject->misAimed();
-                    const i32 delta = click.musicPosMS - (i32)misaimObject->getClickTime();
-                    ui->getHUD()->addHitError(delta, false, true);
-
-                    break;  // the current click has been dealt with (and the hitobject has been misaimed)
-                }
-            }
-        }
-
-        // all remaining clicks which have not been consumed by any hitobjects can safely be deleted
-        if(this->clicks.size() > 0) {
-            // nightmare mod: extra clicks = sliderbreak
-            bool break_on_extra_click = cv::mod_jigsaw1.getBool();
-            break_on_extra_click &= !this->bIsInSkippableSection && !this->bInBreak && !spinner_active;
-            break_on_extra_click &= this->iCurrentHitObjectIndex > 0;
-            if(break_on_extra_click) {
-                this->addSliderBreak();
-                this->addHitResult(nullptr, LiveHitResult::HIT_MISS_SLIDERBREAK, 0, false, true, true, true, true,
-                                   false);  // only decrease health
-            }
-
-            this->clicks.clear();
+        for(const auto &event : this->key_events) {
+            if(event.clickKey) this->all_clicks.push_back(event.click);
         }
     }
+
+    // judging
+    if(this->is_watching || BanchoState::spectating) {
+        if(!isIdlePaused || wasSeekFrame) this->judge->simulate_to(this->iCurMusicPosWithOffsets);
+        this->judge->animate(this->iCurMusicPosWithOffsets);
+        if(this->bIsPaused) this->stopObjectSounds();
+        if(this->is_watching) osu->getScore()->setCheated();
+    } else if(this->bIsPlaying && !this->judge->hasFailed()) {
+        this->step(current_frametime);
+    } else {
+        // (paused, waiting for the continue click, or failing: nothing is judged)
+        this->judge->animate(this->iCurMusicPosWithOffsets);
+        this->stopObjectSounds();
+    }
+    this->key_events.clear();
+    this->vAutoCursorPos = this->replayCoords2Pixels(this->judge->getAutoCursorPos());
+
+    const i32 previousHitObjectTime = this->judge->getPreviousHitObjectTime();
+    const i32 nextHitObjectTime = this->judge->getNextHitObjectTime();
 
     // empty section detection & skipping
-    if(likely(!this->hitobjects.empty())) {
+    if(likely(!hitobjects.empty())) {
         const bool wasInSkippableSection = this->bIsInSkippableSection;
-
-        const i32 legacyOffset = (this->iPreviousHitObjectTime < this->hitobjects[0]->getClickTime() ? 0 : 1000);  // Mc
-        const i32 nextHitObjectDelta = this->iNextHitObjectTime - (i32)this->iCurMusicPosWithOffsets;
-        if(nextHitObjectDelta > 0 && nextHitObjectDelta > (i32)cv::skip_time.getInt() &&
-           this->iCurMusicPosWithOffsets > (this->iPreviousHitObjectTime + legacyOffset))
-            this->bIsInSkippableSection = true;
-        else if(!cv::end_skip.getBool() && nextHitObjectDelta < 0)
-            this->bIsInSkippableSection = true;
-        else
-            this->bIsInSkippableSection = false;
+        this->bIsInSkippableSection = this->judge->isInSkippableSection();
 
         if((wasInSkippableSection != this->bIsInSkippableSection) || (BanchoState::is_playing_a_multi_map())) {
             // FIXME: why the FUCK is this here?
             ui->getChat()->updateVisibility();
         }
-
-        // While we want to allow the chat to pop up during breaks, we don't
-        // want to be able to skip after the start in multiplayer rooms
-        if(BanchoState::is_playing_a_multi_map() && this->iCurrentHitObjectIndex > 0) {
-            this->bIsInSkippableSection = false;
-        }
     }
 
     // warning arrow logic
-    if(likely(!this->hitobjects.empty())) {
-        const i32 legacyOffset = (this->iPreviousHitObjectTime < this->hitobjects[0]->getClickTime() ? 0 : 1000);  // Mc
+    if(likely(!hitobjects.empty())) {
+        const i32 legacyOffset = (previousHitObjectTime < hitobjects[0]->getClickTime() ? 0 : 1000);  // Mc
         const i32 minGapSize = 1000;
         const i32 lastVisibleMin = 400;
         const i32 blinkDelta = 100;
 
-        const i32 gapSize = this->iNextHitObjectTime - (this->iPreviousHitObjectTime + legacyOffset);
-        const i32 nextDelta = (this->iNextHitObjectTime - this->iCurMusicPosWithOffsets);
+        const i32 gapSize = nextHitObjectTime - (previousHitObjectTime + legacyOffset);
+        const i32 nextDelta = (nextHitObjectTime - this->iCurMusicPosWithOffsets);
         const bool drawWarningArrows = gapSize > minGapSize && nextDelta > 0;
         if(drawWarningArrows &&
            ((nextDelta <= lastVisibleMin + blinkDelta * 13 && nextDelta > lastVisibleMin + blinkDelta * 12) ||
@@ -2875,12 +2151,10 @@ void BeatmapInterface::update2() {
             this->bShouldFlashWarningArrows = false;
     }
 
-    // break time detection, and background fade during breaks
-    const DBType::BREAK breakEvent = this->getBreakForTimeRange(
-        this->iPreviousHitObjectTime, this->iCurMusicPosWithOffsets, this->iNextHitObjectTime);
-    const bool isInBreak = ((int)this->iCurMusicPosWithOffsets >= breakEvent.startTime &&
-                            (int)this->iCurMusicPosWithOffsets <= breakEvent.endTime);
-    if(isInBreak != this->bInBreak) {
+    // background fade during breaks
+    const DBType::BREAK breakEvent =
+        this->judge->getBreakForTimeRange(previousHitObjectTime, this->iCurMusicPosWithOffsets, nextHitObjectTime);
+    if(this->judge->isInBreak() != this->bInBreak) {
         this->bInBreak = !this->bInBreak;
 
         if(!cv::background_dont_fade_during_breaks.getBool() || this->fBreakBackgroundFade != 0.0f) {
@@ -2894,23 +2168,21 @@ void BeatmapInterface::update2() {
     }
 
     // section pass/fail logic
-    if(likely(!this->hitobjects.empty())) {
+    if(likely(!hitobjects.empty())) {
         const i32 minGapSize = 2880;
         const i32 fadeStart = 1280;
         const i32 fadeEnd = 1480;
 
-        const i32 gapSize = this->iNextHitObjectTime - this->iPreviousHitObjectTime;
-        const i32 start = (gapSize / 2 > minGapSize ? this->iPreviousHitObjectTime + (gapSize / 2)
-                                                    : this->iNextHitObjectTime - minGapSize);
+        const i32 gapSize = nextHitObjectTime - previousHitObjectTime;
+        const i32 start =
+            (gapSize / 2 > minGapSize ? previousHitObjectTime + (gapSize / 2) : nextHitObjectTime - minGapSize);
         const i32 nextDelta = this->iCurMusicPosWithOffsets - start;
         const bool inSectionPassFail =
-            (gapSize > minGapSize && nextDelta > 0) &&
-            this->iCurMusicPosWithOffsets > this->hitobjects[0]->getClickTime() &&
-            this->iCurMusicPosWithOffsets < (this->hitobjectsSortedByEndTime.back()->getClickTime() +
-                                             this->hitobjectsSortedByEndTime.back()->getDuration()) &&
-            !this->bFailed && this->bInBreak && (breakEvent.endTime - breakEvent.startTime) > minGapSize;
+            (gapSize > minGapSize && nextDelta > 0) && this->iCurMusicPosWithOffsets > hitobjects[0]->getClickTime() &&
+            this->iCurMusicPosWithOffsets < this->judge->getHitObjectsSortedByEndTime().back()->getEndTime() &&
+            !this->judge->hasFailed() && this->bInBreak && (breakEvent.endTime - breakEvent.startTime) > minGapSize;
 
-        const bool passing = (this->fHealth >= 0.5);
+        const bool passing = (this->judge->getHealth() >= 0.5);
 
         // draw logic
         if(passing) {
@@ -2945,40 +2217,8 @@ void BeatmapInterface::update2() {
         }
     }
 
-    // hp drain & failing
-    // handle constant drain
-    {
-        if(this->fDrainRate > 0.0) {
-            if(this->bIsPlaying                  // not paused
-               && !this->bInBreak                // not in a break
-               && !this->bIsInSkippableSection)  // not in a skippable section
-            {
-                // special case: break drain edge cases
-                bool drainAfterLastHitobjectBeforeBreakStart = (this->getMapVersion() < 8);
-
-                const bool isBetweenHitobjectsAndBreak = (int)this->iPreviousHitObjectTime <= breakEvent.startTime &&
-                                                         (int)this->iNextHitObjectTime >= breakEvent.endTime &&
-                                                         this->iCurMusicPosWithOffsets > this->iPreviousHitObjectTime;
-                const bool isLastHitobjectBeforeBreakStart =
-                    isBetweenHitobjectsAndBreak && (int)this->iCurMusicPosWithOffsets <= breakEvent.startTime;
-
-                if(!isBetweenHitobjectsAndBreak ||
-                   (drainAfterLastHitobjectBeforeBreakStart && isLastHitobjectBeforeBreakStart)) {
-                    // special case: spinner nerf
-                    f64 spinnerDrainNerf = this->isSpinnerActive() ? 0.25 : 1.0;
-                    this->addHealth(
-                        -this->fDrainRate * current_frametime * (f64)this->getSpeedMultiplier() * spinnerDrainNerf,
-                        false);
-                }
-            }
-        }
-    }
-
-    // revive in mp
-    if(this->fHealth > 0.999 && osu->getScore()->isDead()) osu->getScore()->setDead(false);
-
     // handle fail animation
-    if(this->bFailed) {
+    if(this->judge->hasFailed()) {
         if(this->fFailAnim <= 0.0f) {
             if(this->music.isPlaying() || !ui->getPauseOverlay()->isVisible()) {
                 this->music.pause();
@@ -2998,8 +2238,8 @@ void BeatmapInterface::update2() {
     }
 
     // spectator score correction
-    if(BanchoState::spectating && this->spectated_replay.size() >= 2) {
-        const auto &current_frame = this->spectated_replay[this->current_frame_idx];
+    if(BanchoState::spectating && replay.size() >= 2) {
+        const auto &current_frame = replay[this->current_frame_idx];
 
         i32 score_frame_idx = -1;
         for(i32 i = 0; i < this->score_frames.size(); i++) {
@@ -3024,7 +2264,7 @@ void BeatmapInterface::update2() {
             score->iCombo = fixed_score.current_combo;
 
             // XXX: instead naively of setting it, we should simulate time decay
-            this->fHealth = ((f32)fixed_score.current_hp) / 255.f;
+            this->judge->setHealth(((f32)fixed_score.current_hp) / 255.f);
 
             // fixed_score.is_perfect is unused
             // fixed_score.tag is unused (XXX: i think scorev2 uses this?)
@@ -3033,10 +2273,46 @@ void BeatmapInterface::update2() {
     }
 }
 
+void BeatmapInterface::step(f64 frametime) {
+    const bool auto_cursor = osu->getModAuto() || osu->getModAutopilot();
+    const auto replayCursor = [this, auto_cursor](vec2 cursorPos) -> vec2 {
+        if(auto_cursor) return this->judge->getAutoCursorPos();
+        return this->pixels2ReplayCoords(cv::mod_fps.getBool() ? this->getMousePos() : cursorPos);
+    };
+
+    // judge clicks since last frame
+    for(const auto &event : this->key_events) {
+        const vec2 pos = replayCursor(event.click.cursorPos);
+        const LegacyReplay::Frame frame{.cur_music_pos = event.click.musicPosMS,
+                                        .milliseconds_since_last_frame = 0,
+                                        .x = pos.x,
+                                        .y = pos.y,
+                                        .key_flags = event.keys};
+        this->judge->step(frame, 0.0, event.clickKey);
+        this->write_frame(frame, true);
+    }
+
+    // judge cursor movement (or lack thereof)
+    const vec2 pos = replayCursor(this->getCursorPos());
+    const LegacyReplay::Frame frame{.cur_music_pos = this->iCurMusicPosWithOffsets,
+                                    .milliseconds_since_last_frame = 0,
+                                    .x = pos.x,
+                                    .y = pos.y,
+                                    .key_flags = this->current_keys};
+    this->judge->step(frame, frametime, 0);
+    this->write_frame(frame, this->judge->needsReplayFrame());
+}
+
+void BeatmapInterface::stopObjectSounds() {
+    this->stopSliderSounds({});
+    this->stopSpinnerSpinSound();
+}
+
 bool BeatmapInterface::clickableHitobjectAt(vec2 cursor_pos) const {
     // FIXME: this doesn't use PVS and iterates over every hit object
-    for(const auto &h : this->hitobjects) {
-        if(!h->isClickableFrom(this->iCurrentHitObjectIndex, cursor_pos)) continue;
+    const vec2 replayCursorPos = this->pixels2ReplayCoords(cursor_pos);
+    for(const auto &h : this->judge->getHitObjects()) {
+        if(!h->isClickableFrom(this->iCurMusicPosWithOffsets, replayCursorPos)) continue;
         return true;
     }
 
@@ -3062,58 +2338,42 @@ void BeatmapInterface::broadcast_spectator_frames() {
     this->last_spectator_broadcast = engine->getTime();
 }
 
-void BeatmapInterface::write_frame() {
-    if(!this->bIsPlaying || this->bFailed || this->is_watching || BanchoState::spectating) return;
+void BeatmapInterface::write_frame(const LegacyReplay::Frame &frame, bool force) {
+    if(!this->bIsPlaying || this->judge->hasFailed() || this->is_watching || BanchoState::spectating) return;
 
-    i32 delta = this->iCurMusicPosWithOffsets - this->last_event_ms;
+    const i32 delta = frame.cur_music_pos - this->last_event_ms;
     if(delta < 0) return;
-    if(delta == 0 && this->last_keys == this->current_keys) return;
-
-    vec2 pos = this->pixels2OsuCoords(this->getCursorPos());
-    if(cv::playfield_mirror_horizontal.getBool()) pos.y = GameRules::OSU_COORD_HEIGHT - pos.y;
-    if(cv::playfield_mirror_vertical.getBool()) pos.x = GameRules::OSU_COORD_WIDTH - pos.x;
-    if(cv::playfield_rotation.getFloat() != 0.0f) {
-        pos.x -= GameRules::OSU_COORD_WIDTH / 2;
-        pos.y -= GameRules::OSU_COORD_HEIGHT / 2;
-        vec3 coords3 = vec3(pos.x, pos.y, 0);
-        Matrix4 rot;
-        rot.rotateZ(-cv::playfield_rotation.getFloat());
-        coords3 = coords3 * rot;
-        coords3.x += GameRules::OSU_COORD_WIDTH / 2;
-        coords3.y += GameRules::OSU_COORD_HEIGHT / 2;
-        pos.x = coords3.x;
-        pos.y = coords3.y;
-    }
-
-    // TODO: not CBF-friendly, since it's called in the update loop and doesn't use click timestamps
+    const bool keysChanged = frame.key_flags != this->last_keys;
+    if(!force && !keysChanged && this->last_event_time + 0.01666666666 > Timing::getTimeReal()) return;
+    if(delta == 0 && !keysChanged) return;
 
     // In replays, "K1" is always stored as "K1+M1"
     // (unless we have the "no keylock" mod on, which uses 4 keys instead of only 2)
-    u8 replay_keys = this->current_keys;
-    if(!cv::mod_no_keylock.getBool()) {
-        if(this->current_keys & LegacyReplay::KeyFlags::K1) replay_keys |= LegacyReplay::KeyFlags::M1;
-        if(this->current_keys & LegacyReplay::KeyFlags::K2) replay_keys |= LegacyReplay::KeyFlags::M2;
+    u8 replay_keys = frame.key_flags;
+    if(!this->getMods().has(ModFlags::NoKeylock)) {
+        if(frame.key_flags & LegacyReplay::KeyFlags::K1) replay_keys |= LegacyReplay::KeyFlags::M1;
+        if(frame.key_flags & LegacyReplay::KeyFlags::K2) replay_keys |= LegacyReplay::KeyFlags::M2;
     }
 
-    this->live_replay.push_back(LegacyReplay::Frame{
-        .cur_music_pos = this->iCurMusicPosWithOffsets,
+    this->judge->replay.push_back(LegacyReplay::Frame{
+        .cur_music_pos = frame.cur_music_pos,
         .milliseconds_since_last_frame = delta,
-        .x = pos.x,
-        .y = pos.y,
+        .x = frame.x,
+        .y = frame.y,
         .key_flags = replay_keys,
     });
 
     this->frame_batch.push_back(LiveReplayFrame{
         .key_flags = replay_keys,
         .padding = 0,
-        .mouse_x = pos.x,
-        .mouse_y = pos.y,
+        .mouse_x = frame.x,
+        .mouse_y = frame.y,
         .time = (i32)this->iCurMusicPos,  // NOTE: might be incorrect
     });
 
     this->last_event_time = engine->getTime();
-    this->last_event_ms = this->iCurMusicPosWithOffsets;
-    this->last_keys = this->current_keys;
+    this->last_event_ms = frame.cur_music_pos;
+    this->last_keys = frame.key_flags;
 
     if(!BanchoState::spectators.empty() && last_event_time > this->last_spectator_broadcast + 1.0) {
         this->broadcast_spectator_frames();
@@ -3125,8 +2385,9 @@ void BeatmapInterface::onModUpdate(bool rebuildSliderVertexBuffers, bool recompu
 
     this->updatePlayfieldMetrics();
     this->updateHitobjectMetrics();
+    if(this->judge) this->judge->updateHitobjectMetrics();
 
-    if(recomputeDrainRate) this->computeDrainRate();
+    if(recomputeDrainRate && this->judge) this->judge->computeDrainRate();
 
     // Updates not just speed but also nightcore state
     this->setMusicSpeed(this->getSpeedMultiplier());
@@ -3139,18 +2400,19 @@ void BeatmapInterface::onModUpdate(bool rebuildSliderVertexBuffers, bool recompu
         this->bWasHorizontalMirrorEnabled = cv::playfield_mirror_horizontal.getBool();
         this->bWasVerticalMirrorEnabled = cv::playfield_mirror_vertical.getBool();
 
-        this->calculateStacks();
+        if(this->judge) this->judge->calculateStacks();
 
         if(rebuildSliderVertexBuffers) this->updateSliderVertexBuffers();
     }
     if(osu->getModEZ() != this->bWasEZEnabled) {
-        this->calculateStacks();
+        if(this->judge) this->judge->calculateStacks();
 
         this->bWasEZEnabled = osu->getModEZ();
         if(rebuildSliderVertexBuffers) this->updateSliderVertexBuffers();
     }
-    if(this->fHitcircleDiameter != this->fPrevHitCircleDiameter && likely(!this->hitobjects.empty())) {
-        this->calculateStacks();
+    if(this->fHitcircleDiameter != this->fPrevHitCircleDiameter && this->judge &&
+       !this->judge->getHitObjects().empty()) {
+        this->judge->calculateStacks();
 
         this->fPrevHitCircleDiameter = this->fHitcircleDiameter;
         if(rebuildSliderVertexBuffers) this->updateSliderVertexBuffers();
@@ -3161,9 +2423,7 @@ void BeatmapInterface::onModUpdate(bool rebuildSliderVertexBuffers, bool recompu
     }
     if(cv::mod_mafham.getBool() != this->bWasMafhamEnabled) {
         this->bWasMafhamEnabled = cv::mod_mafham.getBool();
-        for(auto &hitobject : this->hitobjects) {
-            hitobject->update(this->iCurMusicPosWithOffsets, engine->getFrameTime());
-        }
+        if(this->judge) this->judge->updateAll(this->iCurMusicPosWithOffsets, engine->getFrameTime());
     }
 
     this->resetLiveStarsTasks();
@@ -3218,8 +2478,8 @@ const AsyncPPC::pp_res &BeatmapInterface::getWholeMapPPInfo() const {
 }
 
 i32 BeatmapInterface::getSpectatingLeeway() const {
-    if(this->spectated_replay.empty()) return 0;
-    return std::max(0, this->spectated_replay.back().cur_music_pos - this->iCurMusicPos);
+    if(!this->judge || this->judge->replay.empty()) return 0;
+    return std::max(0, this->judge->replay.back().cur_music_pos - this->iCurMusicPos);
 }
 
 bool BeatmapInterface::isLoading() {
@@ -3256,59 +2516,26 @@ vec2 BeatmapInterface::pixels2OsuCoords(vec2 pixelCoords) const {
 }
 
 vec2 BeatmapInterface::osuCoords2Pixels(vec2 coords) const {
-    if(osu->getModHR()) coords.y = GameRules::OSU_COORD_HEIGHT - coords.y;
+    // the mods' flips and wobble, as judged
+    if(this->judge) coords = this->judge->osuCoords2Pixels(coords);
+
+    // the playfield's flips and rotation (only how it's shown, see pixels2ReplayCoords())
     if(cv::playfield_mirror_horizontal.getBool()) coords.y = GameRules::OSU_COORD_HEIGHT - coords.y;
     if(cv::playfield_mirror_vertical.getBool()) coords.x = GameRules::OSU_COORD_WIDTH - coords.x;
-
-    // wobble
-    if(cv::mod_wobble.getBool()) {
-        const f32 speedMultiplierCompensation = 1.0f / this->getSpeedMultiplier();
-        coords.x += std::sin((this->iCurMusicPos / 1000.0f) * 5 * speedMultiplierCompensation *
-                             cv::mod_wobble_frequency.getFloat()) *
-                    cv::mod_wobble_strength.getFloat();
-        coords.y += std::sin((this->iCurMusicPos / 1000.0f) * 4 * speedMultiplierCompensation *
-                             cv::mod_wobble_frequency.getFloat()) *
-                    cv::mod_wobble_strength.getFloat();
-    }
-
-    // wobble2
-    if(cv::mod_wobble2.getBool()) {
-        const f32 speedMultiplierCompensation = 1.0f / this->getSpeedMultiplier();
-        vec2 centerDelta = coords - vec2(GameRules::OSU_COORD_WIDTH, GameRules::OSU_COORD_HEIGHT) / 2.f;
-        coords.x += centerDelta.x * 0.25f *
-                    std::sin((this->iCurMusicPos / 1000.0f) * 5 * speedMultiplierCompensation *
-                             cv::mod_wobble_frequency.getFloat()) *
-                    cv::mod_wobble_strength.getFloat();
-        coords.y += centerDelta.y * 0.25f *
-                    std::sin((this->iCurMusicPos / 1000.0f) * 3 * speedMultiplierCompensation *
-                             cv::mod_wobble_frequency.getFloat()) *
-                    cv::mod_wobble_strength.getFloat();
-    }
-
-    // rotation
-    if(this->fPlayfieldRotation + cv::playfield_rotation.getFloat() != 0.0f) {
+    if(cv::playfield_rotation.getFloat() != 0.0f) {
         coords.x -= GameRules::OSU_COORD_WIDTH / 2;
         coords.y -= GameRules::OSU_COORD_HEIGHT / 2;
 
         vec3 coords3 = vec3(coords.x, coords.y, 0);
         Matrix4 rot;
-        rot.rotateZ(this->fPlayfieldRotation + cv::playfield_rotation.getFloat());
+        rot.rotateZ(cv::playfield_rotation.getFloat());
 
         coords3 = coords3 * rot;
-        coords3.x += GameRules::OSU_COORD_WIDTH / 2;
-        coords3.y += GameRules::OSU_COORD_HEIGHT / 2;
-
-        coords.x = coords3.x;
-        coords.y = coords3.y;
+        coords.x = coords3.x + GameRules::OSU_COORD_WIDTH / 2;
+        coords.y = coords3.y + GameRules::OSU_COORD_HEIGHT / 2;
     }
 
-    // if wobble, clamp coordinates
-    if(cv::mod_wobble.getBool() || cv::mod_wobble2.getBool()) {
-        coords.x = std::clamp<f32>(coords.x, 0.0f, GameRules::OSU_COORD_WIDTH);
-        coords.y = std::clamp<f32>(coords.y, 0.0f, GameRules::OSU_COORD_HEIGHT);
-    }
-
-    if(this->bFailed) {
+    if(this->hasFailed()) {
         f32 failTimePercentInv = 1.0f - this->fFailAnim;  // goes from 0 to 1 over the duration of osu_fail_time
         failTimePercentInv *= failTimePercentInv;
 
@@ -3343,19 +2570,57 @@ vec2 BeatmapInterface::osuCoords2Pixels(vec2 coords) const {
     return coords;
 }
 
+vec2 BeatmapInterface::pixels2ReplayCoords(vec2 pixelCoords) const {
+    vec2 pos = this->pixels2OsuCoords(pixelCoords);
+
+    // undo the playfield's rotation and flips (in reverse order of osuCoords2Pixels())
+    if(cv::playfield_rotation.getFloat() != 0.0f) {
+        pos.x -= GameRules::OSU_COORD_WIDTH / 2;
+        pos.y -= GameRules::OSU_COORD_HEIGHT / 2;
+        vec3 coords3 = vec3(pos.x, pos.y, 0);
+        Matrix4 rot;
+        rot.rotateZ(-cv::playfield_rotation.getFloat());
+        coords3 = coords3 * rot;
+        pos.x = coords3.x + GameRules::OSU_COORD_WIDTH / 2;
+        pos.y = coords3.y + GameRules::OSU_COORD_HEIGHT / 2;
+    }
+    if(cv::playfield_mirror_vertical.getBool()) pos.x = GameRules::OSU_COORD_WIDTH - pos.x;
+    if(cv::playfield_mirror_horizontal.getBool()) pos.y = GameRules::OSU_COORD_HEIGHT - pos.y;
+
+    return pos;
+}
+
+vec2 BeatmapInterface::replayCoords2Pixels(vec2 coords) const {
+    if(cv::playfield_mirror_horizontal.getBool()) coords.y = GameRules::OSU_COORD_HEIGHT - coords.y;
+    if(cv::playfield_mirror_vertical.getBool()) coords.x = GameRules::OSU_COORD_WIDTH - coords.x;
+    if(cv::playfield_rotation.getFloat() != 0.0f) {
+        coords.x -= GameRules::OSU_COORD_WIDTH / 2;
+        coords.y -= GameRules::OSU_COORD_HEIGHT / 2;
+        vec3 coords3 = vec3(coords.x, coords.y, 0);
+        Matrix4 rot;
+        rot.rotateZ(cv::playfield_rotation.getFloat());
+        coords3 = coords3 * rot;
+        coords.x = coords3.x + GameRules::OSU_COORD_WIDTH / 2;
+        coords.y = coords3.y + GameRules::OSU_COORD_HEIGHT / 2;
+    }
+
+    return coords * this->fScaleFactor + this->vPlayfieldOffset;
+}
+
 vec2 BeatmapInterface::osuCoords2LegacyPixels(vec2 coords) const {
     if(osu->getModHR()) coords.y = GameRules::OSU_COORD_HEIGHT - coords.y;
     if(cv::playfield_mirror_horizontal.getBool()) coords.y = GameRules::OSU_COORD_HEIGHT - coords.y;
     if(cv::playfield_mirror_vertical.getBool()) coords.x = GameRules::OSU_COORD_WIDTH - coords.x;
 
-    // rotation
-    if(this->fPlayfieldRotation + cv::playfield_rotation.getFloat() != 0.0f) {
+    // rotation (getPlayfieldRotation() is for mods like wobble, cv::playfield_rotation is user preference)
+    const f32 rotation = (this->judge ? this->judge->getPlayfieldRotation() : 0.f) + cv::playfield_rotation.getFloat();
+    if(rotation != 0.0f) {
         coords.x -= GameRules::OSU_COORD_WIDTH / 2;
         coords.y -= GameRules::OSU_COORD_HEIGHT / 2;
 
         vec3 coords3 = vec3(coords.x, coords.y, 0);
         Matrix4 rot;
-        rot.rotateZ(this->fPlayfieldRotation + cv::playfield_rotation.getFloat());
+        rot.rotateZ(rotation);
 
         coords3 = coords3 * rot;
         coords3.x += GameRules::OSU_COORD_WIDTH / 2;
@@ -3373,7 +2638,8 @@ vec2 BeatmapInterface::osuCoords2LegacyPixels(vec2 coords) const {
 }
 
 f32 BeatmapInterface::osuAngle2PixelAngle(f32 degrees) const {
-    f32 rotation = degrees - cv::playfield_rotation.getFloat() - this->fPlayfieldRotation;
+    f32 rotation =
+        degrees - cv::playfield_rotation.getFloat() - (this->judge ? this->judge->getPlayfieldRotation() : 0.f);
     if(flags::has<ModFlags::HardRock>(this->getMods().flags)) rotation = 360.0f - rotation;
     if(cv::playfield_mirror_horizontal.getBool()) rotation = 360.0f - rotation;
     if(cv::playfield_mirror_vertical.getBool()) rotation = 180.0f - rotation;
@@ -3417,7 +2683,7 @@ vec2 BeatmapInterface::getFirstPersonCursorDelta() const {
 
 FinishedScore BeatmapInterface::saveAndSubmitScore(bool quit) {
     // calculate stars (of what was played, which the file may not be anymore)
-    const PlayedMap &played = *this->played;
+    const PlayedMap &played = *this->judge->getMapData();
     const f32 AR = this->getAR();
     const f32 HP = this->getHP();
     const f32 CS = this->getCS();
@@ -3431,7 +2697,7 @@ FinishedScore BeatmapInterface::saveAndSubmitScore(bool quit) {
     const bool flashlight = osu->getModFlashlight();
     const bool hardRock = osu->getModHR();
 
-    const u32 breakDuration = this->getBreakDurationTotal();
+    const u32 breakDuration = this->judge->getBreakDurationTotal();
 
     auto diffres = DatabaseBeatmap::loadDifficultyHitObjects(*played.data, AR, CS, speedMultiplier, hardRock);
 
@@ -3469,7 +2735,8 @@ FinishedScore BeatmapInterface::saveAndSubmitScore(bool quit) {
     auto *liveScore = osu->getScore();
 
     // calculate final pp
-    const int numHitObjects = this->hitobjects.size();
+    const int numHitObjects = (int)this->judge->getHitObjects().size();
+    const i32 maxPossibleCombo = this->judge->iMaxPossibleCombo;
     const int numCircles = static_cast<int>(played.primitives.getNumObjects<DBType::HITCIRCLE>());
     const int numSliders = static_cast<int>(played.primitives.getNumObjects<DBType::SLIDER>());
     const int numSpinners = static_cast<int>(played.primitives.getNumObjects<DBType::SPINNER>());
@@ -3489,7 +2756,7 @@ FinishedScore BeatmapInterface::saveAndSubmitScore(bool quit) {
                                             .numCircles = numCircles,
                                             .numSliders = numSliders,
                                             .numSpinners = numSpinners,
-                                            .maxPossibleCombo = this->iMaxPossibleCombo,
+                                            .maxPossibleCombo = maxPossibleCombo,
                                             .combo = highestCombo,
                                             .misses = numMisses,
                                             .c300 = num300s,
@@ -3542,17 +2809,17 @@ FinishedScore BeatmapInterface::saveAndSubmitScore(bool quit) {
     score.numMisses = liveScore->getNumMisses();
     score.score = liveScore->getScore();
     score.comboMax = liveScore->getComboMax();
-    score.perfect = (this->iMaxPossibleCombo > 0 && score.comboMax > 0 && score.comboMax >= this->iMaxPossibleCombo);
+    score.perfect = (maxPossibleCombo > 0 && score.comboMax > 0 && score.comboMax >= maxPossibleCombo);
     score.numSliderBreaks = liveScore->getNumSliderBreaks();
     score.unstableRate = liveScore->getUnstableRate();
     score.hitErrorAvgMin = liveScore->getHitErrorAvgMin();
     score.hitErrorAvgMax = liveScore->getHitErrorAvgMax();
-    score.maxPossibleCombo = this->iMaxPossibleCombo;
+    score.maxPossibleCombo = maxPossibleCombo;
     score.numHitObjects = numHitObjects;
     score.numCircles = numCircles;
     score.mods = liveScore->mods;
     score.beatmap_hash = played.md5;  // NOTE: necessary for "Use Mods"
-    score.replay = this->live_replay;
+    score.replay = this->judge->replay;
 
     // @PPV3: store ppv3 data if not already done. also double check replay is marked correctly
     score.ppv2_version = DiffCalc::PP_ALGORITHM_VERSION;
@@ -3592,7 +2859,7 @@ FinishedScore BeatmapInterface::saveAndSubmitScore(bool quit) {
         BANCHO::Net::send_packet(packet);
     }
 
-    osu->getScore()->setComboFull(this->iMaxPossibleCombo);  // used in RankingScreen/UIRankingScreenRankingPanel
+    osu->getScore()->setComboFull(maxPossibleCombo);  // used in RankingScreen/UIRankingScreenRankingPanel
 
     // special case: incomplete scores should NEVER show pp, even if auto
     if(!isComplete) {
@@ -3600,192 +2867,6 @@ FinishedScore BeatmapInterface::saveAndSubmitScore(bool quit) {
     }
 
     return score;
-}
-
-void BeatmapInterface::updateAutoCursorPos() {
-    this->vAutoCursorPos = this->vPlayfieldCenter;
-    this->vAutoCursorPos.y *= 2.5f;  // start moving in offscreen from bottom
-
-    if(!this->bIsPlaying && !this->bIsPaused) {
-        this->vAutoCursorPos = this->vPlayfieldCenter;
-        return;
-    }
-    if(unlikely(this->hitobjects.empty())) {
-        this->vAutoCursorPos = this->vPlayfieldCenter;
-        return;
-    }
-
-    const i32 curMusicPos = this->iCurMusicPosWithOffsets;
-
-    // general
-    i32 prevTime = 0;
-    i32 nextTime = this->hitobjects[0]->getClickTime();
-    vec2 prevPos = this->vAutoCursorPos;
-    vec2 curPos = this->vAutoCursorPos;
-    vec2 nextPos = this->vAutoCursorPos;
-    bool haveCurPos = false;
-
-    // dance
-    int nextPosIndex = 0;
-
-    if(this->hitobjects[0]->getClickTime() < cv::early_note_time.getInt())
-        prevTime = (int)std::roundf((float)-cv::early_note_time.getInt() * this->getSpeedMultiplier());
-
-    if(osu->getModAuto()) {
-        bool autoDanceOverride = false;
-        for(int i = 0; i < this->hitobjects.size(); i++) {
-            HitObject *o = this->hitobjects[i].get();
-
-            // get previous object
-            if(o->getClickTime() <= curMusicPos) {
-                prevTime = o->getEndTime();
-                prevPos = o->getAutoCursorPos(curMusicPos);
-                if(o->getDuration() > 0 && curMusicPos - o->getClickTime() <= o->getDuration()) {
-                    if(cv::auto_cursordance.getBool()) {
-                        auto *sliderPointer =
-                            o->getType() == HitObjectType::SLIDER ? static_cast<Slider *>(o) : nullptr;
-                        if(sliderPointer != nullptr) {
-                            const std::vector<Slider::SLIDERCLICK> &clicks = sliderPointer->getClicks();
-
-                            // start
-                            prevTime = o->getClickTime();
-                            prevPos = this->osuCoords2Pixels(o->getRawPosAt(prevTime));
-
-                            i32 biggestPrevious = 0;
-                            i32 smallestNext = (std::numeric_limits<i32>::max)();
-                            bool allFinished = true;
-                            i32 endTime = 0;
-
-                            // middle clicks
-                            for(const auto &click : clicks) {
-                                // get previous click
-                                if(click.timeMS <= curMusicPos && click.timeMS > biggestPrevious) {
-                                    biggestPrevious = click.timeMS;
-                                    prevTime = click.timeMS;
-                                    prevPos = this->osuCoords2Pixels(o->getRawPosAt(prevTime));
-                                }
-
-                                // get next click
-                                if(click.timeMS > curMusicPos && click.timeMS < smallestNext) {
-                                    smallestNext = click.timeMS;
-                                    nextTime = click.timeMS;
-                                    nextPos = this->osuCoords2Pixels(o->getRawPosAt(nextTime));
-                                }
-
-                                // end hack
-                                if(!click.finished)
-                                    allFinished = false;
-                                else if(click.timeMS > endTime)
-                                    endTime = click.timeMS;
-                            }
-
-                            // end
-                            if(allFinished) {
-                                // hack for slider without middle clicks
-                                if(endTime == 0) endTime = o->getClickTime();
-
-                                prevTime = endTime;
-                                prevPos = this->osuCoords2Pixels(o->getRawPosAt(prevTime));
-                                nextTime = o->getEndTime();
-                                nextPos = this->osuCoords2Pixels(o->getRawPosAt(nextTime));
-                            }
-
-                            haveCurPos = false;
-                            autoDanceOverride = true;
-                            break;
-                        }
-                    }
-
-                    haveCurPos = true;
-                    curPos = prevPos;
-                    break;
-                }
-            }
-
-            // get next object
-            if(o->getClickTime() > curMusicPos) {
-                nextPosIndex = i;
-                if(!autoDanceOverride) {
-                    nextPos = o->getAutoCursorPos(curMusicPos);
-                    nextTime = o->getClickTime();
-                }
-                break;
-            }
-        }
-    } else if(osu->getModAutopilot()) {
-        for(int i = 0; i < this->hitobjects.size(); i++) {
-            HitObject *o = this->hitobjects[i].get();
-
-            // get previous object
-            if(o->isFinished() ||
-               (curMusicPos > o->getEndTime() + (i32)(this->getHitWindow50() * cv::autopilot_lenience.getFloat()))) {
-                prevTime = o->getEndTime() + o->getAutopilotDelta();
-                prevPos = o->getAutoCursorPos(curMusicPos);
-            } else if(!o->isFinished())  // get next object
-            {
-                nextPosIndex = i;
-                nextPos = o->getAutoCursorPos(curMusicPos);
-                nextTime = o->getClickTime();
-
-                // wait for the user to click
-                if(curMusicPos >= nextTime + o->getDuration()) {
-                    haveCurPos = true;
-                    curPos = nextPos;
-
-                    // i32 delta = curMusicPos - (nextTime + o->duration);
-                    o->setAutopilotDelta(curMusicPos - (nextTime + o->getDuration()));
-                } else if(o->getDuration() > 0 && curMusicPos >= nextTime)  // handle objects with duration
-                {
-                    haveCurPos = true;
-                    curPos = nextPos;
-                    o->setAutopilotDelta(0);
-                }
-
-                break;
-            }
-        }
-    }
-
-    if(haveCurPos)  // in active hitObject
-        this->vAutoCursorPos = curPos;
-    else {
-        // interpolation
-        f32 percent = 1.0f;
-        if((nextTime == 0 && prevTime == 0) || (nextTime - prevTime) == 0)
-            percent = 1.0f;
-        else
-            percent = (f32)((i32)curMusicPos - prevTime) / (f32)(nextTime - prevTime);
-
-        percent = std::clamp<f32>(percent, 0.0f, 1.0f);
-
-        // scaled distance (not osucoords)
-        f32 distance = vec::length((nextPos - prevPos));
-        if(distance > this->fHitcircleDiameter * 1.05f)  // snap only if not in a stream (heuristic)
-        {
-            int numIterations = std::clamp<int>(
-                osu->getModAutopilot() ? cv::autopilot_snapping_strength.getInt() : cv::auto_snapping_strength.getInt(),
-                0, 42);
-            for(int i = 0; i < numIterations; i++) {
-                percent = (-percent) * (percent - 2.0f);
-            }
-        } else  // in a stream
-        {
-            this->iAutoCursorDanceIndex = nextPosIndex;
-        }
-
-        this->vAutoCursorPos = prevPos + (nextPos - prevPos) * percent;
-
-        if(cv::auto_cursordance.getBool() && !osu->getModAutopilot()) {
-            vec3 dir = vec3(nextPos.x, nextPos.y, 0) - vec3(prevPos.x, prevPos.y, 0);
-            vec3 center = dir * 0.5f;
-            Matrix4 worldMatrix;
-            worldMatrix.translate(center);
-            worldMatrix.rotate((1.0f - percent) * 180.0f * (this->iAutoCursorDanceIndex % 2 == 0 ? 1 : -1), 0, 0, 1);
-            vec3 fancyAutoCursorPos = worldMatrix * center;
-            this->vAutoCursorPos =
-                prevPos + (nextPos - prevPos) * 0.5f + vec2(fancyAutoCursorPos.x, fancyAutoCursorPos.y);
-        }
-    }
 }
 
 void BeatmapInterface::updatePlayfieldMetrics() {
@@ -3822,253 +2903,19 @@ void BeatmapInterface::updateSliderVertexBuffers() {
     this->fPrevHitCircleDiameter = this->fHitcircleDiameter;  // same here
     this->fPrevPlayfieldRotationFromConVar = cv::playfield_rotation.getFloat();  // same here
 
-    debugLog("rebuilding for {:d} hitobjects ...", this->hitobjects.size());
+    if(!this->judge) return;
 
-    for(auto &hitobject : this->hitobjects) {
+    debugLog("rebuilding for {:d} hitobjects ...", this->judge->getHitObjects().size());
+
+    for(const auto &hitobject : this->judge->getHitObjects()) {
         hitobject->rebuildVertexBuffer();
     }
 }
 
-void BeatmapInterface::calculateStacks() {
-    if(!this->beatmap) return;
-    this->updateHitobjectMetrics();
+f32 BeatmapInterface::getBaseAnimationSpeed() const { return osu->getAnimationSpeedMultiplier(); }
 
-    debugLog("Beatmap: Calculating stacks ...");
-
-    HitObjects::stack(this->hitobjects, this->getAR(), this->getMapVersion(), this->getMapStackLeniency(),
-                      this->fRawHitcircleDiameter, flags::has<ModFlags::HardRock>(this->getMods().flags));
-}
-
-void BeatmapInterface::computeDrainRate() {
-    this->fDrainRate = 0.0;
-    this->fHpMultiplierNormal = 1.0;
-    this->fHpMultiplierComboEnd = 1.0;
-
-    if(unlikely(this->hitobjects.empty()) || unlikely(!this->beatmap)) return;
-
-    debugLog("Beatmap: Calculating drain ...");
-
-    {
-        // see https://github.com/ppy/osu-iPhone/blob/master/Classes/OsuPlayer.m
-        // see calcHPDropRate() @ https://github.com/ppy/osu-iPhone/blob/master/Classes/OsuFiletype.m#L661
-
-        // NOTE: all drain changes between 2014 and today have been fixed here (the link points to an old version of the
-        // algorithm!) these changes include: passive spinner nerf (drain * 0.25 while spinner is active), and clamping
-        // the object length drain to 0 + an extra check for that (see maxLongObjectDrop) see
-        // https://osu.ppy.sh/home/changelog/stable40/20190513.2
-
-        struct TestPlayer {
-            TestPlayer(f64 hpBarMaximum) {
-                this->hpBarMaximum = hpBarMaximum;
-
-                this->hpMultiplierNormal = 1.0;
-                this->hpMultiplierComboEnd = 1.0;
-
-                this->resetHealth();
-            }
-
-            void resetHealth() {
-                this->health = this->hpBarMaximum;
-                this->healthUncapped = this->hpBarMaximum;
-            }
-
-            void increaseHealth(f64 amount) {
-                this->healthUncapped += amount;
-                this->health += amount;
-
-                if(this->health > this->hpBarMaximum) this->health = this->hpBarMaximum;
-
-                if(this->health < 0.0) this->health = 0.0;
-
-                if(this->healthUncapped < 0.0) this->healthUncapped = 0.0;
-            }
-
-            void decreaseHealth(f64 amount) {
-                this->health -= amount;
-
-                if(this->health < 0.0) this->health = 0.0;
-
-                if(this->health > this->hpBarMaximum) this->health = this->hpBarMaximum;
-
-                this->healthUncapped -= amount;
-
-                if(this->healthUncapped < 0.0) this->healthUncapped = 0.0;
-            }
-
-            f64 hpBarMaximum;
-
-            f64 health;
-            f64 healthUncapped;
-
-            f64 hpMultiplierNormal;
-            f64 hpMultiplierComboEnd;
-        };
-        TestPlayer testPlayer(200.0);
-
-        const f64 HP = this->getHP();
-        const int version = this->getMapVersion();
-
-        f64 testDrop = 0.05;
-
-        const f64 lowestHpEver = GameRules::mapDifficultyRange(HP, 195.0, 160.0, 60.0);
-        const f64 lowestHpComboEnd = GameRules::mapDifficultyRange(HP, 198.0, 170.0, 80.0);
-        const f64 lowestHpEnd = GameRules::mapDifficultyRange(HP, 198.0, 180.0, 80.0);
-        const f64 HpRecoveryAvailable = GameRules::mapDifficultyRange(HP, 8.0, 4.0, 0.0);
-
-        bool fail = false;
-
-        do {
-            testPlayer.resetHealth();
-
-            f64 lowestHp = testPlayer.health;
-            int lastTime = (int)(this->hitobjects[0]->getClickTime() - (i32)this->getApproachTime());
-            fail = false;
-
-            const int breakCount = this->breaks.size();
-            int breakNumber = 0;
-
-            int comboTooLowCount = 0;
-
-            for(int i = 0; i < this->hitobjects.size(); i++) {
-                const HitObject *h = this->hitobjects[i].get();
-                const auto *sliderPointer =
-                    h->getType() == HitObjectType::SLIDER ? static_cast<const Slider *>(h) : nullptr;
-                const auto *spinnerPointer =
-                    h->getType() == HitObjectType::SPINNER ? static_cast<const Spinner *>(h) : nullptr;
-
-                const int localLastTime = lastTime;
-
-                int breakTime = 0;
-                if(breakCount > 0 && breakNumber < breakCount) {
-                    const DBType::BREAK &e = this->breaks[breakNumber];
-                    if(e.startTime >= localLastTime && e.endTime <= h->getClickTime()) {
-                        // consider break start equal to object end time for version 8+ since drain stops during this
-                        // time
-                        breakTime = (version < 8) ? (e.endTime - e.startTime) : (e.endTime - localLastTime);
-                        breakNumber++;
-                    }
-                }
-
-                testPlayer.decreaseHealth(testDrop * (h->getClickTime() - lastTime - breakTime));
-
-                lastTime = (int)(h->getEndTime());
-
-                if(testPlayer.health < lowestHp) lowestHp = testPlayer.health;
-
-                if(testPlayer.health > lowestHpEver) {
-                    const f64 LongObjectDrop = testDrop * (f64)h->getDuration();
-                    const f64 maxLongObjectDrop = std::max(0.0, LongObjectDrop - testPlayer.health);
-
-                    testPlayer.decreaseHealth(LongObjectDrop);
-
-                    // nested hitobjects
-                    if(sliderPointer != nullptr) {
-                        // startcircle
-                        testPlayer.increaseHealth(
-                            LiveScore::getHealthIncrease(LiveHitResult::HIT_SLIDER30, HP, testPlayer.hpMultiplierNormal,
-                                                         testPlayer.hpMultiplierComboEnd, 1.0));  // slider30
-
-                        // ticks + repeats + repeat ticks
-                        const std::vector<Slider::SLIDERCLICK> &clicks = sliderPointer->getClicks();
-                        for(const auto &click : clicks) {
-                            switch(click.type) {
-                                case 0:  // repeat
-                                    testPlayer.increaseHealth(LiveScore::getHealthIncrease(
-                                        LiveHitResult::HIT_SLIDER30, HP, testPlayer.hpMultiplierNormal,
-                                        testPlayer.hpMultiplierComboEnd, 1.0));  // slider30
-                                    break;
-                                case 1:  // tick
-                                    testPlayer.increaseHealth(LiveScore::getHealthIncrease(
-                                        LiveHitResult::HIT_SLIDER10, HP, testPlayer.hpMultiplierNormal,
-                                        testPlayer.hpMultiplierComboEnd, 1.0));  // slider10
-                                    break;
-                            }
-                        }
-
-                        // endcircle
-                        testPlayer.increaseHealth(
-                            LiveScore::getHealthIncrease(LiveHitResult::HIT_SLIDER30, HP, testPlayer.hpMultiplierNormal,
-                                                         testPlayer.hpMultiplierComboEnd, 1.0));  // slider30
-                    } else if(spinnerPointer != nullptr) {
-                        const int rotationsNeeded = (int)((f32)spinnerPointer->getDuration() / 1000.0f *
-                                                          GameRules::getSpinnerSpinsPerSecond(this));
-                        for(int r = 0; r < rotationsNeeded; r++) {
-                            testPlayer.increaseHealth(LiveScore::getHealthIncrease(
-                                LiveHitResult::HIT_SPINNERSPIN, HP, testPlayer.hpMultiplierNormal,
-                                testPlayer.hpMultiplierComboEnd, 1.0));  // spinnerspin
-                        }
-                    }
-
-                    if(!(maxLongObjectDrop > 0.0) || (testPlayer.health - maxLongObjectDrop) > lowestHpEver) {
-                        // regular hit (for every hitobject)
-                        testPlayer.increaseHealth(
-                            LiveScore::getHealthIncrease(LiveHitResult::HIT_300, HP, testPlayer.hpMultiplierNormal,
-                                                         testPlayer.hpMultiplierComboEnd, 1.0));  // 300
-
-                        // end of combo (new combo starts at next hitobject)
-                        if((i == this->hitobjects.size() - 1) || this->hitobjects[i]->isEndOfCombo()) {
-                            testPlayer.increaseHealth(
-                                LiveScore::getHealthIncrease(LiveHitResult::HIT_300G, HP, testPlayer.hpMultiplierNormal,
-                                                             testPlayer.hpMultiplierComboEnd, 1.0));  // geki
-
-                            if(testPlayer.health < lowestHpComboEnd) {
-                                if(++comboTooLowCount > 2) {
-                                    testPlayer.hpMultiplierComboEnd *= 1.07;
-                                    testPlayer.hpMultiplierNormal *= 1.03;
-                                    fail = true;
-                                    break;
-                                }
-                            }
-                        }
-
-                        continue;
-                    }
-
-                    fail = true;
-                    testDrop *= 0.96;
-                    break;
-                }
-
-                fail = true;
-                testDrop *= 0.96;
-                break;
-            }
-
-            if(!fail && testPlayer.health < lowestHpEnd) {
-                fail = true;
-                testDrop *= 0.94;
-                testPlayer.hpMultiplierComboEnd *= 1.01;
-                testPlayer.hpMultiplierNormal *= 1.01;
-            }
-
-            const f64 recovery = (testPlayer.healthUncapped - testPlayer.hpBarMaximum) / (f64)this->hitobjects.size();
-            if(!fail && recovery < HpRecoveryAvailable) {
-                fail = true;
-                testDrop *= 0.96;
-                testPlayer.hpMultiplierComboEnd *= 1.02;
-                testPlayer.hpMultiplierNormal *= 1.01;
-            }
-        } while(fail);
-
-        this->fDrainRate =
-            (testDrop / testPlayer.hpBarMaximum) * 1000.0;  // from [0, 200] to [0, 1], and from ms to seconds
-        this->fHpMultiplierComboEnd = testPlayer.hpMultiplierComboEnd;
-        this->fHpMultiplierNormal = testPlayer.hpMultiplierNormal;
-    }
-}
-
-f32 BeatmapInterface::getApproachTime() const {
-    return cv::mod_mafham.getBool()
-               ? this->getLength() * 2
-               : GameRules::mapDifficultyRange(this->getAR(), GameRules::getMinApproachTime(),
-                                               GameRules::getMidApproachTime(), GameRules::getMaxApproachTime());
-}
-
-f32 BeatmapInterface::getRawApproachTime() const {
-    return cv::mod_mafham.getBool()
-               ? this->getLength() * 2
-               : GameRules::mapDifficultyRange(this->getRawAR(), GameRules::getMinApproachTime(),
-                                               GameRules::getMidApproachTime(), GameRules::getMaxApproachTime());
+f32 BeatmapInterface::getSpeedAdjustedAnimationSpeed() const {
+    return this->getSpeedMultiplier() / this->getBaseAnimationSpeed();
 }
 
 bool BeatmapInterface::isActuallyPausedAndNotSpectating() const {

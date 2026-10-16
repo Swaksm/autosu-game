@@ -4,7 +4,7 @@
 
 #ifndef BUILD_TOOLS_ONLY
 #include "Osu.h"
-#include "AbstractBeatmapInterface.h"
+#include "GameplayJudge.h"
 #include "ConVar.h"
 
 namespace cv {
@@ -87,14 +87,14 @@ float arWithSpeed(float AR, float speed) {
 }
 
 // raw spins required per second
-float getSpinnerSpinsPerSecond(const AbstractBeatmapInterface *beatmap) {
+float getSpinnerSpinsPerSecond(const GameplayJudge *beatmap) {
     (void)beatmap;
     return mapDifficultyRange(BEATMAP_OD(beatmap), 3.0f, 5.0f, 7.5f);
 }
 
 // spinner length compensated rotations
 // respect all mods and overrides
-float getSpinnerRotationsForSpeedMultiplier(const AbstractBeatmapInterface *beatmap, i32 spinnerDuration) {
+float getSpinnerRotationsForSpeedMultiplier(const GameplayJudge *beatmap, i32 spinnerDuration) {
     return getSpinnerRotationsForSpeedMultiplier(beatmap, spinnerDuration, BEATMAP_SPEED(beatmap));
 }
 

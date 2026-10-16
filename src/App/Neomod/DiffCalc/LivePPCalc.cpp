@@ -5,6 +5,7 @@
 
 #include "Osu.h"
 #include "BeatmapInterface.h"
+#include "GameplayJudge.h"
 #include "DatabaseBeatmap.h"
 #include "DifficultyCalculator.h"
 #include "MD5Hash.h"
@@ -109,7 +110,9 @@ struct LivePPCalc::LivePPCalcImpl {
 
     // designed in a way that most of the heavy lifting is done off-thread (inside the calc_inst invocation)
     void update(const LiveScore &score) {
-        const i32 cur_hobj = m_bmi->iCurrentHitObjectIndex;
+        const GameplayJudge *judge = m_bmi->getJudge();
+        if(!judge) return;
+        const i32 cur_hobj = judge->getCurrentHitObjectIndex();
 
         if(!needs_update(cur_hobj)) {
             return;
@@ -126,27 +129,27 @@ struct LivePPCalc::LivePPCalcImpl {
 
         update_queued_idx(cur_hobj);
 
-        const PlayedMap *played = m_bmi->getPlayed();
+        const PlayedMap *played = judge->getMapData();
         m_calc_inst.enqueue([p =
                                  LazyCalcParams{
-                                     .data = played ? played->data : nullptr,             //
-                                     .md5 = played ? played->md5 : MD5Hash{},             //
-                                     .legacy_total_score = score.getScore(),              //
-                                     .CS = m_bmi->getCS(),                                //
-                                     .AR = m_bmi->getAR(),                                //
-                                     .HP = m_bmi->getHP(),                                //
-                                     .OD = m_bmi->getOD(),                                //
-                                     .speed_multiplier = m_bmi->getSpeedMultiplier(),     //
-                                     .current_hitobject = m_bmi->iCurrentHitObjectIndex,  //
-                                     .nb_circles = m_bmi->iCurrentNumCircles,             //
-                                     .nb_sliders = m_bmi->iCurrentNumSliders,             //
-                                     .nb_spinners = m_bmi->iCurrentNumSpinners,           //
-                                     .highest_combo = score.getComboMax(),                //
-                                     .nb_misses = score.getNumMisses(),                   //
-                                     .nb_300s = score.getNum300s(),                       //
-                                     .nb_100s = score.getNum100s(),                       //
-                                     .nb_50s = score.getNum50s(),                         //
-                                     .mods = score.mods,                                  //
+                                     .data = played ? played->data : nullptr,          //
+                                     .md5 = played ? played->md5 : MD5Hash{},          //
+                                     .legacy_total_score = score.getScore(),           //
+                                     .CS = m_bmi->getCS(),                             //
+                                     .AR = m_bmi->getAR(),                             //
+                                     .HP = m_bmi->getHP(),                             //
+                                     .OD = m_bmi->getOD(),                             //
+                                     .speed_multiplier = m_bmi->getSpeedMultiplier(),  //
+                                     .current_hitobject = cur_hobj,                    //
+                                     .nb_circles = judge->getNumCirclesFinished(),     //
+                                     .nb_sliders = judge->getNumSlidersFinished(),     //
+                                     .nb_spinners = judge->getNumSpinnersFinished(),   //
+                                     .highest_combo = score.getComboMax(),             //
+                                     .nb_misses = score.getNumMisses(),                //
+                                     .nb_300s = score.getNum300s(),                    //
+                                     .nb_100s = score.getNum100s(),                    //
+                                     .nb_50s = score.getNum50s(),                      //
+                                     .mods = score.mods,                               //
                                  },
                              &old_cache = m_param_cache](void) -> LazyPPRes {
             LazyPPRes result;
