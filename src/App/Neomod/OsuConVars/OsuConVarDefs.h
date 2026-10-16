@@ -876,7 +876,6 @@ CONVAR(scores_always_display_pp, false, CLIENT | SKINS | SERVER,
 CONVAR(scrubbing_smooth, true, CLIENT | SKINS | SERVER);
 CONVAR(seek_delta, 5, CLIENT | SKINS | SERVER, "how many seconds to skip backward/forward when quick seeking");
 CONVAR(show_approach_circle_on_first_hidden_object, true, CLIENT | SKINS | SERVER);
-CONVAR(simulate_replays, false, CLIENT | SKINS | SERVER, "experimental \"improved\" replay playback");
 CONVAR(skin, "default"sv, CLIENT | SERVER);
 CONVAR(skin_fallback, ""sv, CLIENT | SERVER, "fallback skin for missing elements");
 // (the player's say about what skins get to do, so nothing for a skin or a server to set)

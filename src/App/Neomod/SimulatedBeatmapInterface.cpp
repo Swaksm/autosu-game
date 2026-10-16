@@ -35,19 +35,17 @@ SimulatedBeatmapInterface::~SimulatedBeatmapInterface() { this->hitobjects.clear
 void SimulatedBeatmapInterface::simulate_to(i32 music_pos) {
     if(this->spectated_replay.size() < 2) return;
 
-    LegacyReplay::Frame current_frame = this->spectated_replay[this->current_frame_idx];
-    LegacyReplay::Frame next_frame = this->spectated_replay[this->current_frame_idx + 1];
-
-    while(next_frame.cur_music_pos <= music_pos) {
-        if(this->current_frame_idx + 2 >= this->spectated_replay.size()) break;
-
+    // NOTE: the last frame is processed as well (unlike watch playback which interpolates towards it), so that
+    // objects ending after the second-to-last frame still get judged
+    while(this->current_frame_idx + 1 < (i32)this->spectated_replay.size() &&
+          this->spectated_replay[this->current_frame_idx + 1].cur_music_pos <= music_pos) {
         this->last_keys = this->current_keys;
-        f64 frame_time = (f64)(next_frame.cur_music_pos - current_frame.cur_music_pos) / 1000.0;
+        const LegacyReplay::Frame prev_frame = this->spectated_replay[this->current_frame_idx];
 
         this->current_frame_idx++;
-        current_frame = this->spectated_replay[this->current_frame_idx];
-        next_frame = this->spectated_replay[this->current_frame_idx + 1];
 
+        const LegacyReplay::Frame current_frame = this->spectated_replay[this->current_frame_idx];
+        const f64 frame_time = (f64)(current_frame.cur_music_pos - prev_frame.cur_music_pos) / 1000.0;
         this->current_keys = current_frame.key_flags;
 
         // Replays have both K1 and M1 set when K1 is pressed, fix it now
@@ -286,7 +284,9 @@ LiveHitResult SimulatedBeatmapInterface::addHitResult(HitObject *hitObject, Live
 
         // geki/katu handling
         if(isEndOfCombo) {
-            const int comboEndBitmask = this->live_score.getComboEndBitmask();
+            // (a combo end without a hit result, see Slider::onHit(), awards nothing)
+            const int comboEndBitmask =
+                hit == LiveHitResult::HIT_MISS_SLIDERBREAK ? 2 : this->live_score.getComboEndBitmask();
 
             if(comboEndBitmask == 0) {
                 returnedHit = LiveHitResult::HIT_300G;
@@ -302,7 +302,7 @@ LiveHitResult SimulatedBeatmapInterface::addHitResult(HitObject *hitObject, Live
                     this->addHealth(this->live_score.getHealthIncrease(this, returnedHit), true);
                     this->live_score.addHitResultComboEnd(returnedHit);
                 }
-            } else if(hit != LiveHitResult::HIT_MISS)
+            } else if(hit != LiveHitResult::HIT_MISS && hit != LiveHitResult::HIT_MISS_SLIDERBREAK)
                 this->addHealth(this->live_score.getHealthIncrease(this, LiveHitResult::HIT_MU), true);
 
             this->live_score.setComboEndBitmask(0);
@@ -378,11 +378,7 @@ void SimulatedBeatmapInterface::resetScore() {
 void SimulatedBeatmapInterface::update(f64 frame_time) {
     if(this->hitobjects.empty()) return;
 
-    auto last_hitobject = this->hitobjectsSortedByEndTime.back();
-    const bool isAfterLastHitObject = (this->iCurMusicPos > (last_hitobject->getEndTime()));
-    if(isAfterLastHitObject) {
-        return;
-    }
+    // NOTE: no isAfterLastHitObject early-out here (unlike live play): skipping updates past it would leave the last object unjudged
 
     // live update hitobject and playfield metrics
     this->updateHitobjectMetrics();
@@ -430,11 +426,12 @@ void SimulatedBeatmapInterface::update(f64 frame_time) {
             // 0) miscellaneous stuff (minimal performance impact)
             // 1) prev + next time vars
             // 2) PVS optimization
-            // 3) main hitobject update
-            // 4) note blocking
-            // 5) click events
+            // 3) note blocking
+            // 4) click events
+            // 5) main hitobject update
             //
-            // (because the hitobjects need to know about note blocking before handling the click events)
+            // (clicks go before the update so that a press landing on the same frame as an object end still hits,
+            // like osu!stable/danser-go's UpdateClickFor-before-UpdatePostFor order; live play keeps update-first)
 
             // const bool isCircle = this->hitobjects[i]->type == HitObjectType::CIRCLE;
             const bool isSlider = this->hitobjects[i]->getType() == HitObjectType::SLIDER;
@@ -467,9 +464,6 @@ void SimulatedBeatmapInterface::update(f64 frame_time) {
             if(this->iCurMusicPos >= this->hitobjects[i]->getClickTime() + this->hitobjects[i]->getDuration()) {
                 this->iCurrentHitObjectIndex = i;
             }
-
-            // main hitobject update
-            this->hitobjects[i]->update(this->iCurMusicPos, frame_time);
 
             // spinner visibility detection
             // XXX: there might be a "better" way to do it?
@@ -606,6 +600,9 @@ void SimulatedBeatmapInterface::update(f64 frame_time) {
                     }
                 }
             }
+
+            // main hitobject update (after click events, so a press on the same frame as an object end still hits)
+            this->hitobjects[i]->update(this->iCurMusicPos, frame_time);
 
             if(this->hitobjects[i]->isFinished()) this->iCurrentHitObjectIndex = i;
 
