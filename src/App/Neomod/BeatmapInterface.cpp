@@ -889,6 +889,7 @@ void BeatmapInterface::stop(bool quit) {
     }
 
     this->is_watching = false;
+    this->is_buffering = false;
     this->judge->replay.clear();
     this->score_frames.clear();
 
@@ -2368,7 +2369,7 @@ void BeatmapInterface::write_frame(const LegacyReplay::Frame &frame, bool force)
         .padding = 0,
         .mouse_x = frame.x,
         .mouse_y = frame.y,
-        .time = (i32)this->iCurMusicPos,  // NOTE: might be incorrect
+        .time = frame.cur_music_pos,
     });
 
     this->last_event_time = engine->getTime();
