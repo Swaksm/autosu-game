@@ -5626,8 +5626,8 @@ printf %s "checking how to create a ustar tar archive... " >&6; }
    echo "$as_me:$LINENO: \$? = $ac_status" >&5
    (exit $ac_status); } && break
       done
-      am__tar="$_am_tar --format=ustar -chf - "'"$$tardir"'
-      am__tar_="$_am_tar --format=ustar -chf - "'"$tardir"'
+      am__tar="$_am_tar --format=ustar --sort=name --mtime=@0 --owner=0 --group=0 --numeric-owner -chf - "'"$$tardir"'
+      am__tar_="$_am_tar --format=ustar --sort=name --mtime=@0 --owner=0 --group=0 --numeric-owner -chf - "'"$tardir"'
       am__untar="$_am_tar -xf -"
       ;;
     plaintar)
@@ -10302,12 +10302,18 @@ CCACHE_COMPRESS=1 CCACHE_COMPRESSLEVEL=4 CCACHE_COMPILERTYPE=$_ccache_ctype CCAC
 $CCACHE $CC_REAL "\$@"
 EOF
 chmod +x "$PWD/build/cc"
-cat > "$PWD/build/cxx" <<EOF
+# the pch depends on this wrapper, so only replace it when the compiler (hash) actually changed
+cat > "$PWD/build/cxx.new" <<EOF
 #!/usr/bin/env bash
 CCACHE_SLOPPINESS=pch_defines,time_macros,include_file_mtime,include_file_ctime \\
 CCACHE_COMPRESS=1 CCACHE_COMPRESSLEVEL=4 CCACHE_COMPILERTYPE=$_ccache_ctype CCACHE_COMPILERCHECK="string:$_cxx_real_hash" \\
 $CCACHE $CXX_REAL "\$@"
 EOF
+if cmp -s "$PWD/build/cxx.new" "$PWD/build/cxx"; then
+    rm -f "$PWD/build/cxx.new"
+else
+    mv -f "$PWD/build/cxx.new" "$PWD/build/cxx"
+fi
 chmod +x "$PWD/build/cxx"
 
 export CC="$PWD/build/cc"

@@ -943,12 +943,18 @@ CCACHE_COMPRESS=1 CCACHE_COMPRESSLEVEL=4 CCACHE_COMPILERTYPE=$_ccache_ctype CCAC
 $CCACHE $CC_REAL "\$@"
 EOF
 chmod +x "$PWD/build/cc"
-cat > "$PWD/build/cxx" <<EOF
+# the pch depends on this wrapper, so only replace it when the compiler (hash) actually changed
+cat > "$PWD/build/cxx.new" <<EOF
 #!/usr/bin/env bash
 CCACHE_SLOPPINESS=pch_defines,time_macros,include_file_mtime,include_file_ctime \\
 CCACHE_COMPRESS=1 CCACHE_COMPRESSLEVEL=4 CCACHE_COMPILERTYPE=$_ccache_ctype CCACHE_COMPILERCHECK="string:$_cxx_real_hash" \\
 $CCACHE $CXX_REAL "\$@"
 EOF
+if cmp -s "$PWD/build/cxx.new" "$PWD/build/cxx"; then
+    rm -f "$PWD/build/cxx.new"
+else
+    mv -f "$PWD/build/cxx.new" "$PWD/build/cxx"
+fi
 chmod +x "$PWD/build/cxx"
 
 export CC="$PWD/build/cc"

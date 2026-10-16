@@ -1747,6 +1747,10 @@ PKG_CONFIG_PLUS_BUNDLED_OSSL = $(PKG_CONFIG) $(am__append_4)
 
 # faster nistp implementation on 64bit (matches what the static-curl project enables)
 @BUILD_CURL_TRUE@@UBERCOMPAT_FALSE@OPENSSL_EC_FLAG := $(if $(filter x86_64 aarch64,$(host_cpu)),enable-ec_nistp_64_gcc_128,)
+
+# no LTO on windows: threads_win.c declares CRYPTO_ONCE as LONG (it sees windows.h) while the rest of
+# libcrypto gets unsigned int, which gcc's -Wlto-type-mismatch turns into a link error under -Werror
+@BUILD_CURL_TRUE@@UBERCOMPAT_FALSE@OPENSSL_LTO_FLAG := $(if $(filter windows,$(SYSNAME)),-fno-lto,)
 @WASM_PLATFORM_FALSE@CACERT_DOWNLOAD_DEP := $(CACERT_INCDIR)/cacert.pem
 @WASM_PLATFORM_TRUE@CACERT_DOWNLOAD_DEP := 
 @BUILD_MIMALLOC_FALSE@MIMALLOC_REDIRECT_DLL_NAME := 
@@ -8707,7 +8711,7 @@ $(CACERT_INCDIR)/cacert.pem:
 @BUILD_CURL_TRUE@@UBERCOMPAT_FALSE@	$(TAR) xf $(DEPS_CACHE)/openssl-$(OPENSSL_VERSION).tar.gz -C $(DEPS_PREFIX)/openssl --strip-components=1 && \
 @BUILD_CURL_TRUE@@UBERCOMPAT_FALSE@	cd $(DEPS_PREFIX)/openssl && \
 @BUILD_CURL_TRUE@@UBERCOMPAT_FALSE@	RANLIB="$(RANLIB)" AR="$(AR)" CC="$(CC)" CXX="$(CXX)" \
-@BUILD_CURL_TRUE@@UBERCOMPAT_FALSE@	CFLAGS="$(CFLAGS) -Os" CXXFLAGS="$(CXXFLAGS) -Os" LDFLAGS="$(LDFLAGS)" \
+@BUILD_CURL_TRUE@@UBERCOMPAT_FALSE@	CFLAGS="$(CFLAGS) -Os $(OPENSSL_LTO_FLAG)" CXXFLAGS="$(CXXFLAGS) -Os $(OPENSSL_LTO_FLAG)" LDFLAGS="$(LDFLAGS)" \
 @BUILD_CURL_TRUE@@UBERCOMPAT_FALSE@	$(CONFIGURE_PFX) ./Configure $(OPENSSL_TARGET) --prefix="$(DEPS_PREFIX)" --libdir=lib --openssldir="$(DEPS_PREFIX)/ssl" \
 @BUILD_CURL_TRUE@@UBERCOMPAT_FALSE@		no-shared threads no-tests no-apps no-docs no-module no-comp no-legacy \
 @BUILD_CURL_TRUE@@UBERCOMPAT_FALSE@		$(OPENSSL_EC_FLAG) $(if $(filter windows,$(SYSNAME)),,-fPIC) && \
@@ -9446,7 +9450,7 @@ $(EMBED_OUTPUT): $(EMBED_SCRIPT) $(EMBED_MANIFESTS) $(BUILD_EMBED_MANIFESTS) $(E
 
 -include $(EMBED_DEPFILE)
 
-@BUILD_PCH_TRUE@$(PCH_OUTPUT): $(PCH_SOURCE) $(BUILT_SOURCES)
+@BUILD_PCH_TRUE@$(PCH_OUTPUT): $(PCH_SOURCE) $(BUILT_SOURCES) $(builddir)/build/cxx
 @BUILD_PCH_TRUE@	@rm -f $(PCH_OUTPUT) # remove possibly existing-but-outdated pch to avoid recursively including it (sanity)
 @BUILD_PCH_TRUE@	@$(MKDIR_P) $(dir $@)
 @BUILD_PCH_TRUE@	$(CXX) -c -x c++-header -MMD -MF $(PCH_DEPS) $(PCH_BUILD_FLAGS) \

@@ -1383,7 +1383,7 @@ PCH_BUILD_FLAGS :=
 PCH_FLAGS += -fpch-preprocess
 endif # CLANG_BUILD
 
-$(PCH_OUTPUT): $(PCH_SOURCE) $(BUILT_SOURCES)
+$(PCH_OUTPUT): $(PCH_SOURCE) $(BUILT_SOURCES) $(builddir)/build/cxx
 	@rm -f $(PCH_OUTPUT) # remove possibly existing-but-outdated pch to avoid recursively including it (sanity)
 	@$(MKDIR_P) $(dir $@)
 	$(CXX) -c -x c++-header -MMD -MF $(PCH_DEPS) $(PCH_BUILD_FLAGS) \

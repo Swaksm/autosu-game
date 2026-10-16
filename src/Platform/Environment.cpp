@@ -58,8 +58,8 @@
 
 #if defined(MCENGINE_PLATFORM_WINDOWS)
 #include "WinDebloatDefs.h"
+#include <windows.h>
 #include <lmcons.h>
-#include <winbase.h>
 #include <winnls.h>  // getDefaultLocale
 #elif defined(__APPLE__) || defined(MCENGINE_PLATFORM_LINUX)
 #include <pwd.h>
