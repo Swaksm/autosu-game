@@ -964,10 +964,11 @@ void MainMenu::draw() {
         g->pushTransform();
         {
             McFont *smallFont = osu->getSubTitleFont();
-            g->translate(arrowPos.x - smallFont->getStringWidth(notificationText) / 2.0f,
-                         (-offset * 2) * scale + arrowPos.y -
-                             (osu->getSkin()->i_play_warning_arrow2.getSizeBaseRaw().y * scale) / 1.5f,
-                         0);
+            g->translate(
+                std::max(arrowPos.x - smallFont->getStringWidth(notificationText) / 2.0f, Osu::getUIScale(5.0f)),
+                (-offset * 2) * scale + arrowPos.y -
+                    (osu->getSkin()->i_play_warning_arrow2.getSizeBaseRaw().y * scale) / 1.5f,
+                0);
             g->drawString(smallFont, notificationText);
         }
         g->popTransform();
@@ -1135,10 +1136,11 @@ void MainMenu::tick() {
                 this->updateAvailableButton->setTextColor(0xffffffff);
                 this->updateAvailableButton->setVisible(true);
 
-                if(this->updateAvailableButton->getText().find("ready") != std::string::npos)
+                const std::string readyText = tformat("A new version of {} is ready!", PACKAGE_NAME);
+                if(this->updateAvailableButton->getText() == readyText)
                     this->updateAvailableButton->setText(_("Click here to install the update!"));
                 else
-                    this->updateAvailableButton->setText(tformat("A new version of {} is ready!", PACKAGE_NAME));
+                    this->updateAvailableButton->setText(readyText);
             }
             if(engine->getTime() > this->updateButtonAnimTime) {
                 this->updateButtonAnimTime = engine->getTime() + 3.0f;
@@ -1466,7 +1468,9 @@ void MainMenu::updateLayout() {
     this->nowPlaying->updateLayout();
     this->nowPlaying->setRelPos(screenSize.x - this->nowPlaying->getSize().x - 12 * dpiScale, 12 * dpiScale);
 
-    this->updateAvailableButton->setSize(375 * dpiScale, 50 * dpiScale);
+    const f32 updateBtnWidth =
+        this->updateAvailableButton->getFont()->getStringWidth(this->updateAvailableButton->getText()) + 50 * dpiScale;
+    this->updateAvailableButton->setSize(std::max(375 * dpiScale, updateBtnWidth), 50 * dpiScale);
     this->updateAvailableButton->setPos(screenSize.x / 2 - this->updateAvailableButton->getSize().x / 2,
                                         screenSize.y - this->updateAvailableButton->getSize().y - 10 * dpiScale);
 
