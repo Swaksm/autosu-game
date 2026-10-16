@@ -2559,9 +2559,27 @@ void OptionsOverlayImpl::updateLayout() {
     // options panel
     const float optionsScreenWidthPercent = 0.5f;
     const float categoriesOptionsPercent = 0.135f;
+    const int sideMargin = 25 * 2 * dpiScale;
 
     int optionsWidth = (int)(osu->getVirtScreenWidth() * optionsScreenWidthPercent);
     optionsWidth = std::min((int)(725.0f * (1.0f - categoriesOptionsPercent)), optionsWidth) * dpiScale;
+
+    // widen the panel so the longest option fits without horizontal scrolling (approximately)
+    float baseElementWidth = (float)optionsWidth - 2 * sideMargin - 2 * dpiScale;
+    float maxElementWidth = baseElementWidth;
+    for(const auto &elem : this->elemContainers) {
+        if(elem->baseElems.size() != 1 || elem->type != CBX) continue;
+        auto *checkbox = dynamic_cast<CBaseUICheckbox *>(elem->baseElems[0].get());
+        if(checkbox == nullptr) continue;
+        // checkbox->setSizeY(checkbox->getRelSize().y * dpiScale);
+        // checkbox->onResized();
+        // checkbox->setWidthToContent(0);
+        maxElementWidth = std::max(maxElementWidth, checkbox->getSize().x);
+    }
+    if(maxElementWidth > baseElementWidth) {
+        optionsWidth = std::min((int)(maxElementWidth + 2 * sideMargin + 2 * dpiScale + 1), osu->getVirtScreenWidth());
+    }
+
     const int categoriesWidth = optionsWidth * categoriesOptionsPercent;
 
     this->options->setRelPosX(categoriesWidth - 1);
@@ -2578,7 +2596,6 @@ void OptionsOverlayImpl::updateLayout() {
 
     // build layout
     bool enableHorizontalScrolling = false;
-    int sideMargin = 25 * 2 * dpiScale;
     int spaceSpacing = 25 * dpiScale;
     int sectionSpacing = -15 * dpiScale;            // section title to first element
     int subsectionSpacing = 15 * dpiScale;          // subsection title to first element

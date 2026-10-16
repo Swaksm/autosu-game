@@ -413,6 +413,7 @@ void AboutScreen::buildChangelog() {
         R"(- Fixed pen taps counting as touchscreen input (TD mod))",
         R"(- Fixed pen side buttons not acting as mouse buttons)",
         R"(- Fixed multiple instance of neomod opening when "Open with" is used with multiple files at once)",
+        R"(- Fixed options menu being too small for some languages)",
         R"(- Fixed song browser scroll position being broken when searching the selected beatmap)",
         R"(- Fixed the wrong audio playing when changing beatmap selection very quickly)",
     };
