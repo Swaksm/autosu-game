@@ -21,7 +21,7 @@ void writeFile(const std::string &path, std::string_view bytes) {
 
 Storyboard storyboard(std::string_view events, std::string_view osb = {}) {
     const std::string osu = fmt::format("osu file format v14\n\n[Events]\n{}\n", events);
-    return Storyboard{"", osu, osb, ""};
+    return Storyboard{"", osu, osb, "", ""};
 }
 }  // namespace
 
@@ -229,8 +229,8 @@ void StoryboardTest::runTests() {
             "osu file format v14\n\n[Events]\nSprite,Overlay,Centre,b.png,0,0\n_F,0,0,1,1\n"
             "Sprite,Background,Centre,\"sb\\A.png\",0,0\n_F,0,0,1,1\n"};
         const auto hashOf = [&dir](std::string_view osu, std::string_view osb = {}) {
-            Storyboard sb{dir, osu, osb, "bg.jpg"};
-            sb.load("");
+            Storyboard sb{dir, osu, osb, "bg.jpg", ""};
+            sb.load(false);
             return sb.getHash();
         };
 
@@ -251,7 +251,7 @@ void StoryboardTest::runTests() {
         const std::string osu{
             "osu file format "
             "v14\n\n[Events]\n0,0,\"bg.jpg\",10,-20\nSprite,Background,Centre,\"BG.jpg\",320,240\n_F,0,0,10,1\n"};
-        const Storyboard sb{"", osu, "", "bg.jpg"};
+        const Storyboard sb{"", osu, "", "bg.jpg", ""};
         TEST_ASSERT(sb.replacesBackground(), "a background layer sprite of the background replaces it");
         TEST_ASSERT(sb.getBackgroundOffset() == vec2(10.f, -20.f), "background offset");
         TEST_ASSERT(sb.getSpriteState(0, 5).has_value(), "sprite there");

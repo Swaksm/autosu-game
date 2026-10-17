@@ -8,10 +8,12 @@
 #include "MouseListener.h"
 #include "UIScreen.h"
 
+#include <memory>
 #include <string>
 #include <vector>
 
 class Image;
+class Storyboard;
 class DatabaseBeatmap;
 typedef DatabaseBeatmap BeatmapDifficulty;
 typedef DatabaseBeatmap BeatmapSet;
@@ -66,6 +68,7 @@ class MainMenu final : public UIScreen, public MouseListener {
     void drawFriend(const McRect &mainButtonRect, float pulse, bool haveTimingpoints);
     std::pair<bool, float> getTimingpointPulseAmount();  // for main menu cube anim
     void updateLayout();
+    void updateStoryboard();
     void restartMusic();
     // the menu plays its picks from the start, over the song browser's preview rule (the first one from its restart
     // point with start_first_main_menu_song_at_preview_point)
@@ -156,6 +159,12 @@ class MainMenu final : public UIScreen, public MouseListener {
     // the preloaded difficulties that played before the current one, for going back while the database isn't loaded
     std::vector<BeatmapDifficulty *> previousPreloadedMaps;
     bool firstPick{true};
+
+    const DatabaseBeatmap *storyboardMap{nullptr};
+    const DatabaseBeatmap *shownStoryboardMap{nullptr};
+    Async::CancellableHandle<std::unique_ptr<Storyboard>> storyboardHandle;
+    std::unique_ptr<Storyboard> storyboard;
+    AnimFloat storyboardFade{0.f};
 
     // songs folder enumeration (for random beatmap before db loads)
     void submitSongsFolderEnum();

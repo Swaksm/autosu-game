@@ -44,6 +44,7 @@
 #include "SkinImage.h"
 #include "SongBrowser/SongBrowser.h"
 #include "SoundEngine.h"
+#include "Storyboard.h"
 #include "TooltipOverlay.h"
 #include "UI.h"
 #include "UIButton.h"
@@ -293,6 +294,36 @@ bool is_updating_from_old_version() {
     }
 
     return drawNotificationArrow;
+}
+
+// what a storyboard is read from, for copying across threads
+struct StoryboardSource {
+    std::string folder;
+    std::string osuPath;
+    std::string artist;
+    std::string title;
+    std::string creator;
+    std::string background;
+    std::string skinFolder;
+};
+
+// reads and parses a storyboard (off the main thread)
+std::unique_ptr<Storyboard> parseStoryboard(const StoryboardSource &src, const Sync::stop_token &tok) {
+    File osuFile(src.osuPath);
+    if(!osuFile.canRead() || tok.stop_requested()) return nullptr;
+    const std::string osu = osuFile.readToString();
+
+    std::string osb;
+    if(const std::string osbFile = Storyboard::findOsbFile(src.folder, src.artist, src.title, src.creator);
+       !osbFile.empty()) {
+        File file(src.folder + osbFile);
+        if(file.canRead()) osb = file.readToString();
+    }
+    if(tok.stop_requested()) return nullptr;
+
+    auto storyboard = std::make_unique<Storyboard>(src.folder, osu, osb, src.background, src.skinFolder);
+    if(storyboard->getNumSprites() == 0) return nullptr;
+    return storyboard;
 }
 }  // namespace
 
@@ -927,8 +958,16 @@ void MainMenu::draw() {
         if(this->lastMap && this->lastMap != this->currentMap) {
             bgih->draw(bgih->getLoadBackgroundImage(this->lastMap, true), 1.f - this->mapFadeAnim);
         }
+        const bool drawStoryboard = this->storyboard && this->storyboardFade > 0.f;
         if(this->currentMap) {
-            bgih->draw(bgih->getLoadBackgroundImage(this->currentMap, true), this->mapFadeAnim);
+            const f32 alpha =
+                drawStoryboard && this->storyboard->replacesBackground() ? 1.f - this->storyboardFade : 1.f;
+            bgih->draw(bgih->getLoadBackgroundImage(this->currentMap, true), this->mapFadeAnim * alpha);
+        }
+        if(drawStoryboard) {
+            this->storyboard->draw(Storyboard::Layer::BACKGROUND, Storyboard::Layer::OVERLAY,
+                                   {.screen = McRect(0, 0, osu->getVirtScreenWidth(), osu->getVirtScreenHeight()),
+                                    .alpha = this->storyboardFade * 0.5f});
         }
     } else if(cv::draw_menu_background.getBool()) {
         // menu-background
@@ -1006,9 +1045,57 @@ void MainMenu::draw() {
     this->drawMainButton();
 }
 
+void MainMenu::updateStoryboard() {
+    const f32 fadeDuration = cv::main_menu_background_fade_duration.getFloat();
+    const DatabaseBeatmap *map = cv::main_menu_prefer_map_bg.getBool() ? this->currentMap : nullptr;
+
+    // map changed
+    if(map != this->storyboardMap) {
+        this->storyboardMap = map;
+        this->storyboardHandle = {};
+        if(this->storyboard) this->storyboardFade.set(0.f, fadeDuration, anim::Linear);
+
+        const bool alreadyShown = this->storyboard && map == this->shownStoryboardMap;
+        if(map && !alreadyShown) {
+            const Skin *skin = osu->getSkin();
+            StoryboardSource src{
+                .folder = std::string{map->getFolder()},
+                .osuPath = std::string{map->getFilePath()},
+                .artist = std::string{map->getArtistLatin()},
+                .title = std::string{map->getTitleLatin()},
+                .creator = std::string{map->getCreator()},
+                .background = std::string{map->getBackgroundImageFileName()},
+                .skinFolder = skin ? skin->skin_dir : std::string{},
+            };
+            this->storyboardHandle = Async::submit_cancellable(
+                [src = std::move(src)](const Sync::stop_token &tok) { return parseStoryboard(src, tok); },
+                Lane::Background);
+        }
+    }
+
+    // rather than fade between 2 storyboards,
+    // we fade out the current one then fade in the new one once ready
+    const bool faded = this->storyboardFade == 0.f && !this->storyboardFade.animating();
+    const bool stale = this->storyboard && this->shownStoryboardMap != map;
+    if(stale && faded) this->storyboard.reset();
+
+    if(!this->storyboard && this->storyboardHandle.valid() && this->storyboardHandle.is_ready()) {
+        this->storyboard = this->storyboardHandle.get();
+        this->shownStoryboardMap = map;
+        if(this->storyboard) this->storyboard->load(true);
+    }
+
+    if(this->storyboard && !stale) {
+        if(faded && this->storyboard->isReady()) this->storyboardFade.set(1.f, fadeDuration, anim::Linear);
+        const auto *music = osu->getMusicTrack();
+        this->storyboard->update(music->getTime() + music->getOffset(map, map->getVersion()), true, false);
+    }
+}
+
 void MainMenu::tick() {
     UIScreen::tick();
     this->updateAvailableButton->tick();
+    this->updateStoryboard();
 
     if(!this->bVisible) return;
 

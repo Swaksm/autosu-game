@@ -39,7 +39,8 @@ class Storyboard {
         u16 index;
     };
 
-    Storyboard(std::string folder, std::string_view osuFile, std::string_view osbFile, std::string backgroundFile);
+    Storyboard(std::string folder, std::string_view osuFile, std::string_view osbFile, std::string backgroundFile,
+               std::string_view skinFolder);
     ~Storyboard();
 
     Storyboard(const Storyboard &) = delete;
@@ -58,7 +59,7 @@ class Storyboard {
     [[nodiscard]] std::optional<SpriteState> getSpriteState(uSz sprite, f64 time) const;
     [[nodiscard]] std::optional<f64> getEndTime() const;
 
-    void load(std::string_view skinFolder);
+    void load(bool visualsOnly);
     [[nodiscard]] bool isReady() const;
     [[nodiscard]] const Image *getBackgroundImage() const;
 

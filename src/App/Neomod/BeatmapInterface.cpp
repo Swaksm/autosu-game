@@ -1338,11 +1338,12 @@ void BeatmapInterface::loadStoryboard() {
         if(file.canRead()) osb = file.readToString();
     }
 
+    const Skin *skin = this->getSkin();
     this->storyboard = std::make_unique<Storyboard>(
         folder, std::string_view{reinterpret_cast<const char *>(map->data->data()), map->data->size()}, osb,
-        std::string{this->beatmap->getBackgroundImageFileName()});
-    const Skin *skin = this->getSkin();
-    this->storyboard->load(skin ? std::string_view{skin->skin_dir} : std::string_view{});
+        std::string{this->beatmap->getBackgroundImageFileName()},
+        skin ? std::string_view{skin->skin_dir} : std::string_view{});
+    this->storyboard->load(false);
 }
 
 void BeatmapInterface::unloadObjects() {

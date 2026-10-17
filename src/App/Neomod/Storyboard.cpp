@@ -32,6 +32,7 @@ using Layer = Storyboard::Layer;
 namespace {
 
 constexpr f64 INF = std::numeric_limits<f64>::infinity();
+constexpr u32 NO_FILE = std::numeric_limits<u32>::max();
 
 // a property going from one value to another over [start, end]
 template <typename T>
@@ -304,6 +305,13 @@ struct Storyboard::Impl {
     MD5Hash osbHash;
     bool hasOsb{false};
 
+    // for loading
+    std::vector<std::string> imageFiles;
+    std::vector<u32> frameFiles;
+    u32 backgroundImage{NO_FILE};
+    std::vector<std::string> sampleFiles;
+    std::vector<std::pair<std::string, std::string>> used;
+
     // once loaded
     std::vector<Image *> frames;
     std::vector<Image *> images;
@@ -329,6 +337,7 @@ struct Storyboard::Impl {
     void parse(std::string_view file, bool isOsu, std::vector<std::pair<std::string, std::string>> &variables);
     void parseEventLine(std::string_view line, i32 version);
     void finish();
+    void resolveFiles(std::string_view skinFolder);
 
     template <typename T, typename Get>
     [[nodiscard]] T evaluate(u32 index, Get get, T fallback, f64 time) const;
@@ -603,6 +612,81 @@ void Storyboard::Impl::finish() {
     this->fired.resize(this->sprites.size());
 }
 
+void Storyboard::Impl::resolveFiles(std::string_view skinFolder) {
+    const auto files = this->folder.empty() ? Hash::unstable_ncase_stringmap<std::string>{} : listFolder(this->folder);
+
+    const auto resolve = [&files](std::string_view path) -> std::string {
+        if(path.empty() || path.starts_with('/') ||
+           std::ranges::any_of(SString::split(path, '/'), [](std::string_view part) { return part == ".."; })) {
+            return {};
+        }
+        if(const auto it = files.find(path); it != files.end()) return it->second;
+
+        // old storyboards leave the extension out
+        if(!path.substr(path.rfind('/') + 1).contains('.')) {
+            for(const std::string_view ext : {".png", ".jpg", ".jpeg"}) {
+                if(const auto it = files.find(fmt::format("{}{}", path, ext)); it != files.end()) return it->second;
+            }
+        }
+        return {};
+    };
+
+    Hash::unstable_ncase_stringmap<u32> knownImages;
+    const auto findImage = [&](const std::string &path) -> u32 {
+        if(const auto it = knownImages.find(path); it != knownImages.end()) return it->second;
+        std::string file;
+        if(this->useSkinSprites && !skinFolder.empty()) {
+            if(std::string skinFile = fmt::format("{}{}", skinFolder, path);
+               File::existsCaseInsensitive(skinFile) == File::FILETYPE::FILE) {
+                file = std::move(skinFile);
+            }
+        }
+        const std::string inFolder = resolve(path);
+        this->used.emplace_back(SString::to_lower(path), inFolder);
+        if(file.empty() && !inFolder.empty()) file = this->folder + inFolder;
+
+        u32 index = NO_FILE;
+        if(!file.empty()) {
+            index = (u32)this->imageFiles.size();
+            this->imageFiles.push_back(std::move(file));
+        }
+        knownImages.emplace(path, index);
+        return index;
+    };
+
+    for(auto &sprite : this->sprites) {
+        sprite.firstImage = (u32)this->frameFiles.size();
+        if(sprite.frameCount == 0) {
+            this->frameFiles.push_back(findImage(sprite.path));
+            continue;
+        }
+        const uSz slash = sprite.path.rfind('/');
+        const uSz dot = sprite.path.rfind('.');
+        const uSz numberAt =
+            dot != std::string::npos && (slash == std::string::npos || dot > slash) ? dot : sprite.path.size();
+        for(u32 i = 0; i < sprite.frameCount; i++) {
+            std::string framePath = sprite.path;
+            framePath.insert(numberAt, std::to_string(i));
+            this->frameFiles.push_back(findImage(framePath));
+        }
+    }
+
+    if(!this->backgroundFile.empty()) this->backgroundImage = findImage(this->backgroundFile);
+
+    Hash::unstable_ncase_stringmap<u32> knownSamples;
+    for(auto &sample : this->samples) {
+        if(const auto it = knownSamples.find(sample.path); it != knownSamples.end()) {
+            sample.sound = it->second;
+            continue;
+        }
+        std::string inFolder = resolve(sample.path);
+        this->used.emplace_back(SString::to_lower(sample.path), inFolder);
+        sample.sound = (u32)this->sampleFiles.size();
+        this->sampleFiles.push_back(inFolder.empty() ? std::string{} : this->folder + inFolder);
+        knownSamples.emplace(sample.path, sample.sound);
+    }
+}
+
 template <typename T, typename Get>
 T Storyboard::Impl::evaluate(u32 index, Get get, T fallback, f64 time) const {
     const Sprite &sprite = this->sprites[index];
@@ -712,7 +796,7 @@ void Storyboard::Impl::fire(TriggerCondition::Kind kind, const HitSound *sound, 
 }
 
 Storyboard::Storyboard(std::string folder, std::string_view osuFile, std::string_view osbFile,
-                       std::string backgroundFile)
+                       std::string backgroundFile, std::string_view skinFolder)
     : impl(std::make_unique<Impl>()) {
     this->impl->folder = std::move(folder);
     if(!this->impl->folder.empty() && !this->impl->folder.ends_with('/')) this->impl->folder.push_back('/');
@@ -729,6 +813,7 @@ Storyboard::Storyboard(std::string folder, std::string_view osuFile, std::string
     this->impl->current = nullptr;
     this->impl->currentGroup = nullptr;
     this->impl->finish();
+    this->impl->resolveFiles(skinFolder);
 }
 
 Storyboard::~Storyboard() = default;
@@ -773,95 +858,35 @@ std::optional<f64> Storyboard::getEndTime() const {
     return end;
 }
 
-void Storyboard::load(std::string_view skinFolder) {
+void Storyboard::load(bool visualsOnly) {
     Impl &sb = *this->impl;
-    const auto files = listFolder(sb.folder);
 
-    const auto resolve = [&files](std::string_view path) -> std::string {
-        if(path.empty() || path.starts_with('/') ||
-           std::ranges::any_of(SString::split(path, '/'), [](std::string_view part) { return part == ".."; })) {
-            return {};
-        }
-        if(const auto it = files.find(path); it != files.end()) return it->second;
+    sb.images.reserve(sb.imageFiles.size());
+    for(const auto &file : sb.imageFiles) {
+        resourceManager->requestNextLoadAsync();
+        sb.images.push_back(resourceManager->loadImageAbsUnnamed(file));
+    }
+    sb.frames.reserve(sb.frameFiles.size());
+    for(const u32 file : sb.frameFiles) sb.frames.push_back(file == NO_FILE ? nullptr : sb.images[file]);
+    if(sb.backgroundImage != NO_FILE) sb.background = sb.images[sb.backgroundImage];
 
-        // old storyboards leave the extension out
-        if(!path.substr(path.rfind('/') + 1).contains('.')) {
-            for(const std::string_view ext : {".png", ".jpg", ".jpeg"}) {
-                if(const auto it = files.find(fmt::format("{}{}", path, ext)); it != files.end()) return it->second;
-            }
-        }
-        return {};
-    };
+    if(visualsOnly) return;
 
-    // files used in the storyboard (for storyboard_hash)
-    std::vector<std::pair<std::string, std::string>> used;
-    Hash::unstable_ncase_stringmap<Image *> loadedImages;
-    const auto loadImage = [&](const std::string &path) -> Image * {
-        if(const auto it = loadedImages.find(path); it != loadedImages.end()) return it->second;
-        std::string file;
-        if(sb.useSkinSprites && !skinFolder.empty()) {
-            if(std::string skinFile = fmt::format("{}{}", skinFolder, path);
-               File::existsCaseInsensitive(skinFile) == File::FILETYPE::FILE) {
-                file = std::move(skinFile);
-            }
-        }
-        const std::string inFolder = resolve(path);
-        used.emplace_back(SString::to_lower(path), inFolder);
-        if(file.empty() && !inFolder.empty()) file = sb.folder + inFolder;
-
-        Image *image = nullptr;
+    sb.sounds.reserve(sb.sampleFiles.size());
+    for(const auto &file : sb.sampleFiles) {
+        Sound *sound = nullptr;
         if(!file.empty()) {
             resourceManager->requestNextLoadAsync();
-            image = resourceManager->loadImageAbsUnnamed(std::move(file));
+            sound = resourceManager->loadSoundAbs(file, "", false, true);
         }
-        loadedImages.emplace(path, image);
-        if(image) sb.images.push_back(image);
-        return image;
-    };
-
-    std::vector<Image *> frames;
-    for(auto &sprite : sb.sprites) {
-        sprite.firstImage = (u32)frames.size();
-        if(sprite.frameCount == 0) {
-            frames.push_back(loadImage(sprite.path));
-            continue;
-        }
-        const uSz slash = sprite.path.rfind('/');
-        const uSz dot = sprite.path.rfind('.');
-        const uSz numberAt =
-            dot != std::string::npos && (slash == std::string::npos || dot > slash) ? dot : sprite.path.size();
-        for(u32 i = 0; i < sprite.frameCount; i++) {
-            std::string framePath = sprite.path;
-            framePath.insert(numberAt, std::to_string(i));
-            frames.push_back(loadImage(framePath));
-        }
-    }
-    sb.frames = std::move(frames);
-
-    if(!sb.backgroundFile.empty()) sb.background = loadImage(sb.backgroundFile);
-
-    Hash::unstable_ncase_stringmap<u32> loadedSounds;
-    for(auto &sample : sb.samples) {
-        if(const auto it = loadedSounds.find(sample.path); it != loadedSounds.end()) {
-            sample.sound = it->second;
-            continue;
-        }
-        const std::string inFolder = resolve(sample.path);
-        used.emplace_back(SString::to_lower(sample.path), inFolder);
-        Sound *sound = nullptr;
-        if(!inFolder.empty()) {
-            resourceManager->requestNextLoadAsync();
-            sound = resourceManager->loadSoundAbs(sb.folder + inFolder, "", false, true);
-        }
-        sample.sound = (u32)sb.sounds.size();
         sb.sounds.push_back(sound);
-        loadedSounds.emplace(sample.path, sample.sound);
     }
 
     // no idea how stable generates the storyboard hash, claude picked this.
     // i don't think this matters much, no server is going to extract .oszs
     // and do a bunch of parsing when they can just look at the most used hash
     // on the leaderboard.
+    std::vector<std::pair<std::string, std::string>> used = std::move(sb.used);
     std::ranges::sort(used);
     used.erase(std::unique(used.begin(), used.end()), used.end());
     sb.hashing = Async::submit(
@@ -878,7 +903,7 @@ void Storyboard::load(std::string_view skinFolder) {
 
 bool Storyboard::isReady() const {
     return std::ranges::none_of(this->impl->images,
-                                [](const Image *i) { return resourceManager->isLoadingResource(i); }) &&
+                                [](const Image *i) { return i && resourceManager->isLoadingResource(i); }) &&
            std::ranges::none_of(this->impl->sounds,
                                 [](const Sound *s) { return s && resourceManager->isLoadingResource(s); });
 }
@@ -903,7 +928,8 @@ void Storyboard::update(f64 time, bool passing, bool seeked) {
     if(seeked) {
         for(auto &fired : sb.fired) fired.clear();
     } else if(time > sb.time) {
-        for(auto it = std::ranges::upper_bound(sb.samples, sb.time, {}, &Sample::time);
+        for(auto it = sb.sounds.empty() ? sb.samples.end()
+                                        : std::ranges::upper_bound(sb.samples, sb.time, {}, &Sample::time);
             it != sb.samples.end() && it->time <= time; ++it) {
             if((it->layer == Layer::FAIL && passing) || (it->layer == Layer::PASS && !passing)) continue;
             if(Sound *sound = sb.sounds[it->sound]; sound && sound->isReady()) {
