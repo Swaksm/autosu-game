@@ -957,7 +957,8 @@ void Storyboard::draw(Layer first, Layer last, const View &view) const {
             const bool mirrorX = state->flipH != (state->scale.x < 0.f);
             const bool mirrorY = state->flipV != (state->scale.y < 0.f);
 
-            g->setColor(argb(state->alpha, state->colour.x, state->colour.y, state->colour.z));
+            const vec3 colour = state->colour * view.brightness;
+            g->setColor(argb(state->alpha * view.alpha, colour.x, colour.y, colour.z));
             if(state->additive) g->setBlendMode(DrawBlendMode::ADDITIVE);
             g->pushTransform();
             {

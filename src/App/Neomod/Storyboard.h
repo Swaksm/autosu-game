@@ -74,6 +74,8 @@ class Storyboard {
         bool flipX{false};
         bool flipY{false};
         f32 rotation{0.f};
+        f32 alpha{1.f};
+        f32 brightness{1.f};
 
         void transform() const;
     };

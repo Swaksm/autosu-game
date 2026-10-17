@@ -182,12 +182,15 @@ void BeatmapInterface::drawDebug() {
 void BeatmapInterface::drawBackground() {
     if(!this->canDraw()) return;
 
+    f32 brightness = 1.f - cv::background_dim.getFloat();
+    brightness += this->fBreakBackgroundFade * 0.3f;
+    brightness = std::clamp(brightness, 0.f, 1.f);
+
+    // limit background dim when using Storyboard mod
+    if(this->storyboard) brightness = std::max(brightness, 0.5f);
+
     // draw background image
     {
-        f32 brightness = 1.f - cv::background_dim.getFloat();
-        brightness += this->fBreakBackgroundFade * 0.3f;
-        brightness = std::clamp(brightness, 0.f, 1.f);
-
         const Image *backgroundImage = nullptr;
         vec2 offset{0.f};
         if(this->storyboard) {
@@ -228,7 +231,11 @@ void BeatmapInterface::drawBackground() {
     }
 
     if(this->storyboard) {
-        this->storyboard->draw(Storyboard::Layer::BACKGROUND, Storyboard::Layer::FOREGROUND, this->getStoryboardView());
+        Storyboard::View view = this->getStoryboardView();
+        view.brightness = brightness;
+        this->storyboard->draw(Storyboard::Layer::BACKGROUND, Storyboard::Layer::BACKGROUND, view);
+        view.brightness = 1.f;
+        this->storyboard->draw(Storyboard::Layer::FAIL, Storyboard::Layer::FOREGROUND, view);
     }
 
     // draw scorebar-bg
