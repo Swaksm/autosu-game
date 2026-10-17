@@ -13443,6 +13443,55 @@ else case e in #(
 esac
 fi
 
+    # openssl's threads_win.c declares CRYPTO_ONCE as LONG (it sees windows.h) while the rest of
+    # libcrypto gets unsigned int, which gcc's -Wlto-type-mismatch turns into a link error under -Werror
+    # TODO: better fix for this than globally ignoring the warning (which is useful in general)
+    { printf '%s\n' "$as_me:${as_lineno-$LINENO}: checking whether the C++ compiler accepts -Wno-error=lto-type-mismatch" >&5
+printf %s "checking whether the C++ compiler accepts -Wno-error=lto-type-mismatch... " >&6; }
+if test ${ax_cv_check_cxxflags___Wno_error_lto_type_mismatch+y}
+then :
+  printf %s "(cached) " >&6
+else case e in #(
+  e)
+  ax_check_save_flags=$CXXFLAGS
+  if test x"$GXX" = xyes ; then
+    add_gnu_werror="-Werror"
+  fi
+  CXXFLAGS="$CXXFLAGS  -Wno-error=lto-type-mismatch $add_gnu_werror"
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+int
+main (void)
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"
+then :
+  ax_cv_check_cxxflags___Wno_error_lto_type_mismatch=yes
+else case e in #(
+  e) ax_cv_check_cxxflags___Wno_error_lto_type_mismatch=no ;;
+esac
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.beam conftest.$ac_ext
+  CXXFLAGS=$ax_check_save_flags ;;
+esac
+fi
+{ printf '%s\n' "$as_me:${as_lineno-$LINENO}: result: $ax_cv_check_cxxflags___Wno_error_lto_type_mismatch" >&5
+printf '%s\n' "$ax_cv_check_cxxflags___Wno_error_lto_type_mismatch" >&6; }
+if test "x$ax_cv_check_cxxflags___Wno_error_lto_type_mismatch" = xyes
+then :
+
+        _tmp_werror_flags="$_tmp_werror_flags -Wno-error=lto-type-mismatch"
+
+else case e in #(
+  e) : ;;
+esac
+fi
+
     if test -n "$WASM_CC"
 then :
 

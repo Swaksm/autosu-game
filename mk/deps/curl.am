@@ -76,10 +76,6 @@ $(if $(filter i686,$(host_cpu)),linux-x86,linux-$(host_cpu))))
 # faster nistp implementation on 64bit (matches what the static-curl project enables)
 OPENSSL_EC_FLAG := $(if $(filter x86_64 aarch64,$(host_cpu)),enable-ec_nistp_64_gcc_128,)
 
-# no LTO on windows: threads_win.c declares CRYPTO_ONCE as LONG (it sees windows.h) while the rest of
-# libcrypto gets unsigned int, which gcc's -Wlto-type-mismatch turns into a link error under -Werror
-OPENSSL_LTO_FLAG := $(if $(filter windows,$(SYSNAME)),-fno-lto,)
-
 # only the app needs libcrypto primitives and only curl needs libssl, so strip everything else
 # (-fPIC because the static libs also get linked into shared libarchive in non-static builds)
 # -Os appended (overrides the release -O3) to match the old static-curl prebuilts: the crypto
@@ -90,7 +86,7 @@ $(DEPS_PREFIX)/openssl-$(OPENSSL_VERSION).built: $(DEPS_CACHE)/openssl-$(OPENSSL
 	$(TAR) xf $(DEPS_CACHE)/openssl-$(OPENSSL_VERSION).tar.gz -C $(DEPS_PREFIX)/openssl --strip-components=1 && \
 	cd $(DEPS_PREFIX)/openssl && \
 	RANLIB="$(RANLIB)" AR="$(AR)" CC="$(CC)" CXX="$(CXX)" \
-	CFLAGS="$(CFLAGS) -Os $(OPENSSL_LTO_FLAG)" CXXFLAGS="$(CXXFLAGS) -Os $(OPENSSL_LTO_FLAG)" LDFLAGS="$(LDFLAGS)" \
+	CFLAGS="$(CFLAGS) -Os" CXXFLAGS="$(CXXFLAGS) -Os" LDFLAGS="$(LDFLAGS)" \
 	$(CONFIGURE_PFX) ./Configure $(OPENSSL_TARGET) --prefix="$(DEPS_PREFIX)" --libdir=lib --openssldir="$(DEPS_PREFIX)/ssl" \
 		no-shared threads no-tests no-apps no-docs no-module no-comp no-legacy \
 		$(OPENSSL_EC_FLAG) $(if $(filter windows,$(SYSNAME)),,-fPIC) && \

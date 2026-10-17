@@ -1561,6 +1561,12 @@ AS_IF([test "x$enable_werror" != "xno"], [
     AX_CHECK_COMPILE_FLAG([-Wno-attributes], [
         _tmp_werror_flags="$_tmp_werror_flags -Wno-attributes"
     ])
+    # openssl's threads_win.c declares CRYPTO_ONCE as LONG (it sees windows.h) while the rest of
+    # libcrypto gets unsigned int, which gcc's -Wlto-type-mismatch turns into a link error under -Werror
+    # TODO: better fix for this than globally ignoring the warning (which is useful in general)
+    AX_CHECK_COMPILE_FLAG([-Wno-error=lto-type-mismatch], [
+        _tmp_werror_flags="$_tmp_werror_flags -Wno-error=lto-type-mismatch"
+    ])
     AS_IF([test -n "$WASM_CC"], [
         # not exactly sure why the above tests pass but then the actual compilation fails due to -Werror=unknown-warning-option
         AX_CHECK_COMPILE_FLAG([-Wno-unknown-warning-option], [
