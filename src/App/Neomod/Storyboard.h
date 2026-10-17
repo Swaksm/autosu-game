@@ -84,5 +84,5 @@ class Storyboard {
 
    private:
     struct Impl;
-    StaticPImpl<Impl, 560> impl;
+    StaticPImpl<Impl, 600> impl;
 };
