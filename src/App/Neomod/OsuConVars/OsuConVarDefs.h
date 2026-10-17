@@ -127,6 +127,8 @@ CONVAR(mod_hd_circle_fadeout_start_percent, 0.6f, CLIENT | SKINS | SERVER | GAME
        "hiddenFadeOutStartTime = circleTime - approachTime * mod_hd_circle_fadeout_start_percent");
 CONVAR(mod_hd_slider_fade_percent, 1.0f, CLIENT | SKINS | SERVER | GAMEPLAY);
 CONVAR(mod_hd_slider_fast_fade, false, CLIENT | SKINS | SERVER | GAMEPLAY);
+CONVAR(ignore_beatmap_samples, true, CLIENT | SERVER, "ignore beatmap hitsounds");
+CONVAR(ignore_beatmap_skins, true, CLIENT | SERVER, "ignore beatmap skins");
 
 // Song browser
 CONVAR(draw_songbrowser_background_image, true, CLIENT | SKINS | SERVER);
@@ -989,8 +991,6 @@ CONVAR(user_switcher_include_legacy_scores_for_names, true, CLIENT | SKINS);
 // Unfinished features
 CONVAR(allow_mp_invites, true, CLIENT, "allow multiplayer game invites from all users");
 CONVAR(allow_stranger_dms, true, CLIENT, "allow private messages from non-friends");
-CONVAR(ignore_beatmap_samples, false, CLIENT | SERVER, "ignore beatmap hitsounds");
-CONVAR(ignore_beatmap_skins, false, CLIENT | SERVER, "ignore beatmap skins");
 CONVAR(draw_storyboard, true, CLIENT | SERVER);
 CONVAR(draw_video, true, CLIENT | SERVER);
 CONVAR(save_failed_scores, false, CLIENT | HIDDEN, "save scores locally, even if there was a fail");

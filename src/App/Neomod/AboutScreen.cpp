@@ -406,6 +406,8 @@ void AboutScreen::buildChangelog() {
         R"(- Added music controls to main menu)",
         R"(- Added skin exporting ("Export Skin" in the skin options, or "skin_export" in the console))",
         R"(- Adjusted slider judgement to match stable more closely)",
+        R"(- Added support for beatmap skins (sounds/images))",
+        R"(  - NOTE: Disabled by default, enable them in the skins section in the options menu)",
         R"(- Exposed "direct_autoselect" behavior as a checkbox)",
         R"(- Fixed hit windows being off my 1ms depending on OD)",
         R"(- Fixed multiplayer room beatmap info being stale on newly downloaded/imported maps)",
