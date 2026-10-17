@@ -2567,6 +2567,10 @@ void Spinner::draw() {
     const i32 curPosMS = m_clickTimeMS - m_deltaMS;
     const i32 endTimeMS = getEndTime();
 
+    // avoid blinking when effectively paused
+    const bool madeProgress = curPosMS != m_lastDrawMusicPosMS;
+    m_lastDrawMusicPosMS = curPosMS;
+
     // only used for fade out anim atm
     const f32 alphaMultiplier =
         std::clamp<f32>((deltaEnd < 0 ? 1.f - ((f32)std::abs(deltaEnd) / (f32)fadeOutTimeMS) : 1.f), 0.f, 1.f);
@@ -2621,7 +2625,7 @@ void Spinner::draw() {
         // the metre fills up from the bottom in 10 whole bars, the next bar blinks in randomly (more often the closer
         // it is to filling up), or is always shown with SpinnerNoBlink; it only updates while the spinner is running
         if(skin->i_spinner_metre != MISSING_TEXTURE && curPosMS >= m_clickTimeMS) {
-            const bool noBlink = skin->o_spinner_no_blink || cv::avoid_flashes.getBool();
+            const bool noBlink = !madeProgress || skin->o_spinner_no_blink || cv::avoid_flashes.getBool();
             // capped at 99 so that the top bar keeps blinking at 100%
             const i32 progress = std::min((i32)(clampedRatio * 100.f), 99);
             i32 bars = progress / 10;

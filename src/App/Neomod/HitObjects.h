@@ -508,6 +508,7 @@ class Spinner final : public HitObject {
     i32 m_firstSpinTimeMS{-1};  // first half rotation (fades out "SPIN!")
     i32 m_bonusTimeMS{-1};      // latest bonus spin (bonus counter, glow flash)
     i32 m_bonusSpins{0};
+    i32 m_lastDrawMusicPosMS{0};
     bool m_hitSuccess{false};  // non-miss result ("spinner-osu")
 };
 
