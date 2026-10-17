@@ -1304,6 +1304,7 @@ void BeatmapInterface::resetScore() {
 
     this->last_event_time = Timing::getTimeReal();
     this->last_event_ms = -1;
+    this->key_events.clear();
     this->current_keys = 0;
     this->last_keys = 0;
     this->raw_gameplay_keys = 0;

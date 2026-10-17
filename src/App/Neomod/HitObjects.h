@@ -179,6 +179,8 @@ class HitObject {
     GameplayJudge *m_judge;       // what judges it (NULL: never updated)
     const PlayfieldView *m_view;  // what it's drawn on (NULL: never drawn, no draw-only animations)
 
+    [[nodiscard]] bool animatesHits() const;
+
     i32 m_comboStartMS{0};  // for freeze time mod
     i32 m_clickTimeMS;
     i32 m_durationMS{0};

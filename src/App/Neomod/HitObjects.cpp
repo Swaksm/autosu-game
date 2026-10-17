@@ -467,7 +467,7 @@ void HitObject::addHitResult(LiveHitResult result, i32 delta, bool isEndOfCombo,
 
     const LiveHitResult returnedHit = m_judge->addHitResult(this, result, delta, isEndOfCombo, ignoreOnHitErrorBar,
                                                             false, ignoreCombo, false, ignoreHealth);
-    if(m_view == nullptr) return;
+    if(!animatesHits()) return;
 
     HITRESULTANIM hitresultanim;
     {
@@ -486,6 +486,8 @@ void HitObject::addHitResult(LiveHitResult result, i32 delta, bool isEndOfCombo,
     else
         m_hitresultanim2 = hitresultanim;
 }
+
+bool HitObject::animatesHits() const { return m_view != nullptr && !m_judge->getScore().simulating; }
 
 void HitObject::onReset(i32 /*curPos*/) {
     m_misAim = false;
@@ -997,7 +999,7 @@ void Circle::onHit(LiveHitResult result, i32 delta, f32 targetDelta, f32 targetA
     if(result != LiveHitResult::HIT_MISS) {
         m_judge->playHitSound(m_hitSamples, m_rawPos, delta, m_clickTimeMS);
 
-        if(m_view != nullptr) {
+        if(animatesHits()) {
             m_hitAnimation = 0.001f;  // quickfix for 1 frame missing images
             m_hitAnimation.set(1.0f, GameRules::getFadeOutTime(m_view->getBaseAnimationSpeed()), anim::QuadOut);
         }
@@ -2183,7 +2185,7 @@ void Slider::onHit(LiveHitResult result, i32 delta, bool isEndCircle, f32 target
                 }
             }
 
-            if(m_view != nullptr) {
+            if(animatesHits()) {
                 const f32 fadeoutTimeSecs = GameRules::getFadeOutTime(m_view->getBaseAnimationSpeed());
 
                 if(!isEndCircle) {
@@ -2200,7 +2202,7 @@ void Slider::onHit(LiveHitResult result, i32 delta, bool isEndCircle, f32 target
 
         // end body fadeout
         if(isEndCircle) {
-            if(m_view != nullptr) {
+            if(animatesHits()) {
                 m_endSliderBodyFadeAnimation = 0.001f;  // quickfix for 1 frame missing images
                 m_endSliderBodyFadeAnimation.set(1.0f,
                                                  GameRules::getFadeOutTime(m_view->getBaseAnimationSpeed()) *
@@ -2285,7 +2287,7 @@ void Slider::onRepeatHit(const SLIDERCLICK &click) {
         // NOTE: iCurRepeatCounterForHitSounds starts at 1
         m_judge->playHitSound(this->getRepeatSamples(m_curRepeatCounterForHitSounds), m_curPointRaw, 0, click.timeMS);
 
-        if(m_view != nullptr) {
+        if(animatesHits()) {
             f32 animation_multiplier = m_view->getSpeedAdjustedAnimationSpeed();
             f32 tick_pulse_time = cv::slider_followcircle_tick_pulse_time.getFloat() * animation_multiplier;
 
@@ -2353,7 +2355,7 @@ void Slider::onTickHit(const SLIDERCLICK &click) {
     } else {
         m_judge->playSliderTickSound(m_hitSamples, m_curPointRaw, click.timeMS);
 
-        if(m_view != nullptr) {
+        if(animatesHits()) {
             f32 animation_multiplier = m_view->getSpeedAdjustedAnimationSpeed();
             f32 tick_pulse_time = cv::slider_followcircle_tick_pulse_time.getFloat() * animation_multiplier;
 

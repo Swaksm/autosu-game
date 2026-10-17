@@ -23,9 +23,12 @@
 #include "Environment.h"
 #include "Osu.h"
 #include "BeatmapInterface.h"
+#include "GameplayJudge.h"
+#include "HitObjects.h"
 #include "DatabaseBeatmap.h"
 #include "Graphics.h"
 
+#include <algorithm>
 #include <array>
 #include <cmath>
 #include <ctime>
@@ -136,6 +139,7 @@ void UIDebug::debugAssert(std::string_view args) {
     // ui_assert os_cursor <visible|clipped> <0|1>
     // ui_assert clipboard <expected>
     // ui_assert map <file|root|md5|offset|background> <expected>
+    // ui_assert play finished <count>
     auto parts = SString::split(args, ' ');
     std::erase_if(parts, [](std::string_view p) { return p.empty(); });
 
@@ -172,6 +176,17 @@ void UIDebug::debugAssert(std::string_view args) {
         }
         logRaw("UITEST {} map {} expected='{}' actual='{}'", actual == expected ? "OK" : "FAIL", parts[1], expected,
                actual);
+        return;
+    }
+
+    if(parts.size() >= 3 && SString::to_lower(parts[0]) == "play"sv && parts[1] == "finished"sv) {
+        // how many of the played map's hitobjects are done (hit, missed or past)
+        const GameplayJudge *judge = osu->getMapInterface()->getJudge();
+        const auto expected = Parsing::strto<i32>(parts[2]);
+        const auto actual =
+            judge ? (i32)std::ranges::count_if(judge->getHitObjects(), [](const auto &h) { return h->isFinished(); })
+                  : -1;
+        logRaw("UITEST {} play finished expected={} actual={}", actual == expected ? "OK" : "FAIL", expected, actual);
         return;
     }
 
