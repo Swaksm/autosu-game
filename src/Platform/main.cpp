@@ -34,6 +34,11 @@
 #include <locale>
 #include <clocale>
 #include <cstdlib>
+#include <string_view>
+
+#ifndef MCENGINE_PLATFORM_WINDOWS
+#include <langinfo.h>
+#endif
 
 #ifdef MCENGINE_PLATFORM_WASM
 #include <emscripten/emscripten.h>
@@ -154,6 +159,16 @@ MAIN_FUNC /* int argc, char *argv[] */
 #else
     if(!!std::setlocale(LC_ALL, "")) {
         std::locale::global(std::locale{""});
+    }
+#endif
+
+#ifndef MCENGINE_PLATFORM_WINDOWS
+    // without LANG/LC_* set (e.g. apps launched from Finder) the charset is US-ASCII, which breaks
+    // anything converting UTF-8 through the locale (libarchive can't write non-ASCII entry names)
+    if(std::string_view codeset{nl_langinfo(CODESET)}; codeset != "UTF-8" && codeset != "utf8") {
+        for(const char *name : {"C.UTF-8", "C.utf8", "en_US.UTF-8", "UTF-8"}) {
+            if(std::setlocale(LC_CTYPE, name)) break;
+        }
     }
 #endif
 
