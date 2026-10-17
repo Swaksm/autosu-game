@@ -35,6 +35,7 @@ class SkinImage final {
               const std::string& animationSeparator = "-", bool ignoreDefaultSkin = false);
 
     void destroy(bool everything = false);
+    void swap(SkinImage& other);
 
    public:
     ~SkinImage();

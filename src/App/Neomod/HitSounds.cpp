@@ -11,7 +11,11 @@
 #include <array>
 #include <cassert>
 #include <cmath>
+#include <string>
+#include <string_view>
 #include <utility>
+
+#include "fmt/format.h"
 
 namespace neomod::HitSoundUtils {
 using namespace DatabaseBeatmapTypes;
@@ -127,6 +131,23 @@ static constexpr auto SOUND_METHODS =  //
           }}};  //
 #undef A_
 
+// what the map's own samples for SOUND_METHODS are called: "<set>-<sound><index>"
+static constexpr std::array<std::string_view, 3> SET_NAMES{"normal", "soft", "drum"};
+static constexpr std::array<std::array<std::string_view, 4>, 2> SOUND_NAMES{{
+    {"hitnormal", "hitwhistle", "hitfinish", "hitclap"},
+    {"sliderslide", "sliderwhistle", "", ""},
+}};
+
+// the map's own sample for a custom sample index if it has one, else the skin's
+static Sound *sampleFor(const Skin &skin, Sound *Skin::*skinSound, u8 set, std::string_view sound, u16 index) {
+    if(index == 1) {
+        if(Sound *snd = skin.getBeatmapSample(fmt::format("{}-{}", SET_NAMES[set], sound))) return snd;
+    } else if(index > 1) {
+        if(Sound *snd = skin.getBeatmapSample(fmt::format("{}-{}{}", SET_NAMES[set], sound, index))) return snd;
+    }
+    return skin.*skinSound;
+}
+
 // maps SampleSetType (1-3) to SOUND_METHODS index (0-2)
 static constexpr u8 sampleSetToIndex(u8 set) {
     switch(set) {
@@ -157,8 +178,15 @@ static constexpr u8 hitSoundToIndex(u8 hitSound) {
     }
 }
 
+// the sample index a hitsound plays: its own, else the timing point's
+static u16 getSampleIndex(HITSAMPLE_BITS info, const HitSoundContext &ctx) {
+    if(info.index != 0) return info.index;
+    return static_cast<u16>(std::clamp(ctx.timingPointSampleIndex, 0, 0xffff));
+}
+
 std::vector<ResolvedHitSound> resolve(HITSAMPLE_BITS info, const HitSoundContext &ctx, bool is_sliderslide) {
     std::vector<ResolvedHitSound> result;
+    const u16 index = getSampleIndex(info, ctx);
 
     using HT = HitSoundType;
     for(const auto type : {HT::NORMAL, HT::WHISTLE, HT::FINISH, HT::CLAP}) {
@@ -180,7 +208,8 @@ std::vector<ResolvedHitSound> resolve(HITSAMPLE_BITS info, const HitSoundContext
 
         // check that a valid sound method exists in the lookup table
         if(SOUND_METHODS[set_idx][slider_idx][hit_idx] != nullptr) {
-            result.push_back({vol, set_idx, slider_idx, hit_idx});
+            const u16 filename = (type == HT::NORMAL && !is_sliderslide) ? info.filename : (u16)0;
+            result.push_back({vol, set_idx, slider_idx, hit_idx, index, filename});
         }
     }
 
@@ -202,7 +231,7 @@ ResolvedSliderTick resolveSliderTick(HITSAMPLE_BITS info, const HitSoundContext 
         }
     }
 
-    return {volume, set_idx};
+    return {volume, set_idx, getSampleIndex(info, ctx)};
 }
 
 TIMING_INFO samplesAt(const Primitives::TimingPoints &timing, i32 timeMS) {
@@ -213,6 +242,7 @@ HitSoundContext makeContext(const TIMING_INFO &samples, u8 defaultSampleSet, boo
     return {
         .timingPointSampleSet = samples.sampleSet,
         .timingPointVolume = samples.volume,
+        .timingPointSampleIndex = samples.sampleIndex,
         .defaultSampleSet = defaultSampleSet,
         .forcedSampleSet = cv::skin_force_hitsound_sample_set.getVal<u8>(),
         .layeredHitSounds = layeredHitSounds,
@@ -232,14 +262,15 @@ f32 playedPan(f32 pan) {
 std::vector<Set_Slider_Hit> play(const Skin &skin, std::span<const ResolvedHitSound> sounds, f32 pan, f32 pitch) {
     std::vector<Set_Slider_Hit> played_list;
     for(const auto &r : sounds) {
-        Sound *Skin::*sound_ptr = SOUND_METHODS[r.set][r.slider][r.hit];
-        Sound *snd = skin.*sound_ptr;
+        Sound *snd = r.filename != 0 ? skin.getBeatmapFileSample(r.filename) : nullptr;
+        if(!snd)
+            snd = sampleFor(skin, SOUND_METHODS[r.set][r.slider][r.hit], r.set, SOUND_NAMES[r.slider][r.hit], r.index);
         if(!snd) continue;
 
         if(r.slider == SLIDER_IDX && snd->isPlaying()) continue;
 
         if(soundEngine->play(snd, pan, pitch, r.volume)) {
-            played_list.push_back({r.set, r.slider, r.hit});
+            played_list.push_back({r.set, r.slider, r.hit, r.index});
         }
     }
 
@@ -254,17 +285,18 @@ void playSliderTick(const Skin &skin, ResolvedSliderTick tick, f32 pan) {
     };
 
     if(tick.set >= SLIDERTICK_SAMPLESET_METHODS.size()) return;
-    if(Sound *snd = skin.*SLIDERTICK_SAMPLESET_METHODS[tick.set]) soundEngine->play(snd, pan, 0.f, tick.volume);
+    if(Sound *snd = sampleFor(skin, SLIDERTICK_SAMPLESET_METHODS[tick.set], tick.set, "slidertick", tick.index)) {
+        soundEngine->play(snd, pan, 0.f, tick.volume);
+    }
 }
 
 void stopSliderSounds(const Skin &skin, const std::vector<Set_Slider_Hit> &specific_sets) {
-    // TODO @kiwec: map hitsounds are not supported
-
     // stop specified previously played sounds, otherwise stop everything
     if(!specific_sets.empty()) {
         for(const auto &triple : specific_sets) {
             assert(SOUND_METHODS[triple.set][triple.slider][triple.hit]);
-            Sound *to_stop = skin.*SOUND_METHODS[triple.set][triple.slider][triple.hit];
+            Sound *to_stop = sampleFor(skin, SOUND_METHODS[triple.set][triple.slider][triple.hit], triple.set,
+                                       SOUND_NAMES[triple.slider][triple.hit], triple.index);
 
             if(to_stop && to_stop->isPlaying()) {
                 // debugLog("stopping specific set {} {} {} {}", triple.set, triple.slider, triple.hit,
@@ -279,7 +311,7 @@ void stopSliderSounds(const Skin &skin, const std::vector<Set_Slider_Hit> &speci
     //       So for now we're stopping ALL slider sounds, but in the future
     //       we'll need to store the started sounds somewhere.
 
-    // Bruteforce approach. Will be rewritten when adding map hitsounds.
+    // Bruteforce approach.
     for(const auto &sample_set : SOUND_METHODS) {
         const auto &slider_sounds = sample_set[SLIDER_IDX];
         for(const auto &slider_snd_ptr : slider_sounds) {
@@ -290,6 +322,9 @@ void stopSliderSounds(const Skin &skin, const std::vector<Set_Slider_Hit> &speci
                 soundEngine->stop(snd_memb);
             }
         }
+    }
+    for(Sound *snd : skin.getBeatmapSamples()) {
+        if(snd->isLooped() && snd->isPlaying()) soundEngine->stop(snd);
     }
 }
 

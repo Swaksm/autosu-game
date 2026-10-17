@@ -409,12 +409,12 @@ msgid "Downloading ..."
 msgstr ""
 
 #: src/App/Neomod/MainMenu.cpp
-msgid "Click here to install the update!"
+#, c++-format
+msgid "A new version of {} is ready!"
 msgstr ""
 
 #: src/App/Neomod/MainMenu.cpp
-#, c++-format
-msgid "A new version of {} is ready!"
+msgid "Click here to install the update!"
 msgstr ""
 
 #: src/App/Neomod/MainMenu.cpp
@@ -1649,6 +1649,22 @@ msgstr ""
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Ignore Beatmap Combo Colors"
+msgstr ""
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Ignore Beatmap Skins"
+msgstr ""
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Use your skin's elements and slider colours instead of the ones that come with a beatmap."
+msgstr ""
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Ignore Beatmap Hitsounds"
+msgstr ""
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Use your skin's sounds instead of the ones that come with a beatmap."
 msgstr ""
 
 #: src/App/Neomod/OptionsOverlay.cpp

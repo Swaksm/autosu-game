@@ -12,6 +12,9 @@
 #include "Logging.h"
 #include "FixedSizeArray.h"
 
+#include <string>
+#include <utility>
+
 struct SkinImage::SkinImageImpl {
     // raw files
     std::vector<IMAGE> images;
@@ -128,6 +131,18 @@ bool SkinImage::loadImage(Skin* skin, const std::string& skinElementName, bool i
     const bool tryHD = cv::skin_hd.getBool();
     const bool async = cv::skin_async.getBool();
 
+    // map overrides never load @2x images
+    if(skin->hasBeatmapOverride()) {
+        std::string path = skin->getBeatmapFile(skinElementName + ".png");
+        if(path.empty()) return false;
+
+        if(async) resourceManager->requestNextLoadAsync();
+        const IMAGE image{.img = resourceManager->loadImageAbsUnnamed(std::move(path), mipmapped), .scale = 1.0f};
+        if(!animated) m_impl->nonAnimatedImage = image;
+        if(addToImages) m_impl->images.push_back(image);
+        return true;
+    }
+
     bool exported = false;
     for(size_t i = 0; i < n_dirs; i++) {
         const auto& dir = skin->search_dirs[i];
@@ -192,6 +207,8 @@ bool SkinImage::loadImage(Skin* skin, const std::string& skinElementName, bool i
 
     return false;
 }
+
+void SkinImage::swap(SkinImage& other) { std::swap(*m_impl, *other.m_impl); }
 
 void SkinImage::destroy(bool everything) {
     m_impl->bReady = false;

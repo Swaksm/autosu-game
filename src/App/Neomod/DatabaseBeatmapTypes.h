@@ -81,6 +81,8 @@ struct HITSAMPLE_BITS final {
     u8 normalSet;    // SampleSetType of the normal sound
     u8 additionSet;  // SampleSetType of the whistle, finish and clap sounds
     u8 volume;       // volume of the sample, 1-100. if 0, use timing point volume instead
+    u16 index;       // custom sample index (1+: the map's own samples). if 0, use timing point sample index instead
+    u16 filename;    // if 1+, PRIMITIVE_CONTAINER::sampleFiles[filename - 1] replaces the normal sound
 };
 
 namespace NSPpyHitObjectType {

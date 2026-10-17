@@ -55,6 +55,7 @@ static HitSoundContext defaultCtx() {
     return {
         .timingPointSampleSet = SampleSetType::NORMAL,
         .timingPointVolume = 100,
+        .timingPointSampleIndex = 0,
         .defaultSampleSet = SampleSetType::NORMAL,
         .forcedSampleSet = 0,
         .layeredHitSounds = true,
@@ -648,7 +649,8 @@ void HitSoundTest::runTests() {
                 for(const auto &cue : cues) {
                     if(cue.timeMS == timeMS && cue.kind == HitObject::SoundCue::Kind::HIT) return cue.samples;
                 }
-                return HITSAMPLE_BITS{.hitSounds = 0xff, .normalSet = 0xff, .additionSet = 0xff, .volume = 0};
+                return HITSAMPLE_BITS{
+                    .hitSounds = 0xff, .normalSet = 0xff, .additionSet = 0xff, .volume = 0, .index = 0, .filename = 0};
             };
             TEST_ASSERT_EQ((i32)hitAt(0, 1000).hitSounds, (i32)HitSoundType::WHISTLE, "a unified slider's head");
             TEST_ASSERT_EQ((i32)hitAt(0, 2000).hitSounds, (i32)HitSoundType::WHISTLE, "its repeat");

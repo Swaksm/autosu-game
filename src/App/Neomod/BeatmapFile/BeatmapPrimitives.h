@@ -10,7 +10,9 @@
 
 #include <algorithm>
 #include <array>
+#include <optional>
 #include <span>
+#include <string>
 #include <string_view>
 #include <variant>
 #include <vector>
@@ -133,6 +135,9 @@ struct PRIMITIVE_CONTAINER final {
 
     TimingPoints timingpoints{};
     std::vector<Color> combocolors{};
+    std::optional<Color> sliderBorder{};
+    std::optional<Color> sliderTrackOverride{};
+    std::vector<std::string> sampleFiles{};
 
     f32 stackLeniency{.7f};
     f32 sliderMultiplier{1.f};

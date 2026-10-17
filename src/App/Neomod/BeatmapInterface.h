@@ -54,6 +54,8 @@ class BeatmapInterface final : public GameplayJudge::Listener, public PlayfieldV
     // live (but also on start)
     void onModUpdate(bool rebuildSliderVertexBuffers = true, bool recomputeDrainRate = true);
 
+    void loadBeatmapSkin();
+
     // Returns true if we're loading or waiting on other players
     bool isLoading();
 

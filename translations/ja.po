@@ -437,13 +437,13 @@ msgid "Downloading ..."
 msgstr "ダウンロード中..."
 
 #: src/App/Neomod/MainMenu.cpp
-msgid "Click here to install the update!"
-msgstr "ここをクリックしてアップデートをインストール！"
-
-#: src/App/Neomod/MainMenu.cpp
 #, c++-format
 msgid "A new version of {} is ready!"
 msgstr "{} の新しいバージョンが利用可能です！"
+
+#: src/App/Neomod/MainMenu.cpp
+msgid "Click here to install the update!"
+msgstr "ここをクリックしてアップデートをインストール！"
 
 #: src/App/Neomod/MainMenu.cpp
 msgid "A new version is available! Click to open the download page."
@@ -1746,6 +1746,22 @@ msgstr ""
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Ignore Beatmap Combo Colors"
 msgstr "ビートマップのコンボカラーを無視する"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Ignore Beatmap Skins"
+msgstr ""
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Use your skin's elements and slider colours instead of the ones that come with a beatmap."
+msgstr ""
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Ignore Beatmap Hitsounds"
+msgstr ""
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Use your skin's sounds instead of the ones that come with a beatmap."
+msgstr ""
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Use skin's sound samples"

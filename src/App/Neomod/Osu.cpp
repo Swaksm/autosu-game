@@ -266,6 +266,13 @@ Osu::Osu()
     // to apply a new fallback, change skin or use skin_reload.
     cv::skin_reload.setCallback(SA::MakeDelegate<&Osu::onSkinReload>(this));
     cv::skin_export.setCallback(SA::MakeDelegate<&Osu::exportSkin>(this));
+
+    const auto reloadBeatmapSkin = []() -> void {
+        if(BeatmapInterface *map_iface = osu->getMapInterface()) map_iface->loadBeatmapSkin();
+    };
+    cv::ignore_beatmap_skins.setCallback(reloadBeatmapSkin);
+    cv::ignore_beatmap_samples.setCallback(reloadBeatmapSkin);
+
     cv::skin_allow_convars.setCallback([](float oldValue, float newValue) -> void {
         if(oldValue == newValue) return;
 
@@ -511,6 +518,8 @@ Osu::~Osu() {
         cv::skin.removeAllCallbacks();
         cv::skin_reload.removeAllCallbacks();
         cv::skin_export.removeAllCallbacks();
+        cv::ignore_beatmap_skins.removeAllCallbacks();
+        cv::ignore_beatmap_samples.removeAllCallbacks();
         cv::skin_allow_convars.removeAllCallbacks();
         cv::mod_mafham.removeAllCallbacks();
         cv::mod_fposu.removeAllCallbacks();
@@ -755,6 +764,7 @@ void Osu::update() {
 
             if(this->skin.get() != this->skinScheduledToLoad) {
                 this->skin.reset(this->skinScheduledToLoad);
+                if(this->map_iface) this->map_iface->loadBeatmapSkin();
             }
 
             this->skinScheduledToLoad = nullptr;

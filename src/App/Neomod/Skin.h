@@ -7,6 +7,8 @@
 #include "SkinImage.h"
 
 #include <array>
+#include <memory>
+#include <optional>
 #include <span>
 #include <string>
 #include <string_view>
@@ -84,26 +86,40 @@ struct Skin final {
         OVERLAYABLE = (1 << 0),
         SAMPLE = (1 << 1),  // STREAM = !SAMPLE
         LOOPING = (1 << 2),
-        NO_DEFAULT = (1 << 3)  // don't fallback to default skin if missing
+        NO_DEFAULT = (1 << 3),  // don't fallback to default skin if missing
+        BEATMAP = (1 << 4)      // a map may override it (unless ignore_beatmap_samples)
     };
     void loadSound(Sound *&ref, const std::string &skinElementName, const std::string &resourceName, u8 flags = {});
 
     void load();
+    void loadElements();
+
+    struct BeatmapOverride;
+    std::unique_ptr<BeatmapOverride> beatmap_override;
 
    public:
     // the audio formats a sound element can come in, in the order they're looked for
     static constexpr std::array<std::string_view, 4> SOUND_EXTENSIONS{".wav", ".mp3", ".ogg", ".flac"};
 
     Skin(std::string name, std::string filepath, std::string fallbackDir = "");
-    inline ~Skin() { this->destroy(); }
+    ~Skin();
     void destroy(bool everything = false);
 
     void update(bool isInPlayMode, bool isPlaying, i32 curMusicPos);
 
     [[nodiscard]] bool isReady() const;
 
-    void loadBeatmapOverride(std::string_view filepath);
+    void loadBeatmapOverride(std::string_view folder, std::span<const std::string> sampleFiles,
+                             std::optional<Color> sliderBorder, std::optional<Color> sliderTrackOverride);
+    void unloadBeatmapOverride();
     void reloadSounds();
+
+    [[nodiscard]] std::string getBeatmapFile(std::string_view filename) const;
+    [[nodiscard]] inline bool hasBeatmapOverride() const { return !!this->beatmap_override; }
+
+    [[nodiscard]] Sound *getBeatmapSample(std::string_view name) const;  // name == "drum-slidertick3"
+    [[nodiscard]] Sound *getBeatmapFileSample(u16 filename) const;       // filename == HITSAMPLE_BITS::filename
+    [[nodiscard]] std::vector<Sound *> getBeatmapSamples() const;
 
     // drawable helpers
     // the colour of the i-th combo, skipped ahead by offset: one of the map's colours unless they're ignored, else the skin's

@@ -23,8 +23,30 @@
 #include "score.h"
 #include "UniString.h"
 
+#include "ctre.hpp"
+
+#include <algorithm>
 #include <cstring>
+#include <ranges>
 #include <utility>
+
+struct Skin::BeatmapOverride {
+    std::string dir;
+    Hash::unstable_ncase_set<std::string> files;  // the folder's, by name in any case
+    bool images;                                  // whether its images (and slider colours) replace the skin's
+    bool sounds;                                  // whether its sounds do, and its hitsound samples get loaded
+
+    // the replaced elements, with what the skin had before (in the order they were replaced, which can be more than once)
+    std::vector<std::pair<BasicSkinImage *, BasicSkinImage>> basic_images;
+    std::vector<std::pair<SkinImage *, std::unique_ptr<SkinImage>>> skin_images;  // (holding the skin's own)
+    std::vector<std::pair<Sound **, Sound *>> sounds_replaced;
+    Color slider_border;
+    Color slider_track_override;
+    bool slider_track_overridden;
+
+    Hash::unstable_ncase_stringmap<Sound *> samples;  // by name without extension
+    std::vector<Sound *> file_samples;                // by HITSAMPLE_BITS::filename - 1 (nullptr: not in the folder)
+};
 
 Skin::Skin(std::string name, std::string filepath, std::string fallbackDir)
     : name(std::move(name)),
@@ -48,7 +70,11 @@ Skin::Skin(std::string name, std::string filepath, std::string fallbackDir)
     this->load();
 }
 
+Skin::~Skin() { this->destroy(); }
+
 void Skin::destroy(bool everything) {
+    this->unloadBeatmapOverride();
+
     const auto destroyFlags = everything ? ResourceDestroyFlags::RDF_FORCE_BLOCKING : ResourceDestroyFlags::RDF_DEFAULT;
 
     for(auto &bimg : this->basic_images) {
@@ -109,6 +135,18 @@ bool Skin::isReady() const {
         if(!image->isReady()) return false;
     }
 
+    if(const auto *o = this->beatmap_override.get()) {
+        for(const auto &[ref, own] : o->basic_images) {
+            if(resourceManager->isLoadingResource(ref->img)) return false;
+        }
+        for(const auto &[ref, own] : o->sounds_replaced) {
+            if(resourceManager->isLoadingResource(*ref)) return false;
+        }
+        for(const auto *sound : this->getBeatmapSamples()) {
+            if(resourceManager->isLoadingResource(sound)) return false;
+        }
+    }
+
     // (ready is set in update())
     return true;
 }
@@ -159,26 +197,6 @@ void Skin::load() {
     // if we are not the neomod-provided default skin, add it as the third-tier fallback level
     if(!this->is_default) {
         this->search_dirs.push_back(default_dir);
-    }
-
-    // spinner loading has top priority in async
-    this->randomizeFilePath();
-    {
-        this->loadUnsizedImage(this->i_loading_spinner, "loading-spinner", "SK_I_LOADING_SPINNER");
-    }
-
-    // and the cursor comes right after that
-    this->randomizeFilePath();
-    {
-        this->loadUnsizedImage(this->i_cursor, "cursor", "SK_I_CURSOR");
-        this->loadUnsizedImage(this->i_cursor_middle, "cursormiddle", "SK_I_CURSORMIDDLE", true);
-        this->loadUnsizedImage(this->i_cursor_trail, "cursortrail", "SK_I_CURSORTRAIL");
-        this->loadUnsizedImage(this->i_cursor_ripple, "cursor-ripple", "SK_I_CURSORRIPPLE");
-        this->loadUnsizedImage(this->i_cursor_smoke, "cursor-smoke", "SK_I_CURSORSMOKE");
-
-        // special case: if fallback to default cursor, do load cursorMiddle
-        if(this->i_cursor.img == resourceManager->getImage("SK_I_CURSOR_DEFAULT"))
-            this->loadUnsizedImage(this->i_cursor_middle, "cursormiddle", "SK_I_CURSORMIDDLE");
     }
 
     // skin ini
@@ -237,6 +255,101 @@ void Skin::load() {
         this->c_combo_colors.push_back(argb(255, 242, 24, 57));
     }
 
+    this->loadElements();
+
+    // always load default skin menu-back (to show in options menu)
+    {
+        std::string origdir = this->search_dirs[0];
+        this->search_dirs[0] = Mc::Paths::materials() + "/default/";
+        const size_t recorded = this->files_for_export.size();
+        this->createSkinImage(this->i_menu_back2_DEFAULTSKIN, "menu-back", vec2(225, 87), 54);
+        this->files_for_export.resize(recorded);  // (not part of this skin)
+        this->search_dirs[0] = std::move(origdir);
+    }
+
+    if(!this->s_click_button) this->s_click_button = this->s_menu_hit;
+    if(!this->s_hover_button) this->s_hover_button = this->s_menu_hover;
+    if(!this->s_pause_hover) this->s_pause_hover = this->s_hover_button;
+    if(!this->s_select_difficulty) this->s_select_difficulty = this->s_click_button;
+    if(!this->s_typing2) this->s_typing2 = this->s_typing1;
+    if(!this->s_typing3) this->s_typing3 = this->s_typing2;
+    if(!this->s_typing4) this->s_typing4 = this->s_typing3;
+    if(!this->s_click_back_button) this->s_click_back_button = this->s_click_button;
+    if(!this->s_hover_back_button) this->s_hover_back_button = this->s_hover_button;
+    if(!this->s_menu_back) this->s_menu_back = this->s_click_button;
+    if(!this->s_close_chat_tab) this->s_close_chat_tab = this->s_click_button;
+    if(!this->s_click_main_menu_cube) this->s_click_main_menu_cube = this->s_click_button;
+    if(!this->s_hover_main_menu_cube) this->s_hover_main_menu_cube = this->s_menu_hover;
+    if(!this->s_click_sp) this->s_click_sp = this->s_click_button;
+    if(!this->s_hover_sp) this->s_hover_sp = this->s_menu_hover;
+    if(!this->s_click_mp) this->s_click_mp = this->s_click_button;
+    if(!this->s_hover_mp) this->s_hover_mp = this->s_menu_hover;
+    if(!this->s_click_options) this->s_click_options = this->s_click_button;
+    if(!this->s_hover_options) this->s_hover_options = this->s_menu_hover;
+    if(!this->s_click_exit) this->s_click_exit = this->s_click_button;
+    if(!this->s_hover_exit) this->s_hover_exit = this->s_menu_hover;
+    if(!this->s_click_pause_back) this->s_click_pause_back = this->s_click_button;
+    if(!this->s_hover_pause_back) this->s_hover_pause_back = this->s_pause_hover;
+    if(!this->s_click_pause_continue) this->s_click_pause_continue = this->s_click_button;
+    if(!this->s_hover_pause_continue) this->s_hover_pause_continue = this->s_pause_hover;
+    if(!this->s_click_pause_retry) this->s_click_pause_retry = this->s_click_button;
+    if(!this->s_hover_pause_retry) this->s_hover_pause_retry = this->s_pause_hover;
+
+    // always load these from the bundled default skin for consistent UI appearance (e.g. options menu buttons).
+    // can't rely on the _DEFAULT resource cache from checkLoadImage, since a user fallback skin may have
+    // provided the element before we ever reach the default dir.
+    if(this->is_default) {
+        this->i_cursor_default = this->i_cursor;
+        this->i_button_left_default = this->i_button_left;
+        this->i_button_mid_default = this->i_button_mid;
+        this->i_button_right_default = this->i_button_right;
+    } else {
+        this->loadUnsizedImage(this->i_cursor_default, "cursor", "SK_I_CURSOR", false, "png", false, default_dir);
+        this->loadUnsizedImage(this->i_button_left_default, "button-left", "SK_I_BUTTON_LEFT", false, "png", false,
+                               default_dir);
+        this->loadUnsizedImage(this->i_button_mid_default, "button-middle", "SK_I_BUTTON_MIDDLE", false, "png", false,
+                               default_dir);
+        this->loadUnsizedImage(this->i_button_right_default, "button-right", "SK_I_BUTTON_RIGHT", false, "png", false,
+                               default_dir);
+    }
+
+    // print some debug info
+    debugLog("Skin: Version {:.2f}", this->version);
+    debugLog("Skin: HitCircleOverlap = {:d}", this->hitcircle_overlap_amt);
+
+    // delayed error notifications due to resource loading potentially blocking engine time
+    if(auto *notifOverlay = ui && ui->getNotificationOverlay() ? ui->getNotificationOverlay() : nullptr) {
+        if(!parseSkinIni1Status && parseSkinIni2Status && cv::skin.getString() != "default")
+            notifOverlay->addNotification("Error: Couldn't load skin.ini!", 0xffff0000);
+        else if(!parseSkinIni2Status)
+            notifOverlay->addNotification("Error: Couldn't load DEFAULT skin.ini!!!", 0xffff0000);
+    }
+}
+
+void Skin::loadElements() {
+    // (map overrides never have a prefix)
+    const bool beatmap = this->hasBeatmapOverride();
+
+    // spinner loading has top priority in async
+    this->randomizeFilePath();
+    {
+        this->loadUnsizedImage(this->i_loading_spinner, "loading-spinner", "SK_I_LOADING_SPINNER");
+    }
+
+    // and the cursor comes right after that
+    this->randomizeFilePath();
+    {
+        this->loadUnsizedImage(this->i_cursor, "cursor", "SK_I_CURSOR");
+        this->loadUnsizedImage(this->i_cursor_middle, "cursormiddle", "SK_I_CURSORMIDDLE", true);
+        this->loadUnsizedImage(this->i_cursor_trail, "cursortrail", "SK_I_CURSORTRAIL");
+        this->loadUnsizedImage(this->i_cursor_ripple, "cursor-ripple", "SK_I_CURSORRIPPLE");
+        this->loadUnsizedImage(this->i_cursor_smoke, "cursor-smoke", "SK_I_CURSORSMOKE");
+
+        // special case: if fallback to default cursor, do load cursorMiddle
+        if(this->i_cursor.img == resourceManager->getImage("SK_I_CURSOR_DEFAULT"))
+            this->loadUnsizedImage(this->i_cursor_middle, "cursormiddle", "SK_I_CURSORMIDDLE");
+    }
+
     // images
     this->randomizeFilePath();
     this->loadUnsizedImage(this->i_hitcircle, "hitcircle", "SK_I_HITCIRCLE");
@@ -263,8 +376,9 @@ void Skin::load() {
 
     this->randomizeFilePath();
     {
-        const std::string hitCirclePrefix = this->hitcircle_prefix.empty() ? "default" : this->hitcircle_prefix;
-        const std::string &fbHitCirclePrefix = this->fallback_hitcircle_prefix;
+        const std::string hitCirclePrefix =
+            beatmap || this->hitcircle_prefix.empty() ? "default" : this->hitcircle_prefix;
+        const std::string fbHitCirclePrefix = beatmap ? "" : this->fallback_hitcircle_prefix;
         for(int i = 0; i < 10; i++) {
             const std::string resName = fmt::format("SK_I_DEFAULT{}", i);
             this->loadUnsizedImage(this->i_defaults[i], fmt::format("{}-{}", hitCirclePrefix, i), resName);
@@ -281,8 +395,8 @@ void Skin::load() {
 
     this->randomizeFilePath();
     {
-        const std::string scorePrefix = this->score_prefix.empty() ? "score" : this->score_prefix;
-        const std::string &fbScorePrefix = this->fallback_score_prefix;
+        const std::string scorePrefix = beatmap || this->score_prefix.empty() ? "score" : this->score_prefix;
+        const std::string fbScorePrefix = beatmap ? "" : this->fallback_score_prefix;
         for(int i = 0; i < 10; i++) {
             const std::string resName = fmt::format("SK_I_SCORE{}", i);
             this->loadUnsizedImage(this->i_scores[i], fmt::format("{}-{}", scorePrefix, i), resName);
@@ -305,8 +419,8 @@ void Skin::load() {
     this->randomizeFilePath();
     {
         // yes, "score" is the default value for the combo prefix
-        const std::string comboPrefix = this->combo_prefix.empty() ? "score" : this->combo_prefix;
-        const std::string &fbComboPrefix = this->fallback_combo_prefix;
+        const std::string comboPrefix = beatmap || this->combo_prefix.empty() ? "score" : this->combo_prefix;
+        const std::string fbComboPrefix = beatmap ? "" : this->fallback_combo_prefix;
         for(int i = 0; i < 10; i++) {
             const std::string resName = fmt::format("SK_I_COMBO{}", i);
             this->loadUnsizedImage(this->i_combos[i], fmt::format("{}-{}", comboPrefix, i), resName);
@@ -449,15 +563,6 @@ void Skin::load() {
     this->loadUnsizedImage(this->i_button_mid, "button-middle", "SK_I_BUTTON_MIDDLE");
     this->loadUnsizedImage(this->i_button_right, "button-right", "SK_I_BUTTON_RIGHT");
     this->randomizeFilePath();
-    // always load default skin menu-back (to show in options menu)
-    {
-        std::string origdir = this->search_dirs[0];
-        this->search_dirs[0] = Mc::Paths::materials() + "/default/";
-        const size_t recorded = this->files_for_export.size();
-        this->createSkinImage(this->i_menu_back2_DEFAULTSKIN, "menu-back", vec2(225, 87), 54);
-        this->files_for_export.resize(recorded);  // (not part of this skin)
-        this->search_dirs[0] = std::move(origdir);
-    }
     this->createSkinImage(this->i_menu_back2, "menu-back", vec2(225, 87), 54);
 
     this->randomizeFilePath();
@@ -576,20 +681,20 @@ void Skin::load() {
                     OVERLAYABLE | SAMPLE);                                                    //
 
     // spinner
-    this->loadSound(this->s_spinner_bonus, "spinnerbonus", "SK_S_SPINNERBONUS", OVERLAYABLE | SAMPLE);
-    this->loadSound(this->s_spinner_spin, "spinnerspin", "SK_S_SPINNERSPIN", SAMPLE | LOOPING);
+    this->loadSound(this->s_spinner_bonus, "spinnerbonus", "SK_S_SPINNERBONUS", OVERLAYABLE | SAMPLE | BEATMAP);
+    this->loadSound(this->s_spinner_spin, "spinnerspin", "SK_S_SPINNERSPIN", SAMPLE | LOOPING | BEATMAP);
 
     // others
-    this->loadSound(this->s_combobreak, "combobreak", "SK_S_COMBOBREAK", OVERLAYABLE | SAMPLE);
-    this->loadSound(this->s_fail, "failsound", "SK_S_FAILSOUND");
-    this->loadSound(this->s_applause, "applause", "SK_S_APPLAUSE");
+    this->loadSound(this->s_combobreak, "combobreak", "SK_S_COMBOBREAK", OVERLAYABLE | SAMPLE | BEATMAP);
+    this->loadSound(this->s_fail, "failsound", "SK_S_FAILSOUND", BEATMAP);
+    this->loadSound(this->s_applause, "applause", "SK_S_APPLAUSE", BEATMAP);
     this->loadSound(this->s_menu_hit, "menuhit", "SK_S_MENUHIT", OVERLAYABLE | SAMPLE);
     this->loadSound(this->s_menu_hover, "menuclick", "SK_S_MENUCLICK", OVERLAYABLE | SAMPLE);
     this->loadSound(this->s_check_on, "check-on", "SK_S_CHECKON", OVERLAYABLE | SAMPLE);
     this->loadSound(this->s_check_off, "check-off", "SK_S_CHECKOFF", OVERLAYABLE | SAMPLE);
     this->loadSound(this->s_shutter, "shutter", "SK_S_SHUTTER", OVERLAYABLE | SAMPLE);
-    this->loadSound(this->s_section_pass, "sectionpass", "SK_S_SECTIONPASS");
-    this->loadSound(this->s_section_fail, "sectionfail", "SK_S_SECTIONFAIL");
+    this->loadSound(this->s_section_pass, "sectionpass", "SK_S_SECTIONPASS", BEATMAP);
+    this->loadSound(this->s_section_fail, "sectionfail", "SK_S_SECTIONFAIL", BEATMAP);
 
     // UI feedback
     this->loadSound(this->s_message_sent, "key-confirm", "SK_S_MESSAGE_SENT", OVERLAYABLE | SAMPLE);
@@ -651,74 +756,164 @@ void Skin::load() {
                     OVERLAYABLE | SAMPLE | NO_DEFAULT);
     this->loadSound(this->s_hover_pause_retry, "pause-retry-hover", "SK_S_HOVER_RETRY_SONG",
                     OVERLAYABLE | SAMPLE | NO_DEFAULT);
-
-    if(!this->s_click_button) this->s_click_button = this->s_menu_hit;
-    if(!this->s_hover_button) this->s_hover_button = this->s_menu_hover;
-    if(!this->s_pause_hover) this->s_pause_hover = this->s_hover_button;
-    if(!this->s_select_difficulty) this->s_select_difficulty = this->s_click_button;
-    if(!this->s_typing2) this->s_typing2 = this->s_typing1;
-    if(!this->s_typing3) this->s_typing3 = this->s_typing2;
-    if(!this->s_typing4) this->s_typing4 = this->s_typing3;
-    if(!this->s_click_back_button) this->s_click_back_button = this->s_click_button;
-    if(!this->s_hover_back_button) this->s_hover_back_button = this->s_hover_button;
-    if(!this->s_menu_back) this->s_menu_back = this->s_click_button;
-    if(!this->s_close_chat_tab) this->s_close_chat_tab = this->s_click_button;
-    if(!this->s_click_main_menu_cube) this->s_click_main_menu_cube = this->s_click_button;
-    if(!this->s_hover_main_menu_cube) this->s_hover_main_menu_cube = this->s_menu_hover;
-    if(!this->s_click_sp) this->s_click_sp = this->s_click_button;
-    if(!this->s_hover_sp) this->s_hover_sp = this->s_menu_hover;
-    if(!this->s_click_mp) this->s_click_mp = this->s_click_button;
-    if(!this->s_hover_mp) this->s_hover_mp = this->s_menu_hover;
-    if(!this->s_click_options) this->s_click_options = this->s_click_button;
-    if(!this->s_hover_options) this->s_hover_options = this->s_menu_hover;
-    if(!this->s_click_exit) this->s_click_exit = this->s_click_button;
-    if(!this->s_hover_exit) this->s_hover_exit = this->s_menu_hover;
-    if(!this->s_click_pause_back) this->s_click_pause_back = this->s_click_button;
-    if(!this->s_hover_pause_back) this->s_hover_pause_back = this->s_pause_hover;
-    if(!this->s_click_pause_continue) this->s_click_pause_continue = this->s_click_button;
-    if(!this->s_hover_pause_continue) this->s_hover_pause_continue = this->s_pause_hover;
-    if(!this->s_click_pause_retry) this->s_click_pause_retry = this->s_click_button;
-    if(!this->s_hover_pause_retry) this->s_hover_pause_retry = this->s_pause_hover;
-
-    // always load these from the bundled default skin for consistent UI appearance (e.g. options menu buttons).
-    // can't rely on the _DEFAULT resource cache from checkLoadImage, since a user fallback skin may have
-    // provided the element before we ever reach the default dir.
-    if(this->is_default) {
-        this->i_cursor_default = this->i_cursor;
-        this->i_button_left_default = this->i_button_left;
-        this->i_button_mid_default = this->i_button_mid;
-        this->i_button_right_default = this->i_button_right;
-    } else {
-        this->loadUnsizedImage(this->i_cursor_default, "cursor", "SK_I_CURSOR", false, "png", false, default_dir);
-        this->loadUnsizedImage(this->i_button_left_default, "button-left", "SK_I_BUTTON_LEFT", false, "png", false,
-                               default_dir);
-        this->loadUnsizedImage(this->i_button_mid_default, "button-middle", "SK_I_BUTTON_MIDDLE", false, "png", false,
-                               default_dir);
-        this->loadUnsizedImage(this->i_button_right_default, "button-right", "SK_I_BUTTON_RIGHT", false, "png", false,
-                               default_dir);
-    }
-
-    // print some debug info
-    debugLog("Skin: Version {:.2f}", this->version);
-    debugLog("Skin: HitCircleOverlap = {:d}", this->hitcircle_overlap_amt);
-
-    // delayed error notifications due to resource loading potentially blocking engine time
-    if(auto *notifOverlay = ui && ui->getNotificationOverlay() ? ui->getNotificationOverlay() : nullptr) {
-        if(!parseSkinIni1Status && parseSkinIni2Status && cv::skin.getString() != "default")
-            notifOverlay->addNotification("Error: Couldn't load skin.ini!", 0xffff0000);
-        else if(!parseSkinIni2Status)
-            notifOverlay->addNotification("Error: Couldn't load DEFAULT skin.ini!!!", 0xffff0000);
-    }
 }
 
-void Skin::loadBeatmapOverride(std::string_view /*filepath*/) {
-    // debugLog("Skin::loadBeatmapOverride( {:s} )", filepath.c_str());
-    //  TODO: beatmap skin support
+void Skin::loadBeatmapOverride(std::string_view folder, std::span<const std::string> sampleFiles,
+                               std::optional<Color> sliderBorder, std::optional<Color> sliderTrackOverride) {
+    this->unloadBeatmapOverride();
+
+    const bool images = !cv::ignore_beatmap_skins.getBool();
+    const bool sounds = !cv::ignore_beatmap_samples.getBool();
+    if(!images && !sounds) return;
+
+    auto o = std::make_unique<BeatmapOverride>();
+    o->dir = folder;
+    if(!o->dir.ends_with('/')) o->dir.push_back('/');
+    for(auto &file : Environment::getFilesInFolder(o->dir)) {
+        o->files.insert(std::move(file));
+    }
+    o->images = images;
+    o->sounds = sounds;
+    o->slider_border = this->c_slider_border;
+    o->slider_track_override = this->c_slider_track_override;
+    o->slider_track_overridden = this->o_slider_track_overridden;
+    this->beatmap_override = std::move(o);
+
+    if(images) {
+        if(sliderBorder) this->c_slider_border = *sliderBorder;
+        if(sliderTrackOverride) {
+            this->c_slider_track_override = *sliderTrackOverride;
+            this->o_slider_track_overridden = true;
+        }
+    }
+
+    this->loadElements();
+
+    if(sounds) {
+        auto &ov = *this->beatmap_override;
+        const bool async = cv::skin_async.getBool();
+        const auto loadSample = [async](std::string path, bool loop) -> Sound * {
+            if(async) resourceManager->requestNextLoadAsync();
+            return resourceManager->loadSoundAbs(std::move(path), "", false, !loop, loop);
+        };
+        const auto findWithExtension = [this](std::string_view stem) -> std::string {
+            for(const auto ext : SOUND_EXTENSIONS) {
+                if(std::string path = this->getBeatmapFile(fmt::format("{}{}", stem, ext)); !path.empty()) return path;
+            }
+            return {};
+        };
+
+        // the hitsound samples for custom sample indices ("soft-hitclap", "drum-slidertick3", ...)
+        static constexpr ctll::fixed_string sample_pattern{
+            "(normal|soft|drum)-(hit(normal|whistle|finish|clap)|slider(slide|whistle|tick))[0-9]*"};
+        for(const auto &file : ov.files) {
+            const size_t dot = file.rfind('.');
+            if(dot == std::string::npos ||
+               !std::ranges::any_of(SOUND_EXTENSIONS, [ext = std::string_view{file}.substr(dot)](auto e) {
+                   return SString::strcase_equal(ext, e);
+               })) {
+                continue;
+            }
+            const std::string stem = SString::to_lower(std::string_view{file}.substr(0, dot));
+            if(!ctre::match<sample_pattern>(stem) || ov.samples.contains(stem)) continue;
+            std::string path = findWithExtension(stem);
+            if(path.empty()) continue;
+            const bool loop = stem.contains("sliderslide") || stem.contains("sliderwhistle");
+            ov.samples.emplace(stem, loadSample(std::move(path), loop));
+        }
+
+        // the files hit samples name (with or without their extension)
+        ov.file_samples.reserve(sampleFiles.size());
+        for(std::string name : sampleFiles) {
+            File::normalizeSlashes(name, '\\', '/');
+            std::string path = this->getBeatmapFile(name);
+            if(path.empty()) path = findWithExtension(std::string_view{name}.substr(0, name.rfind('.')));
+            ov.file_samples.push_back(path.empty() ? nullptr : loadSample(std::move(path), false));
+        }
+    }
+
+    const auto &ov = *this->beatmap_override;
+    debugLog("Skin: {} elements and {} samples from {}",
+             ov.basic_images.size() + ov.skin_images.size() + ov.sounds_replaced.size(),
+             this->getBeatmapSamples().size(), ov.dir);
+
+    // (until the map's elements have loaded as well)
+    this->is_ready = false;
+}
+
+void Skin::unloadBeatmapOverride() {
+    if(!this->beatmap_override) return;
+    const auto o = std::move(this->beatmap_override);
+
+    // (in reverse, so that an element replaced twice gets back what the skin had)
+    for(auto &[ref, own] : o->basic_images | std::views::reverse) {
+        resourceManager->destroyResource(ref->img);
+        *ref = own;
+    }
+    // (own then holds the map's, destroyed with o)
+    for(auto &[ref, own] : o->skin_images | std::views::reverse) {
+        ref->swap(*own);
+    }
+    for(auto &[ref, own] : o->sounds_replaced | std::views::reverse) {
+        resourceManager->destroyResource(*ref);
+        *ref = own;
+    }
+    for(const auto &[name, sound] : o->samples) {
+        resourceManager->destroyResource(sound);
+    }
+    for(auto *sound : o->file_samples) {
+        if(sound) resourceManager->destroyResource(sound);
+    }
+
+    this->c_slider_border = o->slider_border;
+    this->c_slider_track_override = o->slider_track_override;
+    this->o_slider_track_overridden = o->slider_track_overridden;
+}
+
+std::string Skin::getBeatmapFile(std::string_view filename) const {
+    const auto *o = this->beatmap_override.get();
+    if(!o) return {};
+    if(const auto it = o->files.find(filename); it != o->files.end()) return o->dir + *it;
+    // (one in a subfolder only as it's written, and never anything outside of the map's folder)
+    if(filename.contains('/') && !filename.starts_with('/') &&
+       std::ranges::none_of(SString::split(filename, '/'), [](std::string_view part) { return part == ".."; })) {
+        std::string path = o->dir + std::string{filename};
+        if(Environment::fileExists(path)) return path;
+    }
+    return {};
+}
+
+Sound *Skin::getBeatmapSample(std::string_view name) const {
+    const auto *o = this->beatmap_override.get();
+    if(!o) return nullptr;
+    const auto it = o->samples.find(name);
+    return it != o->samples.end() ? it->second : nullptr;
+}
+
+Sound *Skin::getBeatmapFileSample(u16 filename) const {
+    const auto *o = this->beatmap_override.get();
+    if(!o || filename == 0 || filename > o->file_samples.size()) return nullptr;
+    return o->file_samples[filename - 1];
+}
+
+std::vector<Sound *> Skin::getBeatmapSamples() const {
+    std::vector<Sound *> ret;
+    if(const auto *o = this->beatmap_override.get()) {
+        for(const auto &[name, sound] : o->samples) ret.push_back(sound);
+        for(auto *sound : o->file_samples) {
+            if(sound) ret.push_back(sound);
+        }
+    }
+    return ret;
 }
 
 void Skin::reloadSounds() {
-    resourceManager->reloadResources(reinterpret_cast<const std::vector<Resource *> &>(this->sounds),
-                                     cv::skin_async.getBool());
+    std::vector<Resource *> toReload{this->sounds.begin(), this->sounds.end()};
+    if(const auto *o = this->beatmap_override.get()) {
+        for(const auto &[ref, own] : o->sounds_replaced) toReload.push_back(*ref);
+        for(auto *sound : this->getBeatmapSamples()) toReload.push_back(sound);
+    }
+    resourceManager->reloadResources(toReload, cv::skin_async.getBool());
 }
 
 bool Skin::parseSkinINI(std::string_view filepath, std::vector<std::pair<ConVar *, std::string>> &convarValues) {
@@ -976,12 +1171,22 @@ Color Skin::getComboColorForCounter(int i, int offset, std::span<const Color> be
 }
 
 void Skin::randomizeFilePath() {
-    if(this->hasRandomElements())
+    if(this->hasRandomElements() && !this->beatmap_override)
         this->search_dirs[0] = this->filepaths_for_random_skin[prand() % this->filepaths_for_random_skin.size()];
 }
 
 void Skin::createSkinImage(SkinImage &ref, const std::string &skinElementName, vec2 baseSizeForScaling2x, float osuSize,
                            bool ignoreDefaultSkin, const std::string &animationSeparator) {
+    if(auto *o = this->beatmap_override.get()) {
+        if(!o->images) return;
+        std::unique_ptr<SkinImage> img{new SkinImage()};
+        img->init(this, skinElementName, baseSizeForScaling2x, osuSize, animationSeparator, true);
+        if(img->isMissingTexture()) return;
+        ref.swap(*img);
+        o->skin_images.emplace_back(&ref, std::move(img));
+        return;
+    }
+
     assert(!ref.isReady());
 
     this->skin_images.push_back(&ref);
@@ -991,10 +1196,25 @@ void Skin::createSkinImage(SkinImage &ref, const std::string &skinElementName, v
 void Skin::loadUnsizedImage(BasicSkinImage &ref, const std::string &skinElementName, const std::string &resourceName,
                             bool ignoreDefaultSkin, const std::string &fileExtension, bool forceLoadMipmaps,
                             const std::string &overrideDir) {
+    const bool use_mipmaps = cv::skin_mipmaps.getBool() || forceLoadMipmaps;
+
+    // map overrides never load @2x images
+    if(auto *o = this->beatmap_override.get()) {
+        if(!o->images || !overrideDir.empty()) return;
+        std::string path = this->getBeatmapFile(fmt::format("{}.{}", skinElementName, fileExtension));
+        if(path.empty()) return;
+
+        o->basic_images.emplace_back(&ref, ref);
+        if(cv::skin_async.getBool()) resourceManager->requestNextLoadAsync();
+        ref.img = resourceManager->loadImageAbsUnnamed(std::move(path), use_mipmaps);
+        ref.scale_mul = 1;
+        ref.is_default = false;
+        return;
+    }
+
     assert(ref == MISSING_TEXTURE);
     bool loaded = false;
 
-    const bool use_mipmaps = cv::skin_mipmaps.getBool() || forceLoadMipmaps;
     const size_t n_dirs = overrideDir.empty() ? (ignoreDefaultSkin ? 1 : this->search_dirs.size()) : 1;
 
     const bool load_hd = cv::skin_hd.getBool();
@@ -1073,11 +1293,26 @@ void Skin::loadUnsizedImage(BasicSkinImage &ref, const std::string &skinElementN
 }
 
 void Skin::loadSound(Sound *&ref, const std::string &skinElementName, const std::string &resourceName, u8 flags) {
-    assert(!ref);
     const bool isOverlayable = !!(flags & OVERLAYABLE);
     const bool isSample = !!(flags & SAMPLE);
     const bool loop = !!(flags & LOOPING);
     const bool fallback_to_default = !(flags & NO_DEFAULT);
+
+    if(auto *o = this->beatmap_override.get()) {
+        if(!o->sounds || !(flags & BEATMAP)) return;
+        std::string path;
+        for(const auto ext : SOUND_EXTENSIONS) {
+            if(!(path = this->getBeatmapFile(skinElementName + std::string{ext})).empty()) break;
+        }
+        if(path.empty()) return;
+
+        o->sounds_replaced.emplace_back(&ref, ref);
+        if(cv::skin_async.getBool()) resourceManager->requestNextLoadAsync();
+        ref = resourceManager->loadSoundAbs(std::move(path), "", !isSample, isOverlayable, loop);
+        return;
+    }
+
+    assert(!ref);
 
     this->randomizeFilePath();
 

@@ -1413,12 +1413,18 @@ OptionsOverlayImpl::OptionsOverlayImpl(OptionsOverlay *parent) : parent(parent) 
     this->addCheckbox(_("Instafade Circles"), &cv::instafade);
     this->addCheckbox(_("Instafade Sliders"), &cv::instafade_sliders);
     this->addSpacer();
+    this->addCheckbox(_("Ignore Beatmap Skins"),
+                      _("Use your skin's elements and slider colours instead of the ones that come with a beatmap."),
+                      &cv::ignore_beatmap_skins);
+    this->addCheckbox(_("Ignore Beatmap Hitsounds"),
+                      _("Use your skin's sounds instead of the ones that come with a beatmap."),
+                      &cv::ignore_beatmap_samples);
+    this->addCheckbox(_("Ignore Beatmap Combo Colors"), &cv::ignore_beatmap_combo_colors);
     this->addCheckbox(
         _("Ignore Beatmap Sample Volume"),
         _("Ignore beatmap timingpoint effect volumes.\nQuiet hitsounds can destroy accuracy and concentration, "
           "enabling this will fix that."),
         &cv::ignore_beatmap_sample_volume);
-    this->addCheckbox(_("Ignore Beatmap Combo Colors"), &cv::ignore_beatmap_combo_colors);
     this->addCheckbox(_("Use skin's sound samples"),
                       _("If this is not selected, then the default skin hitsounds will be used."),
                       &cv::skin_use_skin_hitsounds);

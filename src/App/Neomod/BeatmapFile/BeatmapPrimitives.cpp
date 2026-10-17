@@ -41,12 +41,22 @@ forceinline u8 sampleSetValue(i32 val) {
     return (val >= 0 && val <= 3) ? static_cast<u8>(val) : static_cast<u8>(SampleSetType::NORMAL);
 }
 
-// the hit sample's sets and volume
-// TODO: the index of custom beatmap skin samples and their filename (which overrides everything else) are unused atm
-void applyHitSample(const BeatmapFile::HitSample &sample, HITSAMPLE_BITS &samples) {
+// the hit sample's sets, volume, custom sample index and filename (added to sampleFiles if it's new)
+void applyHitSample(const BeatmapFile::HitSample &sample, HITSAMPLE_BITS &samples,
+                    std::vector<std::string> &sampleFiles) {
     samples.normalSet = sampleSetValue(sample.normalSet);
     samples.additionSet = sampleSetValue(sample.additionSet);
     samples.volume = static_cast<u8>(std::clamp(sample.volume, 0, 100));  // for some reason this can be negative
+    samples.index = static_cast<u16>(std::clamp(sample.index, 0, 0xffff));
+
+    samples.filename = 0;
+    if(sample.filename.empty()) return;
+    auto it = std::ranges::find(sampleFiles, sample.filename);
+    if(it == sampleFiles.end()) {
+        if(sampleFiles.size() >= 0xffff) return;
+        it = sampleFiles.emplace(sampleFiles.end(), sample.filename);
+    }
+    samples.filename = static_cast<u16>(it - sampleFiles.begin() + 1);
 }
 
 bool sliderScoringTimeComparator(const SLIDER_SCORING_TIME &a, const SLIDER_SCORING_TIME &b) {
@@ -358,9 +368,14 @@ PRIMITIVE_CONTAINER loadPrimitiveObjectsFromData(std::span<const u8> fileBuffer,
     BeatmapFile::Colour colour;
     for(const auto line : file.getEntries(Kind::COLOURS)) {
         u8 comboNum;
-        if(BeatmapFile::parse(line.text, colour) && Parsing::parse(colour.name, "Combo", &comboNum) && comboNum >= 1 &&
+        if(!BeatmapFile::parse(line.text, colour)) continue;
+        if(Parsing::parse(colour.name, "Combo", &comboNum) && comboNum >= 1 &&
            comboNum <= 8) {  // bare minimum validation effort
             tempColors[comboNum - 1] = rgb(colour.r, colour.g, colour.b);
+        } else if(colour.name == "SliderBorder") {
+            c.sliderBorder = rgb(colour.r, colour.g, colour.b);
+        } else if(colour.name == "SliderTrackOverride") {
+            c.sliderTrackOverride = rgb(colour.r, colour.g, colour.b);
         }
     }
 
@@ -407,7 +422,7 @@ PRIMITIVE_CONTAINER loadPrimitiveObjectsFromData(std::span<const u8> fileBuffer,
                 h.colorSkip = colorSkip;
                 // h.clicked = false; // unknown what this field was supposed to be for
                 h.samples.hitSounds = (ho.hitSounds & HitSoundType::VALID_HITSOUNDS);
-                applyHitSample(ho.sample, h.samples);
+                applyHitSample(ho.sample, h.samples, c.sampleFiles);
 
                 c.objects.emplace_back(h);
                 break;
@@ -444,10 +459,10 @@ PRIMITIVE_CONTAINER loadPrimitiveObjectsFromData(std::span<const u8> fileBuffer,
 
                 // an edge the lists leave out plays the object's hitsounds and sample sets (as osu!stable's sliders
                 // without edge fields do, and as lazer reads them)
-                const HITSAMPLE_BITS objectEdge{.hitSounds = (u8)(ho.hitSounds & HitSoundType::VALID_HITSOUNDS),
-                                                .normalSet = sampleSetValue(ho.sample.normalSet),
-                                                .additionSet = sampleSetValue(ho.sample.additionSet),
-                                                .volume = 0};
+                HITSAMPLE_BITS objectEdge{};
+                applyHitSample(ho.sample, objectEdge, c.sampleFiles);
+                objectEdge.hitSounds = (u8)(ho.hitSounds & HitSoundType::VALID_HITSOUNDS);
+                objectEdge.volume = 0;
                 for(uSz i = 0; i < std::max(ho.edgeSounds.size(), ho.edgeSets.size()); i++) {
                     HITSAMPLE_BITS samples = objectEdge;
                     if(i < ho.edgeSounds.size()) samples.hitSounds = ho.edgeSounds[i] & HitSoundType::VALID_HITSOUNDS;
@@ -464,7 +479,7 @@ PRIMITIVE_CONTAINER loadPrimitiveObjectsFromData(std::span<const u8> fileBuffer,
                 // No end sample specified, use the same as start
                 if(slider.edgeSamples.size() == 1) slider.edgeSamples.push_back(slider.edgeSamples.front());
 
-                applyHitSample(ho.sample, slider.hoverSamples);
+                applyHitSample(ho.sample, slider.hoverSamples, c.sampleFiles);
 
                 const auto pixelLength = static_cast<f32>(ho.length);
                 slider.x = (f32)(i32)ho.x;  // NOTE: lazer beatmaps do not truncate here
@@ -497,7 +512,7 @@ PRIMITIVE_CONTAINER loadPrimitiveObjectsFromData(std::span<const u8> fileBuffer,
                           .colorSkip = colorSkip,
                           .isEndOfCombo = false};
                 s.samples.hitSounds = (u8)(ho.hitSounds & HitSoundType::VALID_HITSOUNDS);
-                applyHitSample(ho.sample, s.samples);
+                applyHitSample(ho.sample, s.samples, c.sampleFiles);
 
                 c.objects.emplace_back(s);
                 break;

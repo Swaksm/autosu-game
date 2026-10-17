@@ -636,8 +636,7 @@ bool BeatmapInterface::start() {
 
         this->cur_timing_info = {};
 
-        // load beatmap skin
-        this->getSkinMutable()->loadBeatmapOverride(this->beatmap->getFolder());
+        this->loadBeatmapSkin();
     }
 
     // start preloading (delays the play start until it's set to false, see isLoading())
@@ -1272,9 +1271,19 @@ bool BeatmapInterface::canDraw() {
     return true;
 }
 
+void BeatmapInterface::loadBeatmapSkin() {
+    Skin *skin = this->getSkinMutable();
+    const PlayedMap *map = this->judge ? this->judge->getMapData() : nullptr;
+    if(!skin || !map || !this->beatmap) return;
+
+    skin->loadBeatmapOverride(this->beatmap->getFolder(), map->primitives.sampleFiles, map->primitives.sliderBorder,
+                              map->primitives.sliderTrackOverride);
+}
+
 void BeatmapInterface::unloadObjects() {
     this->resetLiveStarsTasks();
     if(this->judge) this->judge->unload();
+    if(Skin *skin = this->getSkinMutable()) skin->unloadBeatmapOverride();
     this->key_events.clear();
     this->all_clicks.clear();
 }
@@ -1823,6 +1832,8 @@ void BeatmapInterface::update() {
         const auto hitobjects = this->judge->getHitObjects();
         while(delta < 0.010 && this->bIsPreLoading) {
             if(this->iPreLoadingIndex >= hitobjects.size()) {
+                // (and for the map's skin elements to load, see loadBeatmapSkin())
+                if(const Skin *skin = this->getSkin(); skin && !skin->isReady()) break;
                 this->bIsPreLoading = false;
                 debugLog("Beatmap: Preloading done.");
                 break;
