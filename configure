@@ -5626,8 +5626,8 @@ printf %s "checking how to create a ustar tar archive... " >&6; }
    echo "$as_me:$LINENO: \$? = $ac_status" >&5
    (exit $ac_status); } && break
       done
-      am__tar="$_am_tar --format=ustar --sort=name --mtime=@0 --owner=0 --group=0 --numeric-owner -chf - "'"$$tardir"'
-      am__tar_="$_am_tar --format=ustar --sort=name --mtime=@0 --owner=0 --group=0 --numeric-owner -chf - "'"$tardir"'
+      am__tar="$_am_tar --format=ustar -chf - "'"$$tardir"'
+      am__tar_="$_am_tar --format=ustar -chf - "'"$tardir"'
       am__untar="$_am_tar -xf -"
       ;;
     plaintar)

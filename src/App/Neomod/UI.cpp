@@ -79,7 +79,7 @@ UI::UI() {
         "LAYER_ORDER must be a permutation of the screen indices");
     static_assert(SCREEN_NAMES[LAYER_ORDER[OVERLAY_BAND_BEGIN]] == "pauseoverlay");
     static_assert(SCREEN_NAMES[LAYER_ORDER[PLAY_OVERLAYS_END - 1]] == "optionsoverlay");
-    static_assert(SCREEN_NAMES[LAYER_ORDER[EXTRAS_SPLICE]] == "tooltipoverlay");
+    static_assert(SCREEN_NAMES[LAYER_ORDER[EXTRAS_SPLICE]] == "volumeoverlay");
     // EARLY_SCREENS: dummy + notification are the first two slots, built in the ctor below
     static_assert(SCREEN_NAMES[0] == "dummy" && SCREEN_NAMES[1] == "notificationoverlay");
 
@@ -301,7 +301,7 @@ void UI::draw() {
         this->hud->drawFps();
     }
 
-    this->drawLayerRange(EXTRAS_SPLICE, NUM_SCREENS);  // tooltip, volume, notification
+    this->drawLayerRange(EXTRAS_SPLICE, NUM_SCREENS - 1);  // volume, notification
 
     // loading spinner for some async tasks
     if((osu->bSkinLoadScheduled && osu->getSkin() != osu->skinScheduledToLoad)) {
@@ -321,6 +321,8 @@ void UI::draw() {
         // draw cursor (menus)
         this->hud->drawCursor(mouse->getPos(), cursorAlpha);
     }
+
+    this->drawLayerRange(NUM_SCREENS - 1, NUM_SCREENS);  // tooltip
 
     // draw build info on top of everything else
     HUD::drawRuntimeInfo();
