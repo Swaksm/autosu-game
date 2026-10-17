@@ -1716,22 +1716,6 @@ msgid "Instafade Sliders"
 msgstr "Instafade des sliders"
 
 #: src/App/Neomod/OptionsOverlay.cpp
-msgid "Ignore Beatmap Sample Volume"
-msgstr "Ignorer le volume des samples de la beatmap"
-
-#: src/App/Neomod/OptionsOverlay.cpp
-msgid ""
-"Ignore beatmap timingpoint effect volumes.\n"
-"Quiet hitsounds can destroy accuracy and concentration, enabling this will fix that."
-msgstr ""
-"Ignore les volumes d'effet de samples de la beatmap.\n"
-"Des hitsounds trop silencieux peuvent nuire à la précision et à la concentration, activer ceci corrige cela."
-
-#: src/App/Neomod/OptionsOverlay.cpp
-msgid "Ignore Beatmap Combo Colors"
-msgstr "Ignorer les couleurs de combo de la beatmap"
-
-#: src/App/Neomod/OptionsOverlay.cpp
 msgid "Ignore Beatmap Skins"
 msgstr "Ignorer le skin de la beatmap"
 
@@ -1746,6 +1730,22 @@ msgstr "Ignorer les sons de la beatmap"
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Use your skin's sounds instead of the ones that come with a beatmap."
 msgstr ""
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Ignore Beatmap Combo Colors"
+msgstr "Ignorer les couleurs de combo de la beatmap"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Ignore Beatmap Sample Volume"
+msgstr "Ignorer le volume des samples de la beatmap"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Ignore beatmap timingpoint effect volumes.\n"
+"Quiet hitsounds can destroy accuracy and concentration, enabling this will fix that."
+msgstr ""
+"Ignore les volumes d'effet de samples de la beatmap.\n"
+"Des hitsounds trop silencieux peuvent nuire à la précision et à la concentration, activer ceci corrige cela."
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Use skin's sound samples"

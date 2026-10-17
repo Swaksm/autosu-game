@@ -1732,22 +1732,6 @@ msgid "Instafade Sliders"
 msgstr "Моментальное исчезновение слайдеров"
 
 #: src/App/Neomod/OptionsOverlay.cpp
-msgid "Ignore Beatmap Sample Volume"
-msgstr "Игнорировать громкость сэмплов карты"
-
-#: src/App/Neomod/OptionsOverlay.cpp
-msgid ""
-"Ignore beatmap timingpoint effect volumes.\n"
-"Quiet hitsounds can destroy accuracy and concentration, enabling this will fix that."
-msgstr ""
-"Игнорировать громкость эффектов в тайминг-поинтах карты.\n"
-"Тихие хитсаунды могут сбивать точность и концентрацию, это исправит проблему."
-
-#: src/App/Neomod/OptionsOverlay.cpp
-msgid "Ignore Beatmap Combo Colors"
-msgstr "Игнорировать цвета комбо карты"
-
-#: src/App/Neomod/OptionsOverlay.cpp
 msgid "Ignore Beatmap Skins"
 msgstr ""
 
@@ -1762,6 +1746,22 @@ msgstr ""
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Use your skin's sounds instead of the ones that come with a beatmap."
 msgstr ""
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Ignore Beatmap Combo Colors"
+msgstr "Игнорировать цвета комбо карты"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Ignore Beatmap Sample Volume"
+msgstr "Игнорировать громкость сэмплов карты"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Ignore beatmap timingpoint effect volumes.\n"
+"Quiet hitsounds can destroy accuracy and concentration, enabling this will fix that."
+msgstr ""
+"Игнорировать громкость эффектов в тайминг-поинтах карты.\n"
+"Тихие хитсаунды могут сбивать точность и концентрацию, это исправит проблему."
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Use skin's sound samples"

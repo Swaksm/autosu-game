@@ -310,8 +310,8 @@ class Slider final : public HitObject, public SliderRenderer::BodySource {
     Slider() = delete;
     ~Slider() override;
 
-    Slider(neomod::SLIDERCURVETYPE stype, i32 repeat, f32 pixelLength, std::vector<vec2> points,
-           const std::vector<f32> &ticks, f32 sliderTimeMS, f32 sliderTimeMSWithoutRepeats, i32 timeMS,
+    Slider(neomod::SLIDERCURVETYPE stype, i32 repeat, f32 pixelLength, std::span<const vec2> points,
+           std::span<const f32> ticks, f32 sliderTimeMS, f32 sliderTimeMSWithoutRepeats, i32 timeMS,
            DatabaseBeatmapTypes::HITSAMPLE_BITS hoverSamples,
            std::vector<DatabaseBeatmapTypes::HITSAMPLE_BITS> edgeSamples, i32 comboNumber, bool isEndOfCombo,
            i32 colorCounter, i32 colorOffset, GameplayJudge *judge, const PlayfieldView *view);
@@ -350,7 +350,6 @@ class Slider final : public HitObject, public SliderRenderer::BodySource {
 
     [[nodiscard]] inline bool isStartCircleFinished() const { return m_startFinished; }
     [[nodiscard]] inline i32 getRepeat() const { return m_repeat; }
-    [[nodiscard]] inline const std::vector<vec2> &getRawPoints() const { return m_ctrlPoints; }
     [[nodiscard]] inline f32 getPixelLength() const { return m_curve.getPixelLength(); }
     [[nodiscard]] inline const std::vector<SLIDERCLICK> &getClicks() const { return m_clicks; }
 
@@ -397,7 +396,6 @@ class Slider final : public HitObject, public SliderRenderer::BodySource {
     HitAnim &addHitAnim(u8 typeFlags, f32 duration);
 
     std::vector<HitAnim> m_clickAnimations;
-    std::vector<vec2> m_ctrlPoints;
     std::vector<DatabaseBeatmapTypes::HITSAMPLE_BITS> m_edgeSamples;
     std::vector<HitSoundUtils::Set_Slider_Hit> m_lastSliderSampleSets;
 
@@ -435,6 +433,8 @@ class Slider final : public HitObject, public SliderRenderer::BodySource {
     i32 m_reverseArrowPos{0};
     i32 m_curRepeat{0};
     i32 m_curRepeatCounterForHitSounds{0};
+    i32 m_slideStartTimeMS{-1};
+    u32 m_numCtrlPoints{0};
 
     LiveHitResult m_startResult{0 /* LiveHitResult::HIT_NULL*/};
     LiveHitResult m_endResult{0 /* LiveHitResult::HIT_NULL*/};
@@ -444,7 +444,6 @@ class Slider final : public HitObject, public SliderRenderer::BodySource {
     bool m_cursorLeft{true};
     bool m_cursorInside{false};
     bool m_tracking{false};  // inside and held: the follow circle shows
-    i32 m_slideStartTimeMS{-1};
     bool m_heldTillEnd{false};
     bool m_heldTillEndForLenienceHack{false};
     bool m_heldTillEndForLenienceHackCheck{false};

@@ -1732,22 +1732,6 @@ msgid "Instafade Sliders"
 msgstr "Slider sofort verblassen lassen"
 
 #: src/App/Neomod/OptionsOverlay.cpp
-msgid "Ignore Beatmap Sample Volume"
-msgstr "Beatmap-Sample-Lautstärke ignorieren"
-
-#: src/App/Neomod/OptionsOverlay.cpp
-msgid ""
-"Ignore beatmap timingpoint effect volumes.\n"
-"Quiet hitsounds can destroy accuracy and concentration, enabling this will fix that."
-msgstr ""
-"Ignoriert die Effektlautstärken von Beatmap-Timingpunkten.\n"
-"Leise Hitsounds können die Genauigkeit und Konzentration stören, dies zu aktivieren behebt das."
-
-#: src/App/Neomod/OptionsOverlay.cpp
-msgid "Ignore Beatmap Combo Colors"
-msgstr "Beatmap-Combofarben ignorieren"
-
-#: src/App/Neomod/OptionsOverlay.cpp
 msgid "Ignore Beatmap Skins"
 msgstr ""
 
@@ -1762,6 +1746,22 @@ msgstr ""
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Use your skin's sounds instead of the ones that come with a beatmap."
 msgstr ""
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Ignore Beatmap Combo Colors"
+msgstr "Beatmap-Combofarben ignorieren"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Ignore Beatmap Sample Volume"
+msgstr "Beatmap-Sample-Lautstärke ignorieren"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Ignore beatmap timingpoint effect volumes.\n"
+"Quiet hitsounds can destroy accuracy and concentration, enabling this will fix that."
+msgstr ""
+"Ignoriert die Effektlautstärken von Beatmap-Timingpunkten.\n"
+"Leise Hitsounds können die Genauigkeit und Konzentration stören, dies zu aktivieren behebt das."
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Use skin's sound samples"

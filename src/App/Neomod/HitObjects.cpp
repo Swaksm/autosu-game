@@ -1031,19 +1031,19 @@ void Circle::onReset(i32 curPosMS) {
 
 vec2 Circle::getAutoCursorPos(i32 /*curPos*/) const { return m_judge->osuCoords2Pixels(m_rawPos); }
 
-Slider::Slider(SLIDERCURVETYPE stype, i32 repeat, f32 pixelLength, std::vector<vec2> points,
-               const std::vector<f32> &ticks, f32 sliderTimeMS, f32 sliderTimeMSWithoutRepeats, i32 timeMS,
+Slider::Slider(SLIDERCURVETYPE stype, i32 repeat, f32 pixelLength, std::span<const vec2> points,
+               std::span<const f32> ticks, f32 sliderTimeMS, f32 sliderTimeMSWithoutRepeats, i32 timeMS,
                DatabaseBeatmapTypes::HITSAMPLE_BITS hoverSamples,
                std::vector<DatabaseBeatmapTypes::HITSAMPLE_BITS> edgeSamples, i32 comboNumber, bool isEndOfCombo,
                i32 colorCounter, i32 colorOffset, GameplayJudge *judge, const PlayfieldView *view)
     : HitObject(timeMS, hoverSamples, comboNumber, isEndOfCombo, colorCounter, colorOffset, judge, view),
-      m_ctrlPoints(std::move(points)),
       m_edgeSamples(std::move(edgeSamples)),
       // build curve
-      m_curve(stype, m_ctrlPoints, std::abs(pixelLength)),
+      m_curve(stype, points, std::abs(pixelLength)),
       m_sliderTimeMS(sliderTimeMS),
       m_sliderTimeMSWithoutRepeats(sliderTimeMSWithoutRepeats),
-      m_repeat(repeat) {
+      m_repeat(repeat),
+      m_numCtrlPoints(static_cast<u32>(points.size())) {
     m_type = HitObjectType::SLIDER;
 
     // build raw ticks
@@ -1103,7 +1103,7 @@ static CONSTINIT std::vector<vec2> alwaysPointsBuf;
 static CONSTINIT std::vector<vec2> legacyScreenPointsBuf;
 
 void Slider::draw() {
-    if(m_ctrlPoints.size() <= 0) return;
+    if(m_numCtrlPoints <= 0) return;
 
     const f32 foscale = cv::circle_fade_out_scale.getFloat();
     const Skin *skin = m_view->getSkin();
@@ -1118,7 +1118,7 @@ void Slider::draw() {
     const bool isCompletelyFinished = m_startFinished && m_endFinished && m_finished;
     // extra possibility to avoid flicker between HitObject::m_bVisible delay and the fadeout animation below
     const bool drawParts = (m_visible || (m_startFinished && !m_finished)) && !isCompletelyFinished;
-    const bool has_points = m_ctrlPoints.size() > 1;
+    const bool has_points = m_numCtrlPoints > 1;
     if(drawParts) {
         const f32 alpha = (cv::mod_hd_slider_fast_fade.getBool() ? m_alpha : m_bodyAlpha);
         const f32 sliderSnake = getSnakeRange().second;
@@ -1333,7 +1333,7 @@ void Slider::draw2(bool drawApproachCircle, bool drawOnlyApproachCircle) {
        drawApproachCircle)  // extra possibility to avoid flicker between HitObject::m_bVisible delay and the fadeout
                             // animation below this if block
     {
-        if(m_ctrlPoints.size() > 1) {
+        if(m_numCtrlPoints > 1) {
             // HACKHACK: very dirty code
             bool sliderRepeatStartCircleFinished = m_repeat < 2;
             for(auto &click : m_clicks) {
@@ -1459,7 +1459,7 @@ void Slider::drawEndCircle(f32 alpha, f32 sliderSnake) {
 }
 
 std::optional<SliderRenderer::Body> Slider::getBody() const {
-    if(m_ctrlPoints.size() <= 0) return std::nullopt;
+    if(m_numCtrlPoints <= 0) return std::nullopt;
 
     const bool isCompletelyFinished = m_startFinished && m_endFinished && m_finished;
     if((m_visible || (m_startFinished && !m_finished)) && !isCompletelyFinished) {
@@ -1908,7 +1908,7 @@ void Slider::pose(i32 timeMS, i32 fadeOutMS, i32 trailMS) {
 }
 
 void Slider::addSoundCues(std::vector<SoundCue> &out) const {
-    if(m_ctrlPoints.size() == 0) return;
+    if(m_numCtrlPoints == 0) return;
 
     const auto cue = [&](i32 timeMS, SoundCue::Kind kind, const DatabaseBeatmapTypes::HITSAMPLE_BITS &samples,
                          i32 endTimeMS) {
@@ -2127,7 +2127,7 @@ f32 Slider::getT(i32 posMS, bool raw) const {
 }
 
 bool Slider::isClickableFrom(i32 music_pos, vec2 cursor_pos) const {
-    if(m_ctrlPoints.size() == 0 || m_startFinished || m_blocked) return false;
+    if(m_numCtrlPoints == 0 || m_startFinished || m_blocked) return false;
     if(m_judge->getHitResult(music_pos - m_clickTimeMS) == LiveHitResult::HIT_NULL) return false;
 
     const vec2 pos = m_judge->osuCoords2Pixels(curvePointAt(0.0f));
@@ -2138,7 +2138,7 @@ bool Slider::isClickableFrom(i32 music_pos, vec2 cursor_pos) const {
 }
 
 void Slider::onClickEvent(std::vector<Click> &clicks) {
-    if(m_ctrlPoints.size() == 0 || m_blocked)
+    if(m_numCtrlPoints == 0 || m_blocked)
         return;  // also handle note blocking here (doesn't need fancy shake logic, since sliders don't shake in
                  // osu!stable)
 
@@ -2166,7 +2166,7 @@ void Slider::onClickEvent(std::vector<Click> &clicks) {
 
 void Slider::onHit(LiveHitResult result, i32 delta, bool isEndCircle, f32 targetDelta, f32 targetAngle,
                    bool isEndResultFromStrictTrackingMod) {
-    if(m_ctrlPoints.size() == 0) return;
+    if(m_numCtrlPoints == 0) return;
 
     // start + end of a slider add +30 points, if successful
 
@@ -2276,7 +2276,7 @@ void Slider::onHit(LiveHitResult result, i32 delta, bool isEndCircle, f32 target
 }
 
 void Slider::onRepeatHit(const SLIDERCLICK &click) {
-    if(m_ctrlPoints.size() == 0) return;
+    if(m_numCtrlPoints == 0) return;
 
     // repeat hit of a slider adds +30 points, if successful
 
@@ -2334,7 +2334,7 @@ const DatabaseBeatmapTypes::HITSAMPLE_BITS &Slider::getRepeatSamples(i32 repeat)
 }
 
 void Slider::onTickHit(const SLIDERCLICK &click) {
-    if(m_ctrlPoints.size() == 0) return;
+    if(m_numCtrlPoints == 0) return;
 
     // tick hit of a slider adds +10 points, if successful
 
