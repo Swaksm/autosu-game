@@ -135,11 +135,6 @@ std::string_view lineText(std::string_view line) {
     return line;
 }
 
-std::string_view trimmed(std::string_view s) {
-    SString::trim_inplace(s);
-    return s;
-}
-
 // splits like SString::split (a trailing empty field doesn't count) into the first N fields; returns how many there
 // are in all
 template <uSz N>
@@ -280,7 +275,7 @@ std::optional<std::string_view> BeatmapFile::getValue(SectionKind kind, std::str
 bool BeatmapFile::parse(std::string_view line, KeyValue &out) {
     const uSz colon = line.find(':');
     if(colon == std::string_view::npos) return false;
-    out = {.key = trimmed(line.substr(0, colon)), .value = trimmed(line.substr(colon + 1))};
+    out = {.key = SString::trimmed(line.substr(0, colon)), .value = SString::trimmed(line.substr(colon + 1))};
     return true;
 }
 
@@ -492,7 +487,7 @@ bool BeatmapFile::parse(std::string_view line, Event &out) {
             default:
                 return false;
         }
-    } else if(trimmed(typeField) == "Video") {
+    } else if(SString::trimmed(typeField) == "Video") {
         ev.kind = Event::Kind::VIDEO;
     } else {
         return false;
@@ -514,7 +509,7 @@ bool BeatmapFile::parse(std::string_view line, Event &out) {
         ev.rest = file.substr(closingQuote + 1);
         file = file.substr(1, closingQuote - 1);
     } else {
-        file = trimmed(file);
+        file = SString::trimmed(file);
     }
     ev.file = file;
     out = ev;

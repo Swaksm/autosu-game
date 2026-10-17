@@ -3,6 +3,7 @@
 #include "types.h"
 #include "MD5Hash.h"
 #include "Rect.h"
+#include "StaticPImpl.h"
 #include "Vectors_fwd.h"
 
 #include <memory>
@@ -15,6 +16,7 @@ class Image;
 
 // see https://osu.ppy.sh/wiki/en/Storyboard/Scripting
 class Storyboard {
+    NOCOPY_NOMOVE(Storyboard)
    public:
     // in drawing order
     // everything up to FOREGROUND goes below the hitobjects
@@ -42,9 +44,6 @@ class Storyboard {
     Storyboard(std::string folder, std::string_view osuFile, std::string_view osbFile, std::string backgroundFile,
                std::string_view skinFolder);
     ~Storyboard();
-
-    Storyboard(const Storyboard &) = delete;
-    Storyboard &operator=(const Storyboard &) = delete;
 
     // "Artist - Title (Creator).osb", or else the first .osb in the folder
     [[nodiscard]] static std::string findOsbFile(std::string_view folder, std::string_view artist,
@@ -85,5 +84,5 @@ class Storyboard {
 
    private:
     struct Impl;
-    std::unique_ptr<Impl> impl;
+    StaticPImpl<Impl, 560> impl;
 };

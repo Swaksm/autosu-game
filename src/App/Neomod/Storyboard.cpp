@@ -89,16 +89,17 @@ struct TriggerCondition {
     Kind kind;
 
     // filters for HIT_SOUND
+    // TODO: use std::optional?
     i8 normalSet{-1};
     i8 additionSet{-1};
     u8 additions{0};
     i32 index{-1};
 
     [[nodiscard]] bool matches(const Storyboard::HitSound &sound) const {
-        if(this->normalSet >= 0 && sound.normalSet != this->normalSet) return false;
+        if(this->normalSet >= 0 && sound.normalSet != (u8)this->normalSet) return false;
         if(this->additions != 0 && (sound.additions & this->additions) == 0) return false;
-        if(this->additionSet >= 0 && (sound.additions == 0 || sound.additionSet != this->additionSet)) return false;
-        if(this->index >= 0 && sound.index != this->index) return false;
+        if(this->additionSet >= 0 && (sound.additions == 0 || sound.additionSet != (u8)this->additionSet)) return false;
+        if(this->index >= 0 && sound.index != (u16)this->index) return false;
         return true;
     }
 };
@@ -162,20 +163,10 @@ struct Latest {
     }
 };
 
-// the not inplace version is gone?
-std::string_view trimmed(std::string_view s) {
-    SString::trim_inplace(s);
-    return s;
-}
-
-template <typename T>
-bool parseNumber(std::string_view s, T &out) {
-    return Parsing::strto_s(trimmed(s), out);
-}
-
 // extra generous path handling, as it needs to be for some storyboards
+// TODO: this logic is duplicated in various ways in multiple places
 std::string cleanPath(std::string_view s) {
-    s = trimmed(s);
+    s = SString::trimmed(s);
     if(s.size() >= 2 && s.front() == '"' && s.back() == '"') s = s.substr(1, s.size() - 2);
     std::string path{s};
     File::normalizeSlashes(path, '\\', '/');
@@ -183,7 +174,7 @@ std::string cleanPath(std::string_view s) {
 }
 
 std::optional<Layer> parseLayer(std::string_view s) {
-    s = trimmed(s);
+    s = SString::trimmed(s);
     static constexpr std::array<std::pair<std::string_view, Layer>, 5> names{{
         {"Background", Layer::BACKGROUND},
         {"Fail", Layer::FAIL},
@@ -200,7 +191,7 @@ std::optional<Layer> parseLayer(std::string_view s) {
 
 // where on the image its position is, as a fraction of its size
 std::optional<vec2> parseOrigin(std::string_view s) {
-    s = trimmed(s);
+    s = SString::trimmed(s);
     static constexpr std::array<std::pair<std::string_view, vec2>, 10> names{{
         {"TopLeft", {0.f, 0.f}},
         {"Centre", {0.5f, 0.5f}},
@@ -224,7 +215,7 @@ std::optional<vec2> parseOrigin(std::string_view s) {
 // see https://osu.ppy.sh/wiki/en/Storyboard/Scripting/Compound_Commands
 std::optional<TriggerCondition> parseTriggerCondition(std::string_view s) {
     using Kind = TriggerCondition::Kind;
-    s = trimmed(s);
+    s = SString::trimmed(s);
     if(s == "Passing") return TriggerCondition{.kind = Kind::PASSING};
     if(s == "Failing") return TriggerCondition{.kind = Kind::FAILING};
     if(s == "HitObjectHit") return TriggerCondition{.kind = Kind::HIT_OBJECT_HIT};
@@ -266,6 +257,7 @@ std::optional<TriggerCondition> parseTriggerCondition(std::string_view s) {
 }
 
 // get all files of a folder, recursively
+// TODO: implement recursive directory listing in File::getDirectoryEntries directly instead of reimplementing it everywhere
 Hash::unstable_ncase_stringmap<std::string> listFolder(std::string_view folder) {
     Hash::unstable_ncase_stringmap<std::string> files;
     std::vector<std::pair<std::string, int>> pending{{"", 0}};
@@ -325,15 +317,6 @@ struct Storyboard::Impl {
     bool passing{true};
     std::vector<std::vector<FiredTrigger>> fired;
 
-    ~Impl() {
-        for(Image *image : this->images) {
-            if(image) resourceManager->destroyResource(image);
-        }
-        for(Sound *sound : this->sounds) {
-            if(sound) resourceManager->destroyResource(sound);
-        }
-    }
-
     void parse(std::string_view file, bool isOsu, std::vector<std::pair<std::string, std::string>> &variables);
     void parseEventLine(std::string_view line, i32 version);
     void finish();
@@ -372,9 +355,9 @@ void Storyboard::Impl::parse(std::string_view file, bool isOsu,
             if(isVariables) {
                 const uSz eq = line.find('=');
                 if(eq == std::string_view::npos) continue;
-                const std::string_view name = trimmed(line.substr(0, eq));
+                const std::string_view name = SString::trimmed(line.substr(0, eq));
                 if(!name.starts_with('$')) continue;
-                std::string value{trimmed(line.substr(eq + 1))};
+                std::string value{SString::trimmed(line.substr(eq + 1))};
                 if(auto it = std::ranges::find(variables, name, &std::pair<std::string, std::string>::first);
                    it != variables.end()) {
                     it->second = std::move(value);
@@ -417,9 +400,9 @@ void Storyboard::Impl::parseEventLine(std::string_view line, i32 version) {
         this->current = nullptr;
         this->currentGroup = nullptr;
 
-        const std::string_view type = trimmed(fields[0]);
+        const std::string_view type = SString::trimmed(fields[0]);
         if(type == "Background" || type == "0") {
-            if(f32 x, y; fields.size() > 4 && parseNumber(fields[3], x) && parseNumber(fields[4], y)) {
+            if(f32 x, y; fields.size() > 4 && Parsing::strto_s(fields[3], x) && Parsing::strto_s(fields[4], y)) {
                 this->backgroundOffset = {x, y};
             }
         } else if(type == "Sprite" || type == "4" || type == "Animation" || type == "6") {
@@ -428,29 +411,30 @@ void Storyboard::Impl::parseEventLine(std::string_view line, i32 version) {
             const auto layer = parseLayer(fields[1]);
             const auto origin = parseOrigin(fields[2]);
             f32 x, y;
-            if(!layer || !origin || !parseNumber(fields[4], x) || !parseNumber(fields[5], y)) return;
+            if(!layer || !origin || !Parsing::strto_s(fields[4], x) || !Parsing::strto_s(fields[5], y)) return;
 
             Sprite sprite{.layer = *layer, .origin = *origin, .pos = {x, y}, .path = cleanPath(fields[3])};
             if(animation) {
                 i32 frameCount;
                 f64 frameDelay;
-                if(!parseNumber(fields[6], frameCount) || !parseNumber(fields[7], frameDelay) || frameCount <= 0) {
+                if(!Parsing::strto_s(fields[6], frameCount) || !Parsing::strto_s(fields[7], frameDelay) ||
+                   frameCount <= 0) {
                     return;
                 }
                 if(version < 6) frameDelay = std::round(0.015 * frameDelay) * 1.186 * (1000.0 / 60.0);
                 sprite.frameCount = (u32)frameCount;
                 sprite.frameDelay = frameDelay;
-                sprite.loopForever =
-                    fields.size() <= 8 || (trimmed(fields[8]) != "LoopOnce" && trimmed(fields[8]) != "1");
+                sprite.loopForever = fields.size() <= 8 ||
+                                     (SString::trimmed(fields[8]) != "LoopOnce" && SString::trimmed(fields[8]) != "1");
             }
             this->sprites.push_back(std::move(sprite));
             this->current = &this->sprites.back();
         } else if(type == "Sample" || type == "5") {
             f64 time;
             const auto layer = fields.size() >= 4 ? parseLayer(fields[2]) : std::nullopt;
-            if(!layer || !parseNumber(fields[1], time)) return;
+            if(!layer || !Parsing::strto_s(fields[1], time)) return;
             f32 volume = 100.f;
-            if(fields.size() > 4) (void)parseNumber(fields[4], volume);
+            if(fields.size() > 4) (void)Parsing::strto_s(fields[4], volume);
             this->samples.push_back({.time = time,
                                      .layer = *layer,
                                      .path = cleanPath(fields[3]),
@@ -462,11 +446,11 @@ void Storyboard::Impl::parseEventLine(std::string_view line, i32 version) {
     if(!this->current) return;
     if(depth < 2) this->currentGroup = &this->current->cmds;
 
-    const std::string_view type = trimmed(fields[0]);
+    const std::string_view type = SString::trimmed(fields[0]);
     if(type == "L") {
         f64 start;
         i32 count;
-        if(fields.size() < 3 || !parseNumber(fields[1], start) || !parseNumber(fields[2], count)) return;
+        if(fields.size() < 3 || !Parsing::strto_s(fields[1], start) || !Parsing::strto_s(fields[2], count)) return;
         this->current->loops.push_back({.start = start, .iterations = std::max(count, 1), .cmds = {}});
         this->currentGroup = &this->current->loops.back().cmds;
         return;
@@ -479,9 +463,9 @@ void Storyboard::Impl::parseEventLine(std::string_view line, i32 version) {
         }
         f64 start = -INF, end = INF;
         i32 groupNumber = 0;
-        if(fields.size() > 2) (void)parseNumber(fields[2], start);
-        if(fields.size() > 3) (void)parseNumber(fields[3], end);
-        if(fields.size() > 4) (void)parseNumber(fields[4], groupNumber);
+        if(fields.size() > 2) (void)Parsing::strto_s(fields[2], start);
+        if(fields.size() > 3) (void)Parsing::strto_s(fields[3], end);
+        if(fields.size() > 4) (void)Parsing::strto_s(fields[4], groupNumber);
         this->current->triggers.push_back(
             {.condition = *condition, .start = start, .end = end, .groupNumber = groupNumber, .cmds = {}});
         this->currentGroup = &this->current->triggers.back().cmds;
@@ -493,16 +477,16 @@ void Storyboard::Impl::parseEventLine(std::string_view line, i32 version) {
 
     i32 easing;
     f64 start, end;
-    if(!parseNumber(fields[1], easing) || !parseNumber(fields[2], start)) return;
-    if(trimmed(fields[3]).empty()) {
+    if(!Parsing::strto_s(fields[1], easing) || !Parsing::strto_s(fields[2], start)) return;
+    if(SString::trimmed(fields[3]).empty()) {
         end = start;
-    } else if(!parseNumber(fields[3], end)) {
+    } else if(!Parsing::strto_s(fields[3], end)) {
         return;
     }
     const Ease ease = easing >= 0 && easing < (i32)Ease::COUNT ? (Ease)easing : Ease::Linear;
 
     if(type == "P") {
-        const std::string_view param = trimmed(fields[4]);
+        const std::string_view param = SString::trimmed(fields[4]);
         const Command<bool> cmd{.start = start, .end = end, .from = true, .to = start == end, .easing = ease};
         if(param == "H") group->add(group->flipH, cmd);
         if(param == "V") group->add(group->flipV, cmd);
@@ -531,9 +515,9 @@ void Storyboard::Impl::parseEventLine(std::string_view line, i32 version) {
                                         .easing = ease});
         }
     };
-    const auto one = [](std::span<const std::string_view> v, f32 &out) { return parseNumber(v[0], out); };
+    const auto one = [](std::span<const std::string_view> v, f32 &out) { return Parsing::strto_s(v[0], out); };
     const auto two = [](std::span<const std::string_view> v, vec2 &out) {
-        return parseNumber(v[0], out.x) && parseNumber(v[1], out.y);
+        return Parsing::strto_s(v[0], out.x) && Parsing::strto_s(v[1], out.y);
     };
 
     if(type == "F") {
@@ -557,7 +541,8 @@ void Storyboard::Impl::parseEventLine(std::string_view line, i32 version) {
         }
     } else if(type == "C") {
         commands(group->colour, 3, [](std::span<const std::string_view> v, vec3 &out) {
-            if(!parseNumber(v[0], out.x) || !parseNumber(v[1], out.y) || !parseNumber(v[2], out.z)) return false;
+            if(!Parsing::strto_s(v[0], out.x) || !Parsing::strto_s(v[1], out.y) || !Parsing::strto_s(v[2], out.z))
+                return false;
             out /= 255.f;
             return true;
         });
@@ -797,7 +782,7 @@ void Storyboard::Impl::fire(TriggerCondition::Kind kind, const HitSound *sound, 
 
 Storyboard::Storyboard(std::string folder, std::string_view osuFile, std::string_view osbFile,
                        std::string backgroundFile, std::string_view skinFolder)
-    : impl(std::make_unique<Impl>()) {
+    : impl() {
     this->impl->folder = std::move(folder);
     if(!this->impl->folder.empty() && !this->impl->folder.ends_with('/')) this->impl->folder.push_back('/');
     this->impl->backgroundFile = std::move(backgroundFile);
@@ -816,7 +801,14 @@ Storyboard::Storyboard(std::string folder, std::string_view osuFile, std::string
     this->impl->resolveFiles(skinFolder);
 }
 
-Storyboard::~Storyboard() = default;
+Storyboard::~Storyboard() {
+    for(Image *image : this->impl->images) {
+        if(image) resourceManager->destroyResource(image);
+    }
+    for(Sound *sound : this->impl->sounds) {
+        if(sound) resourceManager->destroyResource(sound);
+    }
+}
 
 std::string Storyboard::findOsbFile(std::string_view folder, std::string_view artist, std::string_view title,
                                     std::string_view creator) {
@@ -891,10 +883,10 @@ void Storyboard::load(bool visualsOnly) {
     used.erase(std::unique(used.begin(), used.end()), used.end());
     sb.hashing = Async::submit(
         [folder = sb.folder, used = std::move(used), osb = sb.hasOsb ? std::optional{sb.osbHash} : std::nullopt]() {
-            std::string manifest = fmt::format("osb\t{}\n", osb ? osb->to_chars().string() : std::string{"-"});
+            std::string manifest = fmt::format("osb\t{}\n", osb ? osb->to_chars().string() : "-");
             for(const auto &[name, file] : used) {
                 const auto md5 = file.empty() ? std::nullopt : crypto::hash::md5_file(folder + file);
-                manifest += fmt::format("{}\t{}\n", name, md5 ? md5->to_chars().string() : std::string{"-"});
+                manifest += fmt::format("{}\t{}\n", name, md5 ? md5->to_chars().string() : "-");
             }
             return crypto::hash::md5(manifest);
         },

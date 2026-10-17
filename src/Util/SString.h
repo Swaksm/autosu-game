@@ -105,6 +105,11 @@ void trim_inplace(std::string& str) noexcept;
 // adjusts the view to exclude leading/trailing whitespace
 void trim_inplace(std::string_view& str) noexcept;
 
+inline std::string_view trimmed(std::string_view s) {
+    trim_inplace(s);
+    return s;
+}
+
 // case-insensitive strstr
 bool contains_ncase(const std::string_view haystack, const std::string_view needle) noexcept;
 
