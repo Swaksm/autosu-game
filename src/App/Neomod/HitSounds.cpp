@@ -238,15 +238,15 @@ TIMING_INFO samplesAt(const Primitives::TimingPoints &timing, i32 timeMS) {
     return timing.getTimingInfo(timeMS + cv::timingpoints_offset.getInt());
 }
 
-HitSoundContext makeContext(const TIMING_INFO &samples, u8 defaultSampleSet, bool layeredHitSounds) {
+HitSoundContext makeContext(const TIMING_INFO &samples, u8 defaultSampleSet, bool layeredHitSounds, bool storyboard) {
     return {
         .timingPointSampleSet = samples.sampleSet,
         .timingPointVolume = samples.volume,
         .timingPointSampleIndex = samples.sampleIndex,
         .defaultSampleSet = defaultSampleSet,
-        .forcedSampleSet = cv::mod_storyboard.getBool() ? (u8)0 : cv::skin_force_hitsound_sample_set.getVal<u8>(),
+        .forcedSampleSet = storyboard ? (u8)0 : cv::skin_force_hitsound_sample_set.getVal<u8>(),
         .layeredHitSounds = layeredHitSounds,
-        .ignoreSampleVolume = cv::ignore_beatmap_sample_volume.getBool() && !cv::mod_storyboard.getBool(),
+        .ignoreSampleVolume = cv::ignore_beatmap_sample_volume.getBool(),
         .boostVolume = cv::snd_boost_hitsound_volume.getBool(),
     };
 }

@@ -1413,6 +1413,7 @@ OptionsOverlayImpl::OptionsOverlayImpl(OptionsOverlay *parent) : parent(parent) 
     this->addCheckbox(_("Instafade Circles"), &cv::instafade);
     this->addCheckbox(_("Instafade Sliders"), &cv::instafade_sliders);
     this->addSpacer();
+    this->addCheckbox(_("Draw Storyboards"), &cv::draw_storyboard);
     this->addCheckbox(_("Ignore Beatmap Skins"),
                       _("Use your skin's elements and slider colours instead of the ones that come with a beatmap."),
                       &cv::ignore_beatmap_skins);

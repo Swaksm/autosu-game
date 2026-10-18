@@ -543,7 +543,7 @@ void HitSoundTest::runTests() {
                        "a hitsound timingpoints_offset before a point takes its samples");
         TEST_ASSERT_EQ(samplesAt(timing, 2502 - offset).volume, 60, "and its volume");
 
-        const HitSoundContext ctx = makeContext(samplesAt(timing, 3000), SampleSetType::DRUM, true);
+        const HitSoundContext ctx = makeContext(samplesAt(timing, 3000), SampleSetType::DRUM, true, false);
         TEST_ASSERT_EQ(ctx.timingPointSampleSet, (i32)SampleSetType::SOFT, "context takes the samples' set");
         TEST_ASSERT_EQ(ctx.timingPointVolume, 60, "context takes the samples' volume");
         TEST_ASSERT_EQ((i32)ctx.defaultSampleSet, (i32)SampleSetType::DRUM, "context takes the map's default set");

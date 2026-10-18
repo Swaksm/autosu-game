@@ -524,7 +524,6 @@ CONVAR(mod_wobble_strength, 25.0f, CLIENT | SERVER | GAMEPLAY);
 CONVAR(mod_no_pausing, false, CLIENT | SERVER | GAMEPLAY);
 CONVAR(mod_traceable, false, CLIENT | SERVER | GAMEPLAY);
 CONVAR(mod_freeze_frame, false, CLIENT | SERVER | PROTECTED | GAMEPLAY);
-CONVAR(mod_storyboard, false, CLIENT | SERVER | GAMEPLAY);
 
 // Important gameplay values
 CONVAR(animation_speed_override, -1.0f, CLIENT | SERVER | PROTECTED | GAMEPLAY);
@@ -993,6 +992,7 @@ CONVAR(user_switcher_include_legacy_scores_for_names, true, CLIENT | SKINS);
 CONVAR(allow_mp_invites, true, CLIENT, "allow multiplayer game invites from all users");
 CONVAR(allow_stranger_dms, true, CLIENT, "allow private messages from non-friends");
 CONVAR(draw_video, true, CLIENT | SERVER);
+CONVAR(draw_storyboard, true, CLIENT | SERVER | GAMEPLAY);
 CONVAR(save_failed_scores, false, CLIENT | HIDDEN, "save scores locally, even if there was a fail");
 
 // NOLINTEND(misc-definitions-in-headers)

@@ -55,10 +55,10 @@ struct Set_Slider_Hit {
 // the timing point a hitsound at `timeMS` takes its sample set and volume from: the one active timingpoints_offset
 // after it
 [[nodiscard]] DatabaseBeatmapTypes::TIMING_INFO samplesAt(const Primitives::TimingPoints &timing, i32 timeMS);
-// a hitsound's context from those samples, the map's default sample set and whether the skin layers its hitsounds (the
-// rest from the hitsound convars)
+// a hitsound's context from those samples, the map's default sample set, whether the skin layers its hitsounds and
+// whether the map has a storyboard (the rest from the hitsound convars)
 [[nodiscard]] HitSoundContext makeContext(const DatabaseBeatmapTypes::TIMING_INFO &samples, u8 defaultSampleSet,
-                                          bool layeredHitSounds);
+                                          bool layeredHitSounds, bool storyboard);
 // the pan a hitsound plays at: `pan` (from where it happens on the playfield) through sound_panning and its multiplier,
 // centered for FPoSu and FPS unless their own panning convars are on
 [[nodiscard]] f32 playedPan(f32 pan);

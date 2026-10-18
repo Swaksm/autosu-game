@@ -265,7 +265,6 @@ ModSelector::ModSelector() : UIScreen() {
 
     // build experimental buttons
     this->addExperimentalLabel(_(" Experimental Mods (!)"));
-    this->addExperimentalCheckbox(_("Storyboard"), _("Storyboard"), &cv::mod_storyboard);
     this->addExperimentalCheckbox(_("Flip Up/Down"),
                                   _("Playfield is flipped upside down (mirrored at horizontal axis)."),
                                   &cv::playfield_mirror_horizontal);

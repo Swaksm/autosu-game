@@ -272,7 +272,7 @@ Osu::Osu()
     };
     cv::ignore_beatmap_skins.setCallback(reloadBeatmapSkin);
     cv::ignore_beatmap_samples.setCallback(reloadBeatmapSkin);
-    cv::mod_storyboard.setCallback(reloadBeatmapSkin);
+    cv::draw_storyboard.setCallback(reloadBeatmapSkin);
 
     cv::skin_allow_convars.setCallback([](float oldValue, float newValue) -> void {
         if(oldValue == newValue) return;
@@ -521,7 +521,7 @@ Osu::~Osu() {
         cv::skin_export.removeAllCallbacks();
         cv::ignore_beatmap_skins.removeAllCallbacks();
         cv::ignore_beatmap_samples.removeAllCallbacks();
-        cv::mod_storyboard.removeAllCallbacks();
+        cv::draw_storyboard.removeAllCallbacks();
         cv::skin_allow_convars.removeAllCallbacks();
         cv::mod_mafham.removeAllCallbacks();
         cv::mod_fposu.removeAllCallbacks();

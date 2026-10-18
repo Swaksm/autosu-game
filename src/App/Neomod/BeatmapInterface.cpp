@@ -186,9 +186,6 @@ void BeatmapInterface::drawBackground() {
     brightness += this->fBreakBackgroundFade * 0.3f;
     brightness = std::clamp(brightness, 0.f, 1.f);
 
-    // limit background dim when using Storyboard mod
-    if(this->storyboard) brightness = std::max(brightness, 0.5f);
-
     // draw background image
     {
         const Image *backgroundImage = nullptr;
@@ -1197,10 +1194,10 @@ f32 soundPanAt(const BeatmapInterface &play, vec2 rawPos) {
 // the context of a hitsound at `timeMS` (-1: now)
 HitSoundUtils::HitSoundContext hitSoundContext(const BeatmapInterface &play, const Skin &skin, i32 timeMS) {
     const GameplayJudge *judge = play.getJudge();
-    return HitSoundUtils::makeContext((timeMS != -1 && judge)
-                                          ? HitSoundUtils::samplesAt(judge->getMapTimingPoints(), timeMS)
-                                          : play.getCurrentTimingInfo(),
-                                      judge ? judge->getDefaultSampleSet() : 1, skin.o_layered_hitsounds);
+    return HitSoundUtils::makeContext(
+        (timeMS != -1 && judge) ? HitSoundUtils::samplesAt(judge->getMapTimingPoints(), timeMS)
+                                : play.getCurrentTimingInfo(),
+        judge ? judge->getDefaultSampleSet() : 1, skin.o_layered_hitsounds, play.getStoryboard() != nullptr);
 }
 }  // namespace
 
@@ -1327,7 +1324,7 @@ Storyboard::View BeatmapInterface::getStoryboardView() const {
 
 void BeatmapInterface::loadStoryboard() {
     const PlayedMap *map = this->judge->getMapData();
-    if(!cv::mod_storyboard.getBool() || !map || !map->data) return;
+    if(!cv::draw_storyboard.getBool() || !map || !map->data) return;
 
     const std::string folder{this->beatmap->getFolder()};
     std::string osb;
@@ -1343,6 +1340,10 @@ void BeatmapInterface::loadStoryboard() {
         folder, std::string_view{reinterpret_cast<const char *>(map->data->data()), map->data->size()}, osb,
         std::string{this->beatmap->getBackgroundImageFileName()},
         skin ? std::string_view{skin->skin_dir} : std::string_view{});
+    if(this->storyboard->isEmpty()) {
+        this->storyboard.reset();
+        return;
+    }
     this->storyboard->load(false);
 }
 
@@ -2907,8 +2908,13 @@ FinishedScore BeatmapInterface::saveAndSubmitScore(bool quit) {
     score.numHitObjects = numHitObjects;
     score.numCircles = numCircles;
     score.mods = liveScore->mods;
+    if(numSpinners == 0) score.mods.flags &= ~ModFlags::SpunOut;
+    if(this->storyboard) {
+        score.storyboard_hash = this->storyboard->getHash();
+    } else {
+        score.mods.flags &= ~ModFlags::Storyboard;
+    }
     score.beatmap_hash = played.md5;  // NOTE: necessary for "Use Mods"
-    if(this->storyboard) score.storyboard_hash = this->storyboard->getHash();
     score.replay = this->judge->replay;
 
     // @PPV3: store ppv3 data if not already done. also double check replay is marked correctly
