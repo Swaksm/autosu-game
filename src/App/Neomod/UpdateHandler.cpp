@@ -257,9 +257,10 @@ void UpdateHandler::installUpdate() {
             this->status = STATUS_ERROR;
             return;
         }
+        const bool isExe = outFilePath == PACKAGE_NAME ""sv || outFilePath == "neosu"sv || outFilePath == "neosu.exe"sv;
 #ifndef _WIN32
         // make sure the executable is actually executable (workaround server sending zips with non-executable exes...)
-        if(outFilePath == PACKAGE_NAME ""sv || outFilePath == "neosu"sv) {
+        if(isExe) {
             struct stat64 oldStat{};
             const int res = stat64(oldPath.c_str(), &oldStat);
             if(res == 0) {
@@ -269,6 +270,20 @@ void UpdateHandler::installUpdate() {
             }
         }
 #endif
+        if(isExe) {
+            // if the user renamed the executable, rename the downloaded executable to the currently running one too
+            std::string currentExeName = Mc::Paths::exe();
+            if(!currentExeName.ends_with(outFilePath)) {
+                File::normalizeSlashes(currentExeName);
+                if(const auto lastSlash = currentExeName.find_last_of('/'); lastSlash != std::string::npos)
+                    currentExeName = currentExeName.substr(lastSlash);
+
+                const std::string renamed = currentExeName + ".old";
+                Environment::deleteFile(renamed);
+                Environment::renameFile(currentExeName, renamed);
+                Environment::renameFile(outFilePath, currentExeName);
+            }
+        }
     }
 
     cv::is_bleedingedge.setValue(cv::bleedingedge.getBool());
