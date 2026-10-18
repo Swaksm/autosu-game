@@ -84,12 +84,12 @@ msgstr "В очереди"
 #: src/App/Neomod/BeatmapInstaller.cpp
 #, c++-format
 msgid "{} is already installed"
-msgstr ""
+msgstr "{} уже установлена"
 
 #: src/App/Neomod/BeatmapInstaller.cpp
 #, c++-format
 msgid "Beatmapset #{:d} is already installed"
-msgstr ""
+msgstr "Набор карт #{:d} уже установлен"
 
 #: src/App/Neomod/BeatmapInstaller.cpp
 #, c++-format
@@ -109,25 +109,25 @@ msgstr "Не удалось скачать набор карт #{:d} :("
 #: src/App/Neomod/BeatmapInstaller.cpp
 #, c++-format
 msgid "Couldn't delete {}"
-msgstr ""
+msgstr "Не удалось удалить {}"
 
 #: src/App/Neomod/BeatmapInstaller.cpp
 #, c++-format
 msgid "Deleted {}"
-msgstr ""
+msgstr "{} удалено"
 
 #: src/App/Neomod/BeatmapInterface.cpp
 msgid "Buffering ..."
-msgstr ""
+msgstr "Буферизация ..."
 
 #: src/App/Neomod/BeatmapInterface.cpp
 #, c++-format
 msgid "{} has paused"
-msgstr ""
+msgstr "{} поставил(а) на паузу"
 
 #: src/App/Neomod/BeatmapInterface.cpp
 msgid "Waiting for players ..."
-msgstr ""
+msgstr "Ожидание игроков ..."
 
 #: src/App/Neomod/BeatmapInterface.cpp
 msgid "Loading ..."
@@ -210,16 +210,16 @@ msgstr "Введите название канала (например, '#osu'):
 #: src/App/Neomod/Database.cpp
 #, c++-format
 msgid "Added {:d} new beatmapset(s)."
-msgstr ""
+msgstr "Добавлено новых наборов карт: {:d}."
 
 #: src/App/Neomod/Database.cpp
 msgid "No new beatmaps detected."
-msgstr ""
+msgstr "Новые карты не обнаружены."
 
 #: src/App/Neomod/Database.cpp
 #, c++-format
 msgid "{} was written by a newer version, ignoring it"
-msgstr ""
+msgstr "{} записан более новой версией, игнорируется"
 
 #: src/App/Neomod/HUD.cpp
 #, c++-format
@@ -444,7 +444,7 @@ msgstr "Нажмите здесь, чтобы установить обновл�
 
 #: src/App/Neomod/MainMenu.cpp
 msgid "A new version is available! Click to open the download page."
-msgstr ""
+msgstr "Доступна новая версия! Нажмите, чтобы открыть страницу загрузки."
 
 #: src/App/Neomod/MainMenu.cpp
 msgid "Update Error! Click to retry ..."
@@ -460,19 +460,19 @@ msgstr "Необходимо войти в актацию, чтобы скачи
 
 #: src/App/Neomod/MainMenuNowPlaying.cpp
 msgid "Collapse when idle"
-msgstr ""
+msgstr "Сворачивать при бездействии"
 
 #: src/App/Neomod/MainMenuNowPlaying.cpp
 msgid "Keep expanded"
-msgstr ""
+msgstr "Не сворачивать"
 
 #: src/App/Neomod/MainMenuNowPlaying.cpp
 msgid "Previous song"
-msgstr ""
+msgstr "Предыдущая песня"
 
 #: src/App/Neomod/MainMenuNowPlaying.cpp
 msgid "Next song"
-msgstr ""
+msgstr "Следующая песня"
 
 #: src/App/Neomod/MainMenuTips.cpp
 msgid "Press Alt + Enter to toggle Fullscreen."
@@ -505,9 +505,8 @@ msgid "Launch with \"-sound bass\" as a commandline argument to use BASS for aud
 msgstr "Запустите с аргументом командной строки \"-sound bass\", чтобы использовать BASS для звука."
 
 #: src/App/Neomod/MainMenuTips.cpp
-#, fuzzy
 msgid "Put \"-gpu vk\" after the \"Target:\" field in a shortcut to neomod to use the Vulkan renderer."
-msgstr "Добавьте \"-dx11\" в поле \"Объект:\" ярлыка neomod, чтобы использовать рендерер D3D11."
+msgstr "Добавьте \"-gpu vk\" в поле \"Объект:\" ярлыка neomod, чтобы использовать рендерер Vulkan."
 
 #: src/App/Neomod/MainMenuTips.cpp
 msgid "Put \"-dx11\" after the \"Target:\" field in a shortcut to neomod to use the D3D11 renderer."
@@ -581,10 +580,6 @@ msgstr "Множитель скорости/BPM"
 #: src/App/Neomod/ModSelector.cpp
 msgid " Experimental Mods (!)"
 msgstr " Экспериментальные моды (!)"
-
-#: src/App/Neomod/ModSelector.cpp src/App/Neomod/OsuDirectScreen.cpp
-msgid "Storyboard"
-msgstr ""
 
 #: src/App/Neomod/ModSelector.cpp
 msgid "Flip Up/Down"
@@ -1309,7 +1304,7 @@ msgstr "Полноэкранный режим"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Minimize On ALT+TAB"
-msgstr ""
+msgstr "Сворачивать при ALT+TAB"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Keep Aspect Ratio"
@@ -1497,11 +1492,11 @@ msgstr ""
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Lower Latency (!)"
-msgstr ""
+msgstr "Пониженная задержка (!)"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "NOTE: Enabling this may result in audio crackling!"
-msgstr ""
+msgstr "ВНИМАНИЕ: Включение может вызвать треск звука!"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "WASAPI"
@@ -1665,7 +1660,7 @@ msgstr ""
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Export Skin"
-msgstr ""
+msgstr "Экспортировать скин"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Open current Skin folder"
@@ -1676,6 +1671,8 @@ msgid ""
 "Packs the current skin into an .osk file in the exports folder,\n"
 "together with whatever the fallback skin fills in."
 msgstr ""
+"Упаковывает текущий скин в файл .osk в папке exports\n"
+"вместе со всем, что дополняет запасной скин."
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Random Skin"
@@ -1703,13 +1700,15 @@ msgstr ""
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Let Skins Change Settings"
-msgstr ""
+msgstr "Разрешить скинам менять настройки"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid ""
 "Skins can come with settings of their own ([neomod] section in skin.ini).\n"
 "While such a skin is in use, those settings can't be changed here."
 msgstr ""
+"Скины могут иметь собственные настройки (раздел [neomod] в skin.ini).\n"
+"Пока используется такой скин, эти настройки нельзя изменить здесь."
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Number Scale:"
@@ -1736,20 +1735,24 @@ msgid "Instafade Sliders"
 msgstr "Моментальное исчезновение слайдеров"
 
 #: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Storyboards"
+msgstr "Рисовать сториборды"
+
+#: src/App/Neomod/OptionsOverlay.cpp
 msgid "Ignore Beatmap Skins"
-msgstr ""
+msgstr "Игнорировать скины карт"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Use your skin's elements and slider colours instead of the ones that come with a beatmap."
-msgstr ""
+msgstr "Использовать элементы и цвета слайдеров вашего скина вместо тех, что идут с картой."
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Ignore Beatmap Hitsounds"
-msgstr ""
+msgstr "Игнорировать хитсаунды карт"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Use your skin's sounds instead of the ones that come with a beatmap."
-msgstr ""
+msgstr "Использовать звуки вашего скина вместо тех, что идут с картой."
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Ignore Beatmap Combo Colors"
@@ -1848,6 +1851,8 @@ msgid ""
 "This will block all dynamic slider (color/border) features,\n"
 "but is more easily customizable."
 msgstr ""
+"Это отключит все динамические функции слайдеров (цвет/обводка),\n"
+"но упрощает настройку."
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Use osu!lazer Slider Style"
@@ -2270,13 +2275,12 @@ msgid "Draw Background in Ranking/Results Screen"
 msgstr "Рисовать фон на экране результатов"
 
 #: src/App/Neomod/OptionsOverlay.cpp
-#, fuzzy
 msgid "Prefer beatmap background in Menu"
-msgstr "Рисовать menu-background в Главном меню"
+msgstr "Предпочитать фон карты в меню"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Use the background from the currently playing song, even in the main menu."
-msgstr ""
+msgstr "Использовать фон текущей песни даже в главном меню."
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Draw menu-background in Menu"
@@ -2291,36 +2295,32 @@ msgid "NOTE: Only applies if \"Draw Background in SongBrowser\" is disabled."
 msgstr "ПРИМЕЧАНИЕ: Работает только если отключено \"Рисовать фон в меню выбора песен\"."
 
 #: src/App/Neomod/OptionsOverlay.cpp
-#, fuzzy
 msgid "Key Overlay"
-msgstr "Масштаб оверлея клавиш:"
+msgstr "Оверлей клавиш"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Draw Key Overlay"
 msgstr "Рисовать оверлей клавиш"
 
 #: src/App/Neomod/OptionsOverlay.cpp
-#, fuzzy
 msgid "Draw Key Overlay Trail"
-msgstr "Рисовать оверлей клавиш"
+msgstr "Рисовать след оверлея клавиш"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Scrolling blocks next to the key overlay, visualizing how long each key was held."
-msgstr ""
+msgstr "Прокручивающиеся блоки рядом с оверлеем клавиш, показывающие, как долго удерживалась каждая клавиша."
 
 #: src/App/Neomod/OptionsOverlay.cpp
-#, fuzzy
 msgid "Trail Opacity:"
-msgstr "Прозрачность слайдера"
+msgstr "Прозрачность следа:"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Trail Speed:"
-msgstr ""
+msgstr "Скорость следа:"
 
 #: src/App/Neomod/OptionsOverlay.cpp
-#, fuzzy
 msgid "Trail Fade Distance:"
-msgstr "Дистанция:"
+msgstr "Дистанция затухания следа:"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "HUD"
@@ -2355,9 +2355,8 @@ msgid "Draw Accuracy"
 msgstr "Рисовать точность"
 
 #: src/App/Neomod/OptionsOverlay.cpp
-#, fuzzy
 msgid "Draw Clock"
-msgstr "Рисовать комбо"
+msgstr "Рисовать часы"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Draw HitErrorBar"
@@ -2527,76 +2526,64 @@ msgstr ""
 
 #. TRANSLATORS: Section of option sliders to set the scale of in-game UI elements
 #: src/App/Neomod/OptionsOverlay.cpp
-#, fuzzy
 msgid "Scaling"
-msgstr "Масштаб интерфейса"
+msgstr "Масштаб"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "HUD:"
-msgstr ""
+msgstr "Интерфейс:"
 
 #: src/App/Neomod/OptionsOverlay.cpp
-#, fuzzy
 msgid "Score:"
-msgstr "Score V2"
+msgstr "Очки:"
 
 #: src/App/Neomod/OptionsOverlay.cpp
-#, fuzzy
 msgid "Combo:"
-msgstr "Комбо"
+msgstr "Комбо:"
 
 #: src/App/Neomod/OptionsOverlay.cpp src/App/Neomod/RankingScreen.cpp
 msgid "Accuracy:"
 msgstr "Точность:"
 
 #: src/App/Neomod/OptionsOverlay.cpp
-#, fuzzy
 msgid "HitErrorBar:"
-msgstr "Масштаб HitErrorBar:"
+msgstr "HitErrorBar:"
 
 #: src/App/Neomod/OptionsOverlay.cpp
-#, fuzzy
 msgid "HitErrorBar UR:"
-msgstr "Масштаб UR на HitErrorBar:"
+msgstr "UR на HitErrorBar:"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Clock:"
-msgstr ""
+msgstr "Часы:"
 
 #: src/App/Neomod/OptionsOverlay.cpp
-#, fuzzy
 msgid "ScoreBar:"
-msgstr "Масштаб полосы здоровья (ScoreBar):"
+msgstr "Полоса здоровья (ScoreBar):"
 
 #: src/App/Neomod/OptionsOverlay.cpp
-#, fuzzy
 msgid "ScoreBoard:"
-msgstr "Масштаб таблицы рекордов:"
+msgstr "Таблица рекордов:"
 
 #: src/App/Neomod/OptionsOverlay.cpp
-#, fuzzy
 msgid "Key Overlay:"
-msgstr "Масштаб оверлея клавиш:"
+msgstr "Оверлей клавиш:"
 
 #: src/App/Neomod/OptionsOverlay.cpp
-#, fuzzy
 msgid "Statistics:"
-msgstr "Масштаб статистики:"
+msgstr "Статистика:"
 
 #: src/App/Neomod/OptionsOverlay.cpp
-#, fuzzy
 msgid "Statistics Offset"
-msgstr "Смещение статистики по X:"
+msgstr "Смещение статистики"
 
 #: src/App/Neomod/OptionsOverlay.cpp
-#, fuzzy
 msgid "X Offset:"
-msgstr "Масштабируемое смещение:"
+msgstr "Смещение по X:"
 
 #: src/App/Neomod/OptionsOverlay.cpp
-#, fuzzy
 msgid "Y Offset:"
-msgstr "Масштабируемое смещение:"
+msgstr "Смещение по Y:"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Playfield"
@@ -2615,9 +2602,8 @@ msgid "Draw Playfield Border"
 msgstr "Рисовать границы игрового поля"
 
 #: src/App/Neomod/OptionsOverlay.cpp
-#, fuzzy
 msgid "Border Size:"
-msgstr "Размер буфера:"
+msgstr "Размер рамки:"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Hitobjects"
@@ -2909,7 +2895,7 @@ msgstr "Нажмите ещё {:d} раз для подтверждения!"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "This setting is locked in multiplayer rooms."
-msgstr ""
+msgstr "Эта настройка заблокирована в мультиплеерных комнатах."
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "This setting is forced by the server."
@@ -2922,7 +2908,7 @@ msgstr "Эта настройка принудительно задана тек
 #: src/App/Neomod/OptionsOverlay.cpp
 #, c++-format
 msgid "(turn off \"{}\" in the skin options to change it)"
-msgstr ""
+msgstr "(отключите \"{}\" в настройках скина, чтобы изменить)"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "All settings have been reset."
@@ -2938,144 +2924,148 @@ msgstr "Не удалось сохранить osu.cfg"
 
 #: src/App/Neomod/Osu.cpp
 msgid "This replay's beatmap is not installed."
-msgstr ""
+msgstr "Карта этого повтора не установлена."
 
 #: src/App/Neomod/Osu.cpp
 #, c++-format
 msgid "Skin reloaded!{:s}"
-msgstr ""
+msgstr "Скин перезагружен!{:s}"
 
 #: src/App/Neomod/Osu.cpp
 msgid "Mouse buttons are disabled."
-msgstr ""
+msgstr "Кнопки мыши отключены."
 
 #: src/App/Neomod/Osu.cpp
 msgid "Mouse buttons are enabled."
-msgstr ""
+msgstr "Кнопки мыши включены."
 
 #: src/App/Neomod/Osu.cpp
-#, fuzzy
 msgid "No beatmap is currently selected."
-msgstr "Карта не выбрана"
+msgstr "Сейчас не выбрана ни одна карта."
 
 #: src/App/Neomod/Osu.cpp
 msgid "In-game interface has been enabled."
-msgstr ""
+msgstr "Игровой интерфейс включён."
 
 #: src/App/Neomod/Osu.cpp
 msgid "In-game interface has been disabled."
-msgstr ""
+msgstr "Игровой интерфейс отключён."
 
 #: src/App/Neomod/Osu.cpp
 msgid "Scoreboard is hidden."
-msgstr ""
+msgstr "Таблица рекордов скрыта."
 
 #: src/App/Neomod/Osu.cpp
 msgid "Scoreboard is shown."
-msgstr ""
+msgstr "Таблица рекордов показана."
 
 #: src/App/Neomod/Osu.cpp
 #, c++-format
 msgid "Local beatmap offset set to {:d} ms"
-msgstr ""
+msgstr "Локальное смещение карты: {:d} мс"
 
 #: src/App/Neomod/Osu.cpp
-#, fuzzy
 msgid "Error: Couldn't grab a screenshot :("
-msgstr "Ошибка: Не удалось найти ни одного скина"
+msgstr "Ошибка: Не удалось сделать скриншот :("
 
 #: src/App/Neomod/Osu.cpp
 msgid "Screenshot copied to clipboard (click to open in a new tab)"
-msgstr ""
+msgstr "Скриншот скопирован в буфер обмена (нажмите, чтобы открыть в новой вкладке)"
 
 #: src/App/Neomod/Osu.cpp
 msgid "Screenshot taken (click to open in a new tab)"
-msgstr ""
+msgstr "Скриншот сделан (нажмите, чтобы открыть в новой вкладке)"
 
 #: src/App/Neomod/Osu.cpp
 #, c++-format
 msgid "Screenshot copied to clipboard and saved to {:s}"
-msgstr ""
+msgstr "Скриншот скопирован в буфер обмена и сохранён в {:s}"
 
 #: src/App/Neomod/Osu.cpp
-#, fuzzy, c++-format
+#, c++-format
 msgid "Screenshot saved to {:s}"
-msgstr "Скриншоты"
+msgstr "Скриншот сохранён в {:s}"
 
 #: src/App/Neomod/Osu.cpp
 #, c++-format
 msgid "Skin exported to {:s}"
-msgstr ""
+msgstr "Скин экспортирован в {:s}"
 
 #: src/App/Neomod/Osu.cpp
 msgid "Can't export the default skin."
-msgstr ""
+msgstr "Нельзя экспортировать стандартный скин."
 
 #: src/App/Neomod/Osu.cpp
 #, c++-format
 msgid "Couldn't export the skin to {:s}"
-msgstr ""
+msgstr "Не удалось экспортировать скин в {:s}"
 
 #: src/App/Neomod/OsuDirectScreen.cpp
 #, c++-format
 msgid "+{:d} more"
-msgstr ""
+msgstr "ещё {:d}"
 
 #: src/App/Neomod/OsuDirectScreen.cpp
 msgid "View beatmap page"
-msgstr ""
+msgstr "Открыть страницу карты"
 
 #: src/App/Neomod/OsuDirectScreen.cpp
 msgid "Close"
-msgstr ""
+msgstr "Закрыть"
 
 #: src/App/Neomod/OsuDirectScreen.cpp
 msgid "Download"
-msgstr ""
+msgstr "Скачать"
 
 #: src/App/Neomod/OsuDirectScreen.cpp
 msgid "Cancel download"
-msgstr ""
+msgstr "Отменить загрузку"
 
 #: src/App/Neomod/OsuDirectScreen.cpp
 msgid "Go to beatmap"
-msgstr ""
+msgstr "Перейти к карте"
 
 #: src/App/Neomod/OsuDirectScreen.cpp
 msgid ""
 "Click a beatmap to see its details.\n"
 "Click it again to download it."
 msgstr ""
+"Нажмите на карту, чтобы увидеть подробности.\n"
+"Нажмите ещё раз, чтобы скачать её."
 
 #: src/App/Neomod/OsuDirectScreen.cpp src/App/Neomod/SongBrowser/InfoLabel.cpp
 #, c++-format
 msgid "Mapped by {:s}"
-msgstr ""
+msgstr "Автор карты: {:s}"
 
 #: src/App/Neomod/OsuDirectScreen.cpp
 msgid "Pending"
-msgstr ""
+msgstr "На рассмотрении"
 
 #: src/App/Neomod/OsuDirectScreen.cpp
 msgid "Ranked"
-msgstr ""
+msgstr "Рейтинговая"
 
 #: src/App/Neomod/OsuDirectScreen.cpp
 msgid "Approved"
-msgstr ""
+msgstr "Одобрена"
 
 #: src/App/Neomod/OsuDirectScreen.cpp
 msgid "Loved"
-msgstr ""
+msgstr "Любимая"
 
 #: src/App/Neomod/OsuDirectScreen.cpp
 #, c++-format
 msgid "Updated {:s}"
-msgstr ""
+msgstr "Обновлено {:s}"
 
 #: src/App/Neomod/OsuDirectScreen.cpp
 msgid "Video"
-msgstr ""
+msgstr "Видео"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "Storyboard"
+msgstr "Сториборд"
 
 #: src/App/Neomod/OsuDirectScreen.cpp
 msgid "Newest maps"
@@ -3091,7 +3081,7 @@ msgstr "Показывать только ранкнутые карты"
 
 #: src/App/Neomod/OsuDirectScreen.cpp
 msgid "Auto-select downloaded beatmaps"
-msgstr ""
+msgstr "Автоматически выбирать скачанные карты"
 
 #: src/App/Neomod/PauseOverlay.cpp
 msgid "Resume"
@@ -3334,27 +3324,27 @@ msgstr "Конвертация результатов ({}/{}) ..."
 #: src/App/Neomod/SongBrowser/InfoLabel.cpp
 #, c++-format
 msgid "Length: {:02d}:{:02d} BPM: {} Objects: {}"
-msgstr ""
+msgstr "Длина: {:02d}:{:02d} BPM: {} Объекты: {}"
 
 #: src/App/Neomod/SongBrowser/InfoLabel.cpp
 #, c++-format
 msgid "Length: {:02d}:{:02d} BPM: {}-{} ({}) Objects: {}"
-msgstr ""
+msgstr "Длина: {:02d}:{:02d} BPM: {}-{} ({}) Объекты: {}"
 
 #: src/App/Neomod/SongBrowser/InfoLabel.cpp
 #, c++-format
 msgid "CS:{:.3g} AR:{:.3g} OD:{:.3g} HP:{:.3g} Stars:{:.3g} ({}pp)"
-msgstr ""
+msgstr "CS:{:.3g} AR:{:.3g} OD:{:.3g} HP:{:.3g} Звёзды:{:.3g} ({}pp)"
 
 #: src/App/Neomod/SongBrowser/InfoLabel.cpp
 #, c++-format
 msgid "CS:{:.3g} AR:{:.3g} OD:{:.3g} HP:{:.3g} Stars:{:.3g} -> {:.3g} ({}pp)"
-msgstr ""
+msgstr "CS:{:.3g} AR:{:.3g} OD:{:.3g} HP:{:.3g} Звёзды:{:.3g} -> {:.3g} ({}pp)"
 
 #: src/App/Neomod/SongBrowser/InfoLabel.cpp
 #, c++-format
 msgid "CS:{:.3g} AR:{:.3g} OD:{:.3g} HP:{:.3g} Stars:{:.3g} * (??? pp)"
-msgstr ""
+msgstr "CS:{:.3g} AR:{:.3g} OD:{:.3g} HP:{:.3g} Звёзды:{:.3g} * (??? pp)"
 
 #: src/App/Neomod/SongBrowser/SongBrowser.cpp
 msgid "By Artist"
@@ -3389,9 +3379,8 @@ msgid "By Rank Achieved"
 msgstr "По Полученному рангу"
 
 #: src/App/Neomod/SongBrowser/SongBrowser.cpp
-#, fuzzy
 msgid "By Date Played"
-msgstr "По Дате добавления"
+msgstr "По Дате игры"
 
 #: src/App/Neomod/SongBrowser/SongBrowser.cpp
 msgid "By Date"
@@ -3481,12 +3470,12 @@ msgstr "Не удалось найти Карту #{:d} :("
 #: src/App/Neomod/SongBrowser/SongBrowser.cpp
 #, c++-format
 msgid "Scanning beatmap folders ({:d}/{:d})"
-msgstr ""
+msgstr "Сканирование папок с картами ({:d}/{:d})"
 
 #: src/App/Neomod/SongBrowser/SongBrowser.cpp
 #, c++-format
 msgid "Importing beatmaps ({:d}/{:d})"
-msgstr ""
+msgstr "Импорт карт ({:d}/{:d})"
 
 #: src/App/Neomod/SongBrowser/SongBrowser.cpp
 msgid "0-9"
@@ -3621,19 +3610,17 @@ msgstr "{:s} играет в мини-игры"
 #: src/App/Neomod/SpectatorScreen.cpp
 #, c++-format
 msgid "Database not loaded, cannot install map"
-msgstr ""
+msgstr "База данных не загружена, невозможно установить карту"
 
 #: src/App/Neomod/SpectatorScreen.cpp
-#, fuzzy
 msgid "Downloading map..."
-msgstr "Скачивание ..."
+msgstr "Скачивание карты..."
 
 #: src/App/Neomod/UIIconButton.cpp
 msgid "Play"
-msgstr ""
+msgstr "Воспроизвести"
 
 #: src/App/Neomod/UIIconButton.cpp
-#, fuzzy
 msgid "Pause"
 msgstr "Пауза"
 
@@ -3659,19 +3646,19 @@ msgstr "Поиск, пожалуйста подождите ..."
 
 #: src/App/Neomod/UIUserContextMenu.cpp
 msgid "Switch User:"
-msgstr ""
+msgstr "Сменить пользователя:"
 
 #: src/App/Neomod/UIUserContextMenu.cpp
 msgid "Set custom name"
-msgstr ""
+msgstr "Задать своё имя"
 
 #: src/App/Neomod/UIUserContextMenu.cpp
 msgid "Enter Username:"
-msgstr ""
+msgstr "Введите имя пользователя:"
 
 #: src/App/Neomod/UIUserContextMenu.cpp
 msgid "(Press ENTER to confirm.)"
-msgstr ""
+msgstr "(Нажмите ENTER для подтверждения.)"
 
 #: src/Engine/Sound/SoundEngine.cpp
 msgid "No sound"

@@ -61,38 +61,35 @@ msgid "Team"
 msgstr "Team"
 
 #: src/App/Neomod/BeatmapInstallOverlay.cpp
-#, fuzzy, c++-format
+#, c++-format
 msgid "Beatmap #{:d}"
-msgstr "Beatmap"
+msgstr "Beatmap #{:d}"
 
 #: src/App/Neomod/BeatmapInstallOverlay.cpp
-#, fuzzy
 msgid "Failed"
-msgstr "No Fail"
+msgstr "Fehlgeschlagen"
 
 #: src/App/Neomod/BeatmapInstallOverlay.cpp
-#, fuzzy
 msgid "Installing..."
 msgstr "Wird installiert..."
 
 #: src/App/Neomod/BeatmapInstallOverlay.cpp
-#, fuzzy
 msgid "Extracting..."
-msgstr "Erstelle Raum..."
+msgstr "Wird entpackt..."
 
 #: src/App/Neomod/BeatmapInstallOverlay.cpp
 msgid "Queued"
-msgstr ""
+msgstr "In Warteschlange"
 
 #: src/App/Neomod/BeatmapInstaller.cpp
 #, c++-format
 msgid "{} is already installed"
-msgstr ""
+msgstr "{} ist bereits installiert"
 
 #: src/App/Neomod/BeatmapInstaller.cpp
 #, c++-format
 msgid "Beatmapset #{:d} is already installed"
-msgstr ""
+msgstr "Beatmapset #{:d} ist bereits installiert"
 
 #: src/App/Neomod/BeatmapInstaller.cpp
 #, c++-format
@@ -100,7 +97,7 @@ msgid "Downloaded beatmapset #{:d}"
 msgstr "Beatmapset #{:d} heruntergeladen"
 
 #: src/App/Neomod/BeatmapInstaller.cpp
-#, fuzzy, c++-format
+#, c++-format
 msgid "Failed to import {}"
 msgstr "Fehler beim Importieren von {}"
 
@@ -112,21 +109,21 @@ msgstr "Herunterladen von Beatmapset #{:d} fehlgeschlagen :("
 #: src/App/Neomod/BeatmapInstaller.cpp
 #, c++-format
 msgid "Couldn't delete {}"
-msgstr ""
+msgstr "{} konnte nicht gelöscht werden"
 
 #: src/App/Neomod/BeatmapInstaller.cpp
 #, c++-format
 msgid "Deleted {}"
-msgstr ""
+msgstr "{} gelöscht"
 
 #: src/App/Neomod/BeatmapInterface.cpp
 msgid "Buffering ..."
-msgstr ""
+msgstr "Puffern ..."
 
 #: src/App/Neomod/BeatmapInterface.cpp
 #, c++-format
 msgid "{} has paused"
-msgstr ""
+msgstr "{} hat pausiert"
 
 #: src/App/Neomod/BeatmapInterface.cpp
 msgid "Waiting for players ..."
@@ -213,16 +210,16 @@ msgstr "Gib den Kanal ein, dem du beitreten möchtest (z. B. '#osu'):"
 #: src/App/Neomod/Database.cpp
 #, c++-format
 msgid "Added {:d} new beatmapset(s)."
-msgstr ""
+msgstr "{:d} neue(s) Beatmapset(s) hinzugefügt."
 
 #: src/App/Neomod/Database.cpp
 msgid "No new beatmaps detected."
-msgstr ""
+msgstr "Keine neuen Beatmaps gefunden."
 
 #: src/App/Neomod/Database.cpp
 #, c++-format
 msgid "{} was written by a newer version, ignoring it"
-msgstr ""
+msgstr "{} wurde von einer neueren Version geschrieben und wird ignoriert"
 
 #: src/App/Neomod/HUD.cpp
 #, c++-format
@@ -447,7 +444,7 @@ msgstr "Hier klicken, um das Update zu installieren!"
 
 #: src/App/Neomod/MainMenu.cpp
 msgid "A new version is available! Click to open the download page."
-msgstr ""
+msgstr "Eine neue Version ist verfügbar! Klicke, um die Download-Seite zu öffnen."
 
 #: src/App/Neomod/MainMenu.cpp
 msgid "Update Error! Click to retry ..."
@@ -463,19 +460,19 @@ msgstr "Du musst dich anmelden, um Beatmaps herunterzuladen!"
 
 #: src/App/Neomod/MainMenuNowPlaying.cpp
 msgid "Collapse when idle"
-msgstr ""
+msgstr "Bei Inaktivität einklappen"
 
 #: src/App/Neomod/MainMenuNowPlaying.cpp
 msgid "Keep expanded"
-msgstr ""
+msgstr "Ausgeklappt lassen"
 
 #: src/App/Neomod/MainMenuNowPlaying.cpp
 msgid "Previous song"
-msgstr ""
+msgstr "Vorheriger Song"
 
 #: src/App/Neomod/MainMenuNowPlaying.cpp
 msgid "Next song"
-msgstr ""
+msgstr "Nächster Song"
 
 #: src/App/Neomod/MainMenuTips.cpp
 msgid "Press Alt + Enter to toggle Fullscreen."
@@ -508,9 +505,8 @@ msgid "Launch with \"-sound bass\" as a commandline argument to use BASS for aud
 msgstr "Starte mit \"-sound bass\" als Kommandozeilenargument, um BASS für Audio zu verwenden."
 
 #: src/App/Neomod/MainMenuTips.cpp
-#, fuzzy
 msgid "Put \"-gpu vk\" after the \"Target:\" field in a shortcut to neomod to use the Vulkan renderer."
-msgstr "Setze \"-dx11\" hinter das \"Ziel:\"-Feld in einer Verknüpfung zu neomod, um den D3D11-Renderer zu nutzen."
+msgstr "Setze \"-gpu vk\" hinter das \"Ziel:\"-Feld in einer Verknüpfung zu neomod, um den Vulkan-Renderer zu nutzen."
 
 #: src/App/Neomod/MainMenuTips.cpp
 msgid "Put \"-dx11\" after the \"Target:\" field in a shortcut to neomod to use the D3D11 renderer."
@@ -584,11 +580,6 @@ msgstr "Geschwindigkeits-/BPM-Multiplikator"
 #: src/App/Neomod/ModSelector.cpp
 msgid " Experimental Mods (!)"
 msgstr " Experimentelle Mods (!)"
-
-#: src/App/Neomod/ModSelector.cpp src/App/Neomod/OsuDirectScreen.cpp
-#, fuzzy
-msgid "Storyboard"
-msgstr "Tastatur"
 
 #: src/App/Neomod/ModSelector.cpp
 msgid "Flip Up/Down"
@@ -1109,7 +1100,7 @@ msgstr "Score-Sortierung komplett ignorieren."
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Show osu! scores.db user names in user switcher"
-msgstr ""
+msgstr "Benutzernamen aus osu! scores.db im Benutzerwechsler anzeigen"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid ""
@@ -1117,6 +1108,9 @@ msgid ""
 "Should the user switcher show ALL user names from ALL scores?\n"
 "(Even from ones you got in your database because you watched a replay?)"
 msgstr ""
+"Nur relevant, wenn \"osu! scores.db laden\" aktiviert ist.\n"
+"Soll der Benutzerwechsler ALLE Benutzernamen aus ALLEN Scores anzeigen?\n"
+"(Auch von Scores, die durch das Ansehen eines Replays in deiner Datenbank gelandet sind?)"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Songbrowser"
@@ -1310,7 +1304,7 @@ msgstr "Vollbild"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Minimize On ALT+TAB"
-msgstr ""
+msgstr "Bei ALT+TAB minimieren"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Keep Aspect Ratio"
@@ -1498,11 +1492,11 @@ msgstr ""
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Lower Latency (!)"
-msgstr ""
+msgstr "Niedrigere Latenz (!)"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "NOTE: Enabling this may result in audio crackling!"
-msgstr ""
+msgstr "HINWEIS: Das Aktivieren kann zu Knistern im Audio führen!"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "WASAPI"
@@ -1666,7 +1660,7 @@ msgstr ""
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Export Skin"
-msgstr ""
+msgstr "Skin exportieren"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Open current Skin folder"
@@ -1677,6 +1671,8 @@ msgid ""
 "Packs the current skin into an .osk file in the exports folder,\n"
 "together with whatever the fallback skin fills in."
 msgstr ""
+"Packt den aktuellen Skin als .osk-Datei in den Export-Ordner,\n"
+"zusammen mit allem, was der Fallback-Skin ergänzt."
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Random Skin"
@@ -1704,13 +1700,15 @@ msgstr ""
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Let Skins Change Settings"
-msgstr ""
+msgstr "Skins dürfen Einstellungen ändern"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid ""
 "Skins can come with settings of their own ([neomod] section in skin.ini).\n"
 "While such a skin is in use, those settings can't be changed here."
 msgstr ""
+"Skins können eigene Einstellungen mitbringen (Abschnitt [neomod] in skin.ini).\n"
+"Solange ein solcher Skin aktiv ist, können diese Einstellungen hier nicht geändert werden."
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Number Scale:"
@@ -1737,20 +1735,24 @@ msgid "Instafade Sliders"
 msgstr "Slider sofort verblassen lassen"
 
 #: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Storyboards"
+msgstr "Storyboards zeichnen"
+
+#: src/App/Neomod/OptionsOverlay.cpp
 msgid "Ignore Beatmap Skins"
-msgstr ""
+msgstr "Beatmap-Skins ignorieren"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Use your skin's elements and slider colours instead of the ones that come with a beatmap."
-msgstr ""
+msgstr "Verwende die Elemente und Slider-Farben deines Skins statt derer der Beatmap."
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Ignore Beatmap Hitsounds"
-msgstr ""
+msgstr "Beatmap-Hitsounds ignorieren"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Use your skin's sounds instead of the ones that come with a beatmap."
-msgstr ""
+msgstr "Verwende die Sounds deines Skins statt derer der Beatmap."
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Ignore Beatmap Combo Colors"
@@ -1849,6 +1851,8 @@ msgid ""
 "This will block all dynamic slider (color/border) features,\n"
 "but is more easily customizable."
 msgstr ""
+"Dies blockiert alle dynamischen Slider-Funktionen (Farbe/Rand),\n"
+"ist aber leichter anpassbar."
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Use osu!lazer Slider Style"
@@ -2271,13 +2275,12 @@ msgid "Draw Background in Ranking/Results Screen"
 msgstr "Hintergrund im Ranking-/Ergebnis-Bildschirm anzeigen"
 
 #: src/App/Neomod/OptionsOverlay.cpp
-#, fuzzy
 msgid "Prefer beatmap background in Menu"
-msgstr "Menü-Hintergrund im Menü anzeigen"
+msgstr "Beatmap-Hintergrund im Menü bevorzugen"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Use the background from the currently playing song, even in the main menu."
-msgstr ""
+msgstr "Verwende den Hintergrund des aktuell laufenden Songs, auch im Hauptmenü."
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Draw menu-background in Menu"
@@ -2292,36 +2295,32 @@ msgid "NOTE: Only applies if \"Draw Background in SongBrowser\" is disabled."
 msgstr "HINWEIS: Gilt nur, wenn \"Hintergrund in der Songauswahl anzeigen\" deaktiviert ist."
 
 #: src/App/Neomod/OptionsOverlay.cpp
-#, fuzzy
 msgid "Key Overlay"
-msgstr "Tasten-Overlay:"
+msgstr "Tasten-Overlay"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Draw Key Overlay"
 msgstr "Tasten-Overlay anzeigen"
 
 #: src/App/Neomod/OptionsOverlay.cpp
-#, fuzzy
 msgid "Draw Key Overlay Trail"
-msgstr "Tasten-Overlay anzeigen"
+msgstr "Tasten-Overlay-Spur anzeigen"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Scrolling blocks next to the key overlay, visualizing how long each key was held."
-msgstr ""
+msgstr "Scrollende Blöcke neben dem Tasten-Overlay, die zeigen, wie lange jede Taste gehalten wurde."
 
 #: src/App/Neomod/OptionsOverlay.cpp
-#, fuzzy
 msgid "Trail Opacity:"
-msgstr "Slider-Deckkraft"
+msgstr "Spur-Deckkraft:"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Trail Speed:"
-msgstr ""
+msgstr "Spur-Geschwindigkeit:"
 
 #: src/App/Neomod/OptionsOverlay.cpp
-#, fuzzy
 msgid "Trail Fade Distance:"
-msgstr "Distanz:"
+msgstr "Spur-Ausblenddistanz:"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "HUD"
@@ -2896,7 +2895,7 @@ msgstr "Drücke noch {:d} Mal zur Bestätigung!"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "This setting is locked in multiplayer rooms."
-msgstr ""
+msgstr "Diese Einstellung ist in Multiplayer-Räumen gesperrt."
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "This setting is forced by the server."
@@ -2909,7 +2908,7 @@ msgstr "Diese Einstellung wird vom aktuellen Skin erzwungen."
 #: src/App/Neomod/OptionsOverlay.cpp
 #, c++-format
 msgid "(turn off \"{}\" in the skin options to change it)"
-msgstr ""
+msgstr "(deaktiviere \"{}\" in den Skin-Optionen, um sie zu ändern)"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "All settings have been reset."
@@ -2925,147 +2924,148 @@ msgstr "Speichern von osu.cfg fehlgeschlagen"
 
 #: src/App/Neomod/Osu.cpp
 msgid "This replay's beatmap is not installed."
-msgstr ""
+msgstr "Die Beatmap dieses Replays ist nicht installiert."
 
 #: src/App/Neomod/Osu.cpp
 #, c++-format
 msgid "Skin reloaded!{:s}"
-msgstr ""
+msgstr "Skin neu geladen!{:s}"
 
 #: src/App/Neomod/Osu.cpp
 msgid "Mouse buttons are disabled."
-msgstr ""
+msgstr "Maustasten sind deaktiviert."
 
 #: src/App/Neomod/Osu.cpp
 msgid "Mouse buttons are enabled."
-msgstr ""
+msgstr "Maustasten sind aktiviert."
 
 #: src/App/Neomod/Osu.cpp
-#, fuzzy
 msgid "No beatmap is currently selected."
-msgstr "Keine Map ausgewählt"
+msgstr "Aktuell ist keine Beatmap ausgewählt."
 
 #: src/App/Neomod/Osu.cpp
 msgid "In-game interface has been enabled."
-msgstr ""
+msgstr "Das Spiel-Interface wurde aktiviert."
 
 #: src/App/Neomod/Osu.cpp
 msgid "In-game interface has been disabled."
-msgstr ""
+msgstr "Das Spiel-Interface wurde deaktiviert."
 
 #: src/App/Neomod/Osu.cpp
 msgid "Scoreboard is hidden."
-msgstr ""
+msgstr "Scoreboard ist ausgeblendet."
 
 #: src/App/Neomod/Osu.cpp
 msgid "Scoreboard is shown."
-msgstr ""
+msgstr "Scoreboard wird angezeigt."
 
 #: src/App/Neomod/Osu.cpp
 #, c++-format
 msgid "Local beatmap offset set to {:d} ms"
-msgstr ""
+msgstr "Lokaler Beatmap-Offset auf {:d} ms gesetzt"
 
 #: src/App/Neomod/Osu.cpp
-#, fuzzy
 msgid "Error: Couldn't grab a screenshot :("
-msgstr "Fehler: Keine Skins gefunden"
+msgstr "Fehler: Screenshot konnte nicht aufgenommen werden :("
 
 #: src/App/Neomod/Osu.cpp
 msgid "Screenshot copied to clipboard (click to open in a new tab)"
-msgstr ""
+msgstr "Screenshot in die Zwischenablage kopiert (klicken, um ihn in einem neuen Tab zu öffnen)"
 
 #: src/App/Neomod/Osu.cpp
 msgid "Screenshot taken (click to open in a new tab)"
-msgstr ""
+msgstr "Screenshot aufgenommen (klicken, um ihn in einem neuen Tab zu öffnen)"
 
 #: src/App/Neomod/Osu.cpp
 #, c++-format
 msgid "Screenshot copied to clipboard and saved to {:s}"
-msgstr ""
+msgstr "Screenshot in die Zwischenablage kopiert und unter {:s} gespeichert"
 
 #: src/App/Neomod/Osu.cpp
-#, fuzzy, c++-format
+#, c++-format
 msgid "Screenshot saved to {:s}"
-msgstr "Screenshots"
+msgstr "Screenshot unter {:s} gespeichert"
 
 #: src/App/Neomod/Osu.cpp
 #, c++-format
 msgid "Skin exported to {:s}"
-msgstr ""
+msgstr "Skin nach {:s} exportiert"
 
 #: src/App/Neomod/Osu.cpp
 msgid "Can't export the default skin."
-msgstr ""
+msgstr "Der Standard-Skin kann nicht exportiert werden."
 
 #: src/App/Neomod/Osu.cpp
 #, c++-format
 msgid "Couldn't export the skin to {:s}"
-msgstr ""
+msgstr "Skin konnte nicht nach {:s} exportiert werden"
 
 #: src/App/Neomod/OsuDirectScreen.cpp
 #, c++-format
 msgid "+{:d} more"
-msgstr ""
+msgstr "+{:d} weitere"
 
 #: src/App/Neomod/OsuDirectScreen.cpp
 msgid "View beatmap page"
-msgstr ""
+msgstr "Beatmap-Seite ansehen"
 
 #: src/App/Neomod/OsuDirectScreen.cpp
-#, fuzzy
 msgid "Close"
-msgstr "2. Schließen"
+msgstr "Schließen"
 
 #: src/App/Neomod/OsuDirectScreen.cpp
-#, fuzzy
 msgid "Download"
-msgstr "Maps herunterladen"
+msgstr "Herunterladen"
 
 #: src/App/Neomod/OsuDirectScreen.cpp
 msgid "Cancel download"
-msgstr ""
+msgstr "Download abbrechen"
 
 #: src/App/Neomod/OsuDirectScreen.cpp
-#, fuzzy
 msgid "Go to beatmap"
-msgstr "Beatmap"
+msgstr "Zur Beatmap"
 
 #: src/App/Neomod/OsuDirectScreen.cpp
 msgid ""
 "Click a beatmap to see its details.\n"
 "Click it again to download it."
 msgstr ""
+"Klicke auf eine Beatmap, um ihre Details zu sehen.\n"
+"Klicke erneut, um sie herunterzuladen."
 
 #: src/App/Neomod/OsuDirectScreen.cpp src/App/Neomod/SongBrowser/InfoLabel.cpp
 #, c++-format
 msgid "Mapped by {:s}"
-msgstr ""
+msgstr "Gemappt von {:s}"
 
 #: src/App/Neomod/OsuDirectScreen.cpp
 msgid "Pending"
-msgstr ""
+msgstr "Ausstehend"
 
 #: src/App/Neomod/OsuDirectScreen.cpp
 msgid "Ranked"
-msgstr ""
+msgstr "Ranked"
 
 #: src/App/Neomod/OsuDirectScreen.cpp
 msgid "Approved"
-msgstr ""
+msgstr "Approved"
 
 #: src/App/Neomod/OsuDirectScreen.cpp
 msgid "Loved"
-msgstr ""
+msgstr "Loved"
 
 #: src/App/Neomod/OsuDirectScreen.cpp
 #, c++-format
 msgid "Updated {:s}"
-msgstr ""
+msgstr "Aktualisiert {:s}"
 
 #: src/App/Neomod/OsuDirectScreen.cpp
 msgid "Video"
-msgstr ""
+msgstr "Video"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "Storyboard"
+msgstr "Storyboard"
 
 #: src/App/Neomod/OsuDirectScreen.cpp
 msgid "Newest maps"
@@ -3081,7 +3081,7 @@ msgstr "Nur Ranked-Beatmaps anzeigen"
 
 #: src/App/Neomod/OsuDirectScreen.cpp
 msgid "Auto-select downloaded beatmaps"
-msgstr ""
+msgstr "Heruntergeladene Beatmaps automatisch auswählen"
 
 #: src/App/Neomod/PauseOverlay.cpp
 msgid "Resume"
@@ -3324,27 +3324,27 @@ msgstr "Konvertiere Scores ({}/{}) ..."
 #: src/App/Neomod/SongBrowser/InfoLabel.cpp
 #, c++-format
 msgid "Length: {:02d}:{:02d} BPM: {} Objects: {}"
-msgstr ""
+msgstr "Länge: {:02d}:{:02d} BPM: {} Objekte: {}"
 
 #: src/App/Neomod/SongBrowser/InfoLabel.cpp
 #, c++-format
 msgid "Length: {:02d}:{:02d} BPM: {}-{} ({}) Objects: {}"
-msgstr ""
+msgstr "Länge: {:02d}:{:02d} BPM: {}-{} ({}) Objekte: {}"
 
 #: src/App/Neomod/SongBrowser/InfoLabel.cpp
 #, c++-format
 msgid "CS:{:.3g} AR:{:.3g} OD:{:.3g} HP:{:.3g} Stars:{:.3g} ({}pp)"
-msgstr ""
+msgstr "CS:{:.3g} AR:{:.3g} OD:{:.3g} HP:{:.3g} Sterne:{:.3g} ({}pp)"
 
 #: src/App/Neomod/SongBrowser/InfoLabel.cpp
 #, c++-format
 msgid "CS:{:.3g} AR:{:.3g} OD:{:.3g} HP:{:.3g} Stars:{:.3g} -> {:.3g} ({}pp)"
-msgstr ""
+msgstr "CS:{:.3g} AR:{:.3g} OD:{:.3g} HP:{:.3g} Sterne:{:.3g} -> {:.3g} ({}pp)"
 
 #: src/App/Neomod/SongBrowser/InfoLabel.cpp
 #, c++-format
 msgid "CS:{:.3g} AR:{:.3g} OD:{:.3g} HP:{:.3g} Stars:{:.3g} * (??? pp)"
-msgstr ""
+msgstr "CS:{:.3g} AR:{:.3g} OD:{:.3g} HP:{:.3g} Sterne:{:.3g} * (??? pp)"
 
 #: src/App/Neomod/SongBrowser/SongBrowser.cpp
 msgid "By Artist"
@@ -3379,9 +3379,8 @@ msgid "By Rank Achieved"
 msgstr "Nach erreichter Platzierung"
 
 #: src/App/Neomod/SongBrowser/SongBrowser.cpp
-#, fuzzy
 msgid "By Date Played"
-msgstr "Nach Hinzugefügt am"
+msgstr "Nach Spieldatum"
 
 #: src/App/Neomod/SongBrowser/SongBrowser.cpp
 msgid "By Date"
@@ -3471,12 +3470,12 @@ msgstr "Konnte Beatmap #{:d} nicht finden :("
 #: src/App/Neomod/SongBrowser/SongBrowser.cpp
 #, c++-format
 msgid "Scanning beatmap folders ({:d}/{:d})"
-msgstr ""
+msgstr "Beatmap-Ordner werden durchsucht ({:d}/{:d})"
 
 #: src/App/Neomod/SongBrowser/SongBrowser.cpp
 #, c++-format
 msgid "Importing beatmaps ({:d}/{:d})"
-msgstr ""
+msgstr "Beatmaps werden importiert ({:d}/{:d})"
 
 #: src/App/Neomod/SongBrowser/SongBrowser.cpp
 msgid "0-9"
@@ -3611,20 +3610,19 @@ msgstr "{:s} spielt Minispiele"
 #: src/App/Neomod/SpectatorScreen.cpp
 #, c++-format
 msgid "Database not loaded, cannot install map"
-msgstr ""
+msgstr "Datenbank nicht geladen, Map kann nicht installiert werden"
 
 #: src/App/Neomod/SpectatorScreen.cpp
-#, fuzzy
 msgid "Downloading map..."
-msgstr "Wird heruntergeladen ..."
+msgstr "Map wird heruntergeladen..."
 
 #: src/App/Neomod/UIIconButton.cpp
 msgid "Play"
-msgstr ""
+msgstr "Abspielen"
 
 #: src/App/Neomod/UIIconButton.cpp
 msgid "Pause"
-msgstr ""
+msgstr "Pause"
 
 #: src/App/Neomod/UISearchOverlay.cpp
 msgid "Search: "
@@ -3648,19 +3646,19 @@ msgstr "Suchen, bitte warten ..."
 
 #: src/App/Neomod/UIUserContextMenu.cpp
 msgid "Switch User:"
-msgstr ""
+msgstr "Benutzer wechseln:"
 
 #: src/App/Neomod/UIUserContextMenu.cpp
 msgid "Set custom name"
-msgstr ""
+msgstr "Eigenen Namen festlegen"
 
 #: src/App/Neomod/UIUserContextMenu.cpp
 msgid "Enter Username:"
-msgstr ""
+msgstr "Benutzername eingeben:"
 
 #: src/App/Neomod/UIUserContextMenu.cpp
 msgid "(Press ENTER to confirm.)"
-msgstr ""
+msgstr "(Drücke ENTER zum Bestätigen.)"
 
 #: src/Engine/Sound/SoundEngine.cpp
 msgid "No sound"

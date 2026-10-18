@@ -8,13 +8,12 @@ from pathlib import Path
 keywords = ["_", "tformat"]
 
 # Add a new language here to automatically generate a new .po file!
-# Sorting by player count here... but this will get messy if we have many languages
 languages = {
-    "ru": "Русский",
-    "ja": "日本語",
-    "fr": "Français",
-    "pl": "Polski",
-    "de": "Deutsch",
+    "fr": "French (Français)",
+    "de": "German (Deutsch)",
+    "ja": "Japanese (日本語)",
+    "pl": "Polish (Polski)",
+    "ru": "Russian (Русский)",
 }
 
 # Resolve both inputs to absolute paths for unambiguous filesystem ops. xgettext records

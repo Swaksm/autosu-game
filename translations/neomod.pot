@@ -556,10 +556,6 @@ msgstr ""
 msgid " Experimental Mods (!)"
 msgstr ""
 
-#: src/App/Neomod/ModSelector.cpp src/App/Neomod/OsuDirectScreen.cpp
-msgid "Storyboard"
-msgstr ""
-
 #: src/App/Neomod/ModSelector.cpp
 msgid "Flip Up/Down"
 msgstr ""
@@ -1639,6 +1635,10 @@ msgstr ""
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Instafade Sliders"
+msgstr ""
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Storyboards"
 msgstr ""
 
 #: src/App/Neomod/OptionsOverlay.cpp
@@ -2926,6 +2926,10 @@ msgstr ""
 
 #: src/App/Neomod/OsuDirectScreen.cpp
 msgid "Video"
+msgstr ""
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "Storyboard"
 msgstr ""
 
 #: src/App/Neomod/OsuDirectScreen.cpp
