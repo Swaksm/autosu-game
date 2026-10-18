@@ -312,6 +312,8 @@ class BeatmapInterface final : public GameplayJudge::Listener, public PlayfieldV
     // contains hitobjects, score, health
     std::unique_ptr<GameplayJudge> judge;
 
+    const DatabaseBeatmap *storyboardMap{nullptr};  // to check if we can reused the current storyboard
+    Async::CancellableHandle<std::unique_ptr<Storyboard>> storyboardHandle;
     std::unique_ptr<Storyboard> storyboard;
 
     AnimFloat fFailAnim;

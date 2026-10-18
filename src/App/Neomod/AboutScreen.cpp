@@ -400,13 +400,13 @@ void AboutScreen::buildChangelog() {
     CHANGELOG v44_0;
     v44_0.title = "44.0 (" CHANGELOG_TIMESTAMP ")";
     v44_0.changes = {
-        R"(- Added the Storyboard mod)",
         R"(- Added a preview panel to online beatmaps screen)",
         R"(- Added audio previews to online beatmaps screen)",
         R"(  - You can disable them by setting "direct_autoplay_preview 0" if you really want to)",
         R"(- Added music controls to main menu)",
         R"(- Added skin exporting ("Export Skin" in the skin options, or "skin_export" in the console))",
         R"(- Adjusted slider judgement to match stable more closely)",
+        R"(- Added support for storyboards)",
         R"(- Added support for beatmap skins (sounds/images))",
         R"(  - Disabled by default, enable them in the skins section in the options menu)",
         R"(- Exposed "direct_autoselect" behavior as a checkbox)",

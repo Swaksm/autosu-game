@@ -296,35 +296,6 @@ bool is_updating_from_old_version() {
     return drawNotificationArrow;
 }
 
-// what a storyboard is read from, for copying across threads
-struct StoryboardSource {
-    std::string folder;
-    std::string osuPath;
-    std::string artist;
-    std::string title;
-    std::string creator;
-    std::string background;
-    std::string skinFolder;
-};
-
-// reads and parses a storyboard (off the main thread)
-std::unique_ptr<Storyboard> parseStoryboard(const StoryboardSource &src, const Sync::stop_token &tok) {
-    File osuFile(src.osuPath);
-    if(!osuFile.canRead() || tok.stop_requested()) return nullptr;
-    const std::string osu = osuFile.readToString();
-
-    std::string osb;
-    if(const std::string osbFile = Storyboard::findOsbFile(src.folder, src.artist, src.title, src.creator);
-       !osbFile.empty()) {
-        File file(src.folder + osbFile);
-        if(file.canRead()) osb = file.readToString();
-    }
-    if(tok.stop_requested()) return nullptr;
-
-    auto storyboard = std::make_unique<Storyboard>(src.folder, osu, osb, src.background, src.skinFolder);
-    if(storyboard->getNumSprites() == 0) return nullptr;
-    return storyboard;
-}
 }  // namespace
 
 MainMenu::MainMenu() : UIScreen() {
@@ -1058,18 +1029,8 @@ void MainMenu::updateStoryboard() {
         const bool alreadyShown = this->storyboard && map == this->shownStoryboardMap;
         if(map && !alreadyShown) {
             const Skin *skin = osu->getSkin();
-            StoryboardSource src{
-                .folder = std::string{map->getFolder()},
-                .osuPath = std::string{map->getFilePath()},
-                .artist = std::string{map->getArtistLatin()},
-                .title = std::string{map->getTitleLatin()},
-                .creator = std::string{map->getCreator()},
-                .background = std::string{map->getBackgroundImageFileName()},
-                .skinFolder = skin ? skin->skin_dir : std::string{},
-            };
-            this->storyboardHandle = Async::submit_cancellable(
-                [src = std::move(src)](const Sync::stop_token &tok) { return parseStoryboard(src, tok); },
-                Lane::Background);
+            this->storyboardHandle =
+                Storyboard::parseAsync(*map, nullptr, skin ? skin->skin_dir : std::string{}, Lane::Background);
         }
     }
 

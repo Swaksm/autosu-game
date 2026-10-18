@@ -4,6 +4,7 @@
 #include "AnimationHandler.h"
 #include "AsyncPool.h"
 #include "BeatmapFile/BeatmapFile.h"
+#include "DatabaseBeatmap.h"
 #include "Engine.h"
 #include "Environment.h"
 #include "File.h"
@@ -300,7 +301,6 @@ struct Storyboard::Impl {
     // for loading
     std::vector<std::string> imageFiles;
     std::vector<u32> frameFiles;
-    u32 backgroundImage{NO_FILE};
     std::vector<std::string> sampleFiles;
     std::vector<std::pair<std::string, std::string>> used;
 
@@ -308,7 +308,6 @@ struct Storyboard::Impl {
     std::vector<Image *> frames;
     std::vector<Image *> images;
     std::vector<Sound *> sounds;
-    Image *background{nullptr};
     std::optional<Async::Future<MD5Hash>> hashing;
     std::optional<MD5Hash> hash;
 
@@ -318,7 +317,7 @@ struct Storyboard::Impl {
     std::vector<std::vector<FiredTrigger>> fired;
 
     void parse(std::string_view file, bool isOsu, std::vector<std::pair<std::string, std::string>> &variables);
-    void parseEventLine(std::string_view line, i32 version);
+    void parseEventLine(std::string_view line, i32 version, std::vector<std::string_view> &fields);
     void finish();
     void resolveFiles(std::string_view skinFolder);
 
@@ -341,6 +340,7 @@ void Storyboard::Impl::parse(std::string_view file, bool isOsu,
     this->current = nullptr;
     this->currentGroup = nullptr;
 
+    std::vector<std::string_view> fields;
     for(const auto &section : osu.getSections()) {
         const bool isVariables = section.name == "Variables";
         if(!isVariables && section.readAs != BeatmapFile::SectionKind::EVENTS &&
@@ -376,16 +376,16 @@ void Storyboard::Impl::parse(std::string_view file, bool isOsu,
                         substituted.replace(pos, name.size(), value);
                     }
                 }
-                this->parseEventLine(substituted, version);
+                this->parseEventLine(substituted, version, fields);
             } else {
-                this->parseEventLine(line, version);
+                this->parseEventLine(line, version, fields);
             }
         }
     }
 }
 
 // absolute hell
-void Storyboard::Impl::parseEventLine(std::string_view line, i32 version) {
+void Storyboard::Impl::parseEventLine(std::string_view line, i32 version, std::vector<std::string_view> &fields) {
     // strip out comments from commands
     if(const uSz comment = line.find("//"); comment != std::string_view::npos) line = line.substr(0, comment);
 
@@ -393,7 +393,7 @@ void Storyboard::Impl::parseEventLine(std::string_view line, i32 version) {
     while(depth < line.size() && (line[depth] == ' ' || line[depth] == '_')) depth++;
     line.remove_prefix(depth);
 
-    const auto fields = SString::split(line, ',');
+    SString::split(fields, line, ',');
     if(fields.empty()) return;
 
     if(depth == 0) {
@@ -496,23 +496,28 @@ void Storyboard::Impl::parseEventLine(std::string_view line, i32 version) {
 
     const auto values = std::span{fields}.subspan(4);
     const auto commands = [&]<typename T>(std::vector<Command<T>> &list, uSz arity, auto read) {
-        std::vector<T> steps;
-        for(uSz i = 0; i + arity <= values.size(); i += arity) {
-            T value;
-            if(!read(values.subspan(i, arity), value)) return;
-            steps.push_back(value);
-        }
-        if(steps.empty()) return;
-        if(steps.size() == 1) steps.push_back(steps[0]);
+        T from;
+        if(values.size() < arity || !read(values.subspan(0, arity), from)) return;
 
         // https://osu.ppy.sh/wiki/en/Storyboard/Scripting/Shorthand
         const f64 duration = std::max(end - start, 0.0);
-        for(uSz i = 0; i + 1 < steps.size(); i++) {
-            group->add(list, Command<T>{.start = start + duration * (f64)i,
-                                        .end = end + duration * (f64)i,
-                                        .from = steps[i],
-                                        .to = steps[i + 1],
-                                        .easing = ease});
+        const uSz before = list.size();
+        const f64 groupStart = group->start, groupEnd = group->end;
+        for(uSz i = arity; i + arity <= values.size(); i += arity) {
+            T to;
+            if(!read(values.subspan(i, arity), to)) {
+                // (one invalid value drops the whole line)
+                list.resize(before);
+                group->start = groupStart, group->end = groupEnd;
+                return;
+            }
+            const f64 offset = duration * (f64)(i / arity - 1);
+            group->add(
+                list, Command<T>{.start = start + offset, .end = end + offset, .from = from, .to = to, .easing = ease});
+            from = to;
+        }
+        if(list.size() == before) {
+            group->add(list, Command<T>{.start = start, .end = end, .from = from, .to = from, .easing = ease});
         }
     };
     const auto one = [](std::span<const std::string_view> v, f32 &out) { return Parsing::strto_s(v[0], out); };
@@ -656,7 +661,10 @@ void Storyboard::Impl::resolveFiles(std::string_view skinFolder) {
         }
     }
 
-    if(!this->backgroundFile.empty()) this->backgroundImage = findImage(this->backgroundFile);
+    // (drawn from the map's own background, but part of what the storyboard shows)
+    if(!this->backgroundFile.empty()) {
+        this->used.emplace_back(SString::to_lower(this->backgroundFile), resolve(this->backgroundFile));
+    }
 
     Hash::unstable_ncase_stringmap<u32> knownSamples;
     for(auto &sample : this->samples) {
@@ -810,6 +818,38 @@ Storyboard::~Storyboard() {
     }
 }
 
+Async::CancellableHandle<std::unique_ptr<Storyboard>> Storyboard::parseAsync(
+    const DatabaseBeatmap &map, std::shared_ptr<const std::vector<u8>> osuFile, std::string skinFolder, Lane lane) {
+    return Async::submit_cancellable(
+        [folder = std::string{map.getFolder()}, osuPath = std::string{map.getFilePath()},
+         artist = std::string{map.getArtistLatin()}, title = std::string{map.getTitleLatin()},
+         creator = std::string{map.getCreator()}, background = std::string{map.getBackgroundImageFileName()},
+         osuFile = std::move(osuFile),
+         skinFolder = std::move(skinFolder)](const Sync::stop_token &tok) -> std::unique_ptr<Storyboard> {
+            std::string osuRead;
+            if(!osuFile) {
+                File file(osuPath);
+                if(!file.canRead()) return nullptr;
+                osuRead = file.readToString();
+            }
+            const std::string_view osu =
+                osuFile ? std::string_view{reinterpret_cast<const char *>(osuFile->data()), osuFile->size()}
+                        : std::string_view{osuRead};
+
+            std::string osb;
+            if(const std::string osbFile = findOsbFile(folder, artist, title, creator); !osbFile.empty()) {
+                File file(folder + osbFile);
+                if(file.canRead()) osb = file.readToString();
+            }
+            if(tok.stop_requested()) return nullptr;
+
+            auto storyboard = std::make_unique<Storyboard>(folder, osu, osb, background, skinFolder);
+            if(storyboard->isEmpty()) return nullptr;
+            return storyboard;
+        },
+        lane);
+}
+
 std::string Storyboard::findOsbFile(std::string_view folder, std::string_view artist, std::string_view title,
                                     std::string_view creator) {
     std::vector<std::string> osbs;
@@ -853,16 +893,17 @@ std::optional<f64> Storyboard::getEndTime() const {
 void Storyboard::load(bool visualsOnly) {
     Impl &sb = *this->impl;
 
-    sb.images.reserve(sb.imageFiles.size());
-    for(const auto &file : sb.imageFiles) {
-        resourceManager->requestNextLoadAsync();
-        sb.images.push_back(resourceManager->loadImageAbsUnnamed(file));
+    if(sb.frames.empty()) {
+        sb.images.reserve(sb.imageFiles.size());
+        for(const auto &file : sb.imageFiles) {
+            resourceManager->requestNextLoadAsync();
+            sb.images.push_back(resourceManager->loadImageAbsUnnamed(file));
+        }
+        sb.frames.reserve(sb.frameFiles.size());
+        for(const u32 file : sb.frameFiles) sb.frames.push_back(file == NO_FILE ? nullptr : sb.images[file]);
     }
-    sb.frames.reserve(sb.frameFiles.size());
-    for(const u32 file : sb.frameFiles) sb.frames.push_back(file == NO_FILE ? nullptr : sb.images[file]);
-    if(sb.backgroundImage != NO_FILE) sb.background = sb.images[sb.backgroundImage];
 
-    if(visualsOnly) return;
+    if(visualsOnly || sb.hashing || sb.hash) return;
 
     sb.sounds.reserve(sb.sampleFiles.size());
     for(const auto &file : sb.sampleFiles) {
@@ -889,18 +930,16 @@ void Storyboard::load(bool visualsOnly) {
                 manifest += fmt::format("{}\t{}\n", name, md5 ? md5->to_chars().string() : "-");
             }
             return crypto::hash::md5(manifest);
-        },
-        Lane::Background);
+        });
 }
 
 bool Storyboard::isReady() const {
+    if(this->impl->hashing && !this->impl->hashing->is_ready()) return false;
     return std::ranges::none_of(this->impl->images,
                                 [](const Image *i) { return i && resourceManager->isLoadingResource(i); }) &&
            std::ranges::none_of(this->impl->sounds,
                                 [](const Sound *s) { return s && resourceManager->isLoadingResource(s); });
 }
-
-const Image *Storyboard::getBackgroundImage() const { return this->impl->background; }
 
 MD5Hash Storyboard::getHash() {
     Impl &sb = *this->impl;

@@ -1,6 +1,8 @@
 #pragma once
 // Copyright (c) 2025, kiwec, All rights reserved.
 #include "types.h"
+#include "AsyncCancellable.h"
+#include "AsyncTypes.h"
 #include "MD5Hash.h"
 #include "Rect.h"
 #include "StaticPImpl.h"
@@ -12,7 +14,7 @@
 #include <string_view>
 #include <vector>
 
-class Image;
+class DatabaseBeatmap;
 
 // see https://osu.ppy.sh/wiki/en/Storyboard/Scripting
 class Storyboard {
@@ -45,6 +47,10 @@ class Storyboard {
                std::string_view skinFolder);
     ~Storyboard();
 
+    // reads and parses a storyboard off the main thread
+    [[nodiscard]] static Async::CancellableHandle<std::unique_ptr<Storyboard>> parseAsync(
+        const DatabaseBeatmap &map, std::shared_ptr<const std::vector<u8>> osuFile, std::string skinFolder, Lane lane);
+
     // "Artist - Title (Creator).osb", or else the first .osb in the folder
     [[nodiscard]] static std::string findOsbFile(std::string_view folder, std::string_view artist,
                                                  std::string_view title, std::string_view creator);
@@ -60,7 +66,6 @@ class Storyboard {
 
     void load(bool visualsOnly);
     [[nodiscard]] bool isReady() const;
-    [[nodiscard]] const Image *getBackgroundImage() const;
 
     [[nodiscard]] MD5Hash getHash();
 

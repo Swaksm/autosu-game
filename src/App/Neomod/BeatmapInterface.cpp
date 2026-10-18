@@ -45,7 +45,6 @@
 #include "RoomScreen.h"
 #include "GameplayJudge.h"
 #include "Sound.h"
-#include "File.h"
 #include "Font.h"
 #include "Shader.h"
 #include "RenderTarget.h"
@@ -188,16 +187,20 @@ void BeatmapInterface::drawBackground() {
 
     // draw background image
     {
-        const Image *backgroundImage = nullptr;
+        const Storyboard *storyboard = this->bIsPreLoading ? nullptr : this->storyboard.get();
+
+        const Image *backgroundImage = osu->getBackgroundImageHandler()->getLoadBackgroundImage(
+            this->beatmap, false, cv::draw_menu_background.getBool());
+
+        bool drawBackgroundImage = backgroundImage && backgroundImage->isReady();
+        if(brightness == 0.f) drawBackgroundImage = false;
+        if(storyboard && storyboard->replacesBackground()) drawBackgroundImage = false;
+        if(!storyboard && !cv::draw_beatmap_background_image.getBool()) drawBackgroundImage = false;
+
         vec2 offset{0.f};
-        if(this->storyboard) {
-            if(!this->storyboard->replacesBackground()) backgroundImage = this->storyboard->getBackgroundImage();
-            offset = this->storyboard->getBackgroundOffset() * (osu->getVirtScreenHeight() / 480.f);
-        } else if(cv::draw_beatmap_background_image.getBool() && brightness > 0.0f) {
-            backgroundImage = osu->getBackgroundImageHandler()->getLoadBackgroundImage(
-                this->beatmap, false, cv::draw_menu_background.getBool());
-        }
-        if(backgroundImage && backgroundImage->isReady()) {
+        if(storyboard) offset = storyboard->getBackgroundOffset() * (osu->getVirtScreenHeight() / 480.f);
+
+        if(drawBackgroundImage) {
             const float scale = Osu::getImageScaleToFillResolution(backgroundImage, osu->getVirtScreenSize());
             const vec2 centerTrans = (osu->getVirtScreenSize() / 2.0f) + offset;
             const auto alpha = cv::mod_fposu.getBool() ? cv::background_alpha.getFloat() : 1.0f;
@@ -207,7 +210,7 @@ void BeatmapInterface::drawBackground() {
             {
                 g->scale(scale, scale);
                 g->translate((int)centerTrans.x, (int)centerTrans.y);
-                if(this->storyboard) this->getStoryboardView().transform();
+                if(storyboard) this->getStoryboardView().transform();
                 g->drawImage(backgroundImage);
             }
             g->popTransform();
@@ -432,6 +435,9 @@ void BeatmapInterface::selectBeatmap(DatabaseBeatmap *map) {
 void BeatmapInterface::deselectBeatmap() {
     this->beatmap = nullptr;
     this->unloadObjects();
+    this->storyboardMap = nullptr;
+    this->storyboardHandle = {};
+    this->storyboard.reset();
     this->judge.reset();
 }
 
@@ -1324,31 +1330,25 @@ Storyboard::View BeatmapInterface::getStoryboardView() const {
 
 void BeatmapInterface::loadStoryboard() {
     const PlayedMap *map = this->judge->getMapData();
-    if(!cv::draw_storyboard.getBool() || !map || !map->data) return;
 
-    const std::string folder{this->beatmap->getFolder()};
-    std::string osb;
-    if(const std::string osbFile = Storyboard::findOsbFile(folder, this->beatmap->getArtistLatin(),
-                                                           this->beatmap->getTitleLatin(), this->beatmap->getCreator());
-       !osbFile.empty()) {
-        File file(folder + osbFile);
-        if(file.canRead()) osb = file.readToString();
+    DatabaseBeatmap *sbmap = nullptr;
+    if(map && map->data && cv::draw_storyboard.getBool()) {
+        sbmap = this->beatmap;
     }
+
+    if(sbmap == this->storyboardMap) return;
+
+    this->storyboardMap = sbmap;
+    this->storyboard.reset();
+    this->storyboardHandle = {};
+    if(!sbmap) return;
 
     const Skin *skin = this->getSkin();
-    this->storyboard = std::make_unique<Storyboard>(
-        folder, std::string_view{reinterpret_cast<const char *>(map->data->data()), map->data->size()}, osb,
-        std::string{this->beatmap->getBackgroundImageFileName()},
-        skin ? std::string_view{skin->skin_dir} : std::string_view{});
-    if(this->storyboard->isEmpty()) {
-        this->storyboard.reset();
-        return;
-    }
-    this->storyboard->load(false);
+    this->storyboardHandle =
+        Storyboard::parseAsync(*sbmap, map->data, skin ? skin->skin_dir : std::string{}, Lane::Foreground);
 }
 
 void BeatmapInterface::unloadObjects() {
-    this->storyboard.reset();
     this->resetLiveStarsTasks();
     if(this->judge) this->judge->unload();
     if(Skin *skin = this->getSkinMutable()) skin->unloadBeatmapOverride();
@@ -1906,7 +1906,14 @@ void BeatmapInterface::update() {
             if(this->iPreLoadingIndex >= hitobjects.size()) {
                 // (and for the map's skin elements to load, see loadBeatmapSkin())
                 if(const Skin *skin = this->getSkin(); skin && !skin->isReady()) break;
-                if(this->storyboard && !this->storyboard->isReady()) break;
+                if(this->storyboardHandle.valid()) {
+                    if(!this->storyboardHandle.is_ready()) break;
+                    this->storyboard = this->storyboardHandle.get();
+                }
+                if(this->storyboard) {
+                    this->storyboard->load(false);
+                    if(!this->storyboard->isReady()) break;
+                }
                 this->bIsPreLoading = false;
                 debugLog("Beatmap: Preloading done.");
                 break;
