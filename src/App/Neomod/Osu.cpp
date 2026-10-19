@@ -1013,7 +1013,8 @@ void Osu::onKeyDown(KeyboardEvent &key) {
             }
 
             // handle skipping
-            if(key == KEY_ENTER || key == KEY_NUMPAD_ENTER || key == binds::SKIP_CUTSCENE) this->bSkipScheduled = true;
+            if(!key.isRepeat() && (key == KEY_ENTER || key == KEY_NUMPAD_ENTER || key == binds::SKIP_CUTSCENE))
+                this->bSkipScheduled = true;
 
             // toggle ui
             if(!key.isConsumed() && key == binds::TOGGLE_SCOREBOARD && !this->bScoreboardToggleCheck) {
