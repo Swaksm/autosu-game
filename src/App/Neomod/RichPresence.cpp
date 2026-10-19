@@ -181,6 +181,11 @@ void setBanchoStatus(const char* info_text, Action action) {
     BANCHO::Net::send_packet(packet);
 }
 
+void resetBanchoStatus() {
+    last_status = "\nWaking up";
+    last_action = Action::IDLE;
+}
+
 void updateBanchoMods() {
     MD5Hash map_md5;
     i32 map_id = 0;

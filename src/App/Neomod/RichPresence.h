@@ -11,5 +11,6 @@ void onPlayEnd(bool quit);
 void onMultiplayerLobby();
 
 void setBanchoStatus(const char *info_text, Action action);
+void resetBanchoStatus();
 void updateBanchoMods();
 };  // namespace RichPresence

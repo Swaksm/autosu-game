@@ -21,6 +21,7 @@
 #include "NetworkHandler.h"
 #include "OptionsOverlay.h"
 #include "ResourceManager.h"
+#include "RichPresence.h"
 #include "RoomScreen.h"
 #include "SongBrowser.h"
 #include "SpectatorScreen.h"
@@ -433,6 +434,7 @@ void BanchoState::disconnect(bool shutdown) {
         BanchoState::server_icon = nullptr;
     }
     BanchoState::update_online_status(OnlineStatus::LOGGED_OUT);
+    RichPresence::resetBanchoStatus();
     BanchoState::score_submission_policy = ServerPolicy::NO_PREFERENCE;
 
     BANCHO::User::logout_all_users();
