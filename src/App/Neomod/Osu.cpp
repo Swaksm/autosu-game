@@ -738,6 +738,11 @@ void Osu::update() {
                             !this->skin->name.empty() ? fmt::format(" ({:s})", this->skin->name) : ""),
                     0xffffffff, false, 0.75f);
             }
+
+            // cv::skin may have changed while this one was loading (e.g. an .osk opened at launch)
+            if(const auto &wanted = cv::skin.getString(); !wanted.empty() && wanted != this->skin->name) {
+                this->onSkinChange(wanted);
+            }
         }
     }
 

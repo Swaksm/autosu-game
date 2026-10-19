@@ -401,6 +401,8 @@ void AboutScreen::buildChangelog() {
     v44_01.title = "44.01 (" CHANGELOG_TIMESTAMP ")";
     v44_01.changes = {
         R"(- Fixed followpoint animation being half invisible)",
+        R"(- Fixed skins opened with neomod not getting selected)",
+        R"(- Fixed skins being listed twice when they're in both the neomod and osu! skins folders)",
     };
     changelogs.push_back(std::move(v44_01));
 

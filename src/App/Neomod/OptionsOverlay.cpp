@@ -3179,12 +3179,12 @@ void OptionsOverlayImpl::onSkinSelectOpened() {
 
     this->skinFolderEnumHandle = Async::submit(
         [skinFolder] {
-            std::vector<std::string> skinFolders;
-            for(const auto &dir : {Environment::getFoldersInFolder(Mc::Paths::skins() + "/"),
-                                   Environment::getFoldersInFolder(skinFolder)}) {
-                for(const auto &skin : dir) {
-                    skinFolders.push_back(skin);
-                }
+            const std::string localFolder = Mc::Paths::skins() + "/";
+            std::vector<std::string> skinFolders = Environment::getFoldersInFolder(localFolder);
+
+            // a skin in both folders loads from the local one, so only list that one
+            for(auto &skin : Environment::getFoldersInFolder(skinFolder)) {
+                if(!Environment::directoryExists(localFolder + skin)) skinFolders.push_back(std::move(skin));
             }
             if(cv::sort_skins_cleaned.getBool()) {
                 // Sort skins only by alphanum characters, ignore the others
