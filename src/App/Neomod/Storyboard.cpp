@@ -12,6 +12,7 @@
 #include "Hashing.h"
 #include "Image.h"
 #include "Logging.h"
+#include "OsuConVars.h"
 #include "Parsing.h"
 #include "ResourceManager.h"
 #include "SString.h"
@@ -964,7 +965,7 @@ void Storyboard::update(f64 time, bool passing, bool seeked) {
             it != sb.samples.end() && it->time <= time; ++it) {
             if((it->layer == Layer::FAIL && passing) || (it->layer == Layer::PASS && !passing)) continue;
             if(Sound *sound = sb.sounds[it->sound]; sound && sound->isReady()) {
-                soundEngine->play(sound, 0.f, 0.f, it->volume);
+                soundEngine->play(sound, 0.f, 0.f, it->volume * cv::volume_effects.getFloat());
             }
         }
         if(passing != sb.passing) {

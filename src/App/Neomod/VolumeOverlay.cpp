@@ -377,6 +377,7 @@ void VolumeOverlay::updateEffectVolume(Skin *skin) {
         if(osu->isSkinLoading()) break;  // if you hold CTRL+SHIFT+S down then weird things can happen...
         if(sound && sound->getBaseVolume() != volume) sound->setBaseVolume(volume);
     }
+    for(Sound *sound : skin->getBeatmapSamples()) sound->setBaseVolume(volume);
 }
 
 void VolumeOverlay::onMusicVolumeChange() { osu->getPreviewTrackManager()->apply_music_volume(); }

@@ -139,9 +139,6 @@ bool Skin::isReady() const {
         for(const auto &[ref, own] : o->basic_images) {
             if(resourceManager->isLoadingResource(ref->img)) return false;
         }
-        for(const auto &[ref, own] : o->sounds_replaced) {
-            if(resourceManager->isLoadingResource(*ref)) return false;
-        }
         for(const auto *sound : this->getBeatmapSamples()) {
             if(resourceManager->isLoadingResource(sound)) return false;
         }
@@ -832,10 +829,13 @@ void Skin::loadBeatmapOverride(std::string_view folder, std::span<const std::str
         }
     }
 
+    // (the skin's own sounds get theirs from VolumeOverlay::updateEffectVolume())
+    const std::vector<Sound *> beatmapSamples = this->getBeatmapSamples();
+    for(Sound *sound : beatmapSamples) sound->setBaseVolume(cv::volume_effects.getFloat());
+
     const auto &ov = *this->beatmap_override;
-    debugLog("Skin: {} elements and {} samples from {}",
-             ov.basic_images.size() + ov.skin_images.size() + ov.sounds_replaced.size(),
-             this->getBeatmapSamples().size(), ov.dir);
+    debugLog("Skin: {} elements and {} samples from {}", ov.basic_images.size() + ov.skin_images.size(),
+             beatmapSamples.size(), ov.dir);
 
     // (until the map's elements have loaded as well)
     this->is_ready = false;
@@ -899,6 +899,7 @@ Sound *Skin::getBeatmapFileSample(u16 filename) const {
 std::vector<Sound *> Skin::getBeatmapSamples() const {
     std::vector<Sound *> ret;
     if(const auto *o = this->beatmap_override.get()) {
+        for(const auto &[ref, own] : o->sounds_replaced) ret.push_back(*ref);
         for(const auto &[name, sound] : o->samples) ret.push_back(sound);
         for(auto *sound : o->file_samples) {
             if(sound) ret.push_back(sound);
@@ -909,10 +910,7 @@ std::vector<Sound *> Skin::getBeatmapSamples() const {
 
 void Skin::reloadSounds() {
     std::vector<Resource *> toReload{this->sounds.begin(), this->sounds.end()};
-    if(const auto *o = this->beatmap_override.get()) {
-        for(const auto &[ref, own] : o->sounds_replaced) toReload.push_back(*ref);
-        for(auto *sound : this->getBeatmapSamples()) toReload.push_back(sound);
-    }
+    for(auto *sound : this->getBeatmapSamples()) toReload.push_back(sound);
     resourceManager->reloadResources(toReload, cv::skin_async.getBool());
 }
 

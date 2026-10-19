@@ -119,7 +119,7 @@ struct Skin final {
 
     [[nodiscard]] Sound *getBeatmapSample(std::string_view name) const;  // name == "drum-slidertick3"
     [[nodiscard]] Sound *getBeatmapFileSample(u16 filename) const;       // filename == HITSAMPLE_BITS::filename
-    [[nodiscard]] std::vector<Sound *> getBeatmapSamples() const;
+    [[nodiscard]] std::vector<Sound *> getBeatmapSamples() const;        // every sound loaded from the map folder
 
     // drawable helpers
     // the colour of the i-th combo, skipped ahead by offset: one of the map's colours unless they're ignored, else the skin's
