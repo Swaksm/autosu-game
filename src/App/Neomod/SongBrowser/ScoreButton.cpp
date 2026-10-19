@@ -659,17 +659,7 @@ void ScoreButton::onContextMenu(std::string_view text, int id) {
 }
 
 void ScoreButton::onUseModsClicked() {
-    Replay::Mods actual{this->storedScore->mods};
-    // TODO (ugly): allow global hp drain disable to override score mods
-    using namespace flags::operators;
-    if(cv::drain_disabled.getBool()) {
-        actual.flags |= ModFlags::NoHP;
-    }
-    // since mcosu/stable don't have notelock type as a mod, use current notelock type
-    if(this->storedScore->is_mcosu_imported() || this->storedScore->is_peppy_imported()) {
-        actual.notelock_type = cv::notelock_type.getInt();
-    }
-    Replay::Mods::use(actual);
+    Replay::Mods::use(this->storedScore->mods);
     soundEngine->play(osu->getSkin()->s_check_on);
 }
 

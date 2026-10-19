@@ -79,13 +79,16 @@ struct Mods {
     [[nodiscard]] f64 get_scorev1_multiplier() const;
 
     static Mods from_cvars();
-    static void use(const Mods &mods);
+    // with_settings also applies what is a setting in the options menu rather than a mod (storyboard, FPoSu,
+    // notelock type, ...), which only makes sense for reproducing someone's play exactly
+    static void use(const Mods &mods, bool with_settings = false);
 
     // mods that aren't the player's own choice (a multiplayer room's, a watched replay's, a spectated player's) get
     // used inside of a session (see ConVarHandler::beginSession()): what the player had selected before stays
     // untouched below them, including in the config, and is back once the session ends.
     // beginning a session during another one continues that one, ending one that isn't going on does nothing
-    static void begin_session();
+    // with_settings has to match the use() calls made during the session
+    static void begin_session(bool with_settings = false);
     static void end_session();
 
     // templated for either PacketReader/Packet or ByteBufferedFile::Reader/Writer

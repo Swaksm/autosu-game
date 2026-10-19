@@ -285,15 +285,14 @@ Mods Mods::from_cvars() {
 
 // every convar that mods are made of, with what the given mods want it to be
 // (one list for use() to set them and for begin_session() to know which ones there are)
+// with_settings adds the ones that are the player settings in the options menu rather than mods
 template <typename F>
-static void for_each_mod_cv(const Mods &mods, const F &func) {
+static void for_each_mod_cv(const Mods &mods, bool with_settings, const F &func) {
     using enum ModFlags;
 
 #define CVFROMFLAG(cvar__, mod__) func(cv::cvar__, flags::has<mod__>(mods.flags))
 #define CVFROMPROP(cvar__, modsetting__) func(cv::cvar__, mods.modsetting__)
 
-    // FIXME: NoHP should not be changed here, it's a global option
-    CVFROMFLAG(drain_disabled, NoHP);
     CVFROMFLAG(mod_nofail, NoFail);
     CVFROMFLAG(mod_easy, Easy);
     CVFROMFLAG(mod_hidden, Hidden);
@@ -301,10 +300,8 @@ static void for_each_mod_cv(const Mods &mods, const F &func) {
     CVFROMFLAG(mod_flashlight, Flashlight);
     CVFROMFLAG(mod_suddendeath, SuddenDeath);
     CVFROMFLAG(mod_perfect, Perfect);
-    CVFROMFLAG(nightcore_enjoyer, NoPitchCorrection);
     CVFROMFLAG(mod_spunout, SpunOut);
     CVFROMFLAG(mod_scorev2, ScoreV2);
-    CVFROMFLAG(mod_fposu, FPoSu);
     CVFROMFLAG(mod_target, Target);
     CVFROMFLAG(ar_override_lock, AROverrideLock);
     CVFROMFLAG(od_override_lock, ODOverrideLock);
@@ -332,9 +329,7 @@ static void for_each_mod_cv(const Mods &mods, const F &func) {
     CVFROMFLAG(mod_dks, DKS);
     CVFROMFLAG(mod_traceable, Traceable);
     CVFROMFLAG(mod_freeze_frame, FreezeFrame);
-    CVFROMFLAG(draw_storyboard, Storyboard);
 
-    CVFROMPROP(notelock_type, notelock_type);
     CVFROMPROP(autopilot_lenience, autopilot_lenience);
     CVFROMPROP(mod_timewarp_multiplier, timewarp_multiplier);
     CVFROMPROP(mod_minimize_multiplier, minimize_multiplier);
@@ -351,6 +346,14 @@ static void for_each_mod_cv(const Mods &mods, const F &func) {
     CVFROMPROP(cs_overridenegative, cs_overridenegative);
     CVFROMPROP(hp_override, hp_override);
     CVFROMPROP(od_override, od_override);
+
+    if(with_settings) {
+        CVFROMFLAG(drain_disabled, NoHP);
+        CVFROMFLAG(draw_storyboard, Storyboard);
+        CVFROMFLAG(mod_fposu, FPoSu);
+        CVFROMFLAG(nightcore_enjoyer, NoPitchCorrection);
+        CVFROMPROP(notelock_type, notelock_type);
+    }
 
 #undef CVFROMPROP
 #undef CVFROMFLAG
@@ -370,8 +373,7 @@ static void for_each_mod_cv(const Mods &mods, const F &func) {
 }
 
 // FIXME: this is pretty broken, it overrides beatmap values as "mods" if they weren't actually overridden
-// among other issues, like setting drain_disabled etc.
-void Mods::use(const Mods &mods) {
+void Mods::use(const Mods &mods, bool with_settings) {
     const auto &mod_selector = ui->getModSelector();
 
     // (as one change: what is part of both the mods from before and the given ones doesn't go off and back on)
@@ -380,7 +382,7 @@ void Mods::use(const Mods &mods) {
         mod_selector->resetMods();
 
         // Set cvars
-        for_each_mod_cv(mods, [](ConVar &cvar, auto value) -> void { cvar.setValue(value); });
+        for_each_mod_cv(mods, with_settings, [](ConVar &cvar, auto value) -> void { cvar.setValue(value); });
     });
 
     // Update mod selector UI
@@ -390,10 +392,11 @@ void Mods::use(const Mods &mods) {
     osu->updateMods();
 }
 
-void Mods::begin_session() {
+void Mods::begin_session(bool with_settings) {
     // everything that use() or the mod selector (which use() resets) can change
     std::vector<ConVar *> convars = ui->getModSelector()->getModConVars();
-    for_each_mod_cv(Mods{}, [&convars](ConVar &cvar, auto /*value*/) -> void { convars.push_back(&cvar); });
+    for_each_mod_cv(Mods{}, with_settings,
+                    [&convars](ConVar &cvar, auto /*value*/) -> void { convars.push_back(&cvar); });
 
     // (these just mirror speed_override for the DT/HT buttons: useCurrentMods() keeps them in line, while having
     // them go back by themselves would run their callbacks, which set speed_override)

@@ -490,8 +490,8 @@ bool BeatmapInterface::watch(const FinishedScore &score, u32 start_ms) {
     this->is_watching = true;
 
     // the replay's mods are only for watching it (see stop())
-    Replay::Mods::begin_session();
-    Replay::Mods::use(score.mods);
+    Replay::Mods::begin_session(true);
+    Replay::Mods::use(score.mods, true);
 
     if(!this->start()) {
         // Map failed to load
@@ -533,8 +533,8 @@ bool BeatmapInterface::spectate() {
     score.mods = Replay::Mods::from_legacy(user_info->mods);
 
     // the spectated player's mods are only for watching them play (see stop())
-    Replay::Mods::begin_session();
-    Replay::Mods::use(score.mods);
+    Replay::Mods::begin_session(true);
+    Replay::Mods::use(score.mods, true);
 
     if(!this->start()) {
         // Map failed to load
