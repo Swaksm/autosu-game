@@ -665,6 +665,10 @@ void ScoreButton::onUseModsClicked() {
     if(cv::drain_disabled.getBool()) {
         actual.flags |= ModFlags::NoHP;
     }
+    // since mcosu/stable don't have notelock type as a mod, use current notelock type
+    if(this->storedScore->is_mcosu_imported() || this->storedScore->is_peppy_imported()) {
+        actual.notelock_type = cv::notelock_type.getInt();
+    }
     Replay::Mods::use(actual);
     soundEngine->play(osu->getSkin()->s_check_on);
 }
