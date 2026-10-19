@@ -581,7 +581,7 @@ msgstr "Множитель скорости/BPM"
 msgid " Experimental Mods (!)"
 msgstr " Экспериментальные моды (!)"
 
-#: src/App/Neomod/ModSelector.cpp
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "Flip Up/Down"
 msgstr "Отразить по вертикали"
 
@@ -589,7 +589,7 @@ msgstr "Отразить по вертикали"
 msgid "Playfield is flipped upside down (mirrored at horizontal axis)."
 msgstr "Игровое поле перевёрнуто вверх ногами (отражено по горизонтальной оси)."
 
-#: src/App/Neomod/ModSelector.cpp
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "Flip Left/Right"
 msgstr "Отразить по горизонтали"
 
@@ -597,7 +597,7 @@ msgstr "Отразить по горизонтали"
 msgid "Playfield is flipped left/right (mirrored at vertical axis)."
 msgstr "Игровое поле отражено слева направо (отражено по вертикальной оси)."
 
-#: src/App/Neomod/ModSelector.cpp
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "Singletap"
 msgstr "Синглтап"
 
@@ -605,7 +605,7 @@ msgstr "Синглтап"
 msgid "You can only press one key."
 msgstr "Можно нажимать только одну клавишу."
 
-#: src/App/Neomod/ModSelector.cpp
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "Alternate"
 msgstr "Альтернейт"
 
@@ -613,7 +613,7 @@ msgstr "Альтернейт"
 msgid "You can never use the same key twice in a row."
 msgstr "Нельзя использовать одну и ту же клавишу дважды подряд."
 
-#: src/App/Neomod/ModSelector.cpp
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "No keylock"
 msgstr "Без блокировки клавиш"
 
@@ -625,7 +625,7 @@ msgstr "Вы можете использовать 4 клавиши вместо
 msgid "Also click hitcircles when releasing a key."
 msgstr "Нажатие на ноты также происходит при отпускании клавиши."
 
-#: src/App/Neomod/ModSelector.cpp
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "DKS"
 msgstr "DKS"
 
@@ -645,7 +645,7 @@ msgstr "Заморозка кадра"
 msgid "Draw all hitobjects in a combo group together. Try it with Hidden for an extra challenge!"
 msgstr "Отображает все объекты одного комбо одновременно. Попробуйте с Hidden для дополнительной сложности!"
 
-#: src/App/Neomod/ModSelector.cpp
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "No pausing"
 msgstr "Без пауз"
 
@@ -653,7 +653,7 @@ msgstr "Без пауз"
 msgid "Pausing is cheating"
 msgstr "Паузы — это читерство"
 
-#: src/App/Neomod/ModSelector.cpp
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "FPoSu: Strafing"
 msgstr "FPoSu: Стрейф"
 
@@ -669,11 +669,11 @@ msgstr ""
 msgid "Playfield rotates and moves."
 msgstr "Игровое поле вращается и движется."
 
-#: src/App/Neomod/ModSelector.cpp
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "Wobble"
 msgstr "Раскачивание"
 
-#: src/App/Neomod/ModSelector.cpp
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "AR Wobble"
 msgstr "Колебание AR"
 
@@ -681,7 +681,7 @@ msgstr "Колебание AR"
 msgid "Approach rate oscillates between -1 and +1."
 msgstr "Скорость появления (AR) колеблется между -1 и +1."
 
-#: src/App/Neomod/ModSelector.cpp
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "Approach Different"
 msgstr "Другое сужение"
 
@@ -695,7 +695,7 @@ msgstr ""
 "См. mod_approach_different_style.\n"
 "См. mod_approach_different_initial_size."
 
-#: src/App/Neomod/ModSelector.cpp
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "Timewarp"
 msgstr "Искажение времени"
 
@@ -704,7 +704,7 @@ msgstr "Искажение времени"
 msgid "Speed increases from 100% to 150% over the course of the beatmap."
 msgstr "Скорость увеличивается со 100% до 150% по ходу карты."
 
-#: src/App/Neomod/ModSelector.cpp
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "AR Timewarp"
 msgstr "Искажение времени AR"
 
@@ -713,7 +713,7 @@ msgstr "Искажение времени AR"
 msgid "Approach rate decreases from 100% to 50% over the course of the beatmap."
 msgstr "Скорость появления (AR) падает со 100% до 50% по ходу карты."
 
-#: src/App/Neomod/ModSelector.cpp
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "Minimize"
 msgstr "Уменьшение"
 
@@ -722,7 +722,7 @@ msgstr "Уменьшение"
 msgid "Circle size decreases from 100% to 50% over the course of the beatmap."
 msgstr "Размер кругов уменьшается со 100% до 50% по ходу карты."
 
-#: src/App/Neomod/ModSelector.cpp
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "Fading Cursor"
 msgstr "Исчезающий курсор"
 
@@ -734,7 +734,7 @@ msgstr "Курсор исчезает по мере роста комбо, ст�
 msgid "Centered cursor."
 msgstr "Отцентрированный курсор."
 
-#: src/App/Neomod/ModSelector.cpp
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "First Person"
 msgstr "Первое лицо"
 
@@ -742,11 +742,11 @@ msgstr "Первое лицо"
 msgid "Massively reduced slider follow circle radius."
 msgstr "Значительно уменьшен радиус круга следования слайдера."
 
-#: src/App/Neomod/ModSelector.cpp
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "Precise sliders"
 msgstr "Точные слайдеры"
 
-#: src/App/Neomod/ModSelector.cpp
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "Reverse Sliders"
 msgstr "Реверсивные слайдеры"
 
@@ -754,7 +754,7 @@ msgstr "Реверсивные слайдеры"
 msgid "Reverses the direction of all sliders. (Reload beatmap to apply!)"
 msgstr "Меняет направление всех слайдеров на противоположное. (Перезагрузите карту для применения!)"
 
-#: src/App/Neomod/ModSelector.cpp
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "No 50s"
 msgstr "Без 50"
 
@@ -766,11 +766,11 @@ msgstr "Только 300 или 100. Старайся лучше."
 msgid "300 or miss. PF \"lite\""
 msgstr "300 или промах. PF \"lite\""
 
-#: src/App/Neomod/ModSelector.cpp
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "No 100s no 50s"
 msgstr "Без 100 и 50"
 
-#: src/App/Neomod/ModSelector.cpp
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "MinG3012"
 msgstr "MinG3012"
 
@@ -778,7 +778,7 @@ msgstr "MinG3012"
 msgid "No 100s. Only 300s or 50s. Git gud."
 msgstr "Без 100. Только 300 или 50. Git gud."
 
-#: src/App/Neomod/ModSelector.cpp
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "Half Timing Window"
 msgstr "Половина окна тайминга"
 
@@ -790,11 +790,11 @@ msgstr "Окно тайминга урезано вдвое. Нажимайте 
 msgid "Go below AR 0. Doubled approach time."
 msgstr "Значения ниже AR 0. Удвоенное время появления."
 
-#: src/App/Neomod/ModSelector.cpp
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "MillhioreF"
 msgstr "MillhioreF"
 
-#: src/App/Neomod/ModSelector.cpp
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "Mafham"
 msgstr "Mafham"
 
@@ -806,7 +806,7 @@ msgstr ""
 "Скорость появления (AR) равна минус бесконечности. Вся карта видна сразу.\n"
 "Используются агрессивные оптимизации для сохранения высокой частоты кадров, вы предупреждены!"
 
-#: src/App/Neomod/ModSelector.cpp
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "Strict clicks"
 msgstr "Строгие клики"
 
@@ -814,7 +814,7 @@ msgstr "Строгие клики"
 msgid "Unnecessary clicks count as misses."
 msgstr "Лишние клики засчитываются как промахи."
 
-#: src/App/Neomod/ModSelector.cpp
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "Strict Tracking"
 msgstr "Строгий трекинг"
 
@@ -961,15 +961,15 @@ msgstr "ПКМ"
 msgid "<UNBOUND>"
 msgstr "<НЕ НАЗНАЧЕНО>"
 
-#: src/App/Neomod/OptionsOverlay.cpp
+#: src/App/Neomod/OptionsOverlay.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "McOsu"
 msgstr "McOsu"
 
-#: src/App/Neomod/OptionsOverlay.cpp
+#: src/App/Neomod/OptionsOverlay.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "None"
 msgstr "Нет"
 
-#: src/App/Neomod/OptionsOverlay.cpp
+#: src/App/Neomod/OptionsOverlay.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "osu!lazer 2020"
 msgstr "osu!lazer 2020"
 
@@ -2214,7 +2214,7 @@ msgstr ""
 "Включено: По умолчанию в синглплеере. При падении HP карта останавливается.\n"
 "Выключено: По умолчанию в мультиплеере. Позволяет доиграть карту после падения HP."
 
-#: src/App/Neomod/OptionsOverlay.cpp
+#: src/App/Neomod/OptionsOverlay.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "Disable HP drain"
 msgstr "Отключить падение HP"
 
@@ -3131,6 +3131,11 @@ msgstr "Скорость: {:.3g}x"
 msgid "CS:{:.2f} AR:{:.2f} OD:{:.2f} HP:{:.2f}"
 msgstr "CS:{:.2f} AR:{:.2f} OD:{:.2f} HP:{:.2f}"
 
+#: src/App/Neomod/RankingScreen.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+#, c++-format
+msgid "Notelock: {}"
+msgstr "Нотлок: {}"
+
 #: src/App/Neomod/RankingScreen.cpp
 #, c++-format
 msgid "Error: {:.2f}ms - {:.2f}ms avg"
@@ -3345,6 +3350,18 @@ msgstr "CS:{:.3g} AR:{:.3g} OD:{:.3g} HP:{:.3g} Звёзды:{:.3g} -> {:.3g} ({
 #, c++-format
 msgid "CS:{:.3g} AR:{:.3g} OD:{:.3g} HP:{:.3g} Stars:{:.3g} * (??? pp)"
 msgstr "CS:{:.3g} AR:{:.3g} OD:{:.3g} HP:{:.3g} Звёзды:{:.3g} * (??? pp)"
+
+#: src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Wobble 2"
+msgstr "Раскачивание 2"
+
+#: src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Shirone"
+msgstr "Shirone"
+
+#: src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "osu!stable"
+msgstr "osu!stable"
 
 #: src/App/Neomod/SongBrowser/SongBrowser.cpp
 msgid "By Artist"

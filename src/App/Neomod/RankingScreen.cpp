@@ -228,7 +228,7 @@ struct RankingScreen::RankingScreenImpl {
 
     std::string sMods;
     std::vector<SkinImage Skin::*> modImages;
-    std::vector<ConVar *> extraMods;
+    std::vector<std::string> extraMods;
 
     // custom
     FinishedScore storedScore;
@@ -271,8 +271,7 @@ void RankingScreen::draw() {
 
         float maxStringWidth = 0.0f;
         for(auto &enabledExperimentalMod : m_impl->extraMods) {
-            std::string experimentalModName{enabledExperimentalMod->getName()};
-            experimentalModName.insert(0, prefix);
+            const std::string experimentalModName = prefix + enabledExperimentalMod;
             const float width = experimentalModFont->getStringWidth(experimentalModName);
             if(width > maxStringWidth) maxStringWidth = width;
         }
@@ -295,8 +294,7 @@ void RankingScreen::draw() {
         {
             g->translate((int)experimentalModPos.x, (int)experimentalModPos.y);
             for(auto &enabledExperimentalMod : m_impl->extraMods) {
-                std::string experimentalModName{enabledExperimentalMod->getName()};
-                experimentalModName.insert(0, prefix);
+                const std::string experimentalModName = prefix + enabledExperimentalMod;
 
                 g->translate(1.5f, 1.5f);
                 g->setColor(0xff000000);
@@ -376,6 +374,10 @@ void RankingScreen::updateInput(CBaseUIEventCtx &c) {
             }
 
             if(m_impl->sMods.length() > 0) tto->addLine(m_impl->sMods);
+            for(const auto &name : m_impl->extraMods) {
+                tto->addLine(fmt::format("+ {}", name));
+            }
+            tto->addLine(tformat("Notelock: {}", ScoreButton::getNotelockNameForDisplay(sc.mods.notelock_type)));
 
             if(m_impl->fUnstableRate > 0.f) {
                 tto->addLine(_("Accuracy:"));
@@ -481,38 +483,7 @@ void RankingScreen::setScore(const FinishedScore &newscore) {
     m_impl->modImages.clear();
     Skin::getModImagesForMods(m_impl->modImages, sc.mods);
 
-    using enum ModFlags;
-
-    m_impl->extraMods.clear();
-    if(flags::has<FPoSu_Strafing>(sc.mods.flags)) m_impl->extraMods.push_back(&cv::fposu_mod_strafing);
-    if(flags::has<Wobble1>(sc.mods.flags)) m_impl->extraMods.push_back(&cv::mod_wobble);
-    if(flags::has<Wobble2>(sc.mods.flags)) m_impl->extraMods.push_back(&cv::mod_wobble2);
-    if(flags::has<ARWobble>(sc.mods.flags)) m_impl->extraMods.push_back(&cv::mod_arwobble);
-    if(flags::has<Timewarp>(sc.mods.flags)) m_impl->extraMods.push_back(&cv::mod_timewarp);
-    if(flags::has<ARTimewarp>(sc.mods.flags)) m_impl->extraMods.push_back(&cv::mod_artimewarp);
-    if(flags::has<Minimize>(sc.mods.flags)) m_impl->extraMods.push_back(&cv::mod_minimize);
-    if(flags::has<FadingCursor>(sc.mods.flags)) m_impl->extraMods.push_back(&cv::mod_fadingcursor);
-    if(flags::has<FPS>(sc.mods.flags)) m_impl->extraMods.push_back(&cv::mod_fps);
-    if(flags::has<StrictClicks>(sc.mods.flags)) m_impl->extraMods.push_back(&cv::mod_jigsaw1);
-    if(flags::has<PreciseSliders>(sc.mods.flags)) m_impl->extraMods.push_back(&cv::mod_jigsaw2);
-    if(flags::has<FullAlternate>(sc.mods.flags)) m_impl->extraMods.push_back(&cv::mod_fullalternate);
-    if(flags::has<ReverseSliders>(sc.mods.flags)) m_impl->extraMods.push_back(&cv::mod_reverse_sliders);
-    if(flags::has<No50s>(sc.mods.flags)) m_impl->extraMods.push_back(&cv::mod_no50s);
-    if(flags::has<No100s>(sc.mods.flags)) m_impl->extraMods.push_back(&cv::mod_no100s);
-    if(flags::has<Ming3012>(sc.mods.flags)) m_impl->extraMods.push_back(&cv::mod_ming3012);
-    if(flags::has<HalfWindow>(sc.mods.flags)) m_impl->extraMods.push_back(&cv::mod_halfwindow);
-    if(flags::has<Millhioref>(sc.mods.flags)) m_impl->extraMods.push_back(&cv::mod_millhioref);
-    if(flags::has<Mafham>(sc.mods.flags)) m_impl->extraMods.push_back(&cv::mod_mafham);
-    if(flags::has<StrictTracking>(sc.mods.flags)) m_impl->extraMods.push_back(&cv::mod_strict_tracking);
-    if(flags::has<MirrorHorizontal>(sc.mods.flags)) m_impl->extraMods.push_back(&cv::playfield_mirror_horizontal);
-    if(flags::has<MirrorVertical>(sc.mods.flags)) m_impl->extraMods.push_back(&cv::playfield_mirror_vertical);
-    if(flags::has<Shirone>(sc.mods.flags)) m_impl->extraMods.push_back(&cv::mod_shirone);
-    if(flags::has<ApproachDifferent>(sc.mods.flags)) m_impl->extraMods.push_back(&cv::mod_approach_different);
-    if(flags::has<Singletap>(sc.mods.flags)) m_impl->extraMods.push_back(&cv::mod_singletap);
-    if(flags::has<NoKeylock>(sc.mods.flags)) m_impl->extraMods.push_back(&cv::mod_no_keylock);
-    if(flags::has<NoPausing>(sc.mods.flags)) m_impl->extraMods.push_back(&cv::mod_no_pausing);
-    if(flags::has<NoHP>(sc.mods.flags)) m_impl->extraMods.push_back(&cv::drain_disabled);
-    if(flags::has<DKS>(sc.mods.flags)) m_impl->extraMods.push_back(&cv::mod_dks);
+    m_impl->extraMods = ScoreButton::getExtraModNamesForDisplay(sc.mods);
 }
 
 const FinishedScore &RankingScreen::getScore() { return m_impl->storedScore; }

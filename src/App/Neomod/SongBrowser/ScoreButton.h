@@ -4,6 +4,8 @@
 #include "CBaseUIButton.h"
 
 #include <memory>
+#include <string>
+#include <vector>
 
 class DatabaseBeatmap;
 using BeatmapDifficulty = DatabaseBeatmap;
@@ -25,6 +27,8 @@ class ScoreButton final : public CBaseUIButton {
     NOCOPY_NOMOVE(ScoreButton)
    public:
     static std::string getModsStringForDisplay(const Replay::Mods &mods);
+    static std::vector<std::string> getExtraModNamesForDisplay(const Replay::Mods &mods);
+    static std::string getNotelockNameForDisplay(int notelockType);
 
     enum class STYLE : uint8_t { SONG_BROWSER, TOP_RANKS };
     ScoreButton() = delete;

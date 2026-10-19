@@ -33,6 +33,7 @@
 #include "UIAvatar.h"
 #include "UIContextMenu.h"
 #include "UniString.h"
+#include "i18n.h"
 #include "UserStatsScreen.h"
 #include "Logging.h"
 #include "SongDifficultyButton.h"
@@ -810,35 +811,11 @@ void ScoreButton::setScore(const FinishedScore &newscore, const DatabaseBeatmap 
     else
         tooltipMods.append("None");
 
-    using enum ModFlags;
-
     this->tooltipLines.push_back(tooltipMods);
-    if(flags::has<NoHP>(sc.mods.flags)) this->tooltipLines.emplace_back("+ no HP drain");
-    if(flags::has<ApproachDifferent>(sc.mods.flags)) this->tooltipLines.emplace_back("+ approach different");
-    if(flags::has<ARTimewarp>(sc.mods.flags)) this->tooltipLines.emplace_back("+ AR timewarp");
-    if(flags::has<ARWobble>(sc.mods.flags)) this->tooltipLines.emplace_back("+ AR wobble");
-    if(flags::has<FadingCursor>(sc.mods.flags)) this->tooltipLines.emplace_back("+ fading cursor");
-    if(flags::has<FullAlternate>(sc.mods.flags)) this->tooltipLines.emplace_back("+ alternate");
-    if(flags::has<FPoSu_Strafing>(sc.mods.flags)) this->tooltipLines.emplace_back("+ FPoSu strafing");
-    if(flags::has<FPS>(sc.mods.flags)) this->tooltipLines.emplace_back("+ FPS");
-    if(flags::has<HalfWindow>(sc.mods.flags)) this->tooltipLines.emplace_back("+ half window");
-    if(flags::has<StrictClicks>(sc.mods.flags)) this->tooltipLines.emplace_back("+ strict clicks");
-    if(flags::has<PreciseSliders>(sc.mods.flags)) this->tooltipLines.emplace_back("+ precise sliders");
-    if(flags::has<Mafham>(sc.mods.flags)) this->tooltipLines.emplace_back("+ mafham");
-    if(flags::has<Millhioref>(sc.mods.flags)) this->tooltipLines.emplace_back("+ millhioref");
-    if(flags::has<Minimize>(sc.mods.flags)) this->tooltipLines.emplace_back("+ minimize");
-    if(flags::has<Ming3012>(sc.mods.flags)) this->tooltipLines.emplace_back("+ ming3012");
-    if(flags::has<MirrorHorizontal>(sc.mods.flags)) this->tooltipLines.emplace_back("+ mirror (horizontal)");
-    if(flags::has<MirrorVertical>(sc.mods.flags)) this->tooltipLines.emplace_back("+ mirror (vertical)");
-    if(flags::has<No50s>(sc.mods.flags)) this->tooltipLines.emplace_back("+ no 50s");
-    if(flags::has<No100s>(sc.mods.flags)) this->tooltipLines.emplace_back("+ no 100s");
-    if(flags::has<ReverseSliders>(sc.mods.flags)) this->tooltipLines.emplace_back("+ reverse sliders");
-    if(flags::has<Timewarp>(sc.mods.flags)) this->tooltipLines.emplace_back("+ timewarp");
-    if(flags::has<Shirone>(sc.mods.flags)) this->tooltipLines.emplace_back("+ shirone");
-    if(flags::has<StrictTracking>(sc.mods.flags)) this->tooltipLines.emplace_back("+ strict tracking");
-    if(flags::has<Wobble1>(sc.mods.flags)) this->tooltipLines.emplace_back("+ wobble1");
-    if(flags::has<Wobble2>(sc.mods.flags)) this->tooltipLines.emplace_back("+ wobble2");
-    // TODO: missing mods such as singletap?
+    for(const auto &name : getExtraModNamesForDisplay(sc.mods)) {
+        this->tooltipLines.emplace_back(fmt::format("+ {}", name));
+    }
+    this->tooltipLines.emplace_back(tformat("Notelock: {}", getNotelockNameForDisplay(sc.mods.notelock_type)));
 
     if(this->style == STYLE::TOP_RANKS) {
         const int weightRounded = std::round(weight * 100.0f);
@@ -905,4 +882,56 @@ std::string ScoreButton::getModsStringForDisplay(const Replay::Mods &mods) {
     if(modsString.length() > 0) modsString.pop_back();  // remove trailing comma
 
     return modsString;
+}
+
+std::vector<std::string> ScoreButton::getExtraModNamesForDisplay(const Replay::Mods &mods) {
+    using enum ModFlags;
+
+    std::vector<std::string> names;
+    if(flags::has<MirrorHorizontal>(mods.flags)) names.emplace_back(_("Flip Up/Down"));
+    if(flags::has<MirrorVertical>(mods.flags)) names.emplace_back(_("Flip Left/Right"));
+    if(flags::has<Singletap>(mods.flags)) names.emplace_back(_("Singletap"));
+    if(flags::has<FullAlternate>(mods.flags)) names.emplace_back(_("Alternate"));
+    if(flags::has<NoKeylock>(mods.flags)) names.emplace_back(_("No keylock"));
+    if(flags::has<DKS>(mods.flags)) names.emplace_back(_("DKS"));
+    if(flags::has<NoPausing>(mods.flags)) names.emplace_back(_("No pausing"));
+    if(flags::has<NoHP>(mods.flags)) names.emplace_back(_("Disable HP drain"));
+    if(flags::has<FPoSu_Strafing>(mods.flags)) names.emplace_back(_("FPoSu: Strafing"));
+    if(flags::has<Wobble1>(mods.flags)) names.emplace_back(_("Wobble"));
+    if(flags::has<Wobble2>(mods.flags)) names.emplace_back(_("Wobble 2"));
+    if(flags::has<ARWobble>(mods.flags)) names.emplace_back(_("AR Wobble"));
+    if(flags::has<ApproachDifferent>(mods.flags)) names.emplace_back(_("Approach Different"));
+    if(flags::has<Timewarp>(mods.flags)) names.emplace_back(_("Timewarp"));
+    if(flags::has<ARTimewarp>(mods.flags)) names.emplace_back(_("AR Timewarp"));
+    if(flags::has<Minimize>(mods.flags)) names.emplace_back(_("Minimize"));
+    if(flags::has<FadingCursor>(mods.flags)) names.emplace_back(_("Fading Cursor"));
+    if(flags::has<FPS>(mods.flags)) names.emplace_back(_("First Person"));
+    if(flags::has<PreciseSliders>(mods.flags)) names.emplace_back(_("Precise sliders"));
+    if(flags::has<ReverseSliders>(mods.flags)) names.emplace_back(_("Reverse Sliders"));
+    if(flags::has<No50s>(mods.flags)) names.emplace_back(_("No 50s"));
+    if(flags::has<No100s>(mods.flags)) names.emplace_back(_("No 100s no 50s"));
+    if(flags::has<Ming3012>(mods.flags)) names.emplace_back(_("MinG3012"));
+    if(flags::has<HalfWindow>(mods.flags)) names.emplace_back(_("Half Timing Window"));
+    if(flags::has<Millhioref>(mods.flags)) names.emplace_back(_("MillhioreF"));
+    if(flags::has<Mafham>(mods.flags)) names.emplace_back(_("Mafham"));
+    if(flags::has<StrictClicks>(mods.flags)) names.emplace_back(_("Strict clicks"));
+    if(flags::has<StrictTracking>(mods.flags)) names.emplace_back(_("Strict Tracking"));
+    if(flags::has<Shirone>(mods.flags)) names.emplace_back(_("Shirone"));
+
+    return names;
+}
+
+std::string ScoreButton::getNotelockNameForDisplay(int notelockType) {
+    switch(notelockType) {
+        case 0:
+            return _("None");
+        case 1:
+            return _("McOsu");
+        case 2:
+            return _("osu!stable");
+        case 3:
+            return _("osu!lazer 2020");
+        default:
+            return std::to_string(notelockType);
+    }
 }

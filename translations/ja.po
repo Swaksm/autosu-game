@@ -581,7 +581,7 @@ msgstr "スピード/BPM 倍率"
 msgid " Experimental Mods (!)"
 msgstr " 実験的モッド (!)"
 
-#: src/App/Neomod/ModSelector.cpp
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "Flip Up/Down"
 msgstr "上下反転"
 
@@ -589,7 +589,7 @@ msgstr "上下反転"
 msgid "Playfield is flipped upside down (mirrored at horizontal axis)."
 msgstr "プレイフィールドが上下逆さまになります（水平軸で反転）。"
 
-#: src/App/Neomod/ModSelector.cpp
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "Flip Left/Right"
 msgstr "左右反転"
 
@@ -597,7 +597,7 @@ msgstr "左右反転"
 msgid "Playfield is flipped left/right (mirrored at vertical axis)."
 msgstr "プレイフィールドが左右逆さまになります（垂直軸で反転）。"
 
-#: src/App/Neomod/ModSelector.cpp
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "Singletap"
 msgstr "シングルタップ"
 
@@ -605,7 +605,7 @@ msgstr "シングルタップ"
 msgid "You can only press one key."
 msgstr "1つのキーしか押せなくなります。"
 
-#: src/App/Neomod/ModSelector.cpp
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "Alternate"
 msgstr "交互打ち"
 
@@ -613,7 +613,7 @@ msgstr "交互打ち"
 msgid "You can never use the same key twice in a row."
 msgstr "同じキーを連続して使用できなくなります。"
 
-#: src/App/Neomod/ModSelector.cpp
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "No keylock"
 msgstr "キーロックなし"
 
@@ -625,7 +625,7 @@ msgstr "2つだけでなく、4つのキーを使用できます。"
 msgid "Also click hitcircles when releasing a key."
 msgstr "キーを離したときにもヒットサークルをクリックした判定になります。"
 
-#: src/App/Neomod/ModSelector.cpp
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "DKS"
 msgstr "DKS"
 
@@ -645,7 +645,7 @@ msgstr "フリーズフレーム"
 msgid "Draw all hitobjects in a combo group together. Try it with Hidden for an extra challenge!"
 msgstr "コンボグループ内のすべてのヒットオブジェクトを同時に描画します。さらなる挑戦としてHiddenと併用してみてください！"
 
-#: src/App/Neomod/ModSelector.cpp
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "No pausing"
 msgstr "ポーズなし"
 
@@ -653,7 +653,7 @@ msgstr "ポーズなし"
 msgid "Pausing is cheating"
 msgstr "一時停止はズルです"
 
-#: src/App/Neomod/ModSelector.cpp
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "FPoSu: Strafing"
 msgstr "FPoSu: ストレイフ"
 
@@ -669,11 +669,11 @@ msgstr ""
 msgid "Playfield rotates and moves."
 msgstr "プレイフィールドが回転および移動します。"
 
-#: src/App/Neomod/ModSelector.cpp
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "Wobble"
 msgstr "ウォブル"
 
-#: src/App/Neomod/ModSelector.cpp
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "AR Wobble"
 msgstr "AR ウォブル"
 
@@ -681,7 +681,7 @@ msgstr "AR ウォブル"
 msgid "Approach rate oscillates between -1 and +1."
 msgstr "アプローチレートが -1 から +1 の間を行き来します。"
 
-#: src/App/Neomod/ModSelector.cpp
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "Approach Different"
 msgstr "アプローチディファレント"
 
@@ -695,7 +695,7 @@ msgstr ""
 "mod_approach_different_style および\n"
 "mod_approach_different_initial_size を参照してください。"
 
-#: src/App/Neomod/ModSelector.cpp
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "Timewarp"
 msgstr "タイムワープ"
 
@@ -704,7 +704,7 @@ msgstr "タイムワープ"
 msgid "Speed increases from 100% to 150% over the course of the beatmap."
 msgstr "ビートマップの進行につれてスピードが 100% から 150% に増加します。"
 
-#: src/App/Neomod/ModSelector.cpp
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "AR Timewarp"
 msgstr "AR タイムワープ"
 
@@ -713,7 +713,7 @@ msgstr "AR タイムワープ"
 msgid "Approach rate decreases from 100% to 50% over the course of the beatmap."
 msgstr "ビートマップの進行につれてアプローチレートが 100% から 50% に減少します。"
 
-#: src/App/Neomod/ModSelector.cpp
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "Minimize"
 msgstr "ミニマイズ"
 
@@ -722,7 +722,7 @@ msgstr "ミニマイズ"
 msgid "Circle size decreases from 100% to 50% over the course of the beatmap."
 msgstr "ビートマップの進行につれてサークルサイズが 100% から 50% に減少します。"
 
-#: src/App/Neomod/ModSelector.cpp
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "Fading Cursor"
 msgstr "フェーディングカーソル"
 
@@ -734,7 +734,7 @@ msgstr "コンボが増えるにつれてカーソルがフェードし、50コ�
 msgid "Centered cursor."
 msgstr "カーソルを中央に固定します。"
 
-#: src/App/Neomod/ModSelector.cpp
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "First Person"
 msgstr "一人称視点"
 
@@ -742,11 +742,11 @@ msgstr "一人称視点"
 msgid "Massively reduced slider follow circle radius."
 msgstr "スライダーフォローサークルの半径を大幅に縮小します。"
 
-#: src/App/Neomod/ModSelector.cpp
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "Precise sliders"
 msgstr "精密スライダー"
 
-#: src/App/Neomod/ModSelector.cpp
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "Reverse Sliders"
 msgstr "リバーススライダー"
 
@@ -754,7 +754,7 @@ msgstr "リバーススライダー"
 msgid "Reverses the direction of all sliders. (Reload beatmap to apply!)"
 msgstr "すべてのスライダーの方向を逆にします。（適用するにはビートマップをリロードしてください！）"
 
-#: src/App/Neomod/ModSelector.cpp
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "No 50s"
 msgstr "No 50s"
 
@@ -766,11 +766,11 @@ msgstr "300 または 100 のみ。もっと頑張りましょう。"
 msgid "300 or miss. PF \"lite\""
 msgstr "300 またはミス。PFの「軽量版」です"
 
-#: src/App/Neomod/ModSelector.cpp
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "No 100s no 50s"
 msgstr "No 100s no 50s"
 
-#: src/App/Neomod/ModSelector.cpp
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "MinG3012"
 msgstr "MinG3012"
 
@@ -778,7 +778,7 @@ msgstr "MinG3012"
 msgid "No 100s. Only 300s or 50s. Git gud."
 msgstr "100はありません。300 か 50 のみ。上達しましょう。"
 
-#: src/App/Neomod/ModSelector.cpp
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "Half Timing Window"
 msgstr "半分のタイミングウィンドウ"
 
@@ -790,11 +790,11 @@ msgstr "ヒットタイミングウィンドウが半分になります。早め
 msgid "Go below AR 0. Doubled approach time."
 msgstr "AR 0 を下回ります。アプローチ時間が倍になります。"
 
-#: src/App/Neomod/ModSelector.cpp
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "MillhioreF"
 msgstr "MillhioreF"
 
-#: src/App/Neomod/ModSelector.cpp
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "Mafham"
 msgstr "Mafham"
 
@@ -806,7 +806,7 @@ msgstr ""
 "アプローチレートがマイナス無限大に設定されます。ビートマップ全体を一度に見ることができます。\n"
 "フレームレートを高く保つために非常に攻撃的な最適化を使用します、自己責任でお願いします！"
 
-#: src/App/Neomod/ModSelector.cpp
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "Strict clicks"
 msgstr "厳密なクリック"
 
@@ -814,7 +814,7 @@ msgstr "厳密なクリック"
 msgid "Unnecessary clicks count as misses."
 msgstr "不要なクリックはミスとしてカウントされます。"
 
-#: src/App/Neomod/ModSelector.cpp
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "Strict Tracking"
 msgstr "厳密なトラッキング"
 
@@ -961,15 +961,15 @@ msgstr "右クリック"
 msgid "<UNBOUND>"
 msgstr "<未割り当て>"
 
-#: src/App/Neomod/OptionsOverlay.cpp
+#: src/App/Neomod/OptionsOverlay.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "McOsu"
 msgstr "McOsu"
 
-#: src/App/Neomod/OptionsOverlay.cpp
+#: src/App/Neomod/OptionsOverlay.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "None"
 msgstr "なし"
 
-#: src/App/Neomod/OptionsOverlay.cpp
+#: src/App/Neomod/OptionsOverlay.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "osu!lazer 2020"
 msgstr "osu!lazer 2020"
 
@@ -2214,7 +2214,7 @@ msgstr ""
 "有効: シングルプレイヤーのデフォルトです。失敗すると死に、ビートマップが停止します。\n"
 "無効: マルチプレイヤーのデフォルトです。失敗した後でもプレイを続けられます。"
 
-#: src/App/Neomod/OptionsOverlay.cpp
+#: src/App/Neomod/OptionsOverlay.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "Disable HP drain"
 msgstr "HPドレインを無効にする"
 
@@ -3131,6 +3131,11 @@ msgstr "スピード: {:.3g}x"
 msgid "CS:{:.2f} AR:{:.2f} OD:{:.2f} HP:{:.2f}"
 msgstr "CS:{:.2f} AR:{:.2f} OD:{:.2f} HP:{:.2f}"
 
+#: src/App/Neomod/RankingScreen.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+#, c++-format
+msgid "Notelock: {}"
+msgstr "ノートロック: {}"
+
 #: src/App/Neomod/RankingScreen.cpp
 #, c++-format
 msgid "Error: {:.2f}ms - {:.2f}ms avg"
@@ -3345,6 +3350,18 @@ msgstr "CS:{:.3g} AR:{:.3g} OD:{:.3g} HP:{:.3g} ★:{:.3g} -> {:.3g} ({}pp)"
 #, c++-format
 msgid "CS:{:.3g} AR:{:.3g} OD:{:.3g} HP:{:.3g} Stars:{:.3g} * (??? pp)"
 msgstr "CS:{:.3g} AR:{:.3g} OD:{:.3g} HP:{:.3g} ★:{:.3g} * (??? pp)"
+
+#: src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Wobble 2"
+msgstr "ウォブル 2"
+
+#: src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Shirone"
+msgstr "Shirone"
+
+#: src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "osu!stable"
+msgstr "osu!stable"
 
 #: src/App/Neomod/SongBrowser/SongBrowser.cpp
 msgid "By Artist"
