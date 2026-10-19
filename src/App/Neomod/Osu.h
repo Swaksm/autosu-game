@@ -215,7 +215,6 @@ class Osu final : public App, public MouseListener, public TouchListener {
                (this->skin && this->skinScheduledToLoad && this->skin.get() != this->skinScheduledToLoad);
     }
 
-    [[nodiscard]] inline bool isSkipScheduled() const { return this->bSkipScheduled; }
     [[nodiscard]] inline bool isSeeking() const { return this->bSeeking; }
     [[nodiscard]] inline u32 getQuickSaveTimeMS() const { return this->iQuickSaveMS; }
 
@@ -338,10 +337,8 @@ class Osu final : public App, public MouseListener, public TouchListener {
     bool bF1{false};
     bool bUIToggleCheck{false};
     bool bScoreboardToggleCheck{false};
-    bool bSkipScheduled{false};
     bool bSeekKey{false};
     bool bSeeking{false};
-    bool bClickedSkipButton{false};
     float fPrevSeekMousePosX{-1.f};
 
    public:  // public due to BeatmapInterface access

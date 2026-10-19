@@ -318,7 +318,7 @@ void HUD::draw() {
                                     breaks);
     }
 
-    if(!osu->isSkipScheduled() && pf->isInSkippableSection() &&
+    if(!pf->isSkipScheduled() && pf->isInSkippableSection() &&
        ((cv::skip_intro_enabled.getBool() && pf->getCurrentHitObjectIndex() < 1) ||
         (cv::skip_breaks_enabled.getBool() && pf->getCurrentHitObjectIndex() > 0)))
         this->drawSkip();

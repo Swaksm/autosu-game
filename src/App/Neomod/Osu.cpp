@@ -645,65 +645,12 @@ void Osu::update() {
         // NOTE: force keep loaded background images while playing
         this->backgroundImageHandler->scheduleFreezeCache();
 
-        // skip button clicking
-        if(
-            // skipping is not already scheduled
-            (!this->bSkipScheduled && !this->bClickedSkipButton) &&
-            // skipping is possible, and
-            (this->map_iface->isInSkippableSection() && !this->map_iface->isPaused() &&
-             !ui->getVolumeOverlay()->isBusy()) &&
-            // any gameplay-relevant key is down, and
-            (this->map_iface->isClickHeld() || mouse->isLeftDown()) &&
-            // mouse is inside skip click rect
-            (ui->getHUD()->getSkipClickRect().contains(mouse->getPos()))  //
-        ) {
-            // schedule skip
-            this->bSkipScheduled = true;
-            this->bClickedSkipButton = true;
-
-            if(BanchoState::is_playing_a_multi_map()) {
-                Packet packet;
-                packet.id = OUTP_MATCH_SKIP_REQUEST;
-                BANCHO::Net::send_packet(packet);
-            }
-        }
-
-        // skipping
-        if(this->bSkipScheduled) {
-            const bool isLoading = this->map_iface->isLoading();
-
-            if(this->map_iface->isInSkippableSection() && !this->map_iface->isPaused() && !isLoading) {
-                bool can_skip_intro =
-                    (cv::skip_intro_enabled.getBool() && this->map_iface->getCurrentHitObjectIndex() < 1);
-                bool can_skip_break =
-                    (cv::skip_breaks_enabled.getBool() && this->map_iface->getCurrentHitObjectIndex() > 0);
-                if(BanchoState::is_playing_a_multi_map()) {
-                    can_skip_intro = this->map_iface->all_players_skipped;
-                    can_skip_break = false;
-                }
-
-                if(can_skip_intro || can_skip_break) {
-                    this->map_iface->skipEmptySection();
-                }
-            }
-
-            if(!isLoading) this->bSkipScheduled = false;
-        }
-
-        // Reset m_bClickedSkipButton on mouse up
-        // We only use m_bClickedSkipButton to prevent seeking when clicking the skip button
-        if(this->bClickedSkipButton && !this->map_iface->isInSkippableSection()) {
-            if(!mouse->isLeftDown()) {
-                this->bClickedSkipButton = false;
-            }
-        }
-
         // scrubbing/seeking
         this->bSeeking = (this->bSeekKey ||
                           // only auto-seek if not paused (or we immediately seek when unpausing)
                           (this->map_iface->is_watching && !this->map_iface->isActuallyPausedAndNotSpectating()))  //
                          && (!ui->getVolumeOverlay()->isBusy())                                                    //
-                         && (!BanchoState::is_playing_a_multi_map() && !this->bClickedSkipButton)                  //
+                         && (!BanchoState::is_playing_a_multi_map() && !this->map_iface->isSkipButtonHeld())       //
                          && (!BanchoState::spectating);                                                            //
         if(this->bSeeking) {
             f32 mousePosX = std::round(mouse->getPos().x);
@@ -1014,7 +961,7 @@ void Osu::onKeyDown(KeyboardEvent &key) {
 
             // handle skipping
             if(!key.isRepeat() && (key == KEY_ENTER || key == KEY_NUMPAD_ENTER || key == binds::SKIP_CUTSCENE))
-                this->bSkipScheduled = true;
+                this->map_iface->scheduleSkip();
 
             // toggle ui
             if(!key.isConsumed() && key == binds::TOGGLE_SCOREBOARD && !this->bScoreboardToggleCheck) {

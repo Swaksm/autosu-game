@@ -132,6 +132,7 @@ class BeatmapInterface final : public GameplayJudge::Listener, public PlayfieldV
 
     // callbacks called by the Osu class (osu!standard)
     void skipEmptySection();
+    void scheduleSkip() { this->bSkipScheduled = true; }  // skips once the current section turns out to be skippable
     void onKey(GameplayKeys key_flag, bool down, u64 timestamp);
 
     // loads the music of the currently selected diff and starts playing from the previewTime (e.g. clicking on a beatmap)
@@ -247,6 +248,8 @@ class BeatmapInterface final : public GameplayJudge::Listener, public PlayfieldV
     [[nodiscard]] inline bool isRestartScheduled() const { return this->bIsRestartScheduled; }
     [[nodiscard]] inline bool isContinueScheduled() const { return this->bContinueScheduled; }
     [[nodiscard]] inline bool isInSkippableSection() const { return this->bIsInSkippableSection; }
+    [[nodiscard]] inline bool isSkipScheduled() const { return this->bSkipScheduled; }
+    [[nodiscard]] inline bool isSkipButtonHeld() const { return this->bClickedSkipButton; }
     [[nodiscard]] inline bool isInBreak() const { return this->bInBreak; }
     [[nodiscard]] inline bool shouldFlashWarningArrows() const { return this->bShouldFlashWarningArrows; }
     [[nodiscard]] inline f32 shouldFlashSectionPass() const { return this->fShouldFlashSectionPass; }
@@ -320,6 +323,8 @@ class BeatmapInterface final : public GameplayJudge::Listener, public PlayfieldV
     AnimFloat fBreakBackgroundFade;
     bool bInBreak;
     bool bIsInSkippableSection;
+    bool bSkipScheduled{false};
+    bool bClickedSkipButton{false};  // (keeps the click on the skip button from seeking)
     i32 iPreviousSectionPassFailTime;
 
     struct KeyEvent {

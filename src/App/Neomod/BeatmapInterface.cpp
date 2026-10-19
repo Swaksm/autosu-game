@@ -56,6 +56,7 @@
 #include "SpectatorScreen.h"
 #include "Storyboard.h"
 #include "UI.h"
+#include "VolumeOverlay.h"
 #include "Matrices.h"
 #include "UIModSelectorModButton.h"
 #include "Graphics.h"
@@ -707,6 +708,9 @@ bool BeatmapInterface::start() {
     this->iLeadInMS = 0;
     this->bIsRestartScheduled = false;
     this->bIsRestartScheduledQuick = false;
+    this->bIsInSkippableSection = false;
+    this->bSkipScheduled = false;
+    this->bClickedSkipButton = false;
 
     if(this->beatmap->getLocalOffset() != 0)
         ui->getNotificationOverlay()->addNotification(
@@ -2156,7 +2160,7 @@ void BeatmapInterface::update2() {
             // We'll "schedule" a skip, which is the same as clicking the skip button, so nothing
             // would get skipped if it isn't actually a skippable section.
             if(next_frame.milliseconds_since_last_frame >= cv::skip_time.getInt()) {
-                osu->bSkipScheduled = true;
+                this->bSkipScheduled = true;
             }
 
             this->current_keys = current_frame.key_flags;
@@ -2222,6 +2226,54 @@ void BeatmapInterface::update2() {
         if((wasInSkippableSection != this->bIsInSkippableSection) || (BanchoState::is_playing_a_multi_map())) {
             // FIXME: why the FUCK is this here?
             ui->getChat()->updateVisibility();
+        }
+    }
+
+    // skip button clicking
+    if(
+        // skipping is not already scheduled
+        (!this->bSkipScheduled && !this->bClickedSkipButton) &&
+        // skipping is possible, and
+        (this->bIsInSkippableSection && !this->bIsPaused && !ui->getVolumeOverlay()->isBusy()) &&
+        // any gameplay-relevant key is down, and
+        (this->isClickHeld() || mouse->isLeftDown()) &&
+        // mouse is inside skip click rect
+        (ui->getHUD()->getSkipClickRect().contains(mouse->getPos()))  //
+    ) {
+        // schedule skip
+        this->bSkipScheduled = true;
+        this->bClickedSkipButton = true;
+
+        if(BanchoState::is_playing_a_multi_map()) {
+            Packet packet;
+            packet.id = OUTP_MATCH_SKIP_REQUEST;
+            BANCHO::Net::send_packet(packet);
+        }
+    }
+
+    // skipping
+    if(this->bSkipScheduled) {
+        if(this->bIsInSkippableSection && !this->bIsPaused) {
+            bool can_skip_intro = (cv::skip_intro_enabled.getBool() && this->getCurrentHitObjectIndex() < 1);
+            bool can_skip_break = (cv::skip_breaks_enabled.getBool() && this->getCurrentHitObjectIndex() > 0);
+            if(BanchoState::is_playing_a_multi_map()) {
+                can_skip_intro = this->all_players_skipped;
+                can_skip_break = false;
+            }
+
+            if(can_skip_intro || can_skip_break) {
+                this->skipEmptySection();
+            }
+        }
+
+        this->bSkipScheduled = false;
+    }
+
+    // Reset bClickedSkipButton on mouse up
+    // We only use bClickedSkipButton to prevent seeking when clicking the skip button
+    if(this->bClickedSkipButton && !this->bIsInSkippableSection) {
+        if(!mouse->isLeftDown()) {
+            this->bClickedSkipButton = false;
         }
     }
 
