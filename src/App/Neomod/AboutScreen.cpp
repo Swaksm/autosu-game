@@ -408,6 +408,7 @@ void AboutScreen::buildChangelog() {
         R"(- Fixed Shift+F2 not selecting the previous random beatmap in the main menu)",
         R"(- Fixed the F9 user list briefly showing disconnected users when opening chat)",
         R"(- Fixed seeking in replays reacting to clicks in options menu or outside the window)",
+        R"(- Fixed the song sometimes restarting at the end of a map)",
     };
     changelogs.push_back(std::move(v44_01));
 

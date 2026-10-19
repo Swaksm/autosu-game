@@ -49,11 +49,15 @@ bool MusicTrack::update() {
         this->virtualMS = this->time;
     }
     if(this->outsideSong) {
+        const f64 before = this->virtualMS;
         if(this->playing) this->virtualMS += elapsed * 1000.0 * this->speed * this->slowdown;
         this->time = (i32)std::round(this->virtualMS);
         logIf(cv::debug_snd.getInt() > 1, "music clock: real time {:.6f} position {:.3f} time {} (virtual)", now,
               this->virtualMS, this->time);
-        if(this->virtualMS >= 0.0 && this->virtualMS < this->getLengthMS()) this->enterSong(this->time);
+        // only the lead-in runs into the song. a song that ended stays ended, even if it ended before getLengthMS()
+        if(before < 0.0 && this->virtualMS >= 0.0 && this->virtualMS < this->getLengthMS()) {
+            this->enterSong(this->time);
+        }
         return finished;
     }
 
