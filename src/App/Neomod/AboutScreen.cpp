@@ -418,6 +418,7 @@ void AboutScreen::buildChangelog() {
         R"(  - Fixed various slider inaccuracies (shape, hitreg, judgements))",
         R"(  - Fixed hit windows being off by 1ms depending on OD)",
         R"(  - Fixed combo handling after breaks and spinners)",
+        R"(  - Fixed 0-duration spinners failing instead of passing)",
         R"(- Improved replay playback)",
         R"(- Improved audio)",
         R"(  - Improved audio quality at playback rates above 1.0x (especially vocals))",

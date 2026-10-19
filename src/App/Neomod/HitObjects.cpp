@@ -2822,6 +2822,11 @@ void Spinner::update(i32 curPosMS, f64 frameTimeSecs) {
 
     // if we have not been clicked yet, check if we are in the timeframe of a miss, also handle auto and relax
     if(!m_finished) {
+        m_rotationsNeeded = GameRules::getSpinnerRotationsForSpeedMultiplier(m_judge, m_durationMS);
+
+        // spinners too short to require a single rotation are implicitly cleared
+        if(m_rotationsNeeded <= 0.f) m_ratio = 1.f;
+
         // handle spinner ending
         if(curPosMS >= getEndTime()) {
             onHit();
@@ -2832,8 +2837,6 @@ void Spinner::update(i32 curPosMS, f64 frameTimeSecs) {
         if(frameTimeSecs == 0.0) {
             return;
         }
-
-        m_rotationsNeeded = GameRules::getSpinnerRotationsForSpeedMultiplier(m_judge, m_durationMS);
 
         const f32 DELTA_UPDATE_TIME_MS = (frameTimeSecs * 1000.0f);
         const f32 AUTO_MULTIPLIER = (1.0f / 20.0f);
@@ -2899,7 +2902,7 @@ void Spinner::update(i32 curPosMS, f64 frameTimeSecs) {
                 if(std::abs(rotationAngle) > 0.0001f) rotate(rotationAngle);
             }
 
-            m_ratio = m_rotations / (m_rotationsNeeded * 360.0f);
+            if(m_rotationsNeeded > 0.f) m_ratio = m_rotations / (m_rotationsNeeded * 360.0f);
             if(m_completedTimeMS < 0 && m_ratio >= 1.0f) m_completedTimeMS = curPosMS;
         }
     }
@@ -2935,7 +2938,7 @@ void Spinner::addSoundCues(std::vector<SoundCue> &out) const {
 
 f32 Spinner::getTimeLeftPercent(i32 curPosMS) const {
     const i32 deltaMS = m_clickTimeMS - curPosMS;
-    return 1.0f - std::clamp<f32>((f32)deltaMS / -(f32)(m_durationMS), 0.0f, 1.0f);
+    return 1.0f - std::clamp<f32>((f32)deltaMS / -(f32)std::max(m_durationMS, 1), 0.0f, 1.0f);
 }
 
 void Spinner::onReset(i32 curPosMS) {
