@@ -467,11 +467,17 @@ void HitObject::addHitResult(LiveHitResult result, i32 delta, bool isEndOfCombo,
 
     const LiveHitResult returnedHit = m_judge->addHitResult(this, result, delta, isEndOfCombo, ignoreOnHitErrorBar,
                                                             false, ignoreCombo, false, ignoreHealth);
+    addHitResultAnim(returnedHit != LiveHitResult::HIT_MISS ? returnedHit : result, delta, posRaw,
+                     addObjectDurationToSkinAnimationTimeStartOffset);
+}
+
+void HitObject::addHitResultAnim(LiveHitResult result, i32 delta, vec2 posRaw,
+                                 bool addObjectDurationToSkinAnimationTimeStartOffset) {
     if(!animatesHits()) return;
 
     HITRESULTANIM hitresultanim;
     {
-        hitresultanim.result = (returnedHit != LiveHitResult::HIT_MISS ? returnedHit : result);
+        hitresultanim.result = result;
         hitresultanim.rawPos = posRaw;
         hitresultanim.deltaMS = delta;
         hitresultanim.deltaRangePercent = std::clamp<f32>((f32)delta / m_judge->getHitWindow50(), -1.0f, 1.0f);
@@ -1719,8 +1725,13 @@ void Slider::update(i32 curPosMS, f64 /*frameTimeSecs*/) {
                         m_endResult = LiveHitResult::HIT_MISS;
 
                         // end of combo, ignore in hiterrorbar, ignore combo, subtract health
-                        addHitResult(m_endResult, 0, m_endOfCombo, getRawPosAt(getEndTime()), -1.0f, 0.0f, true, true,
-                                     false);
+                        const LiveHitResult returnedHit =
+                            m_judge->addHitResult(this, m_endResult, 0, m_endOfCombo, true, false, true, false, false);
+
+                        // scorev2 only shows the head result
+                        if(!flags::has<ModFlags::ScoreV2>(curIFaceMods))
+                            addHitResultAnim(returnedHit != LiveHitResult::HIT_MISS ? returnedHit : m_endResult, 0,
+                                             getRawPosAt(getEndTime()), true);
                     }
                 }
             }
@@ -2218,6 +2229,7 @@ void Slider::onHit(LiveHitResult result, i32 delta, bool isEndCircle, f32 target
     if(!isEndCircle) {
         // startcircle
 
+        m_startResult = result;
         m_startFinished = true;
 
         // ignore all keys that were held prior to entering the slider
@@ -2234,6 +2246,9 @@ void Slider::onHit(LiveHitResult result, i32 delta, bool isEndCircle, f32 target
             // not end of combo, show in hiterrorbar, ignore for accuracy, increase combo,
             // don't count towards score, depending on scorev2 ignore for health or not
             m_judge->addHitResult(this, result, delta, false, false, true, false, true, true);
+
+            // scorev2 judges the whole slider by its head, so its result is shown as soon as the head is hit
+            if(m_judge->getMods().has(ModFlags::ScoreV2)) addHitResultAnim(result, delta, curvePointAt(0.0f), false);
         }
 
         // add bonus score + health manually
@@ -2254,6 +2269,8 @@ void Slider::onHit(LiveHitResult result, i32 delta, bool isEndCircle, f32 target
     } else {
         // endcircle
 
+        // the startcircle can be missed without reaching onHit(), if the slider is shorter than its miss window
+        const bool startShown = m_startFinished;
         m_startFinished = true;
         m_endFinished = true;
         m_finished = true;
@@ -2266,9 +2283,17 @@ void Slider::onHit(LiveHitResult result, i32 delta, bool isEndCircle, f32 target
             const bool isLazer2020Drain = false;
 
             // (the endcircle's bonus score, combo and health were already added at its check time, see update())
-            addHitResult(result, delta, m_endOfCombo, getRawPosAt(getEndTime()), -1.0f, 0.0f, true, true,
-                         isLazer2020Drain);  // end of combo, ignore in hiterrorbar, ignore combo, increase score,
-                                             // increase health depending on drain type
+            // end of combo, ignore in hiterrorbar, ignore combo, increase score, increase health depending on drain type
+            const LiveHitResult returnedHit =
+                m_judge->addHitResult(this, result, delta, m_endOfCombo, true, false, true, false, isLazer2020Drain);
+
+            // scorev2 only shows the head result
+            if(!m_judge->getMods().has(ModFlags::ScoreV2)) {
+                addHitResultAnim(returnedHit != LiveHitResult::HIT_MISS ? returnedHit : result, delta,
+                                 getRawPosAt(getEndTime()), true);
+            } else if(!startShown) {
+                addHitResultAnim(m_startResult, delta, curvePointAt(0.0f), true);
+            }
         }
     }
 

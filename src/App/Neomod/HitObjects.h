@@ -123,6 +123,9 @@ class HitObject {
     void addHitResult(LiveHitResult result, i32 delta, bool isEndOfCombo, vec2 posRaw, f32 targetDeltaPct = 0.0f,
                       f32 targetAngle = 0.0f, bool ignoreOnHitErrorBar = false, bool ignoreCombo = false,
                       bool ignoreHealth = false, bool addObjectDurationToSkinAnimationTimeStartOffset = true);
+    // shows a hit result at posRaw without judging anything
+    void addHitResultAnim(LiveHitResult result, i32 delta, vec2 posRaw,
+                          bool addObjectDurationToSkinAnimationTimeStartOffset);
     void misAimed() { m_misAim = true; }
 
     void setStack(i32 stack) { m_stackNum = stack; }
