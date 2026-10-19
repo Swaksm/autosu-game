@@ -272,7 +272,12 @@ Osu::Osu()
     };
     cv::ignore_beatmap_skins.setCallback(reloadBeatmapSkin);
     cv::ignore_beatmap_samples.setCallback(reloadBeatmapSkin);
-    cv::draw_storyboard.setCallback(reloadBeatmapSkin);
+    cv::draw_storyboard.setCallback([]() -> void {
+        if(BeatmapInterface *map_iface = osu->getMapInterface()) {
+            map_iface->loadBeatmapSkin();
+            if(osu->isInPlayMode()) map_iface->loadStoryboard();
+        }
+    });
 
     cv::skin_allow_convars.setCallback([](float oldValue, float newValue) -> void {
         if(oldValue == newValue) return;

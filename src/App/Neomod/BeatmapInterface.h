@@ -57,6 +57,7 @@ class BeatmapInterface final : public GameplayJudge::Listener, public PlayfieldV
     void onModUpdate(bool rebuildSliderVertexBuffers = true, bool recomputeDrainRate = true);
 
     void loadBeatmapSkin();
+    void loadStoryboard();
 
     [[nodiscard]] inline Storyboard *getStoryboard() const { return this->storyboard.get(); }
     [[nodiscard]] Storyboard::View getStoryboardView() const;
@@ -292,7 +293,6 @@ class BeatmapInterface final : public GameplayJudge::Listener, public PlayfieldV
     void actualRestart();
 
     void unloadObjects();
-    void loadStoryboard();
 
     void step(f64 frametime);
     void stopObjectSounds();

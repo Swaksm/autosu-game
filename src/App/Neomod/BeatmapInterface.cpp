@@ -1891,6 +1891,12 @@ void BeatmapInterface::update() {
     // yes, this needs to happen after updating metrics
     this->update2();
 
+    // adopt the storyboard once parsed (at the start, or after it got turned on mid-play)
+    if(this->storyboardHandle.valid() && this->storyboardHandle.is_ready()) {
+        this->storyboard = this->storyboardHandle.get();
+        if(this->storyboard) this->storyboard->load(false);
+    }
+
     // handle preloading (only for distributed slider vertexbuffer generation atm)
     const bool was_preloading = this->bIsPreLoading;
     if(this->bIsPreLoading) {
@@ -1906,14 +1912,8 @@ void BeatmapInterface::update() {
             if(this->iPreLoadingIndex >= hitobjects.size()) {
                 // (and for the map's skin elements to load, see loadBeatmapSkin())
                 if(const Skin *skin = this->getSkin(); skin && !skin->isReady()) break;
-                if(this->storyboardHandle.valid()) {
-                    if(!this->storyboardHandle.is_ready()) break;
-                    this->storyboard = this->storyboardHandle.get();
-                }
-                if(this->storyboard) {
-                    this->storyboard->load(false);
-                    if(!this->storyboard->isReady()) break;
-                }
+                if(this->storyboardHandle.valid()) break;
+                if(this->storyboard && !this->storyboard->isReady()) break;
                 this->bIsPreLoading = false;
                 debugLog("Beatmap: Preloading done.");
                 break;
