@@ -182,9 +182,8 @@ void BeatmapInterface::drawDebug() {
 void BeatmapInterface::drawBackground() {
     if(!this->canDraw()) return;
 
-    f32 brightness = 1.f - cv::background_dim.getFloat();
-    brightness += this->fBreakBackgroundFade * 0.3f;
-    brightness = std::clamp(brightness, 0.f, 1.f);
+    const Storyboard::View view = this->getStoryboardView();
+    const f32 brightness = view.brightness;
 
     // draw background image
     {
@@ -211,7 +210,7 @@ void BeatmapInterface::drawBackground() {
             {
                 g->scale(scale, scale);
                 g->translate((int)centerTrans.x, (int)centerTrans.y);
-                if(storyboard) this->getStoryboardView().transform();
+                if(storyboard) view.transform();
                 g->drawImage(backgroundImage);
             }
             g->popTransform();
@@ -232,11 +231,7 @@ void BeatmapInterface::drawBackground() {
     }
 
     if(this->storyboard) {
-        Storyboard::View view = this->getStoryboardView();
-        view.brightness = brightness;
-        this->storyboard->draw(Storyboard::Layer::BACKGROUND, Storyboard::Layer::BACKGROUND, view);
-        view.brightness = 1.f;
-        this->storyboard->draw(Storyboard::Layer::FAIL, Storyboard::Layer::FOREGROUND, view);
+        this->storyboard->draw(Storyboard::Layer::BACKGROUND, Storyboard::Layer::FOREGROUND, view);
     }
 
     // draw scorebar-bg
@@ -1329,6 +1324,7 @@ Storyboard::View BeatmapInterface::getStoryboardView() const {
         .flipX = cv::playfield_mirror_vertical.getBool(),
         .flipY = cv::playfield_mirror_horizontal.getBool(),
         .rotation = cv::playfield_rotation.getFloat(),
+        .brightness = std::clamp(1.f - cv::background_dim.getFloat() + this->fBreakBackgroundFade * 0.3f, 0.f, 1.f),
     };
 }
 
