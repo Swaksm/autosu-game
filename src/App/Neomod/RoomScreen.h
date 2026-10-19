@@ -2,6 +2,7 @@
 // Copyright (c) 2024, kiwec, All rights reserved.
 
 #include "CBaseUIScrollView.h"
+#include "MD5Hash.h"
 #include "MapFetcher.h"
 #include "Registration.h"
 #include "UIScreen.h"
@@ -133,9 +134,9 @@ class RoomScreen final : public UIScreen {
 
     time_t last_packet_tms = {0};
 
-    // tracks the last map_id we successfully downloaded + applied via on_map_change;
+    // tracks the last map we successfully downloaded + applied via on_map_change;
     // map_fetcher drives the install of the host's current pick until it gets there.
-    i32 current_map_id{-1};
+    MD5Hash current_map_md5;
     MapFetcher map_fetcher;
     Mc::Registration passwordPrompt;
     // while the room has a map (the room picks it, nothing else may)

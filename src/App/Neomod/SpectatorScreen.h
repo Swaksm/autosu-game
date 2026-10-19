@@ -4,6 +4,7 @@
 #include "types.h"
 #include "BanchoProtocol.h"
 #include "LegacyReplay.h"
+#include "MD5Hash.h"
 #include "UIScreen.h"
 
 class McFont;
@@ -16,7 +17,6 @@ class UIButton;
 struct RemotePlayerUpdate {
     LiveReplayAction action;
     i32 music_pos;
-    i32 map_id;
     MD5Hash map_md5;
     ScoreFrame score;
     std::vector<LegacyReplay::Frame> replay_frames;
@@ -49,7 +49,7 @@ class SpectatorScreen final : public UIScreen {
     CBaseUILabel* status = nullptr;
 
     // dedupes the OUTP_CANT_SPECTATE packet to one per failed map
-    i32 last_failed_map{0};
+    MD5Hash last_failed_map;
 };
 
 namespace Spectating {

@@ -37,8 +37,9 @@ class MapFetcher final {
     };
 
     // want a specific difficulty: md5 (if non-empty) is the success criterion, map_id otherwise.
-    // a set_id_hint > 0 skips the metadata query. retargeting resets the machinery; calling every
-    // tick with the same target is free.
+    // several difficulties can share a map_id, so pass the md5 whenever it is known.
+    // map_id is only needed to download a missing map; a set_id_hint > 0 skips the metadata query.
+    // retargeting resets the machinery; calling every tick with the same target is free.
     void target_map(i32 map_id, const MD5Hash &md5 = {}, i32 set_id_hint = 0);
 
     // want a whole set.

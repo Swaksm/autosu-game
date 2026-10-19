@@ -168,7 +168,7 @@ void SpectatorScreen::controlClientState() {
 
         auto it =
             std::find_if(this->player_updates.begin(), this->player_updates.end(), [&](const RemotePlayerUpdate &u) {
-                return u.music_pos < last_music_pos || u.map_id != map_iface->beatmap->getID() ||
+                return u.music_pos < last_music_pos || u.map_md5 != map_iface->beatmap->getMD5() ||
                        u.action != LiveReplayAction::NONE;
             });
         for(auto u = this->player_updates.begin(); u != it; u++) {
@@ -232,14 +232,14 @@ void SpectatorScreen::controlClientState() {
     if(map_iface->getSpectatingLeeway() > 0 && !map_iface->is_buffering) return;
 
     // clear all frames that aren't from the remote player's current map
-    // (so we can be sure that user_info->map_id is our target)
+    // (so we can be sure that user_info->map_md5 is our target)
     UserInfo *user_info = BANCHO::User::get_user_info(BanchoState::spectated_player_id, true);
     auto it = std::find_if(this->player_updates.begin(), this->player_updates.end(),
-                           [&](const RemotePlayerUpdate &u) { return u.map_id == user_info->map_id; });
+                           [&](const RemotePlayerUpdate &u) { return u.map_md5 == user_info->map_md5; });
     this->player_updates.erase(this->player_updates.begin(), it);
 
     // check if we need to switch map
-    if(can_load_maps && (map_iface->beatmap == nullptr || map_iface->beatmap->getID() != user_info->map_id)) {
+    if(can_load_maps && (map_iface->beatmap == nullptr || map_iface->beatmap->getMD5() != user_info->map_md5)) {
         if(osu->isInPlayMode()) {
             // this will also send us back to the spectator screen, if user quits the map
             map_iface->stop(true);
@@ -345,7 +345,7 @@ void SpectatorScreen::tick() {
 
     if(user_info->mode != GameMode::STANDARD) {
         this->status->setText(tformat("{:s} is playing minigames", user_info->name));
-    } else if(user_info->map_id != -1 && user_info->map_id != 0) {
+    } else if(!user_info->map_md5.empty()) {
         const auto &fs = map_fetcher.state();
         if(!db->isFinished() || db->isCancelled()) {
             // this text shouldn't be visible, it's a failsafe in case we fucked up the complex db loading logic
@@ -354,11 +354,11 @@ void SpectatorScreen::tick() {
             // TODO: more detailed error message
             this->status->setText(tformat("Failed to download Beatmap #{:d} :(", user_info->map_id));
 
-            if(user_info->map_id != this->last_failed_map) {
+            if(user_info->map_md5 != this->last_failed_map) {
                 Packet packet;
                 packet.id = OUTP_CANT_SPECTATE;
                 BANCHO::Net::send_packet(packet);
-                this->last_failed_map = user_info->map_id;
+                this->last_failed_map = user_info->map_md5;
             }
         } else if(fs.status == MapFetcher::Status::Working) {
             // map download overlay already shows download progress
@@ -437,11 +437,10 @@ void SpectatorScreen::handleFrameBundle(PacketReader &packet) {
     auto *map_iface = osu->getMapInterface();
 
     RemotePlayerUpdate update;
-    update.map_id = info->map_id;
     update.map_md5 = info->map_md5;
 
     update.music_pos = -1000;
-    if(map_iface->beatmap && map_iface->beatmap->getID() == update.map_id && !map_iface->judge->replay.empty()) {
+    if(map_iface->beatmap && map_iface->beatmap->getMD5() == update.map_md5 && !map_iface->judge->replay.empty()) {
         update.music_pos = map_iface->judge->replay.back().cur_music_pos;
     }
 

@@ -8,7 +8,7 @@
 #include "Osu.h"
 
 void MapFetcher::target_map(i32 map_id, const MD5Hash &md5, i32 set_id_hint) {
-    if(map_id <= 0) {
+    if(map_id <= 0 && md5.empty()) {
         this->clear();
         return;
     }
@@ -27,7 +27,7 @@ void MapFetcher::target_set(i32 set_id) {
         this->clear();
         return;
     }
-    if(this->map_id == 0 && this->set_id == set_id) return;
+    if(this->map_id == 0 && this->md5.empty() && this->set_id == set_id) return;
 
     this->clear();
     this->set_id = set_id;
@@ -45,9 +45,8 @@ void MapFetcher::clear() {
 }
 
 DatabaseBeatmap *MapFetcher::lookup() const {
-    if(this->map_id != 0) {
-        return this->md5.empty() ? db->getBeatmapDifficulty(this->map_id) : db->getBeatmapDifficulty(this->md5);
-    }
+    if(!this->md5.empty()) return db->getBeatmapDifficulty(this->md5);
+    if(this->map_id > 0) return db->getBeatmapDifficulty(this->map_id);
     return this->set_id > 0 ? db->getBeatmapSet(this->set_id) : nullptr;
 }
 

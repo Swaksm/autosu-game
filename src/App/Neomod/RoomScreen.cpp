@@ -252,11 +252,11 @@ void RoomScreen::draw() {
     if(!BanchoState::is_in_a_multi_room() || osu->isInPlayMode()) return;
 
     // visual state only - the install pipeline is driven from update()
-    if(BanchoState::room.map_id == -1 || BanchoState::room.map_id == 0) {
+    if(BanchoState::room.map_md5.empty()) {
         this->map_title->setText(_("Host is selecting a map..."));
         this->map_title->setSizeToContent(0, 0);
         this->ready_btn->is_loading = true;
-    } else if(BanchoState::room.map_id != this->current_map_id) {
+    } else if(BanchoState::room.map_md5 != this->current_map_md5) {
         // install in flight (or about to be targeted by update())
         const auto &fs = this->map_fetcher.state();
         if(fs.status == MapFetcher::Status::NotFound) {
@@ -283,10 +283,10 @@ void RoomScreen::tick() {
 
     // drive the host's current pick through the fetcher (retargeting is implicit when the host
     // changes the map under us); fire on_map_change exactly once when it lands.
-    if(BanchoState::room.map_id > 0 && BanchoState::room.map_id != this->current_map_id) {
+    if(!BanchoState::room.map_md5.empty() && BanchoState::room.map_md5 != this->current_map_md5) {
         this->map_fetcher.target_map(BanchoState::room.map_id, BanchoState::room.map_md5);
         if(this->map_fetcher.tick().status == MapFetcher::Status::Found) {
-            this->current_map_id = BanchoState::room.map_id;
+            this->current_map_md5 = BanchoState::room.map_md5;
             this->map_fetcher.clear();
             this->on_map_change();
         }
@@ -599,9 +599,9 @@ void RoomScreen::on_map_change() {
 
     // Deselect current map
     osu->getMapInterface()->deselectBeatmap();
-    this->selectionHold = BanchoState::room.map_id > 0 ? osu->getMusicTrack()->hold() : Mc::Registration{};
+    this->selectionHold = !BanchoState::room.map_md5.empty() ? osu->getMusicTrack()->hold() : Mc::Registration{};
 
-    if(BanchoState::room.map_id == 0) {
+    if(BanchoState::room.map_md5.empty()) {
         this->map_title->setText(_("(no map selected)"));
         this->map_title->setSizeToContent(0, 0);
         this->ready_btn->is_loading = true;
@@ -691,7 +691,7 @@ void RoomScreen::on_room_updated(const Room &room) {
     }
 
     bool was_host = BanchoState::room.is_host();
-    bool map_changed = BanchoState::room.map_id != room.map_id;
+    bool map_changed = BanchoState::room.map_md5 != room.map_md5;
     BanchoState::room = room;
 
     Slot *player_slot = nullptr;
