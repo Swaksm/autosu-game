@@ -397,8 +397,15 @@ void AboutScreen::onChangeClicked(CBaseUIButton *button) {
 void AboutScreen::buildChangelog() {
     std::vector<CHANGELOG> changelogs;
 
+    CHANGELOG v44_01;
+    v44_01.title = "44.01 (" CHANGELOG_TIMESTAMP ")";
+    v44_01.changes = {
+        R"()",
+    };
+    changelogs.push_back(std::move(v44_01));
+
     CHANGELOG v44_0;
-    v44_0.title = "44.0 (" CHANGELOG_TIMESTAMP ")";
+    v44_0.title = "44.0 (2026-10-19)";
     v44_0.changes = {
         R"(- Added support for storyboards)",
         R"(- Added support for beatmap skins (sounds/images))",
