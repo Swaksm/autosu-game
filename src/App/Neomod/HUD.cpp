@@ -22,6 +22,7 @@
 #include "ModFPoSu.h"
 #include "MusicTrack.h"
 #include "Mouse.h"
+#include "CBaseUIDispatch.h"
 #include "Osu.h"
 #include "Font.h"
 #include "RankingScreen.h"
@@ -111,6 +112,53 @@ void HUD::onCursorTrailMaxChange() {
     this->cursorTrailSpectator2 = CursorTrail{};
 }
 
+// the whole screen while seeking: a left press/drag seeks to the time under the cursor, a right press/drag picks the
+// quick save time
+class HUD::SeekArea final : public CBaseUIElement {
+    NOCOPY_NOMOVE(SeekArea)
+   public:
+    SeekArea() : CBaseUIElement(0, 0, 0, 0, "hud_seekarea") { this->bHandleRightMouse = true; }
+    ~SeekArea() override = default;
+
+    void draw() override {}
+
+   protected:
+    void onMouseDownInside(bool left, bool /*right*/) override {
+        if(left) this->fPrevSeekMousePosX = -1.f;
+    }
+
+    void onCapturedMouseMove() override {
+        auto *pf = osu->getMapInterface();
+        const auto buttons = CBaseUIDispatch::getCaptorButtons();
+        const f32 mousePosX = std::round(mouse->getPos().x);
+        const f64 percent = std::clamp<f64>(mousePosX / (f64)this->getSize().x, 0., 1.);
+        const u32 seek_to_ms =
+            static_cast<u32>(std::round(percent * (f64)(pf->getStartTimePlayable() + pf->getLengthPlayable())));
+
+        if(flags::has<MouseButtonFlags::MF_LEFT>(buttons) &&
+           (mousePosX != this->fPrevSeekMousePosX || !cv::scrubbing_smooth.getBool())) {
+            this->fPrevSeekMousePosX = mousePosX;
+
+            // special case: allow cancelling the failing animation here
+            if(pf->hasFailed()) pf->cancelFailing();
+
+            pf->seekMS(seek_to_ms);
+        }
+
+        if(flags::has<MouseButtonFlags::MF_RIGHT>(buttons)) osu->iQuickSaveMS = seek_to_ms;
+    }
+
+   private:
+    f32 fPrevSeekMousePosX{-1.f};
+};
+
+void HUD::updateInput(CBaseUIEventCtx &c) {
+    // the hud is drawn by the gameplay composite instead of as a visible screen, so only the seek area takes input
+    if(!osu->isSeeking()) return;
+    this->seekArea->setRect(osu->getVirtScreenRect());
+    this->seekArea->updateInput(c);
+}
+
 // temp vao buffers
 namespace {
 static CONSTINIT VertexArrayObject quadVAO{DrawPrimitive::QUADS};
@@ -144,6 +192,9 @@ HUD::HUD() : UIScreen() {
     this->fHealth = 1.0f;
     this->fScoreBarBreakAnim = 0.0f;
     this->fKiScaleAnim = 0.8f;
+
+    this->seekArea = new SeekArea();
+    this->addBaseUIElement(this->seekArea);
 }
 
 HUD::~HUD() { cv::cursor_trail_max_size.removeAllCallbacks(); }

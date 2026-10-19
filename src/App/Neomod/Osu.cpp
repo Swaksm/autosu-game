@@ -635,46 +635,23 @@ void Osu::update() {
 
     this->fposu->update();
 
+    // scrubbing/seeking (the hud seek area takes the clicks while this is set)
+    this->bSeeking = this->isInPlayMode() &&
+                     (this->bSeekKey ||
+                      // only auto-seek if not paused (or we immediately seek when unpausing)
+                      (this->map_iface->is_watching && !this->map_iface->isActuallyPausedAndNotSpectating()))  //
+                     && (!ui->getVolumeOverlay()->isBusy())                                                    //
+                     && (!BanchoState::is_playing_a_multi_map() && !this->map_iface->isSkipButtonHeld())       //
+                     && (!BanchoState::spectating);                                                            //
+
     ui->update();
 
     // main playfield update
-    this->bSeeking = false;
     if(this->isInPlayMode()) {
         this->map_iface->update();
 
         // NOTE: force keep loaded background images while playing
         this->backgroundImageHandler->scheduleFreezeCache();
-
-        // scrubbing/seeking
-        this->bSeeking = (this->bSeekKey ||
-                          // only auto-seek if not paused (or we immediately seek when unpausing)
-                          (this->map_iface->is_watching && !this->map_iface->isActuallyPausedAndNotSpectating()))  //
-                         && (!ui->getVolumeOverlay()->isBusy())                                                    //
-                         && (!BanchoState::is_playing_a_multi_map() && !this->map_iface->isSkipButtonHeld())       //
-                         && (!BanchoState::spectating);                                                            //
-        if(this->bSeeking) {
-            f32 mousePosX = std::round(mouse->getPos().x);
-            f64 percent = std::clamp<f64>(mousePosX / (f64)this->internalRect.getWidth(), 0., 1.);
-            u32 seek_to_ms = static_cast<u32>(std::round(
-                percent * (f64)(this->map_iface->getStartTimePlayable() + this->map_iface->getLengthPlayable())));
-
-            if(mouse->isLeftDown()) {
-                if(mousePosX != this->fPrevSeekMousePosX || !cv::scrubbing_smooth.getBool()) {
-                    this->fPrevSeekMousePosX = mousePosX;
-
-                    // special case: allow cancelling the failing animation here
-                    if(this->map_iface->hasFailed()) this->map_iface->cancelFailing();
-
-                    this->map_iface->seekMS(seek_to_ms);
-                }
-            } else {
-                this->fPrevSeekMousePosX = -1.0f;
-            }
-
-            if(mouse->isRightDown()) {
-                this->iQuickSaveMS = seek_to_ms;
-            }
-        }
 
         // quick retry timer
         if(this->bQuickRetryDown && this->fQuickRetryTime != 0.0f && engine->getTime() > this->fQuickRetryTime) {

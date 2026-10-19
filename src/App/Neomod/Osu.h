@@ -338,7 +338,6 @@ class Osu final : public App, public MouseListener, public TouchListener {
     bool bScoreboardToggleCheck{false};
     bool bSeekKey{false};
     bool bSeeking{false};
-    float fPrevSeekMousePosX{-1.f};
 
    public:  // public due to BeatmapInterface access
     u32 iQuickSaveMS{0};

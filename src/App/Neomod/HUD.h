@@ -53,6 +53,7 @@ class HUD final : public UIScreen {
     ~HUD() override;
 
     void draw() override;
+    void updateInput(CBaseUIEventCtx &c) override;
     void drawDummy();
     static void drawRuntimeInfo();
 
@@ -267,6 +268,8 @@ class HUD final : public UIScreen {
     std::vector<HITERROR> hiterrors;
 
     // scrubbing timeline
+    class SeekArea;
+    SeekArea *seekArea;
     StrainGraph strainGraph;
     f64 fLastCursorMoveTime{0.};
     vec2 lastCursorMovePos{};
