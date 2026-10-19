@@ -3108,10 +3108,9 @@ void drawFollowPoints(const PlayfieldView &view, std::span<const std::unique_ptr
 
     const i32 curPos = view.getCurMusicPosWithOffsets();
 
-    // I absolutely hate this, followpoints can be abused for cheesing high AR reading since they always fade in with a
-    // fixed 800 ms custom approach time. Capping it at the current approach rate seems sensible, but unfortunately
-    // that's not what osu is doing. It was non-osu-compliant-clamped since this client existed, but let's see how many
-    // people notice a change after all this time (26.02.2020)
+    // followpoints always fade in with a fixed 800 ms approach time (like stable),
+    // which can be abused for reading high AR.
+    // followpoints_clamp caps it at the current approach time instead.
 
     // 0.7x means animation lasts only 0.7 of it's time
     const f64 animationMultiplier = view.getSpeedAdjustedAnimationSpeed();
@@ -3123,7 +3122,7 @@ void drawFollowPoints(const PlayfieldView &view, std::span<const std::unique_ptr
     const bool followPointsConnectCombos = cv::followpoints_connect_combos.getBool();
     const bool followPointsConnectSpinners = cv::followpoints_connect_spinners.getBool();
     const f32 followPointSeparationMultiplier = std::max(cv::followpoints_separation_multiplier.getFloat(), 0.1f);
-    const f32 followPointPrevFadeTime = animationMultiplier * cv::followpoints_prevfadetime.getFloat();
+    const f32 followPointFadeTime = animationMultiplier * cv::followpoints_prevfadetime.getFloat();
     const f32 followPointScaleMultiplier = cv::followpoints_scale_multiplier.getFloat();
     const int screenWidth = (int)view.getScreenSize().x;
     const int screenHeight = (int)view.getScreenSize().y;
@@ -3164,7 +3163,7 @@ void drawFollowPoints(const PlayfieldView &view, std::span<const std::unique_ptr
 
             // get time & pos of the last and current object
             const i32 lastObjectEndTime =
-                objects[lastObjectIndex]->getClickTime() + objects[lastObjectIndex]->getDuration() + 1;
+                objects[lastObjectIndex]->getClickTime() + objects[lastObjectIndex]->getDuration();
             const i32 objectStartTime = objects[index]->getClickTime();
             const i32 timeDiff = objectStartTime - lastObjectEndTime;
 
@@ -3179,13 +3178,13 @@ void drawFollowPoints(const PlayfieldView &view, std::span<const std::unique_ptr
 
             // NOTE: dist and separation are in osu!pixels, so that followpoint placement is independent of how the
             // playfield is scaled to the screen (only the final positions are mapped to screen space)
-            const f32 dist = vec::length(endPointRaw - startPointRaw);
+            const i32 dist = (i32)vec::length(endPointRaw - startPointRaw);
 
             // draw all points between the two objects
             const int followPointSeparation = 32.0f * followPointSeparationMultiplier;
             for(int j = (int)(followPointSeparation * 1.5f); j < (dist - followPointSeparation);
                 j += followPointSeparation) {
-                const f32 animRatio = ((f32)j / dist);
+                const f32 animRatio = ((f32)j / (f32)dist);
 
                 const vec2 animPosStart = startPoint + (animRatio - 0.1f) * diff;
                 const vec2 finalPos = startPoint + animRatio * diff;
@@ -3195,8 +3194,7 @@ void drawFollowPoints(const PlayfieldView &view, std::span<const std::unique_ptr
 
                 // draw
                 f32 alpha = 1.0f;
-                f32 followAnimPercent =
-                    std::clamp<f32>((f32)(curPos - fadeInTime) / (f32)followPointPrevFadeTime, 0.0f, 1.0f);
+                f32 followAnimPercent = std::clamp<f32>((f32)(curPos - fadeInTime) / followPointFadeTime, 0.0f, 1.0f);
                 followAnimPercent = -followAnimPercent * (followAnimPercent - 2.0f);  // quad out
 
                 // NOTE: only internal osu default skin uses scale + move transforms here, it is impossible to achieve
@@ -3215,12 +3213,12 @@ void drawFollowPoints(const PlayfieldView &view, std::span<const std::unique_ptr
                 // calculate trail alpha
                 if(curPos >= fadeInTime && curPos < fadeOutTime) {
                     // future trail
-                    const f32 delta = curPos - fadeInTime;
-                    alpha = (f32)delta / (f32)followPointApproachTime;
-                } else if(curPos >= fadeOutTime && curPos < (fadeOutTime + (i32)followPointPrevFadeTime)) {
+                    const i32 delta = curPos - fadeInTime;
+                    alpha = std::min((f32)delta / followPointFadeTime, 1.0f);
+                } else if(curPos >= fadeOutTime && curPos < (fadeOutTime + (i32)followPointFadeTime)) {
                     // previous trail
                     const i32 delta = curPos - fadeOutTime;
-                    alpha = 1.0f - (f32)delta / (f32)(followPointPrevFadeTime);
+                    alpha = 1.0f - (f32)delta / followPointFadeTime;
                 } else
                     alpha = 0.0f;
 

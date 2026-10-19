@@ -400,7 +400,7 @@ void AboutScreen::buildChangelog() {
     CHANGELOG v44_01;
     v44_01.title = "44.01 (" CHANGELOG_TIMESTAMP ")";
     v44_01.changes = {
-        R"()",
+        R"(- Fixed followpoint animation being half invisible)",
     };
     changelogs.push_back(std::move(v44_01));
 
