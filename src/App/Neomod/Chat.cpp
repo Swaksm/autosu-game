@@ -524,13 +524,10 @@ void Chat::tick() {
             // if we had a full layout update scheduled, do that, which includes a userlist update
             if(this->layout_update_scheduled) {
                 this->updateLayout(osu->getVirtScreenSize());
-                this->layout_update_scheduled = false;
-                this->userlist_update_scheduled = false;
             }
             // otherwise only update the userlist
             if(this->userlist_update_scheduled) {
                 this->updateUserList();
-                this->userlist_update_scheduled = false;
             }
         }
     }
@@ -1271,6 +1268,7 @@ void Chat::updateUserList() {
     }
 
     this->in_userlist_update = true;
+    this->userlist_update_scheduled = false;
 
     // XXX: don't use SongBrowser::getUIScale
     auto card_size = vec2{SongBrowser::getUIScale(320), SongBrowser::getUIScale(75)};
@@ -1482,8 +1480,12 @@ CBaseUIContainer *Chat::setVisible(bool visible) {
             this->mark_as_read(this->selected_channel);
         }
 
+        // flush updates that were deferred while hidden, so stale user cards don't show up for a frame
         if(this->layout_update_scheduled) {
             this->updateLayout(osu->getVirtScreenSize());
+        }
+        if(this->userlist_update_scheduled) {
+            this->updateUserList();
         }
     } else {
         this->fAnimation.set(0.0f, 0.25f * this->fAnimation, anim::QuadOut);
