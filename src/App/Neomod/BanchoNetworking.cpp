@@ -379,6 +379,7 @@ void BanchoState::disconnect(bool shutdown) {
 
     // reset
     BanchoState::nonsubmittable_notification_clicked = false;
+    BanchoState::silence_end = 0.0;
 
     // Logout
     // This is a blocking call, but we *do* want this to block when quitting the game.

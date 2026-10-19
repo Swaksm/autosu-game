@@ -1,6 +1,7 @@
 // Copyright (c) 2023, kiwec, All rights reserved.
 
 #include <algorithm>
+#include <cmath>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -92,6 +93,7 @@ bool BanchoState::match_started{false};
 std::array<Slot, 16> BanchoState::last_scores{};
 
 Hash::unstable_stringmap<BanchoState::Channel *> BanchoState::chat_channels;
+f64 BanchoState::silence_end{0.0};
 
 bool BanchoState::print_new_channels{true};
 std::string BanchoState::disk_uuid;
@@ -104,6 +106,8 @@ bool BanchoState::nonsubmittable_notification_clicked{false};
 /*###################################################################################################*/
 
 bool BanchoState::is_in_a_multi_room() { return room.nb_players > 0; }
+
+i64 BanchoState::get_silence_seconds_left() { return std::max<i64>(std::ceil(silence_end - Timing::getTimeReal()), 0); }
 
 void BanchoState::set_uid(i32 new_uid) {
     const i32 old_uid = get_uid();
@@ -692,7 +696,8 @@ void BanchoState::handle_packet(PacketReader &packet) {
         case INP_SILENCE_END: {
             i32 delta = packet.read<i32>();
             debugLog("Silence ends in {:d} seconds.", delta);
-            // XXX: Prevent user from sending messages while silenced
+            BanchoState::silence_end = delta > 0 ? Timing::getTimeReal() + delta : 0.0;
+            if(delta > 0) ui->getChat()->input_box->clear();
             break;
         }
 

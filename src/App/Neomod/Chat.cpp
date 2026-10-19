@@ -432,6 +432,22 @@ void Chat::draw() {
     } else {
         UIScreen::draw();
         this->selected_channel->ui->draw();
+
+        if(const i64 left = BanchoState::get_silence_seconds_left(); left > 0) {
+            const auto msg = tformat("You are silenced for another {:d}h {:02d}m {:02d}s.", left / 3600,
+                                     (left / 60) % 60, left % 60);
+            McFont *font = this->input_box->getFont();
+            const vec2 pos = this->input_box->getPos();
+            const vec2 size = this->input_box->getSize();
+            g->setColor(argb(255, 150, 150, 150));
+            g->pushTransform();
+            {
+                g->translate(std::round(pos.x + 3.f * Osu::getUIScale()),
+                             std::round(pos.y + (size.y + font->getHeight()) / 2.f));
+                g->drawString(font, msg);
+            }
+            g->popTransform();
+        }
     }
 
     if(isAnimating) {
@@ -838,6 +854,12 @@ void Chat::onKeyDown(KeyboardEvent &key) {
         return;
     }
 
+    // silenced: the input box takes no text
+    if(this->input_box->isFocused() && BanchoState::get_silence_seconds_left() > 0) {
+        key.consume();
+        return;
+    }
+
     // TAB: Complete nickname
     if(sc == KEY_TAB) {
         key.consume();
@@ -896,6 +918,11 @@ void Chat::onChar(KeyboardEvent &key) {
     if(!this->bVisible || key.isConsumed() || !this->input_box->isFocused() ||
        (keyboard->isSuperDown() || (keyboard->isControlDown() && !keyboard->isAltDown())))
         return;
+
+    if(BanchoState::get_silence_seconds_left() > 0) {
+        key.consume();
+        return;
+    }
 
     this->input_box->onChar(key);
     key.consume();

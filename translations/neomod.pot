@@ -109,6 +109,11 @@ msgid "Loading ..."
 msgstr ""
 
 #: src/App/Neomod/Chat.cpp
+#, c++-format
+msgid "You are silenced for another {:d}h {:02d}m {:02d}s."
+msgstr ""
+
+#: src/App/Neomod/Chat.cpp
 msgid "You are not listening to anything."
 msgstr ""
 

@@ -404,6 +404,7 @@ void AboutScreen::buildChangelog() {
         R"(- Fixed skins opened with neomod not getting selected)",
         R"(- Fixed skins being listed twice when they're in both the neomod and osu! skins folders)",
         R"(- Fixed various spinner inaccuracies (sound, metre, scoring))",
+        R"(- Fixed being able to type in chat while silenced)",
     };
     changelogs.push_back(std::move(v44_01));
 
