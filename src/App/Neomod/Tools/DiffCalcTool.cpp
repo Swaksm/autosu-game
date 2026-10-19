@@ -413,7 +413,6 @@ std::string modsStringFromMods(ModFlags mods, float speed) {
     if(flags::has<HardRock>(mods)) modsString.append("HR,");
     if(flags::has<FreezeFrame>(mods)) modsString.append("FR,");
     if(flags::has<Traceable>(mods)) modsString.append("TC,");
-    if(flags::has<Storyboard>(mods)) modsString.append("SB,");
     if(sd) modsString.append("SD,");
     if(dt) modsString.append("DT,");
     if(nc) modsString.append("NC,");
@@ -458,8 +457,6 @@ std::pair<ModFlags, float> modStringToModFlag(std::string_view CSVs) {
             retFlags |= FreezeFrame;
         } else if(modString == "tc") {
             retFlags |= Traceable;
-        } else if(modString == "sb") {
-            retFlags |= Storyboard;
         } else if(modString == "sd") {
             retFlags |= SuddenDeath;
         } else if(modString == "dt") {

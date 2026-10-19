@@ -248,7 +248,6 @@ Mods Mods::from_cvars() {
     ADDIFCV(mod_dks, DKS);
     ADDIFCV(mod_traceable, Traceable);
     ADDIFCV(mod_freeze_frame, FreezeFrame);
-    ADDIFCV(draw_storyboard, Storyboard);
     if(cv::mod_autoplay.getBool()) {
         mods.flags &= ~(Relax | Autopilot);
         mods.flags |= Autoplay;
@@ -349,7 +348,6 @@ static void for_each_mod_cv(const Mods &mods, bool with_settings, const F &func)
 
     if(with_settings) {
         CVFROMFLAG(drain_disabled, NoHP);
-        CVFROMFLAG(draw_storyboard, Storyboard);
         CVFROMFLAG(mod_fposu, FPoSu);
         CVFROMFLAG(nightcore_enjoyer, NoPitchCorrection);
         CVFROMPROP(notelock_type, notelock_type);

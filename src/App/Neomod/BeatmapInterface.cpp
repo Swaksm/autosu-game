@@ -2964,11 +2964,7 @@ FinishedScore BeatmapInterface::saveAndSubmitScore(bool quit) {
     score.numCircles = numCircles;
     score.mods = liveScore->mods;
     if(numSpinners == 0) score.mods.flags &= ~ModFlags::SpunOut;
-    if(this->storyboard) {
-        score.storyboard_hash = this->storyboard->getHash();
-    } else {
-        score.mods.flags &= ~ModFlags::Storyboard;
-    }
+    if(this->storyboard) score.storyboard_hash = this->storyboard->getHash();
     score.beatmap_hash = played.md5;  // NOTE: necessary for "Use Mods"
     score.replay = this->judge->replay;
 

@@ -204,7 +204,6 @@ class Osu final : public App, public MouseListener, public TouchListener {
     [[nodiscard]] bool getModHT() const;
     [[nodiscard]] bool getModTraceable() const;
     [[nodiscard]] bool getModFreezeFrame() const;
-    [[nodiscard]] bool getModStoryboard() const;
     [[nodiscard]] bool getModDKS() const;
 
     [[nodiscard]] static bool isKioskMode();
