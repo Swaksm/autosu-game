@@ -1162,9 +1162,16 @@ Color Skin::getComboColorForCounter(int i, int offset, std::span<const Color> be
     i += cv::skin_color_index_add.getInt();
     i = std::max(i, 0);
 
-    if(beatmapColors.size() > 0 && !cv::ignore_beatmap_combo_colors.getBool())
+    if(beatmapColors.size() > 0 && !cv::ignore_beatmap_combo_colors.getBool()) {
         return beatmapColors[(i + offset) % beatmapColors.size()];
-    else if(this->c_combo_colors.size() > 0)
+    }
+
+    // since we ignore map colors, we should also ignore map color skips
+    if(beatmapColors.size() > 0 && cv::ignore_beatmap_combo_colors.getBool()) {
+        offset = 0;
+    }
+
+    if(this->c_combo_colors.size() > 0)
         return this->c_combo_colors[(i + offset) % this->c_combo_colors.size()];
     else
         return argb(255, 0, 255, 0);
