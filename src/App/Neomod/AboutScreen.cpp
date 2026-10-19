@@ -403,6 +403,7 @@ void AboutScreen::buildChangelog() {
         R"(- Fixed followpoint animation being half invisible)",
         R"(- Fixed skins opened with neomod not getting selected)",
         R"(- Fixed skins being listed twice when they're in both the neomod and osu! skins folders)",
+        R"(- Fixed various spinner inaccuracies (sound, metre, scoring))",
     };
     changelogs.push_back(std::move(v44_01));
 

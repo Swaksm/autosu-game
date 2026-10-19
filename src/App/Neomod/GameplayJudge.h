@@ -57,9 +57,10 @@ class GameplayJudge final {
             bool sliding, neomod::DatabaseBeatmapTypes::HITSAMPLE_BITS samples, vec2 rawPos,
             const std::vector<neomod::HitSoundUtils::Set_Slider_Hit> &started);
         virtual void stopSliderSounds(const std::vector<neomod::HitSoundUtils::Set_Slider_Hit> &started);
-        virtual void playSpinnerSpinSound(f32 ratio);  // ratio: of the spinning speed needed
+        // ratio: of the spinning speed needed
+        virtual void playSpinnerSpinSound(f32 ratio, neomod::DatabaseBeatmapTypes::HITSAMPLE_BITS samples);
         virtual void stopSpinnerSpinSound();
-        virtual void playSpinnerBonusSound();
+        virtual void playSpinnerBonusSound(neomod::DatabaseBeatmapTypes::HITSAMPLE_BITS samples);
         virtual void addTargetHit(f32 delta, f32 angle);  // target mod hits by distance and angle from the center
 
         virtual void onComboBreak();  // called right before the combo is reset
@@ -198,9 +199,9 @@ class GameplayJudge final {
         bool sliding, neomod::DatabaseBeatmapTypes::HITSAMPLE_BITS samples, vec2 rawPos,
         const std::vector<neomod::HitSoundUtils::Set_Slider_Hit> &started);
     void stopSliderSounds(const std::vector<neomod::HitSoundUtils::Set_Slider_Hit> &started);
-    void playSpinnerSpinSound(f32 ratio);
+    void playSpinnerSpinSound(f32 ratio, neomod::DatabaseBeatmapTypes::HITSAMPLE_BITS samples);
     void stopSpinnerSpinSound();
-    void playSpinnerBonusSound();
+    void playSpinnerBonusSound(neomod::DatabaseBeatmapTypes::HITSAMPLE_BITS samples);
     void addTargetHit(f32 delta, f32 angle);
 
     // for HitObject::update to avoid recalculating for each object every frame

@@ -98,12 +98,6 @@ float getSpinnerSpinsPerSecond(const GameplayJudge *beatmap) {
     return mapDifficultyRange(BEATMAP_OD(beatmap), 3.0f, 5.0f, 7.5f);
 }
 
-// spinner length compensated rotations
-// respect all mods and overrides
-float getSpinnerRotationsForSpeedMultiplier(const GameplayJudge *beatmap, i32 spinnerDuration) {
-    return getSpinnerRotationsForSpeedMultiplier(beatmap, spinnerDuration, BEATMAP_SPEED(beatmap));
-}
-
 vec2 getPlayfieldOffset() {
     const vec2 res = OSU_RES;
 

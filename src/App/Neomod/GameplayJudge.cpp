@@ -31,9 +31,9 @@ std::vector<HitSoundUtils::Set_Slider_Hit> GameplayJudge::Listener::updateSlider
     return {};
 }
 void GameplayJudge::Listener::stopSliderSounds(const std::vector<HitSoundUtils::Set_Slider_Hit> & /*started*/) {}
-void GameplayJudge::Listener::playSpinnerSpinSound(f32 /*ratio*/) {}
+void GameplayJudge::Listener::playSpinnerSpinSound(f32 /*ratio*/, DatabaseBeatmapTypes::HITSAMPLE_BITS /*samples*/) {}
 void GameplayJudge::Listener::stopSpinnerSpinSound() {}
-void GameplayJudge::Listener::playSpinnerBonusSound() {}
+void GameplayJudge::Listener::playSpinnerBonusSound(DatabaseBeatmapTypes::HITSAMPLE_BITS /*samples*/) {}
 void GameplayJudge::Listener::addTargetHit(f32 /*delta*/, f32 /*angle*/) {}
 void GameplayJudge::Listener::onComboBreak() {}
 void GameplayJudge::Listener::onHealthGain(f64 /*healthBefore*/) {}
@@ -585,8 +585,10 @@ LiveHitResult GameplayJudge::addHitResult(HitObject *hitObject, LiveHitResult hi
 bool GameplayJudge::isPassing() const {
     if(this->hitobjects.empty() || this->iCurMusicPos < this->hitobjects.front()->getClickTime()) return true;
     if(this->iCurMusicPos > this->hitobjectsSortedByEndTime.back()->getEndTime()) {
-        if(this->iNumBreaksStarted == 0) return this->fHealth > 0.5;
-        else return this->iNumBreaksPassed * 2 >= this->iNumBreaksStarted;
+        if(this->iNumBreaksStarted == 0)
+            return this->fHealth > 0.5;
+        else
+            return this->iNumBreaksPassed * 2 >= this->iNumBreaksStarted;
     }
     return this->bInBreak ? this->bBreakPassed : this->bLastComboPerfect;
 }
@@ -623,16 +625,16 @@ void GameplayJudge::stopSliderSounds(const std::vector<HitSoundUtils::Set_Slider
     if(this->listener) this->listener->stopSliderSounds(started);
 }
 
-void GameplayJudge::playSpinnerSpinSound(f32 ratio) {
-    if(this->listener) this->listener->playSpinnerSpinSound(ratio);
+void GameplayJudge::playSpinnerSpinSound(f32 ratio, DatabaseBeatmapTypes::HITSAMPLE_BITS samples) {
+    if(this->listener) this->listener->playSpinnerSpinSound(ratio, samples);
 }
 
 void GameplayJudge::stopSpinnerSpinSound() {
     if(this->listener) this->listener->stopSpinnerSpinSound();
 }
 
-void GameplayJudge::playSpinnerBonusSound() {
-    if(this->listener) this->listener->playSpinnerBonusSound();
+void GameplayJudge::playSpinnerBonusSound(DatabaseBeatmapTypes::HITSAMPLE_BITS samples) {
+    if(this->listener) this->listener->playSpinnerBonusSound(samples);
 }
 
 void GameplayJudge::addTargetHit(f32 delta, f32 angle) {
@@ -1420,9 +1422,9 @@ void GameplayJudge::computeDrainRate() {
                             LiveScore::getHealthIncrease(LiveHitResult::HIT_SLIDER30, HP, testPlayer.hpMultiplierNormal,
                                                          testPlayer.hpMultiplierComboEnd, 1.0));  // slider30
                     } else if(spinnerPointer != nullptr) {
-                        const int rotationsNeeded = (int)((f32)spinnerPointer->getDuration() / 1000.0f *
-                                                          GameRules::getSpinnerSpinsPerSecond(this));
-                        for(int r = 0; r < rotationsNeeded; r++) {
+                        const i32 halfSpinsNeeded =
+                            GameRules::getSpinnerHalfSpinsRequired(this, spinnerPointer->getDuration());
+                        for(i32 r = 0; r < halfSpinsNeeded; r++) {
                             testPlayer.increaseHealth(LiveScore::getHealthIncrease(
                                 LiveHitResult::HIT_SPINNERSPIN, HP, testPlayer.hpMultiplierNormal,
                                 testPlayer.hpMultiplierComboEnd, 1.0));  // spinnerspin

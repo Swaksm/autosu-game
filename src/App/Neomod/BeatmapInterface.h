@@ -263,9 +263,9 @@ class BeatmapInterface final : public GameplayJudge::Listener, public PlayfieldV
         bool sliding, neomod::DatabaseBeatmapTypes::HITSAMPLE_BITS samples, vec2 rawPos,
         const std::vector<neomod::HitSoundUtils::Set_Slider_Hit> &started) override;
     void stopSliderSounds(const std::vector<neomod::HitSoundUtils::Set_Slider_Hit> &started) override;
-    void playSpinnerSpinSound(f32 ratio) override;
+    void playSpinnerSpinSound(f32 ratio, neomod::DatabaseBeatmapTypes::HITSAMPLE_BITS samples) override;
     void stopSpinnerSpinSound() override;
-    void playSpinnerBonusSound() override;
+    void playSpinnerBonusSound(neomod::DatabaseBeatmapTypes::HITSAMPLE_BITS samples) override;
     void addTargetHit(f32 delta, f32 angle) override;
     void onComboBreak() override;
     void onHealthGain(f64 healthBefore) override;

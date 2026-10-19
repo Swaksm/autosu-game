@@ -2622,19 +2622,21 @@ void Spinner::draw() {
             drawSprite(skin->i_spinner_circle, center, spinnerScale / skin->i_spinner_circle.scale(), m_drawRot);
         }
 
-        // the metre fills up from the bottom in 10 whole bars, the next bar blinks in randomly (more often the closer
-        // it is to filling up), or is always shown with SpinnerNoBlink; it only updates while the spinner is running
-        if(skin->i_spinner_metre != MISSING_TEXTURE && curPosMS >= m_clickTimeMS) {
-            const bool noBlink = !madeProgress || skin->o_spinner_no_blink || cv::avoid_flashes.getBool();
-            // capped at 99 so that the top bar keeps blinking at 100%
-            const i32 progress = std::min((i32)(clampedRatio * 100.f), 99);
+        // the metre fills up from the bottom in 10 whole bars spread over its top 692 (1x) pixels, the rest below
+        // is always visible. the next bar blinks in randomly (more often the closer it is to filling up), and the top
+        // bar keeps blinking at 100%, unless SpinnerNoBlink is set.
+        if(skin->i_spinner_metre != MISSING_TEXTURE) {
+            const bool blink = madeProgress && !m_finished && !skin->o_spinner_no_blink && !cv::avoid_flashes.getBool();
+            i32 progress = (i32)(clampedRatio * 100.f);
+            if(blink) progress = std::min(progress, 99);
             i32 bars = progress / 10;
-            if(noBlink || m_finished || (prand() % 10) < (progress % 10)) bars++;
+            if(blink && (prand() % 10) < (progress % 10)) bars++;
 
-            if(bars > 0) {
-                const f32 visible = (f32)bars / 10.f;
-                const f32 width = (f32)skin->i_spinner_metre.getWidth();
-                const f32 height = (f32)skin->i_spinner_metre.getHeight();
+            const f32 width = (f32)skin->i_spinner_metre.getWidth();
+            const f32 height = (f32)skin->i_spinner_metre.getHeight();
+            const f32 hidden =
+                std::min(height, 692.f * skin->i_spinner_metre.scale() * (1.f - (f32)bars / 10.f)) / height;
+            if(hidden < 1.f) {
                 const f32 metreScale = spinnerScale / skin->i_spinner_metre.scale();
                 // anchored to the top left corner of stable's 4:3 window, not to the spinner itself
                 const vec2 topLeft = windowPos(-320.f, -219.f);
@@ -2646,14 +2648,14 @@ void Spinner::draw() {
                     g->translate(topLeft.x, topLeft.y);
 
                     spinnerMetreVAO.clear();
-                    spinnerMetreVAO.addVertex(0.f, height * (1.f - visible));
-                    spinnerMetreVAO.addTexcoord(0.f, 1.f - visible);
+                    spinnerMetreVAO.addVertex(0.f, height * hidden);
+                    spinnerMetreVAO.addTexcoord(0.f, hidden);
                     spinnerMetreVAO.addVertex(0.f, height);
                     spinnerMetreVAO.addTexcoord(0.f, 1.f);
                     spinnerMetreVAO.addVertex(width, height);
                     spinnerMetreVAO.addTexcoord(1.f, 1.f);
-                    spinnerMetreVAO.addVertex(width, height * (1.f - visible));
-                    spinnerMetreVAO.addTexcoord(1.f, 1.f - visible);
+                    spinnerMetreVAO.addVertex(width, height * hidden);
+                    spinnerMetreVAO.addTexcoord(1.f, hidden);
 
                     skin->i_spinner_metre.bind();
                     g->drawVAO(&spinnerMetreVAO);
@@ -2707,16 +2709,13 @@ void Spinner::draw() {
 
     // "CLEAR!"
     if(clearTimeMS >= 0 && curPosMS >= clearTimeMS && skin->i_spinner_clear != MISSING_TEXTURE) {
-        // fades in with a bounce (cut short if the spinner ends sooner), and out over the last 50 ms
-        const f32 t = (f32)(curPosMS - clearTimeMS);
-        const f32 fadeInMS = (f32)std::clamp(endTimeMS - clearTimeMS, 1, 400);
-        const f32 bounceMS = (f32)std::clamp(endTimeMS - clearTimeMS, 1, 240);
-        const f32 fadeIn = easeOut(std::clamp<f32>(t / fadeInMS, 0.f, 1.f));
+        // fades in over 400 ms with a bounce, and out over the last 50 ms. when cleared less than 400 ms before the
+        // end, the animation starts 400 ms before the end, so it shows up already partway through.
+        const f32 t = (f32)(curPosMS - std::min(clearTimeMS, endTimeMS - 400));
+        const f32 fadeIn = easeOut(std::clamp<f32>(t / 400.f, 0.f, 1.f));
         const f32 fadeOut = 1.f - std::clamp<f32>((f32)(curPosMS - (endTimeMS - 50)) / 50.f, 0.f, 1.f);
-        const f32 bounce =
-            t < bounceMS
-                ? std::lerp(2.f, 0.8f, easeOut(t / bounceMS))
-                : std::lerp(0.8f, 1.f, std::clamp<f32>((t - bounceMS) / std::max(1.f, fadeInMS - bounceMS), 0.f, 1.f));
+        const f32 bounce = t < 240.f ? std::lerp(2.f, 0.8f, easeOut(t / 240.f))
+                                     : std::lerp(0.8f, 1.f, std::clamp<f32>((t - 240.f) / 160.f, 0.f, 1.f));
 
         g->setColor(Color(0xffffffff).setA(fadeIn * fadeOut));
         drawSprite(skin->i_spinner_clear, windowPos(0.f, -104.f),
@@ -2793,7 +2792,7 @@ void Spinner::draw() {
         {
             g->scale(digitScale, digitScale);
             g->translate(pos.x, pos.y + (f32)skin->i_scores[0]->getHeight() * digitScale / 2.f);
-            HUD::drawNumberWithSkinDigits({.number = (u64)std::lround(m_RPM),
+            HUD::drawNumberWithSkinDigits({.number = (u64)m_RPM,
                                            .scale = digitScale,
                                            .combo = false,
                                            .anchor = AnchorPoint::RIGHT,
@@ -2822,10 +2821,10 @@ void Spinner::update(i32 curPosMS, f64 frameTimeSecs) {
 
     // if we have not been clicked yet, check if we are in the timeframe of a miss, also handle auto and relax
     if(!m_finished) {
-        m_rotationsNeeded = GameRules::getSpinnerRotationsForSpeedMultiplier(m_judge, m_durationMS);
+        m_halfSpinsNeeded = GameRules::getSpinnerHalfSpinsRequired(m_judge, m_durationMS);
 
-        // spinners too short to require a single rotation are implicitly cleared
-        if(m_rotationsNeeded <= 0.f) m_ratio = 1.f;
+        // spinners too short to require a single half rotation are implicitly cleared
+        if(m_halfSpinsNeeded <= 0) m_ratio = 1.f;
 
         // handle spinner ending
         if(curPosMS >= getEndTime()) {
@@ -2858,6 +2857,14 @@ void Spinner::update(i32 curPosMS, f64 frameTimeSecs) {
                 m_lastMouseAngle = currentMouseAngle;
             else
                 angleDiff = 0;
+
+            if(angleDiff < -PI_F)
+                angleDiff += 2 * PI_F;
+            else if(angleDiff > PI_F)
+                angleDiff -= 2 * PI_F;
+
+            // like osu!stable, the spinner turns in music time: spins count 1.5x with DT, 0.75x with HT
+            angleDiff *= m_judge->getSpeedMultiplier();
         }
 
         // handle spinning
@@ -2869,13 +2876,9 @@ void Spinner::update(i32 curPosMS, f64 frameTimeSecs) {
 
             m_deltaOverflowMS += frameTimeSecs * 1000.0f;
 
-            if(angleDiff < -PI_F)
-                angleDiff += 2 * PI_F;
-            else if(angleDiff > PI_F)
-                angleDiff -= 2 * PI_F;
-
             if(isSpinning) m_deltaAngleOverflow += angleDiff;
 
+            const f32 prevRotations = m_rotations;
             while(m_deltaOverflowMS >= DELTA_UPDATE_TIME_MS) {
                 // spin caused by the cursor
                 f32 deltaAngle = 0;
@@ -2892,7 +2895,9 @@ void Spinner::update(i32 curPosMS, f64 frameTimeSecs) {
                 m_storedDeltaAngles[m_deltaAngleIndex++] = deltaAngle;
                 m_deltaAngleIndex %= m_maxStoredDeltaAngles;
 
-                f32 rotationAngle = m_sumDeltaAngle / m_maxStoredDeltaAngles;
+                // osu!stable caps the spinner at 0.05 rad per (music) ms, i.e. 477 RPM
+                const f32 maxAngle = 0.05f * DELTA_UPDATE_TIME_MS * m_judge->getSpeedMultiplier();
+                f32 rotationAngle = std::clamp(m_sumDeltaAngle / m_maxStoredDeltaAngles, -maxAngle, maxAngle);
                 f32 rotationPerSec = rotationAngle * (1000.0f / DELTA_UPDATE_TIME_MS) / (2.0f * PI_F);
 
                 f32 decay = std::pow(0.01f, (f32)frameTimeSecs);
@@ -2902,7 +2907,10 @@ void Spinner::update(i32 curPosMS, f64 frameTimeSecs) {
                 if(std::abs(rotationAngle) > 0.0001f) rotate(rotationAngle);
             }
 
-            if(m_rotationsNeeded > 0.f) m_ratio = m_rotations / (m_rotationsNeeded * 360.0f);
+            // the spinnerspin loop only plays while the spinner is actually turning
+            if(m_rotations == prevRotations) m_judge->stopSpinnerSpinSound();
+
+            if(m_halfSpinsNeeded > 0) m_ratio = m_rotations / ((f32)m_halfSpinsNeeded * 180.0f);
             if(m_completedTimeMS < 0 && m_ratio >= 1.0f) m_completedTimeMS = curPosMS;
         }
     }
@@ -3006,30 +3014,28 @@ void Spinner::rotate(f32 rad) {
     // stable counts spins in half rotations, the first one is what fades out "SPIN!"
     if(m_firstSpinTimeMS < 0 && newRotations >= 180.0f) m_firstSpinTimeMS = m_clickTimeMS - m_deltaMS;
 
-    // added one whole rotation
-    if(std::floor(newRotations / 360.0f) > m_rotations / 360.0f) {
-        if((i32)(newRotations / 360.0f) > (i32)(m_rotationsNeeded) + 1) {
-            // extra rotations and bonus sound
+    // past the first one, every half rotation gives health, and every whole rotation 100 points. from 2.5 rotations
+    // past clearing the spinner, every other half rotation gives a 1100 point bonus instead.
+    const i32 bonusStart = m_halfSpinsNeeded + 3;
+    for(i32 halfSpin = (i32)(m_rotations / 180.0f) + 1; halfSpin <= (i32)(newRotations / 180.0f); halfSpin++) {
+        if(halfSpin <= 1) continue;
+
+        if(halfSpin > bonusStart && (halfSpin - bonusStart) % 2 == 0) {
             m_bonusSpins++;
             m_bonusTimeMS = m_clickTimeMS - m_deltaMS;
-            m_judge->playSpinnerBonusSound();
+            m_judge->playSpinnerBonusSound(m_hitSamples);
             m_judge->addHitResult(this, LiveHitResult::HIT_SPINNERBONUS, 0, false, true, true, true, true,
                                   false);  // only increase health
-            m_judge->addHitResult(this, LiveHitResult::HIT_SPINNERBONUS, 0, false, true, true, true, true,
-                                  false);  // HACKHACK: compensating for rotation logic differences
             m_judge->addScorePoints(1100, true);
         } else {
-            // normal whole rotation
             m_judge->addHitResult(this, LiveHitResult::HIT_SPINNERSPIN, 0, false, true, true, true, true,
                                   false);  // only increase health
-            m_judge->addHitResult(this, LiveHitResult::HIT_SPINNERSPIN, 0, false, true, true, true, true,
-                                  false);  // HACKHACK: compensating for rotation logic differences
-            m_judge->addScorePoints(100, true);
+            if(halfSpin % 2 == 0) m_judge->addScorePoints(100, true);
         }
     }
 
     // spinner sound
-    m_judge->playSpinnerSpinSound(m_ratio);
+    m_judge->playSpinnerSpinSound(m_ratio, m_hitSamples);
 
     m_rotations = newRotations;
 }

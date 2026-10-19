@@ -106,16 +106,10 @@ constexpr inline float getApproachTimeForStacking(float AR) {
 // raw spins required per second
 float getSpinnerSpinsPerSecond(const GameplayJudge *beatmap);
 
-inline float getSpinnerRotationsForSpeedMultiplier(const GameplayJudge *beatmap, i32 spinnerDuration,
-                                                   float speedMultiplier) {
-    /// return (int)((float)spinnerDuration / 1000.0f * getSpinnerSpinsPerSecond(beatmap)); // actual
-    return (int)((((float)spinnerDuration / 1000.0f * getSpinnerSpinsPerSecond(beatmap)) * 0.5f) *
-                 (std::min(1.0f / speedMultiplier, 1.0f)));  // Mc
+// the half rotations needed to clear a spinner (osu!stable counts spins in half rotations)
+inline i32 getSpinnerHalfSpinsRequired(const GameplayJudge *beatmap, i32 spinnerDuration) {
+    return (i32)((float)spinnerDuration / 1000.0f * getSpinnerSpinsPerSecond(beatmap));
 }
-
-// spinner length compensated rotations
-// respect all mods and overrides
-float getSpinnerRotationsForSpeedMultiplier(const GameplayJudge *beatmap, i32 spinnerDuration);
 
 //*************//
 //	Playfield  //

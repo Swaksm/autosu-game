@@ -490,7 +490,7 @@ class Spinner final : public HitObject {
 
     f32 m_drawRot{0.f};
     f32 m_rotations{0.f};
-    f32 m_rotationsNeeded{-1.f};
+    i32 m_halfSpinsNeeded{-1};
     f32 m_deltaOverflowMS{0.f};
     f32 m_sumDeltaAngle{0.f};
 

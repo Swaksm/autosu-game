@@ -1204,6 +1204,13 @@ HitSoundUtils::HitSoundContext hitSoundContext(const BeatmapInterface &play, con
                                 : play.getCurrentTimingInfo(),
         judge ? judge->getDefaultSampleSet() : 1, skin.o_layered_hitsounds, play.getStoryboard() != nullptr);
 }
+
+// spinnerspin and spinnerbonus follow the sample volume (or the current timing point volume), without hitsound boost
+f32 spinnerSoundVolume(const BeatmapInterface &play, const Skin &skin, DatabaseBeatmapTypes::HITSAMPLE_BITS samples) {
+    const auto ctx = hitSoundContext(play, skin, -1);
+    if(ctx.ignoreSampleVolume) return 1.f;
+    return (f32)(samples.volume > 0 ? samples.volume : ctx.timingPointVolume) / 100.f;
+}
 }  // namespace
 
 void BeatmapInterface::playHitSound(DatabaseBeatmapTypes::HITSAMPLE_BITS samples, vec2 rawPos, i32 delta, i32 timeMS) {
@@ -1267,17 +1274,18 @@ void BeatmapInterface::stopSliderSounds(const std::vector<HitSoundUtils::Set_Sli
     if(const Skin *skin = this->getSkin()) HitSoundUtils::stopSliderSounds(*skin, started);
 }
 
-void BeatmapInterface::playSpinnerSpinSound(f32 ratio) {
+void BeatmapInterface::playSpinnerSpinSound(f32 ratio, DatabaseBeatmapTypes::HITSAMPLE_BITS samples) {
     if(this->bWasSeekFrame) return;
 
     const Skin *skin = this->getSkin();
     Sound *spinner_spinsound = skin ? skin->s_spinner_spin : nullptr;
     if(spinner_spinsound) {
         if(!spinner_spinsound->isPlaying()) {
-            soundEngine->play(spinner_spinsound);
+            soundEngine->play(spinner_spinsound, 0.f, 0.f, spinnerSoundVolume(*this, *skin, samples));
         }
         if(skin->o_spinner_frequency_modulate) {
-            const f32 frequency = 20000.0f + (i32)(std::clamp<f32>(ratio, 0.0f, 2.5f) * 40000.0f);
+            // same as stable: 20 kHz at the start, +40 kHz per required spin speed, capped at 100 kHz
+            const f32 frequency = std::min(100000.0f, 20000.0f + (i32)(std::max(ratio, 0.0f) * 40000.0f));
             spinner_spinsound->setFrequency(frequency);
         } else {
             // sanity reset
@@ -1294,8 +1302,10 @@ void BeatmapInterface::stopSpinnerSpinSound() {
     }
 }
 
-void BeatmapInterface::playSpinnerBonusSound() {
-    if(!this->bWasSeekFrame && this->getSkin()->s_spinner_bonus) soundEngine->play(this->getSkin()->s_spinner_bonus);
+void BeatmapInterface::playSpinnerBonusSound(DatabaseBeatmapTypes::HITSAMPLE_BITS samples) {
+    const Skin *skin = this->getSkin();
+    if(!this->bWasSeekFrame && skin && skin->s_spinner_bonus)
+        soundEngine->play(skin->s_spinner_bonus, 0.f, 0.f, spinnerSoundVolume(*this, *skin, samples));
 }
 
 void BeatmapInterface::addTargetHit(f32 delta, f32 angle) { ui->getHUD()->addTarget(delta, angle); }
