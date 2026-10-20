@@ -4,6 +4,7 @@
 #include "AsyncIOHandler.h"
 #include "AsyncPool.h"
 #include "Bancho.h"
+#include "ContainerRanges.h"
 
 #include "Downloader.h"
 #include "DownloadHandle.h"
@@ -208,8 +209,9 @@ void ThumbnailManager::Impl::update() {
     // has no priorities, so this is what gets the thumbnails that are visible right now served first
     static constexpr uSz ELEMS_TO_CHECK{4};
     const uSz num_to_check = std::min(ELEMS_TO_CHECK, candidates.size());
-    std::ranges::partial_sort(candidates, candidates.begin() + (sSz)num_to_check, std::ranges::greater{},
-                              [](const auto* candidate) { return candidate->second.last_access_time; });
+    std::partial_sort(
+        candidates.begin(), candidates.begin() + (sSz)num_to_check, candidates.end(),
+        [](const auto* a, const auto* b) { return a->second.last_access_time > b->second.last_access_time; });
 
     for(uSz i = 0; i < num_to_check; ++i) {
         const ThumbIdentifier& id = candidates[i]->first;
@@ -313,7 +315,7 @@ void ThumbnailManager::Impl::prune_oldest_entries() {
         return;
     }
 
-    std::ranges::sort(loaded_entries, {}, &ThumbEntry::last_access_time);
+    Mc::ranges::sort(loaded_entries, {}, &ThumbEntry::last_access_time);
 
     // unload oldest images (a bit more, to not constantly be unloading images for each new image added after we hit the limit once)
     const uSz to_unload = std::clamp<uSz>((uSz)(MAX_LOADED_IMAGES / 4.f), 0, loaded_entries.size() / 2);

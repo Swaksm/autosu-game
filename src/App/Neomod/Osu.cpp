@@ -1369,8 +1369,7 @@ void Osu::saveScreenshot() {
                                            ((startY + y) * static_cast<sSz>(outerWidth) + startX) * screenshotChannels;
                         auto destRowStart =
                             croppedPixels.begin() + (y * static_cast<sSz>(finalWidth)) * screenshotChannels;
-                        std::ranges::copy_n(srcRowStart, static_cast<sSz>(finalWidth) * screenshotChannels,
-                                            destRowStart);
+                        std::copy_n(srcRowStart, static_cast<sSz>(finalWidth) * screenshotChannels, destRowStart);
                     }
 
                     finalPixels = croppedPixels.data();

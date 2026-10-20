@@ -1,6 +1,7 @@
 // Copyright (c) 2026, WH, All rights reserved.
 #include "BeatmapFile.h"
 
+#include "ContainerRanges.h"
 #include "Parsing.h"
 #include "SString.h"
 #include "Vectors.h"
@@ -176,7 +177,7 @@ void parseHitSample(std::string_view field, BeatmapFile::HitSample &out) {
     if(count >= 4) out.volume = Parsing::strto<i32>(parts[3]);
     if(count >= 5) out.filename = parts[4];
     // (an empty filename after the last ':' counts as written)
-    out.parts = static_cast<u8>(std::min<uSz>(std::ranges::count(field, ':') + 1, 5));
+    out.parts = static_cast<u8>(std::min<uSz>(Mc::ranges::count(field, ':') + 1, 5));
 }
 
 void appendHitSample(Text &out, const BeatmapFile::HitSample &sample) {
@@ -205,7 +206,7 @@ BeatmapFile::BeatmapFile(std::string_view bytes) : bytes(bytes), bom(bytes.start
             this->sections.push_back(current);
 
             const std::string_view name = line.substr(1, line.size() - 2);
-            const auto known = std::ranges::find(KNOWN_SECTIONS, name, &decltype(KNOWN_SECTIONS)::value_type::first);
+            const auto known = Mc::ranges::find(KNOWN_SECTIONS, name, &decltype(KNOWN_SECTIONS)::value_type::first);
             const SectionKind kind = known != KNOWN_SECTIONS.end() ? known->second : UNKNOWN;
             current = {.header = bytes.substr(pos, next - pos),
                        .body = {},

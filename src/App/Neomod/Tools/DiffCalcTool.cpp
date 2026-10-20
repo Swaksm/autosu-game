@@ -8,6 +8,7 @@
 #endif
 
 #include "BeatmapPrimitives.h"
+#include "ContainerRanges.h"
 #include "DiffCalcToolShared.h"
 #include "DifficultyCalculator.h"
 #include "ModFlags.h"
@@ -328,7 +329,7 @@ int runBatch(const std::vector<std::string> &argv) {
             if(path.length() > 4 && SString::to_lower(std::string_view{path}.substr(path.length() - 4)) == ".osu")
                 paths.push_back(std::move(path));
         }
-        std::ranges::sort(paths);  // byte-wise lexicographic, matches LC_ALL=C sort
+        Mc::ranges::sort(paths);  // byte-wise lexicographic, matches LC_ALL=C sort
     }
 
     if(paths.empty()) return argError("no maps to process");

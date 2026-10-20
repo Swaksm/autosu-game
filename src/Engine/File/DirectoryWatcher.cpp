@@ -1,6 +1,7 @@
 // Copyright (c) 2025 kiwec, All rights reserved.
 #include "DirectoryWatcher.h"
 
+#include "ContainerRanges.h"
 #include "File.h"
 #include "Logging.h"
 #include "Thread.h"
@@ -34,7 +35,7 @@ struct DirWatcherImpl {
         this->thr = Sync::jthread([this](const Sync::stop_token& stoken) { return this->worker_loop(stoken); });
     }
     ~DirWatcherImpl() {
-        assert(std::ranges::all_of(this->watches, &WatchEntry::detached) && "a watch outlived the DirectoryWatcher");
+        assert(Mc::ranges::all_of(this->watches, &WatchEntry::detached) && "a watch outlived the DirectoryWatcher");
         // (the worker waits on the wakeup notification)
         this->thr.request_stop();
         this->thr.join();
@@ -44,7 +45,7 @@ struct DirWatcherImpl {
     u64 watch_directory(std::string path, FileChangeCallback cb) {
         assert(McThread::is_main_thread() && "directory watches belong to the main thread");
         if(!path.ends_with('/')) path.push_back('/');
-        if(!std::ranges::contains(this->watches, path, &WatchEntry::dir)) {
+        if(!Mc::ranges::contains(this->watches, path, &WatchEntry::dir)) {
             {
                 Sync::scoped_lock lock(this->directories_mtx);
                 this->directories.push_back(path);
@@ -58,7 +59,7 @@ struct DirWatcherImpl {
 
     void end_watch(u64 id, Mc::Registration::End how) {
         assert(McThread::is_main_thread() && "directory watches belong to the main thread");
-        const auto it = std::ranges::find(this->watches, id, &WatchEntry::id);
+        const auto it = Mc::ranges::find(this->watches, id, &WatchEntry::id);
         if(it == this->watches.end()) return;
         if(how == Mc::Registration::End::DETACH) {
             it->detached = true;
@@ -66,7 +67,7 @@ struct DirWatcherImpl {
         }
         const std::string dir = std::move(it->dir);
         this->watches.erase(it);
-        if(!std::ranges::contains(this->watches, dir, &WatchEntry::dir)) {
+        if(!Mc::ranges::contains(this->watches, dir, &WatchEntry::dir)) {
             {
                 Sync::scoped_lock lock(this->directories_mtx);
                 std::erase(this->directories, dir);
@@ -91,7 +92,7 @@ struct DirWatcherImpl {
         const u64 newest = this->last_id;
         for(const auto& [dir, event] : events) {
             for(u64 after = 0;;) {
-                const auto it = std::ranges::find_if(
+                const auto it = Mc::ranges::find_if(
                     this->watches, [&](const WatchEntry& w) { return w.id > after && w.id <= newest && w.dir == dir; });
                 if(it == this->watches.end()) break;
                 after = it->id;
@@ -576,7 +577,7 @@ struct DirWatcherImpl {
         Sync::scoped_lock lock(this->directories_mtx);
         if(!std::exchange(this->directories_changed, false)) return;
         std::erase_if(active,
-                      [this](const auto& entry) { return !std::ranges::contains(this->directories, entry.first); });
+                      [this](const auto& entry) { return !Mc::ranges::contains(this->directories, entry.first); });
         for(const auto& dir : this->directories) {
             if(auto [it, inserted] = active.try_emplace(dir); inserted) added.push_back(&*it);
         }

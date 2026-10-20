@@ -1,6 +1,7 @@
 // Copyright (c) 2017, PG, All rights reserved.
 #include "SkinImage.h"
 
+#include "ContainerRanges.h"
 #include "OsuConVars.h"
 #include "Engine.h"
 #include "Environment.h"
@@ -65,7 +66,7 @@ void SkinImage::init(Skin* skin, const std::string& skinElementName, vec2 baseSi
 
         // avoid double-delete
         m_impl->bCanDeleteNonAnimatedImage =
-            !std::ranges::contains(m_impl->images, m_impl->nonAnimatedImage.img, &IMAGE::img);
+            !Mc::ranges::contains(m_impl->images, m_impl->nonAnimatedImage.img, &IMAGE::img);
     } else {
         m_impl->bHasNonAnimatedImage = false;
         m_impl->bCanDeleteNonAnimatedImage = true;

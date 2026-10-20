@@ -1,6 +1,7 @@
 // Copyright (c) 2026, WH, All rights reserved.
 #include "SkinLoadTest.h"
 
+#include "ContainerRanges.h"
 #include "TestMacros.h"
 #include "Archival.h"
 #include "Engine.h"
@@ -313,7 +314,7 @@ SkinLoadTest::Look SkinLoadTest::loadedLook(Skin &skin, Look *fromDefault) {
             add(frames.back());
         }
         // (the still image of an animated one, if it has one of its own)
-        if(const Image *still = img->getImageForCurrentFrame(false).img; !std::ranges::contains(frames, still)) {
+        if(const Image *still = img->getImageForCurrentFrame(false).img; !Mc::ranges::contains(frames, still)) {
             add(still);
         }
     }
@@ -988,10 +989,12 @@ void SkinLoadTest::checkImportedSkin() {
     // on its own, the export has to load the same files (by contents, as digits can get renamed). only what the default
     // skin filled in can go missing when it isn't packed, e.g. the still image of an animation from the fallback skin
     const Look look = loadedLook(*m_skin);
-    constexpr auto contents = &Look::value_type::first;
+    const auto byContents = [](const auto &a, const auto &b) { return a.first < b.first; };
     Look lost, gained;
-    std::ranges::set_difference(m_original_look, look, std::inserter(lost, lost.end()), {}, contents, contents);
-    std::ranges::set_difference(look, m_original_look, std::inserter(gained, gained.end()), {}, contents, contents);
+    std::set_difference(m_original_look.begin(), m_original_look.end(), look.begin(), look.end(),
+                        std::inserter(lost, lost.end()), byContents);
+    std::set_difference(look.begin(), look.end(), m_original_look.begin(), m_original_look.end(),
+                        std::inserter(gained, gained.end()), byContents);
     if(rt.kind != RoundTrip::Kind::FixtureWithDefault) {
         std::erase_if(lost, [this](const auto &element) { return m_original_default.contains(element.first); });
     }

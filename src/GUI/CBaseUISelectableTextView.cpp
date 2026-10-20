@@ -1,6 +1,7 @@
 // Copyright (c) 2026, WH, All rights reserved.
 #include "CBaseUISelectableTextView.h"
 
+#include "ContainerRanges.h"
 #include "CBaseUIDispatch.h"
 #include "Engine.h"
 #include "Environment.h"
@@ -33,7 +34,7 @@ CBaseUISelectableTextView::TextPos CBaseUISelectableTextView::hitTest(vec2 pos) 
 
     // the row under pos: the last run starting above it and the runs sharing its y (above the first row: its start)
     const auto next =
-        std::ranges::upper_bound(indices, pos.y, {}, [&](size_t i) { return origin.y + this->getRun(i).pos.y; });
+        Mc::ranges::upper_bound(indices, pos.y, {}, [&](size_t i) { return origin.y + this->getRun(i).pos.y; });
     if(next == indices.begin()) return {};
     const size_t last = static_cast<size_t>(next - indices.begin()) - 1;
     const float rowY = this->getRun(last).pos.y;
@@ -83,7 +84,7 @@ void CBaseUISelectableTextView::drawSelection() const {
 
     // only the runs inside the view (reading order: a run's bottom edge is never above the previous one's)
     const auto indices = std::views::iota(from.run, std::min(to.run + 1, count));
-    auto it = std::ranges::lower_bound(indices, clip.getY(), {}, [&](size_t i) {
+    auto it = Mc::ranges::lower_bound(indices, clip.getY(), {}, [&](size_t i) {
         const TextRun run = this->getRun(i);
         return origin.y + run.pos.y + run.height;
     });

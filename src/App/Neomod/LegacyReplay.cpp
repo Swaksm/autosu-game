@@ -8,6 +8,7 @@
 
 #include "AsyncIOHandler.h"
 #include "ByteBufferedFile.h"
+#include "ContainerRanges.h"
 #include "crypto.h"
 #include "Bancho.h"
 #include "BanchoApi.h"
@@ -407,7 +408,7 @@ bool load_from_disk(FinishedScore& score, bool update_db) {
     if(succeeded && update_db) {
         Sync::unique_lock lk(db->scores_mtx);
         if(const auto& it = db->getScoresMutable().find(score.beatmap_hash); it != db->getScoresMutable().end()) {
-            if(auto scorevecIt = std::ranges::find(it->second, score); scorevecIt != it->second.end()) {
+            if(auto scorevecIt = Mc::ranges::find(it->second, score); scorevecIt != it->second.end()) {
                 scorevecIt->replay = score.replay;
             }
         }

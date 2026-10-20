@@ -263,7 +263,7 @@ namespace {
 void forward_key(const std::vector<CBaseUIElement *> &elements, KeyboardEvent &e,
                  void (CBaseUIElement::*handler)(KeyboardEvent &)) {
     CBaseUIElement *focused = CBaseUIDispatch::getFocus();
-    if(focused != nullptr && !std::ranges::contains(elements, focused)) focused = nullptr;
+    if(focused != nullptr && !Mc::ranges::contains(elements, focused)) focused = nullptr;
     if(focused != nullptr && focused->isVisible()) (focused->*handler)(e);
 
     for(auto *elem : elements) {

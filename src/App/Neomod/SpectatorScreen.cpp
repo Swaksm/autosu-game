@@ -1,6 +1,7 @@
 // Copyright (c) 2024, kiwec, All rights reserved.
 #include "SpectatorScreen.h"
 
+#include "ContainerRanges.h"
 #include "Osu.h"
 #include "BackgroundImageHandler.h"
 #include "Bancho.h"
@@ -474,7 +475,7 @@ void SpectatorScreen::handleFrameBundle(PacketReader &packet) {
     (void)sequence;  // don't know how to use this
 
     // some clients send frames in the wrong order, so we're correcting it here.
-    std::ranges::stable_sort(update.replay_frames, [](const LegacyReplay::Frame &a, const LegacyReplay::Frame &b) {
+    Mc::ranges::stable_sort(update.replay_frames, [](const LegacyReplay::Frame &a, const LegacyReplay::Frame &b) {
         return a.cur_music_pos < b.cur_music_pos;
     });
 

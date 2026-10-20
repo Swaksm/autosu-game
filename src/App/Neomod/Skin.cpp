@@ -1,6 +1,7 @@
 // Copyright (c) 2015, PG, 2024-2025, kiwec, 2025-2026, WH, All rights reserved.
 #include "Skin.h"
 
+#include "ContainerRanges.h"
 #include "OsuConVars.h"
 #include "Font.h"
 #include "Sound.h"
@@ -810,7 +811,7 @@ void Skin::loadBeatmapOverride(std::string_view folder, std::span<const std::str
         for(const auto &file : ov.files) {
             const size_t dot = file.rfind('.');
             if(dot == std::string::npos ||
-               !std::ranges::any_of(SOUND_EXTENSIONS, [ext = std::string_view{file}.substr(dot)](auto e) {
+               !Mc::ranges::any_of(SOUND_EXTENSIONS, [ext = std::string_view{file}.substr(dot)](auto e) {
                    return SString::strcase_equal(ext, e);
                })) {
                 continue;
@@ -880,7 +881,7 @@ std::string Skin::getBeatmapFile(std::string_view filename) const {
     if(const auto it = o->files.find(filename); it != o->files.end()) return o->dir + *it;
     // (one in a subfolder only as it's written, and never anything outside of the map's folder)
     if(filename.contains('/') && !filename.starts_with('/') &&
-       std::ranges::none_of(SString::split(filename, '/'), [](std::string_view part) { return part == ".."; })) {
+       Mc::ranges::none_of(SString::split(filename, '/'), [](std::string_view part) { return part == ".."; })) {
         std::string path = o->dir + std::string{filename};
         if(Environment::fileExists(path)) return path;
     }

@@ -7,6 +7,7 @@
 #include "Bancho.h"
 #include "BanchoUsers.h"
 #include "BeatmapInterface.h"
+#include "ContainerRanges.h"
 #include "GameplayJudge.h"
 #include "CBaseUIContainer.h"
 #include "Logging.h"
@@ -1493,7 +1494,7 @@ std::span<const SCORE_ENTRY> HUD::updateAndGetCurrentScores() {
     }
 
     const WinCondition sorting_type = this->scoring_metric;
-    std::ranges::sort(this->scores_cache, [sorting_type](const SCORE_ENTRY &a, const SCORE_ENTRY &b) {
+    Mc::ranges::sort(this->scores_cache, [sorting_type](const SCORE_ENTRY &a, const SCORE_ENTRY &b) {
         if(sorting_type == WinCondition::MISSES) {
             return a.misses < b.misses;
         } else if(sorting_type == WinCondition::CURRENT_COMBO) {

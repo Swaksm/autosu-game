@@ -1,6 +1,7 @@
 // Copyright (c) 2026, WH, All rights reserved.
 #include "CryptoTest.h"
 
+#include "ContainerRanges.h"
 #include "TestMacros.h"
 #include "Engine.h"
 #include "Environment.h"
@@ -95,7 +96,7 @@ void CryptoTest::update() {
 
         const std::array<u8, 4> binary{0x00, 0xFF, 0x7F, 0x80};
         TEST_ASSERT_EQ(conv::encode64(binary), "AP9/gA==", "encode64 of binary bytes");
-        TEST_ASSERT(std::ranges::equal(conv::decode64("AP9/gA=="), binary), "decode64 of binary bytes");
+        TEST_ASSERT(Mc::ranges::equal(conv::decode64("AP9/gA=="), binary), "decode64 of binary bytes");
 
         TEST_ASSERT(conv::decode64("Zm9").empty(), "decode64 rejects length not multiple of 4");
         TEST_ASSERT(conv::decode64("Zm=v").empty(), "decode64 rejects padding in the middle");
@@ -117,12 +118,12 @@ void CryptoTest::update() {
         std::array<u8, 64> b{};
         rng::get_rand(a);
         rng::get_rand(b);
-        TEST_ASSERT(std::ranges::any_of(a, [](u8 x) { return x != 0; }), "get_rand fills array with random bytes");
+        TEST_ASSERT(Mc::ranges::any_of(a, [](u8 x) { return x != 0; }), "get_rand fills array with random bytes");
         TEST_ASSERT(a != b, "consecutive get_rand calls differ");
 
         u32 c_array[8]{};
         rng::get_rand(c_array);
-        TEST_ASSERT(std::ranges::any_of(c_array, [](u32 x) { return x != 0; }), "get_rand fills C array");
+        TEST_ASSERT(Mc::ranges::any_of(c_array, [](u32 x) { return x != 0; }), "get_rand fills C array");
 
         std::vector<u8> empty_vec;
         rng::get_rand(empty_vec);

@@ -4,6 +4,7 @@
 #include "CBaseUIButton.h"
 #include "CBaseUIContainer.h"
 #include "CBaseUISelectableTextView.h"
+#include "ContainerRanges.h"
 #include "ConVar.h"
 #include "Console.h"
 #include "ConsoleWidgets.h"
@@ -229,7 +230,7 @@ void ConsoleLogView::applyAnchor(const Anchor &anchor) {
     }
 
     // the anchored entry's line again (it may wrap differently now, or have fallen out of the scrollback)
-    const auto it = std::ranges::lower_bound(this->lines, anchor.entrySeq, {}, &Line::entrySeq);
+    const auto it = Mc::ranges::lower_bound(this->lines, anchor.entrySeq, {}, &Line::entrySeq);
     if(it == this->lines.end()) {
         this->scrollToY(-(int)this->vScrollSize.y, false);
         return;

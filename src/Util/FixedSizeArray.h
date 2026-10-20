@@ -65,7 +65,7 @@ struct FixedSizeArray {
         if constexpr(std::is_trivially_copyable_v<T>) {
             if(size_) memcpy(data_.get(), vec.data(), size_ * sizeof(T));
         } else {
-            std::ranges::move(vec, data_.get());
+            std::move(vec.begin(), vec.end(), data_.get());
         }
     }
 
@@ -74,7 +74,7 @@ struct FixedSizeArray {
         if constexpr(std::is_trivially_copyable_v<T>) {
             if(size_) memcpy(data_.get(), vec.data(), size_ * sizeof(T));
         } else {
-            std::ranges::copy(vec, data_.get());
+            std::copy(vec.begin(), vec.end(), data_.get());
         }
     }
 
@@ -85,7 +85,7 @@ struct FixedSizeArray {
         if constexpr(std::is_trivially_copyable_v<T>) {
             if(size_) memcpy(data_.get(), vec.data(), size_ * sizeof(T));
         } else {
-            std::ranges::move(vec, data_.get());
+            std::move(vec.begin(), vec.end(), data_.get());
         }
         return *this;
     }
@@ -96,7 +96,7 @@ struct FixedSizeArray {
         if constexpr(std::is_trivially_copyable_v<T>) {
             if(size_) memcpy(data_.get(), vec.data(), size_ * sizeof(T));
         } else {
-            std::ranges::copy(vec, data_.get());
+            std::copy(vec.begin(), vec.end(), data_.get());
         }
         return *this;
     }

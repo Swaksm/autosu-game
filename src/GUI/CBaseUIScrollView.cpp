@@ -4,6 +4,7 @@
 #include "CBaseUIScrollView.h"
 
 #include "AnimationHandler.h"
+#include "ContainerRanges.h"
 #include "ConVar.h"
 #include "Engine.h"
 #include "Keyboard.h"
@@ -687,7 +688,7 @@ void CBaseUIScrollView::scrollToXInt(int scrollPosX, bool animated, bool slow) {
 
 void CBaseUIScrollView::scrollToElement(CBaseUIElement *element, int /*xOffset*/, int yOffset, bool animated) {
     const std::vector<CBaseUIElement *> &elements = this->container.getElements();
-    if(const auto &elemit = std::ranges::find(elements, element); elemit != elements.end()) {
+    if(const auto &elemit = Mc::ranges::find(elements, element); elemit != elements.end()) {
         this->scrollToY(-(*elemit)->getRelPos().y + yOffset, animated);
     }
 }
@@ -768,7 +769,7 @@ void CBaseUIScrollView::updateClipping() {
     if(!numChangedElements) {
         // sort final list of elements to draw (in order)
         if(this->container.drawOrderCmp) {
-            std::ranges::sort(visElements, this->container.drawOrderCmp);
+            Mc::ranges::sort(visElements, this->container.drawOrderCmp);
         }
         this->bClippingDirty = false;
     }

@@ -157,7 +157,8 @@ struct PRIMITIVE_CONTAINER final {
     // of one kind: DBType::HITCIRCLE, SLIDER or SPINNER
     template <typename Kind>
     [[nodiscard]] u32 getNumObjects() const {
-        return std::ranges::count_if(objects, [](const auto &object) { return std::holds_alternative<Kind>(object); });
+        return std::count_if(objects.begin(), objects.end(),
+                             [](const auto &object) { return std::holds_alternative<Kind>(object); });
     }
 
     u32 totalBreakDuration{0};

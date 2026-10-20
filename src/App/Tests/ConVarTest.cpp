@@ -1,6 +1,7 @@
 // Copyright (c) 2026, WH, All rights reserved.
 #include "ConVarTest.h"
 
+#include "ContainerRanges.h"
 #include "TestMacros.h"
 #include "ConVar.h"
 #include "ConVarHandler.h"
@@ -92,7 +93,7 @@ std::string s_cbOldString;
 std::string s_cbNewString;
 
 bool isNonDefaultProtected(const ConVar &cvar) {
-    return std::ranges::contains(cvars().getNonDefaultProtectedCvars(), &cvar);
+    return Mc::ranges::contains(cvars().getNonDefaultProtectedCvars(), &cvar);
 }
 
 // for the convars that come and go (owned by a test, like an editor object's would be)
@@ -1303,7 +1304,7 @@ void ConVarTest::testLifetime() {
 
     owned.reset();
     TEST_ASSERT(cvars().getConVarByName("cvtest_owned") == nullptr && cvars().getNumConVars() == numConVars &&
-                    !std::ranges::contains(cvars().getConVarArray(), "cvtest_owned"sv, &ConVar::getName),
+                    !Mc::ranges::contains(cvars().getConVarArray(), "cvtest_owned"sv, &ConVar::getName),
                 "a destroyed convar is gone from the registry");
     TEST_ASSERT(keptValue("cvtest_owned") == "2.5", "...which keeps its client value");
 
@@ -1418,8 +1419,8 @@ void ConVarTest::testLifetime() {
         nosave.setValue(0);
     }
     TEST_ASSERT(
-        std::ranges::none_of(cvars().getKeptValues(),
-                             [](const auto &kept) { return kept.first.starts_with("cvtest_") && kept.second.text; }),
+        Mc::ranges::none_of(cvars().getKeptValues(),
+                            [](const auto &kept) { return kept.first.starts_with("cvtest_") && kept.second.text; }),
         "(no value of the tests is kept anymore)");
 }
 

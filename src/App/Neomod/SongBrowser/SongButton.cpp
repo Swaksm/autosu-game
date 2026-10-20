@@ -1,6 +1,7 @@
 // Copyright (c) 2016, PG, All rights reserved.
 #include "SongButton.h"
 
+#include "ContainerRanges.h"
 #include "Font.h"
 #include "SString.h"
 #include "ScoreButton.h"
@@ -245,7 +246,7 @@ void SongButton::drawSubTitle(float deselectedAlpha, bool forceSelectedStyle) {
 bool SongButton::sortChildren() {
     if(this->childrenNeedSorting()) {
         this->lastChildSortStarPrecalcIdx = StarPrecalc::active_idx;
-        std::ranges::sort(this->children, SongBrowser::sort_by_difficulty);
+        Mc::ranges::sort(this->children, SongBrowser::sort_by_difficulty);
         return true;
     } else {
         return false;
@@ -402,7 +403,7 @@ void SongButton::onContextMenu(std::string_view text, int id) {
             auto sorted_collections = Collections::get_loaded();
 
             // sort by name
-            std::ranges::stable_sort(sorted_collections, SString::strcase_comp, &Collections::Collection::get_name);
+            Mc::ranges::stable_sort(sorted_collections, SString::strcase_comp, &Collections::Collection::get_name);
 
             for(const auto &collection : sorted_collections) {
                 if(!collection.get_maps().empty()) {
@@ -422,7 +423,7 @@ void SongButton::onContextMenu(std::string_view text, int id) {
                 bool can_add_to_collection = true;
 
                 if(id == 1) {
-                    if(std::ranges::contains(collection.get_maps(), map_hash)) {
+                    if(Mc::ranges::contains(collection.get_maps(), map_hash)) {
                         // Map already is present in the collection
                         can_add_to_collection = false;
                     }

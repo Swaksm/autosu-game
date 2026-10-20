@@ -13,6 +13,7 @@
 #include "BanchoUsers.h"
 #include "BeatmapInterface.h"
 #include "Chat.h"
+#include "ContainerRanges.h"
 #include "OsuConVars.h"
 #include "Environment.h"
 #include "Paths.h"
@@ -383,7 +384,7 @@ void BanchoState::handle_packet(PacketReader &packet) {
 
         case INP_SPECTATOR_JOINED: {
             i32 spectator_id = packet.read<i32>();
-            if(std::ranges::find(BanchoState::spectators, spectator_id) == BanchoState::spectators.end()) {
+            if(Mc::ranges::find(BanchoState::spectators, spectator_id) == BanchoState::spectators.end()) {
                 debugLog("Spectator joined: user id {:d}", spectator_id);
                 BanchoState::spectators.push_back(spectator_id);
             }
@@ -393,7 +394,7 @@ void BanchoState::handle_packet(PacketReader &packet) {
 
         case INP_SPECTATOR_LEFT: {
             i32 spectator_id = packet.read<i32>();
-            auto it = std::ranges::find(BanchoState::spectators, spectator_id);
+            auto it = Mc::ranges::find(BanchoState::spectators, spectator_id);
             if(it != BanchoState::spectators.end()) {
                 debugLog("Spectator left: user id {:d}", spectator_id);
                 BanchoState::spectators.erase(it);
@@ -486,8 +487,7 @@ void BanchoState::handle_packet(PacketReader &packet) {
 
         case INP_FELLOW_SPECTATOR_JOINED: {
             i32 spectator_id = packet.read<i32>();
-            if(std::ranges::find(BanchoState::fellow_spectators, spectator_id) ==
-               BanchoState::fellow_spectators.end()) {
+            if(Mc::ranges::find(BanchoState::fellow_spectators, spectator_id) == BanchoState::fellow_spectators.end()) {
                 debugLog("Fellow spectator joined: user id {:d}", spectator_id);
                 BanchoState::fellow_spectators.push_back(spectator_id);
             }
@@ -497,7 +497,7 @@ void BanchoState::handle_packet(PacketReader &packet) {
 
         case INP_FELLOW_SPECTATOR_LEFT: {
             i32 spectator_id = packet.read<i32>();
-            auto it = std::ranges::find(BanchoState::fellow_spectators, spectator_id);
+            auto it = Mc::ranges::find(BanchoState::fellow_spectators, spectator_id);
             if(it != BanchoState::fellow_spectators.end()) {
                 debugLog("Fellow spectator left: user id {:d}", spectator_id);
                 BanchoState::fellow_spectators.erase(it);

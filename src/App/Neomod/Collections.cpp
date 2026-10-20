@@ -2,6 +2,7 @@
 #include "Collections.h"
 
 #include "ByteBufferedFile.h"
+#include "ContainerRanges.h"
 #include "OsuConVars.h"
 #include "Database.h"
 #include "Engine.h"
@@ -70,7 +71,7 @@ bool Collection::rename_to(std::string_view new_name) {
     if(new_name.empty() || new_name == this->name) return false;
 
     // don't allow renaming to an existing collection name
-    if(std::ranges::contains(s_collections, new_name, [](const auto& col) -> std::string_view { return col.name; })) {
+    if(Mc::ranges::contains(s_collections, new_name, [](const auto& col) -> std::string_view { return col.name; })) {
         debugLog("not renaming {} -> {}, conflicting name", this->name, new_name);
         return false;
     }
@@ -84,7 +85,7 @@ Collection& get_or_create_collection(std::string_view name) {
     if(name.length() < 1) name = "Untitled collection";
 
     // get
-    const auto& it = std::ranges::find_if(s_collections, [name](const auto& col) -> bool { return col.name == name; });
+    const auto& it = Mc::ranges::find_if(s_collections, [name](const auto& col) -> bool { return col.name == name; });
     if(it != s_collections.end()) {
         return *it;
     }

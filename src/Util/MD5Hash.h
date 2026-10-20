@@ -94,7 +94,7 @@ struct ALIGNED_TO(sizeof(void *) * 2) MD5Hash final : public std::array<MD5Byte,
 
     // this is just a fast heuristic check, a better one would be to check if there's a sequence of contiguous
     // zero memory over a certain length instead of the absolute number of zeros, but that's much slower
-    [[nodiscard]] inline bool is_suspicious() const { return std::ranges::count(*this, 0) >= 10; }
+    [[nodiscard]] inline bool is_suspicious() const { return std::count(this->begin(), this->end(), 0) >= 10; }
 
     static const MD5Hash sentinel;
 };

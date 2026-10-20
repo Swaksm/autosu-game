@@ -1120,8 +1120,8 @@ void SongBrowser::onResolutionChange(vec2 newResolution) {
     if(const auto &elements = this->carousel->container.getElements();
        !elements.empty() && this->carousel->getSize().y > 0) {
         const f64 viewCenterY = this->carousel->getSize().y / 2 - this->carousel->getRelPosY();
-        anchor = *std::ranges::min_element(elements, {},
-                                           [&](const CBaseUIElement *e) { return std::abs(centerY(e) - viewCenterY); });
+        anchor = *Mc::ranges::min_element(elements, {},
+                                          [&](const CBaseUIElement *e) { return std::abs(centerY(e) - viewCenterY); });
         anchorPct = (centerY(anchor) + this->carousel->getRelPosY()) / this->carousel->getSize().y;
         // a centered button was scrolled to: keep it exactly centered, the whole-pixel scroll position would
         // otherwise let it drift over many small resizes
@@ -1710,7 +1710,7 @@ void SongBrowser::addBeatmapSet(BeatmapSet *mapset, bool initialSongBrowserLoad)
 }
 
 void SongBrowser::unlinkBeatmapSet(const BeatmapSet *set) {
-    auto btn_it = std::ranges::find(this->parentButtons, set, &SongButton::getBeatmapSet);
+    auto btn_it = Mc::ranges::find(this->parentButtons, set, &SongButton::getBeatmapSet);
     if(btn_it == this->parentButtons.end()) return;
     SongButton *btn = *btn_it;
 
@@ -1775,7 +1775,7 @@ void SongBrowser::applyReconcile(const ReconcileResult &r) {
     // on, so the set changes below treat it as a map that stayed (a held selection is its holder's)
     bool followed = false;
     if(const DatabaseBeatmap *cur = osu->getMapInterface()->getBeatmap(); cur && !osu->getMusicTrack()->isHeld()) {
-        if(auto it = std::ranges::find(r.successors, cur, &ReconcileResult::Successor::was); it != r.successors.end()) {
+        if(auto it = Mc::ranges::find(r.successors, cur, &ReconcileResult::Successor::was); it != r.successors.end()) {
             osu->getMapInterface()->selectBeatmap(it->now);
             followed = true;
         }
@@ -1989,7 +1989,7 @@ bool SongBrowser::scrollToBestButton() {
             // alphanumeric grouping contains parent song buttons instead of difficulties directly
             // XXX: more special cases for collection grouping (they can be grouped in multiple ways)
             if(isAlphanumeric || this->curGroup == GroupType::COLLECTIONS) {
-                if(const auto &songit = std::ranges::find(collChildren, selParent); songit != collChildren.end()) {
+                if(const auto &songit = Mc::ranges::find(collChildren, selParent); songit != collChildren.end()) {
                     collectionContainingTarget = curColBtn;
                     if(!selDiff) {
                         target = *songit;
@@ -1998,7 +1998,7 @@ bool SongBrowser::scrollToBestButton() {
                     }
                     const auto &songChildren =
                         reinterpret_cast<const std::vector<SongDifficultyButton *> &>((*songit)->getChildren());
-                    if(const auto &diffit = std::ranges::find(songChildren, selDiff); diffit != songChildren.end()) {
+                    if(const auto &diffit = Mc::ranges::find(songChildren, selDiff); diffit != songChildren.end()) {
                         // found difficulty
                         target = *diffit;
                         break;
@@ -2008,7 +2008,7 @@ bool SongBrowser::scrollToBestButton() {
 
             if(!target && (!isAlphanumeric || this->curGroup == GroupType::COLLECTIONS)) {
                 const auto &songChildren = reinterpret_cast<const std::vector<SongDifficultyButton *> &>(collChildren);
-                if(const auto &diffit = std::ranges::find(songChildren, selDiff); diffit != songChildren.end()) {
+                if(const auto &diffit = Mc::ranges::find(songChildren, selDiff); diffit != songChildren.end()) {
                     collectionContainingTarget = curColBtn;
                     // found difficulty
                     target = *diffit;
@@ -2454,7 +2454,7 @@ void SongBrowser::rebuildScoreButtons() {
 
         if(is_online) {
             if(local_scores != db->getScores().end()) {
-                if(const auto &elem = std::ranges::max_element(
+                if(const auto &elem = Mc::ranges::max_element(
                        local_scores->second,
                        [](const FinishedScore &a, const FinishedScore &b) { return a.score < b.score; });
                    elem != local_scores->second.end()) {
@@ -3117,7 +3117,7 @@ void SongBrowser::onSortClicked(CBaseUIButton *button) {
         ++i;
         sorting_names[i] = sortmeth.name;
     }
-    std::ranges::sort(sorting_names, SString::strcase_comp);
+    Mc::ranges::sort(sorting_names, SString::strcase_comp);
     for(const auto &name : sorting_names) {
         for(int stype = -1; const auto &sortmeth : MAP_SORTING_METHODS) {
             ++stype;
@@ -3471,7 +3471,7 @@ void SongBrowser::onCollectionButtonContextMenu(CollectionButton *collectionButt
 
     if(id == 2) {  // delete collection
         if(const auto &it =
-               std::ranges::find(this->collectionButtons, collection_name, &CollectionButton::getCollectionName);
+               Mc::ranges::find(this->collectionButtons, collection_name, &CollectionButton::getCollectionName);
            it != this->collectionButtons.end() && Collections::delete_collection(collection_name)) {
             Collections::save_collections_async();
 
@@ -3494,14 +3494,14 @@ void SongBrowser::onCollectionButtonContextMenu(CollectionButton *collectionButt
                 Collections::save_collections_async();
 
                 // rename button
-                if(const auto &it = std::ranges::find(this->collectionButtons, collectionButton,
-                                                      &std::unique_ptr<CollectionButton>::get);
+                if(const auto &it = Mc::ranges::find(this->collectionButtons, collectionButton,
+                                                     &std::unique_ptr<CollectionButton>::get);
                    it != this->collectionButtons.end()) {
                     (*it)->setCollectionName(collection_name);
 
                     // resort collection buttons
-                    std::ranges::stable_sort(this->collectionButtons, SString::strcase_comp,
-                                             &CollectionButton::getCollectionName);
+                    Mc::ranges::stable_sort(this->collectionButtons, SString::strcase_comp,
+                                            &CollectionButton::getCollectionName);
                 }
 
                 // update UI
@@ -3524,8 +3524,8 @@ void SongBrowser::onCollectionButtonContextMenu(CollectionButton *collectionButt
         if(colNameSanitized.empty()) {
             colNameSanitized = fmt::format("Untitled-Collection-{:%F-%H-%M-%S}", fmt::gmtime(std::time(nullptr)));
         } else {
-            std::ranges::replace(colNameSanitized, '\\', '_');
-            std::ranges::replace(colNameSanitized, '/', '_');
+            Mc::ranges::replace(colNameSanitized, '\\', '_');
+            Mc::ranges::replace(colNameSanitized, '/', '_');
             if(colNameSanitized.starts_with('.')) {
                 colNameSanitized[0] = '_';
             } else if(colNameSanitized.starts_with("..")) {
@@ -3548,7 +3548,7 @@ void SongBrowser::onCollectionButtonContextMenu(CollectionButton *collectionButt
 }
 
 void SongBrowser::highlightScore(const FinishedScore &scoreToHighlight) {
-    if(auto cachedit = std::ranges::find(this->scoreButtonCache, scoreToHighlight, &ScoreButton::getScore);
+    if(auto cachedit = Mc::ranges::find(this->scoreButtonCache, scoreToHighlight, &ScoreButton::getScore);
        cachedit != this->scoreButtonCache.end()) {
         this->scoreBrowser->scrollToElement(*cachedit, 0, 10);
         (*cachedit)->highlight();
@@ -3605,7 +3605,7 @@ bool SongBrowser::selectPreviousRandomBeatmap() {
         SongButton *found = songButton->getDatabaseBeatmap() == previousRandomBeatmap ? songButton : nullptr;
         if(!found) {
             const auto &children = songButton->getChildren();
-            const auto it = std::ranges::find(children, previousRandomBeatmap, &SongButton::getDatabaseBeatmap);
+            const auto it = Mc::ranges::find(children, previousRandomBeatmap, &SongButton::getDatabaseBeatmap);
             if(it != children.end()) found = *it;
         }
         if(found) {
@@ -3699,7 +3699,7 @@ void SongBrowser::recreateCollectionsButtons() {
     }
 
     // sort buttons by name
-    std::ranges::stable_sort(this->collectionButtons, SString::strcase_comp, &CollectionButton::getCollectionName);
+    Mc::ranges::stable_sort(this->collectionButtons, SString::strcase_comp, &CollectionButton::getCollectionName);
 
     t.update();
     debugLog("recreateCollectionsButtons(): {:f} seconds", t.getElapsedTime());

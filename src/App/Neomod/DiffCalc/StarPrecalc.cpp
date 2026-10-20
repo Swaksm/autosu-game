@@ -1,6 +1,7 @@
 // Copyright (c) 2026, WH, All rights reserved.
 #include "StarPrecalc.h"
 
+#include "ContainerRanges.h"
 #include "ModFlags.h"
 
 #include <algorithm>
@@ -33,7 +34,7 @@ MOD_COMBO_INDEX mod_combo_index(ModFlags flags) {
 
 // never fail, return closest
 uSz speed_index(f32 speed) {
-    auto it = std::ranges::lower_bound(SPEEDS, speed);
+    auto it = Mc::ranges::lower_bound(SPEEDS, speed);
     if(it == SPEEDS.begin()) return 0;
     if(it == SPEEDS.end()) return SPEEDS.size() - 1;
 

@@ -13,6 +13,7 @@
 #include "CBaseUIContainer.h"
 #include "CBaseUILabel.h"
 #include "Chat.h"
+#include "ContainerRanges.h"
 #include "Database.h"
 #include "Engine.h"
 #include "Font.h"
@@ -233,7 +234,7 @@ void Lobby::joinRoom(u32 id, std::string_view password) {
 }
 
 void Lobby::updateRoom(const Room& room) {
-    if(auto old_room = std::ranges::find(this->rooms, room.id, [](const auto& room_) -> u32 { return room_->id; });
+    if(auto old_room = Mc::ranges::find(this->rooms, room.id, [](const auto& room_) -> u32 { return room_->id; });
        old_room != this->rooms.end()) {
         *(old_room->get()) = room;
     } else {

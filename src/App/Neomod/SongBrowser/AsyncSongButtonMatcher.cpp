@@ -2,6 +2,7 @@
 #include "AsyncSongButtonMatcher.h"
 
 #include "AsyncPool.h"
+#include "ContainerRanges.h"
 #include "Parsing.h"
 #include "SString.h"
 
@@ -148,7 +149,7 @@ static Query parse_query(std::string_view search) {
         }
         SString::trim_inplace(token);
         if(SString::is_wspace_only(token)) continue;
-        if(std::ranges::find(query.needles, token) == query.needles.end()) query.needles.emplace_back(token);
+        if(Mc::ranges::find(query.needles, token) == query.needles.end()) query.needles.emplace_back(token);
     }
     return query;
 }
@@ -158,9 +159,9 @@ static Query parse_query(std::string_view search) {
 // case-insensitive substring search where the needle is already lowercased
 // (like SString::contains_ncase, but it skips re-lowercasing the needle every call).
 static forceinline INLINE_BODY bool haystack_contains_needle(std::string_view haystack, std::string_view lower_needle) {
-    return !std::ranges::search(haystack, lower_needle, [](unsigned char hay, unsigned char ndl) {
-                return SString::ascii_tolower(hay) == ndl;
-            }).empty();
+    return std::search(haystack.begin(), haystack.end(), lower_needle.begin(), lower_needle.end(),
+                       [](unsigned char hay, unsigned char ndl) { return SString::ascii_tolower(hay) == ndl; }) !=
+           haystack.end();
 }
 
 // does any of the difficulty's text metadata contain the (lowercased) needle?

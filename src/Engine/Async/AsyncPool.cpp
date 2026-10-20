@@ -391,9 +391,10 @@ void Scope::track(detail::StateBase *task, detail::StateBase *antecedent) {
     std::vector<Owned> finished;
     {
         Sync::scoped_lock lock(this->mutex);
-        const auto done = std::ranges::partition(this->owned, [](const Owned &o) { return !o.task->done(); });
-        finished.assign(std::make_move_iterator(done.begin()), std::make_move_iterator(done.end()));
-        this->owned.erase(done.begin(), done.end());
+        const auto done =
+            std::partition(this->owned.begin(), this->owned.end(), [](const Owned &o) { return !o.task->done(); });
+        finished.assign(std::make_move_iterator(done), std::make_move_iterator(this->owned.end()));
+        this->owned.erase(done, this->owned.end());
         this->owned.push_back({.task = detail::Ref<detail::StateBase>(task), .antecedent = antecedent});
     }
     // (released outside the lock: a task's destructor may touch the scope)

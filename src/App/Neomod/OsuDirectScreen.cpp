@@ -1,6 +1,7 @@
 #include "OsuDirectScreen.h"
 
 #include "AnimationHandler.h"
+#include "ContainerRanges.h"
 #include "Parsing.h"
 #include "ThumbnailManager.h"
 #include "BackgroundImageHandler.h"
@@ -50,6 +51,7 @@
 #include <algorithm>
 #include <charconv>
 #include <cmath>
+#include <functional>
 #include <optional>
 
 namespace {
@@ -260,7 +262,7 @@ OnlineMapListing::OnlineMapListing(Downloader::BeatmapSetMetadata meta, OnlineMa
 
     if(this->meta.beatmaps.size() > 1) {
         // reverse
-        std::ranges::sort(this->meta.beatmaps, std::ranges::greater{}, [](const auto& bm) { return bm.star_rating; });
+        Mc::ranges::sort(this->meta.beatmaps, std::greater<>{}, [](const auto& bm) { return bm.star_rating; });
     }
 
     this->onResolutionChange(osu->getVirtScreenSize());
@@ -387,7 +389,7 @@ void OnlineMapListing::onResolutionChange(vec2 /*newResolution*/) {
     const sSz max_slots = icon_region >= STEP ? (sSz)(icon_region / STEP) : 0;
 
     // only standard-mode diffs get an icon; meta.beatmaps is sorted descending by star rating
-    const sSz n_std = std::ranges::count_if(this->meta.beatmaps, [](const auto& bm) { return bm.mode == 0; });
+    const sSz n_std = Mc::ranges::count_if(this->meta.beatmaps, [](const auto& bm) { return bm.mode == 0; });
 
     // if there are too many to fit, reserve room on the left for a "+N more" indicator and
     // collapse the lowest-star tail into it

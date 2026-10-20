@@ -7,6 +7,7 @@
 #include "BanchoNetworking.h"
 #include "BanchoUsers.h"
 #include "Chat.h"
+#include "ContainerRanges.h"
 #include "OsuConVars.h"
 #include "Database.h"
 #include "Engine.h"
@@ -201,7 +202,7 @@ void UIUserContextMenuScreen::on_action(std::string_view text, int user_action) 
             packet.write<i32>(this->user_id);
             BANCHO::Net::send_packet(packet);
 
-            auto it = std::ranges::find(BANCHO::User::friends, this->user_id);
+            auto it = Mc::ranges::find(BANCHO::User::friends, this->user_id);
             if(it != BANCHO::User::friends.end()) {
                 BANCHO::User::friends.erase(it);
             }

@@ -1,6 +1,7 @@
 // Copyright (c) 2018, PG, All rights reserved.
 #include "ScoreButton.h"
 
+#include "ContainerRanges.h"
 #include "OptionsOverlay.h"
 #include "SongBrowser.h"
 // ---
@@ -417,7 +418,7 @@ void ScoreButton::tick() {
             }
             auto &hashToScore = sc.is_online_score ? db->getOnlineScores() : db->getScoresMutable();
             if(const auto &it = hashToScore.find(sc.beatmap_hash); it != hashToScore.end()) {
-                if(auto scorevecIt = std::ranges::find(it->second, sc); scorevecIt != it->second.end()) {
+                if(auto scorevecIt = Mc::ranges::find(it->second, sc); scorevecIt != it->second.end()) {
                     g_songbrowser->score_resort_scheduled = true;
                     *scorevecIt = sc;
                 }

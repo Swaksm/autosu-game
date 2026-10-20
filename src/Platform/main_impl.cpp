@@ -16,6 +16,7 @@
 #include "Timing.h"
 #include "MakeDelegateWrapper.h"
 #include "Engine.h"
+#include "ContainerRanges.h"
 #include "ConVar.h"
 #include "FPSLimiter.h"
 #include "Keyboard.h"
@@ -726,7 +727,7 @@ SDL_AppResult SDLMain::handleEvent(SDL_Event *event) {
 
         // pens are absolute pointers whatever the mouse mode is (sdl's pen->mouse/touch emulation is off)
         case SDL_EVENT_PEN_PROXIMITY_IN:
-            if(std::ranges::find(m_pensInProximity, event->pproximity.which) == m_pensInProximity.end()) {
+            if(Mc::ranges::find(m_pensInProximity, event->pproximity.which) == m_pensInProximity.end()) {
                 m_pensInProximity.push_back(event->pproximity.which);
             }
             break;

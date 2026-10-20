@@ -4,6 +4,7 @@
 #include "SoLoudSoundEngine.h"
 #include "SoundEngine.h"
 
+#include "ContainerRanges.h"
 #include "Engine.h"
 #include "Environment.h"
 #include "ConVar.h"
@@ -16,7 +17,7 @@
 #include <cassert>
 
 SoundEngine::~SoundEngine() {
-    assert(std::ranges::all_of(this->deviceChangeListeners, &DeviceChangeListenerEntry::detached) &&
+    assert(Mc::ranges::all_of(this->deviceChangeListeners, &DeviceChangeListenerEntry::detached) &&
            "a device change listener's Registration outlived the sound engine");
 }
 
@@ -32,7 +33,7 @@ Mc::Registration SoundEngine::addDeviceChangeListener(AudioOutputChangedCallback
 
 void SoundEngine::endDeviceChangeListener(u64 id, Mc::Registration::End how) {
     assert(McThread::is_main_thread() && "device change listeners belong to the main thread");
-    const auto it = std::ranges::find(this->deviceChangeListeners, id, &DeviceChangeListenerEntry::id);
+    const auto it = Mc::ranges::find(this->deviceChangeListeners, id, &DeviceChangeListenerEntry::id);
     if(it == this->deviceChangeListeners.end()) return;
     if(how == Mc::Registration::End::DETACH) {
         it->detached = true;
@@ -46,7 +47,7 @@ void SoundEngine::notifyDeviceChange(DeviceChange change) {
     // ones added meanwhile wait for the next change)
     const u64 newest = this->lastDeviceChangeListenerId;
     for(u64 after = 0;;) {
-        const auto it = std::ranges::find_if(this->deviceChangeListeners, [after, newest](const auto &entry) {
+        const auto it = Mc::ranges::find_if(this->deviceChangeListeners, [after, newest](const auto &entry) {
             return entry.id > after && entry.id <= newest;
         });
         if(it == this->deviceChangeListeners.end()) break;

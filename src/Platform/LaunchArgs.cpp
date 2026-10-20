@@ -1,5 +1,6 @@
 // Copyright (c) 2026, WH, All rights reserved.
 #include "LaunchArgs.h"
+#include "ContainerRanges.h"
 #include "SString.h"
 
 #include <algorithm>
@@ -61,7 +62,7 @@ constexpr auto KNOWN_SWITCHES = std::to_array<KnownSwitch>({
 // clang-format on
 
 const KnownSwitch *find_known(std::string_view name) {
-    const auto it = std::ranges::find(KNOWN_SWITCHES, name, &KnownSwitch::name);
+    const auto it = Mc::ranges::find(KNOWN_SWITCHES, name, &KnownSwitch::name);
     return it != KNOWN_SWITCHES.end() ? &*it : nullptr;
 }
 
@@ -72,7 +73,7 @@ bool can_be_value(Takes takes, std::string_view next) {
             return false;
         case Takes::WORD:
             return !next.empty() &&
-                   std::ranges::all_of(next, [](unsigned char c) { return std::isalnum(c) || c == '_' || c == '-'; });
+                   Mc::ranges::all_of(next, [](unsigned char c) { return std::isalnum(c) || c == '_' || c == '-'; });
         case Takes::ANYTHING:
             return true;
     }
@@ -170,7 +171,7 @@ std::optional<std::string> get_switches_cmdline() noexcept {
     for(size_t cut = 1; cut <= cmdline.size() && ends.size() < args.size(); cut++) {
         if(cut < cmdline.size() && cmdline[cut] != L' ' && cmdline[cut] != L'\t') continue;
         const auto head = parse(cmdline.substr(0, cut));
-        if(head.size() == ends.size() + 1 && std::ranges::equal(head, std::span{args}.first(head.size()))) {
+        if(head.size() == ends.size() + 1 && Mc::ranges::equal(head, std::span{args}.first(head.size()))) {
             ends.push_back(cut);
         }
     }

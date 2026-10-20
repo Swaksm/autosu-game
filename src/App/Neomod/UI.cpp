@@ -2,6 +2,7 @@
 #include "UI.h"
 #include "UIDebug.h"
 
+#include "ContainerRanges.h"
 #include "noinclude.h"
 #include "Bancho.h"
 #include "BeatmapInterface.h"
@@ -364,7 +365,7 @@ void UI::routeKey(KeyboardEvent &e, void (CBaseUIElement::*handler)(KeyboardEven
                 auto *overlay = this->extra_overlays[oi];
                 (overlay->*handler)(e);
                 // (the handler may have popped and deleted its overlay)
-                const bool stillPushed = std::ranges::contains(this->extra_overlays, overlay);
+                const bool stillPushed = Mc::ranges::contains(this->extra_overlays, overlay);
                 if(e.isConsumed()) {
                     if(stillPushed) traceKeyConsumed(traceName, overlay);
                     return;
@@ -452,7 +453,7 @@ UIOverlay *UI::pushOverlay(std::unique_ptr<UIOverlay> overlay) {
     assert(overlay);
 
     UIOverlay *raw = overlay.release();
-    assert(!std::ranges::contains(this->extra_overlays, raw));
+    assert(!Mc::ranges::contains(this->extra_overlays, raw));
     this->extra_overlays.push_back(raw);
 
     // set the overlay visible immediately, and tick it once so a push during the input pass
@@ -463,14 +464,14 @@ UIOverlay *UI::pushOverlay(std::unique_ptr<UIOverlay> overlay) {
 }
 
 bool UI::peekOverlay(UIOverlay *overlay) const {
-    if(auto it = std::ranges::find(this->extra_overlays, overlay); it != this->extra_overlays.end()) {
+    if(auto it = Mc::ranges::find(this->extra_overlays, overlay); it != this->extra_overlays.end()) {
         return true;
     }
     return false;
 }
 
 std::unique_ptr<UIOverlay> UI::popOverlay(UIOverlay *overlay) {
-    if(auto it = std::ranges::find(this->extra_overlays, overlay); it != this->extra_overlays.end()) {
+    if(auto it = Mc::ranges::find(this->extra_overlays, overlay); it != this->extra_overlays.end()) {
         std::unique_ptr<UIOverlay> overlay_out;
         overlay_out.reset(*it);
 

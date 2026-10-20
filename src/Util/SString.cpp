@@ -4,6 +4,7 @@
 #endif
 
 #include "SString.h"
+#include "ContainerRanges.h"
 
 #include <algorithm>
 #include <cctype>
@@ -46,13 +47,14 @@ void trim_inplace(std::string_view& str) noexcept {
 }
 
 bool contains_ncase(const std::string_view haystack, const std::string_view needle) noexcept {
-    return !haystack.empty() && !std::ranges::search(haystack, needle, [](unsigned char ch1, unsigned char ch2) {
-                                     return ascii_tolower(ch1) == ascii_tolower(ch2);
-                                 }).empty();
+    return !haystack.empty() && !needle.empty() &&
+           std::search(haystack.begin(), haystack.end(), needle.begin(), needle.end(),
+                       [](unsigned char ch1, unsigned char ch2) { return ascii_tolower(ch1) == ascii_tolower(ch2); }) !=
+               haystack.end();
 }
 
 bool is_wspace_only(const std::string_view str) noexcept {
-    return str.empty() || std::ranges::all_of(str, [](unsigned char c) { return std::isspace(c) != 0; });
+    return str.empty() || Mc::ranges::all_of(str, [](unsigned char c) { return std::isspace(c) != 0; });
 }
 
 bool is_comment(const std::string_view str, const std::string_view token) noexcept {
@@ -63,7 +65,7 @@ bool is_comment(const std::string_view str, const std::string_view token) noexce
 
 void lower_inplace(std::string& str) noexcept {
     if(str.empty()) return;
-    std::ranges::transform(str, str.begin(), [](unsigned char c) { return ascii_tolower(c); });
+    std::transform(str.begin(), str.end(), str.begin(), [](unsigned char c) { return ascii_tolower(c); });
 }
 
 std::string to_lower(const std::string_view str) noexcept {
@@ -138,7 +140,7 @@ std::vector<R> split(std::string_view s, S delim) noexcept {
     // pre-count delimiter occurrences and reserve that amount (to avoid reallocations)
     size_t count = 0;
     if constexpr(std::is_same_v<std::decay_t<S>, char>) {
-        count = std::ranges::count(s, delim);
+        count = Mc::ranges::count(s, delim);
     } else {
         for(size_t pos = 0; (pos = s.find(delim, pos)) != s.npos; pos += delim_len) count++;
     }
@@ -205,7 +207,7 @@ void split_newlines(std::vector<R>& r, std::string_view s) noexcept {
 template <typename R, split_ret_enabled_t<R>>
 std::vector<R> split_newlines(std::string_view s) noexcept {
     std::vector<R> r;
-    size_t count = std::ranges::count(s, '\n');
+    size_t count = Mc::ranges::count(s, '\n');
     r.reserve(count + 1);
 
     split_newlines(r, s);

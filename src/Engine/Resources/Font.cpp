@@ -7,6 +7,7 @@
 
 #include "Font.h"
 
+#include "ContainerRanges.h"
 #include "ConVar.h"
 #include "Engine.h"
 #include "File.h"
@@ -380,7 +381,7 @@ std::string McFont::ellipsize(std::string_view text, f64 max_width) const { retu
 McFontImpl::McFontImpl(McFont *parent, int fontSize, bool antialiasing, int fontDPI) : m_parent(parent) {
     // initialize with basic ASCII, load the rest as needed
     std::array<char32_t, 96> characters;  // NOLINT
-    std::ranges::iota(characters, 32);
+    std::iota(characters.begin(), characters.end(), 32);
     m_bTryFindFallbacks = true;
     constructor(characters, fontSize, antialiasing, fontDPI);
 }
@@ -1617,7 +1618,7 @@ bool McFont::initSharedResources() {
     {
         auto allFonts = Environment::getFilesInFolder(Mc::Paths::fonts() + "/");
         // sort to load woff2 before ttf/otf
-        std::ranges::sort(allFonts, [](const std::string &font1, const std::string &font2) {
+        Mc::ranges::sort(allFonts, [](const std::string &font1, const std::string &font2) {
             std::string ext1 = Environment::getFileExtensionFromFilePath(font1);
             std::string ext2 = Environment::getFileExtensionFromFilePath(font2);
             SString::lower_inplace(ext1);
@@ -1728,7 +1729,7 @@ static ConVar r_debug_draw_font_atlas("r_debug_draw_font_atlas", "",
 
                                           const auto &csvs = SString::split(atlases, ',');
                                           for(auto atlas : csvs) {
-                                              if(const auto &it = std::ranges::find_if(
+                                              if(const auto &it = Mc::ranges::find_if(
                                                      fonts,
                                                      [atlas](const auto &font) {
                                                          return SString::to_lower(font->getName()) ==

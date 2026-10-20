@@ -862,25 +862,25 @@ bool ModSelector::isInCompactMode() const { return osu->isInPlayMode(); }
 bool ModSelector::isCSOverrideSliderActive() const { return this->CSSlider->isActive(); }
 
 bool ModSelector::isMouseInside() {
-    return this->isVisible()                                                                                      //
-           &&                                                                                                     //
-           (                                                                                                      //
-               this->experimentalContainer->isMouseInside()                                                       //
-               ||                                                                                                 //
-               std::ranges::contains(this->vElements, true,                                                       //
-                                     [](const auto &elem) -> bool { return elem->isMouseInside(); })              //
-               ||                                                                                                 //
-               std::ranges::contains(this->modButtons, true,                                                      //
-                                     [](const auto &modButton) -> bool { return modButton->isMouseInside(); })    //
-               ||                                                                                                 //
-               std::ranges::contains(this->overrideSliders, true,                                                 //
-                                     [](const auto &overrideSlider) -> bool {                                     //
-                                         return (overrideSlider.lock && overrideSlider.lock->isMouseInside()) ||  //
-                                                overrideSlider.desc->isMouseInside() ||                           //
-                                                overrideSlider.slider->isMouseInside() ||                         //
-                                                overrideSlider.label->isMouseInside();                            //
-                                     })                                                                           //
-           );                                                                                                     //
+    return this->isVisible()                                                                                     //
+           &&                                                                                                    //
+           (                                                                                                     //
+               this->experimentalContainer->isMouseInside()                                                      //
+               ||                                                                                                //
+               Mc::ranges::contains(this->vElements, true,                                                       //
+                                    [](const auto &elem) -> bool { return elem->isMouseInside(); })              //
+               ||                                                                                                //
+               Mc::ranges::contains(this->modButtons, true,                                                      //
+                                    [](const auto &modButton) -> bool { return modButton->isMouseInside(); })    //
+               ||                                                                                                //
+               Mc::ranges::contains(this->overrideSliders, true,                                                 //
+                                    [](const auto &overrideSlider) -> bool {                                     //
+                                        return (overrideSlider.lock && overrideSlider.lock->isMouseInside()) ||  //
+                                               overrideSlider.desc->isMouseInside() ||                           //
+                                               overrideSlider.slider->isMouseInside() ||                         //
+                                               overrideSlider.label->isMouseInside();                            //
+                                    })                                                                           //
+           );                                                                                                    //
 }
 
 void ModSelector::updateLayout() {
@@ -1337,7 +1337,7 @@ void ModSelector::close(bool force) {
 }
 
 void ModSelector::onOverrideSliderChange(CBaseUISlider *slider) {
-    auto it = std::ranges::find(this->overrideSliders, slider, &OVERRIDE_SLIDER::slider);
+    auto it = Mc::ranges::find(this->overrideSliders, slider, &OVERRIDE_SLIDER::slider);
     assert(it != this->overrideSliders.end());
     auto &overrideSlider = *it;
 
@@ -1380,7 +1380,7 @@ void ModSelector::onOverrideSliderChange(CBaseUISlider *slider) {
 void ModSelector::onOverrideSliderLockChange(CBaseUICheckbox *checkbox) {
     const auto *mapIface = osu->getMapInterface();
 
-    auto it = std::ranges::find(this->overrideSliders, checkbox, &OVERRIDE_SLIDER::lock);
+    auto it = Mc::ranges::find(this->overrideSliders, checkbox, &OVERRIDE_SLIDER::lock);
     assert(it != this->overrideSliders.end());
     auto &overrideSliderLock = *it;
 
@@ -1540,7 +1540,7 @@ void ModSelector::enableAuto() {
 void ModSelector::toggleAuto() { this->modButtonAUTO->click(); }
 
 void ModSelector::onCheckboxChange(CBaseUICheckbox *checkbox) {
-    auto it = std::ranges::find(this->experimentalMods, checkbox, &EXPERIMENTAL_MOD::element);
+    auto it = Mc::ranges::find(this->experimentalMods, checkbox, &EXPERIMENTAL_MOD::element);
     assert(it != this->experimentalMods.end());
     auto &experimentalMod = *it;
 

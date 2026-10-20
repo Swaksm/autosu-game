@@ -63,7 +63,7 @@ struct StringHashNcase {
 struct StringEqualNcase {
    private:
     [[nodiscard]] inline bool equality(std::string_view lhs, std::string_view rhs) const {
-        return std::ranges::equal(lhs, rhs, [](unsigned char a, unsigned char b) -> bool {
+        return std::equal(lhs.begin(), lhs.end(), rhs.begin(), rhs.end(), [](unsigned char a, unsigned char b) -> bool {
             return detail::ascii_tolower(a) == detail::ascii_tolower(b);
         });
     }

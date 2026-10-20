@@ -3,6 +3,7 @@
 
 #if defined(MCENGINE_FEATURE_OPENGL) || defined(MCENGINE_FEATURE_GLES32)
 
+#include "ContainerRanges.h"
 #include "OpenGLHeaders.h"
 
 namespace GLStateCache {
@@ -64,12 +65,12 @@ void enableClientState(unsigned int GLarray) {
         return;
     }
 
-    const auto &it = std::ranges::find(current_state_array, GLarray);
+    const auto &it = Mc::ranges::find(current_state_array, GLarray);
     if(it != current_state_array.end()) {
         return;  // already enabled
     }
 
-    const auto &zero = std::ranges::find(current_state_array, 0);
+    const auto &zero = Mc::ranges::find(current_state_array, 0);
     assert(zero != current_state_array.end());
 
     *zero = GLarray;
@@ -82,7 +83,7 @@ void disableClientState(unsigned int GLarray) {
         return;
     }
 
-    const auto &array = std::ranges::find(current_state_array, GLarray);
+    const auto &array = Mc::ranges::find(current_state_array, GLarray);
     if(array != current_state_array.end()) {
         *array = 0;
         glDisableClientState(GLarray);

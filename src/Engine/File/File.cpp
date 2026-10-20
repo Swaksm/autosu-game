@@ -6,6 +6,7 @@
 //===============================================================================//
 
 #include "File.h"
+#include "ContainerRanges.h"
 #include "ConVar.h"
 #include "Engine.h"
 #include "Hashing.h"
@@ -387,7 +388,7 @@ wine_get_dos_file_name_t *pwine_get_dos_file_name{nullptr};
 bool tried_load_wine_func{false};
 
 void normalize_wide_slashes(std::wstring &str, wchar_t oldSlash, wchar_t newSlash) noexcept {
-    std::ranges::replace(str, oldSlash, newSlash);
+    Mc::ranges::replace(str, oldSlash, newSlash);
 
     bool prev = false;
     std::erase_if(str, [&](wint_t c) {
@@ -1058,7 +1059,7 @@ File::FILETYPE File::exists(std::string_view filePath, const fs::path &path) {
 }
 
 void File::normalizeSlashes(std::string &str, unsigned char oldSlash, unsigned char newSlash) noexcept {
-    std::ranges::replace(str, oldSlash, newSlash);
+    Mc::ranges::replace(str, oldSlash, newSlash);
 
     bool prev = false;
     std::erase_if(str, [&](unsigned char c) {

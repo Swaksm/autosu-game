@@ -69,7 +69,7 @@ constexpr int BENCH_FRAMES = 200;
 
 f64 median(std::vector<f64> v) {
     if(v.empty()) return 0.0;
-    std::ranges::nth_element(v, v.begin() + (std::ptrdiff_t)(v.size() / 2));
+    std::nth_element(v.begin(), v.begin() + (std::ptrdiff_t)(v.size() / 2), v.end());
     return v[v.size() / 2];
 }
 

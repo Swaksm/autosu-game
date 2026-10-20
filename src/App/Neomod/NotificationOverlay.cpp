@@ -2,6 +2,7 @@
 #include "NotificationOverlay.h"
 
 #include "AnimationHandler.h"
+#include "ContainerRanges.h"
 #include "OsuConVars.h"
 #include "Engine.h"
 #include "Environment.h"
@@ -69,7 +70,7 @@ NotificationOverlay::NotificationOverlay() : UIScreen(), notifMtx(new Mutex()) {
 NotificationOverlay::~NotificationOverlay() {
     cv::cmd::notify.removeCallback();
     cv::cmd::toast.removeCallback();
-    assert(std::ranges::all_of(this->toastCallbacks, &ToastCallback::detached) &&
+    assert(Mc::ranges::all_of(this->toastCallbacks, &ToastCallback::detached) &&
            "a toast callback's Registration outlived the NotificationOverlay");
 }
 
@@ -358,7 +359,7 @@ void NotificationOverlay::onToastClicked(u64 callbackId) {
     ToastClickCallback callback;
     {
         Sync::scoped_lock lk(*this->notifMtx);
-        const auto it = std::ranges::find(this->toastCallbacks, callbackId, &ToastCallback::id);
+        const auto it = Mc::ranges::find(this->toastCallbacks, callbackId, &ToastCallback::id);
         if(it == this->toastCallbacks.end()) return;
         callback = it->callback;
     }
@@ -367,7 +368,7 @@ void NotificationOverlay::onToastClicked(u64 callbackId) {
 
 void NotificationOverlay::endToastCallback(u64 callbackId, Mc::Registration::End how) {
     Sync::scoped_lock lk(*this->notifMtx);
-    const auto it = std::ranges::find(this->toastCallbacks, callbackId, &ToastCallback::id);
+    const auto it = Mc::ranges::find(this->toastCallbacks, callbackId, &ToastCallback::id);
     if(it == this->toastCallbacks.end()) return;
     if(how == Mc::Registration::End::DETACH) {
         it->detached = true;

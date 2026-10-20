@@ -1,6 +1,7 @@
 // Copyright (c) 2023, kiwec, All rights reserved.
 #include "BanchoNetworking.h"
 
+#include "ContainerRanges.h"
 #include "Osu.h"
 #include "Bancho.h"
 #include "BanchoProtocol.h"
@@ -488,7 +489,7 @@ void BanchoState::reconnect() {
         "gatari.pw"sv,
     };
 
-    if(std::ranges::contains(server_blacklist, BanchoState::endpoint)) {
+    if(Mc::ranges::contains(server_blacklist, BanchoState::endpoint)) {
         ui->getNotificationOverlay()->addToast("This server does not allow " PACKAGE_NAME " clients.", ERROR_TOAST);
         return;
     }
@@ -499,7 +500,7 @@ void BanchoState::reconnect() {
         "ripple.moe"sv,
     };
 
-    if(std::ranges::contains(submit_blacklist, BanchoState::endpoint)) {
+    if(Mc::ranges::contains(submit_blacklist, BanchoState::endpoint)) {
         BanchoState::score_submission_policy = ServerPolicy::NO;
     }
 

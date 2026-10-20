@@ -7,6 +7,7 @@
 #include "BackgroundImageHandler.h"
 #include "BeatmapFile.h"
 #include "BeatmapInterface.h"
+#include "ContainerRanges.h"
 #include "Database.h"
 #include "DatabaseBeatmap.h"
 #include "DiffCalc/BatchDiffCalc.h"
@@ -415,11 +416,11 @@ void BeatmapInstaller::enqueue_local(std::string osz_path, bool auto_select, boo
 void BeatmapInstaller::enqueue_folder(std::string folder, bool changed) {
     // a queued pass lists the folder only once it runs, so one is enough; a change after a pass has started gets
     // another one after it
-    if(auto it = std::ranges::find_if(m->entries,
-                                      [&folder](const Entry& e) {
-                                          return e.kind == Entry::Kind::Folder && e.stage == MapInstallStage::Queued &&
-                                                 e.folder == folder;
-                                      });
+    if(auto it = Mc::ranges::find_if(m->entries,
+                                     [&folder](const Entry& e) {
+                                         return e.kind == Entry::Kind::Folder && e.stage == MapInstallStage::Queued &&
+                                                e.folder == folder;
+                                     });
        it != m->entries.end()) {
         it->changed |= changed;
         return;
@@ -561,7 +562,7 @@ void BeatmapInstaller::update() {
                     // as the last import or uninstall left it was that write: the watcher reported the installer's
                     // own change
                     if(!db->isFinished() || db->isCancelled() || extracting >= max_extracting ||
-                       std::ranges::any_of(m->entries, [&e](const Entry& o) {
+                       Mc::ranges::any_of(m->entries, [&e](const Entry& o) {
                            return (o.stage == Extracting && o.kind != Entry::Kind::Folder) ||
                                   ((o.stage == Extracting || o.stage == Installing) && o.folder == e.folder);
                        })) {

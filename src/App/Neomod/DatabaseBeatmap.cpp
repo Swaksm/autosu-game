@@ -490,7 +490,7 @@ DatabaseBeatmap::LOAD_GAMEPLAY_RESULT DatabaseBeatmap::loadGameplay(PlayedMap &p
             if(cv::mod_strict_tracking.getBool() && cv::mod_strict_tracking_remove_slider_ticks.getBool())
                 s->ticks.clear();
 
-            if(cv::mod_reverse_sliders.getBool()) std::ranges::reverse(s->points);
+            if(cv::mod_reverse_sliders.getBool()) std::reverse(s->points.begin(), s->points.end());
 
             const int repeats = std::max((s->repeat - 1), 0);
             maxPossibleCombo += 2 + repeats + (repeats + 1) * s->ticks.size();  // start/end + repeat arrow + ticks

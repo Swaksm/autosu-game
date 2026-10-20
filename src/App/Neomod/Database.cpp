@@ -646,7 +646,7 @@ void Database::sortScoresInPlace(std::vector<FinishedScore> &scores) {
         cv::songbrowser_scores_sortingtype.setValue(sortIndex);
     }
 
-    std::ranges::sort(scores, ui->getSongBrowser()->SCORE_SORTING_METHODS[sortIndex].comparator);
+    Mc::ranges::sort(scores, ui->getSongBrowser()->SCORE_SORTING_METHODS[sortIndex].comparator);
 }
 
 void Database::sortScores(const MD5Hash &beatmapMD5Hash) {
@@ -702,7 +702,7 @@ Database::PlayerPPScores Database::getPlayerPPScores(std::string_view playerName
 
         // sort by pp (reversed)
         // for some reason this was originally backwards from sortScoreByPP, so negating it here
-        std::ranges::sort(scores, [](const FinishedScore *const a, const FinishedScore *const b) -> bool {
+        Mc::ranges::sort(scores, [](const FinishedScore *const a, const FinishedScore *const b) -> bool {
             if(a == b) return false;
             return sortScoreByPP(*b, *a);
         });
@@ -736,7 +736,7 @@ std::vector<std::string> Database::getPlayerNamesWithScoresForUserSwitcher() {
     for(const auto &name : tempNames) {
         if(!name.empty()) names.push_back(name);
     }
-    std::ranges::sort(names, SString::strcase_comp);
+    Mc::ranges::sort(names, SString::strcase_comp);
 
     return names;
 }
@@ -892,7 +892,7 @@ BeatmapDifficulty *Database::getBeatmapDifficulty(const MapLocation &location) c
     const std::string path = this->rootPath(location.root) + location.folder + "/" + location.file;
     auto find_in = [&path](const BeatmapSet *set) -> BeatmapDifficulty * {
         const auto &diffs = set->getDifficulties();
-        auto it = std::ranges::find(diffs, std::string_view{path}, &DatabaseBeatmap::getFilePath);
+        auto it = Mc::ranges::find(diffs, std::string_view{path}, &DatabaseBeatmap::getFilePath);
         return it != diffs.end() ? it->get() : nullptr;
     };
 
@@ -959,7 +959,7 @@ void Database::updateSetID(DatabaseBeatmap *map, i32 new_id) {
         const bool indexed =
             set->iSetID > 0
                 ? this->unindexSet(set)
-                : std::ranges::any_of(this->beatmapsets, [set](const auto &owned) { return owned.get() == set; });
+                : Mc::ranges::any_of(this->beatmapsets, [set](const auto &owned) { return owned.get() == set; });
         set->iSetID = new_id;
         if(indexed) this->indexSet(set);
     }
@@ -1674,7 +1674,7 @@ void Database::loadMaps(std::string_view neomod_maps_path, std::string_view pepp
                 // it can happen that nested beatmaps are stored in the
                 // database, and that osu! stores that filepath with a backslash (because windows)
                 // so replace them with / to normalize
-                std::ranges::replace(beatmap_subfolder, '\\', '/');
+                Mc::ranges::replace(beatmap_subfolder, '\\', '/');
 
                 // build beatmap & diffs from all the data
                 std::string beatmap_dir = fmt::format("{}{}/", peppy_songfolder, beatmap_subfolder);
@@ -1774,7 +1774,7 @@ void Database::loadMaps(std::string_view neomod_maps_path, std::string_view pepp
                                                            : sid_or_folder_to_diffcont[std::move(beatmap_subfolder)];
                     if(!diffcont) diffcont = std::make_unique<DiffContainer>();
 
-                    if(!std::ranges::contains(*diffcont, md5hash, &DatabaseBeatmap::getMD5)) {
+                    if(!Mc::ranges::contains(*diffcont, md5hash, &DatabaseBeatmap::getMD5)) {
                         diffp = map.get();
                         diffcont->push_back(std::move(map));
                     }
@@ -2792,7 +2792,7 @@ ReconcileResult Database::reconcileFolder(MapRoot root, std::string_view rel_fol
             }
         }
         this->unindexSet(set);
-        if(auto it = std::ranges::find_if(this->beatmapsets, [set](const auto &owned) { return owned.get() == set; });
+        if(auto it = Mc::ranges::find_if(this->beatmapsets, [set](const auto &owned) { return owned.get() == set; });
            it != this->beatmapsets.end()) {
             this->graveyard.push_back(std::move(*it));
             this->beatmapsets.erase(it);
@@ -2849,7 +2849,7 @@ ReconcileResult Database::reconcileFolder(MapRoot root, std::string_view rel_fol
             Slot slot{.path = abs_folder + file.name};
             if(old) {
                 const auto &old_diffs = old->getDifficulties();
-                if(auto it = std::ranges::find(old_diffs, std::string_view{slot.path}, &DatabaseBeatmap::getFilePath);
+                if(auto it = Mc::ranges::find(old_diffs, std::string_view{slot.path}, &DatabaseBeatmap::getFilePath);
                    it != old_diffs.end()) {
                     if((*it)->last_modification_time <= 0) (*it)->last_modification_time = file.mtime;
                     if((*it)->last_modification_time == file.mtime) slot.kept = it->get();
@@ -2870,7 +2870,7 @@ ReconcileResult Database::reconcileFolder(MapRoot root, std::string_view rel_fol
             }
         }
     }
-    std::ranges::sort(slots, {}, &Slot::path);
+    Mc::ranges::sort(slots, {}, &Slot::path);
 
     // 3. the hash decides what a parsed file is: one index lookup each under the lock, then the decisions (which
     //    may stat other folders) without it
@@ -2891,7 +2891,7 @@ ReconcileResult Database::reconcileFolder(MapRoot root, std::string_view rel_fol
         auto name = [&slot] { return Environment::getFileNameFromFilePath(slot.path); };
 
         if(owner && old && owner->getParentSet() == old) {
-            if(std::ranges::any_of(slots, [owner](const Slot &s) { return s.kept == owner; })) {
+            if(Mc::ranges::any_of(slots, [owner](const Slot &s) { return s.kept == owner; })) {
                 // a second copy of a map this folder still has: the first one wins
                 logIfCV(debug_db, "reconcile {}: {} duplicates {}", rel_folder, name(), owner->getFilePath());
             } else {
@@ -2906,7 +2906,7 @@ ReconcileResult Database::reconcileFolder(MapRoot root, std::string_view rel_fol
             if(!res.dedup_owner) res.dedup_owner = owner->getParentSet();
             logIfCV(debug_db, "reconcile {}: {} duplicates {}", rel_folder, name(), owner->getFilePath());
             slot.parsed.reset();
-        } else if(std::ranges::any_of(slots.begin(), slots.begin() + static_cast<sSz>(i), [&slot](const Slot &s) {
+        } else if(std::any_of(slots.begin(), slots.begin() + static_cast<sSz>(i), [&slot](const Slot &s) {
                       return s.parsed && s.parsed->getMD5() == slot.parsed->getMD5();
                   })) {
             logIfCV(debug_db, "reconcile {}: {} duplicates another new file in the folder", rel_folder, name());
@@ -2924,15 +2924,15 @@ ReconcileResult Database::reconcileFolder(MapRoot root, std::string_view rel_fol
         slot.was = slot.owner;
         if(!old) continue;
         const auto &old_diffs = old->getDifficulties();
-        if(auto it = std::ranges::find(old_diffs, std::string_view{slot.path}, &DatabaseBeatmap::getFilePath);
-           it != old_diffs.end() && std::ranges::none_of(slots, [&it](const Slot &s) { return s.kept == it->get(); })) {
+        if(auto it = Mc::ranges::find(old_diffs, std::string_view{slot.path}, &DatabaseBeatmap::getFilePath);
+           it != old_diffs.end() && Mc::ranges::none_of(slots, [&it](const Slot &s) { return s.kept == it->get(); })) {
             slot.was = it->get();
         }
     }
 
     const uSz n_old = old ? old->getDifficulties().size() : 0;
-    const uSz n_kept = std::ranges::count_if(slots, [](const Slot &s) { return s.kept != nullptr; });
-    res.added = static_cast<u16>(std::ranges::count_if(slots, [](const Slot &s) { return s.parsed != nullptr; }));
+    const uSz n_kept = Mc::ranges::count_if(slots, [](const Slot &s) { return s.kept != nullptr; });
+    res.added = static_cast<u16>(Mc::ranges::count_if(slots, [](const Slot &s) { return s.parsed != nullptr; }));
     res.removed = static_cast<u16>(n_old - n_kept);
 
     if(res.added == 0 && res.removed == 0) {
@@ -2978,7 +2978,7 @@ ReconcileResult Database::reconcileFolder(MapRoot root, std::string_view rel_fol
             container->push_back(std::move(slot.parsed));
         } else if(slot.kept) {
             auto &old_diffs = *old->difficulties;
-            auto it = std::ranges::find_if(old_diffs, [&slot](const auto &p) { return p.get() == slot.kept; });
+            auto it = Mc::ranges::find_if(old_diffs, [&slot](const auto &p) { return p.get() == slot.kept; });
             assert(it != old_diffs.end());
             container->push_back(std::move(*it));
         }
@@ -3045,7 +3045,7 @@ ReconcileResult Database::reconcileFolder(MapRoot root, std::string_view rel_fol
             BeatmapSet *stale = moved.back()->getParentSet();
             auto rest = std::make_unique<DiffContainer>();
             for(auto &diff : *stale->difficulties) {
-                if(!std::ranges::contains(moved, diff.get())) rest->push_back(std::move(diff));
+                if(!Mc::ranges::contains(moved, diff.get())) rest->push_back(std::move(diff));
             }
             std::erase_if(*stale->difficulties, [](const auto &p) { return p == nullptr; });
             std::erase_if(moved, [stale](const BeatmapDifficulty *diff) { return diff->getParentSet() == stale; });
@@ -3098,7 +3098,7 @@ ReconcileResult Database::reconcileFolder(MapRoot root, std::string_view rel_fol
         // post-load import: the batch passes already ran. an import calculates its diffs itself, which leaves the
         // difficulty batch their scores (it had to skip those without the map) and diffs that were parsed right here
         if(has_scores ||
-           std::ranges::any_of(fresh, [](const BeatmapDifficulty *diff) { return diff->ppv2Version == 0; })) {
+           Mc::ranges::any_of(fresh, [](const BeatmapDifficulty *diff) { return diff->ppv2Version == 0; })) {
             this->batch_diffcalc_pending = true;  // picked up by SongBrowser::tick
         }
         for(BeatmapDifficulty *diff : fresh) {

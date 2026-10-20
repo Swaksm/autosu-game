@@ -1,6 +1,7 @@
 // Copyright (c) 2019, PG & Francesco149 & Khangaroo & Givikap120, 2026, WH, All rights reserved.
 #include "DifficultyCalculator.h"
 
+#include "ContainerRanges.h"
 #include "DatabaseBeatmapTypes.h"
 #include "BeatmapStacking.h"
 #include "SliderCurves.h"
@@ -15,6 +16,8 @@
 #include <type_traits>
 #include <span>
 #include <variant>
+#include <algorithm>
+#include <functional>
 
 #ifndef BUILD_TOOLS_ONLY
 #include "OsuConVars.h"
@@ -1458,12 +1461,12 @@ f64 calculate_aim_difficulty(const Skills::Skill type, const DifficultyHitObject
                 totalLength -= peak.sectionLength;
             } else {
                 strains.push_back(peak);
-                std::ranges::push_heap(strains, byValueDescStable);
+                std::push_heap(strains.begin(), strains.end(), byValueDescStable);
             }
 
             // remove the smallest sections once they can't contribute anymore
             while(totalLength > max_stored_length * max_section_length) {
-                std::ranges::pop_heap(strains, byValueDescStable);
+                std::pop_heap(strains.begin(), strains.end(), byValueDescStable);
                 totalLength -= strains.back().sectionLength;
                 strains.pop_back();
             }
@@ -1528,7 +1531,7 @@ f64 calculate_aim_difficulty(const Skills::Skill type, const DifficultyHitObject
 
     // the exact order the insertion-sorted list ends up with; zero-value sections sort to the
     // tail, drop them
-    std::ranges::sort(strains, byValueDescStable);
+    Mc::ranges::sort(strains, byValueDescStable);
     while(!strains.empty() && !(strains.back().value > 0.0)) strains.pop_back();
 
     // getReducedStrainPeaks: chop the top strains within the first 4000ms of cumulative section
@@ -1567,7 +1570,7 @@ f64 calculate_aim_difficulty(const Skills::Skill type, const DifficultyHitObject
     // re-sorting everything (seq keeps the LINQ OrderByDescending tie behavior: sections
     // before equal-valued chunks, chunks among themselves in generation order)
     chunkStart = std::max(chunkStart, skipCount);
-    std::ranges::sort(strains.begin() + (sSz)chunkStart, strains.end(), byValueDescStable);
+    std::sort(strains.begin() + (sSz)chunkStart, strains.end(), byValueDescStable);
 
     // continuous weighted sum: weight = integral of decay_weight^x over the section, with time
     // in units of max_section_length
@@ -1596,7 +1599,7 @@ f64 harmonic_difficulty_sum(std::span<f64> difficulties, f64 harmonicScale, f64 
                             f64 &outObjectWeightSum) {
     outObjectWeightSum = 0.0;
 
-    std::ranges::sort(difficulties, std::ranges::greater{});
+    Mc::ranges::sort(difficulties, std::greater<>{});
 
     f64 difficulty = 0.0;
     i32 index = 0;

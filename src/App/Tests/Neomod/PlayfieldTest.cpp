@@ -1,6 +1,7 @@
 // Copyright (c) 2026, WH, All rights reserved.
 #include "PlayfieldTest.h"
 
+#include "ContainerRanges.h"
 #include "TestMacros.h"
 #include "BeatmapPrimitives.h"
 #include "ConVar.h"
@@ -51,7 +52,7 @@ PlayfieldTest::PlayfieldTest() {
             !ec && it != fs::recursive_directory_iterator(); it.increment(ec)) {
             if(it->path().extension() == ".osu" && it->is_regular_file(ec)) m_corpus.push_back(it->path().string());
         }
-        std::ranges::sort(m_corpus);
+        Mc::ranges::sort(m_corpus);
         logRaw("PlayfieldTest: {} maps under {}", m_corpus.size(), *corpus);
         return;
     }
@@ -91,7 +92,7 @@ bool PlayfieldTest::load(const std::string &path) {
     HitObjects::stack(m_objects, c.AR, c.version, c.stackLeniency, m_view.rawHitcircleDiameter, false);
 
     for(const auto &obj : m_objects) m_byEndTime.push_back({obj.get(), false});
-    std::ranges::stable_sort(m_byEndTime, {}, [](const Entry &e) { return e.obj->getEndTime(); });
+    Mc::ranges::stable_sort(m_byEndTime, {}, [](const Entry &e) { return e.obj->getEndTime(); });
 
     m_firstTimeMS = m_objects.front()->getClickTime();
     m_lastTimeMS = m_byEndTime.back().obj->getEndTime();

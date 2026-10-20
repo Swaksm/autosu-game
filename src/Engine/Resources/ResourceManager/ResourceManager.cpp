@@ -7,6 +7,7 @@
 
 #include "ResourceManager.h"
 
+#include "ContainerRanges.h"
 #include "Font.h"
 #include "Image.h"
 #include "RenderTarget.h"
@@ -269,7 +270,7 @@ void ResourceManager::destroyResource(Resource *rs, ResourceDestroyFlags destfla
 
     logIf(debug, "destroying {:s}", rs->getDebugIdentifier());
 
-    auto managedResourceIterator = std::ranges::find(pImpl->vResources, rs);
+    auto managedResourceIterator = Mc::ranges::find(pImpl->vResources, rs);
     const bool isManagedResource = managedResourceIterator != pImpl->vResources.end();
 
     using enum ResourceDestroyFlags;

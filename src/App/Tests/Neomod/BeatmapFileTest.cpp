@@ -1,6 +1,7 @@
 // Copyright (c) 2026, WH, All rights reserved.
 #include "BeatmapFileTest.h"
 
+#include "ContainerRanges.h"
 #include "TestMacros.h"
 #include "BeatmapFile.h"
 #include "BeatmapPrimitives.h"
@@ -692,7 +693,7 @@ void BeatmapFileTest::runCorpus(const std::string &dir) {
             files.emplace_back(path.string(), fs::relative(path, dir, ec).generic_string());
         }
     }
-    std::ranges::sort(files);
+    Mc::ranges::sort(files);
     TEST_ASSERT(!files.empty(), "the corpus has .osu files");
 
     if(const auto rounds = getTestArg("bench")) {

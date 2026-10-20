@@ -1,6 +1,7 @@
 // Copyright (c) 2026, WH, All rights reserved.
 #include "CBaseUINumberField.h"
 
+#include "ContainerRanges.h"
 #include "Engine.h"
 #include "KeyBindings.h"
 #include "Keyboard.h"
@@ -233,6 +234,6 @@ void CBaseUINumberField::settle() {
 void CBaseUINumberField::takeTyped() {
     if(this->text == this->typingText) return;
     std::string typed = this->text;
-    std::ranges::replace(typed, ',', '.');
+    Mc::ranges::replace(typed, ',', '.');
     if(f64 number{0.0}; Parsing::parse(typed, &number) && std::isfinite(number)) this->value = this->fit(number);
 }

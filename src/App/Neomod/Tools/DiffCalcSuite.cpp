@@ -3,6 +3,7 @@
 #include "config.h"
 #endif
 
+#include "ContainerRanges.h"
 #include "DiffCalcToolShared.h"
 #include "ModFlags.h"
 #include "Parsing.h"
@@ -68,7 +69,7 @@ std::vector<std::string> listFixtures(const std::filesystem::path &mapsDir, std:
         std::string name = it->path().filename().string();
         if(name.ends_with(".osu")) fixtures.push_back(std::move(name));
     }
-    std::ranges::sort(fixtures);
+    Mc::ranges::sort(fixtures);
     return fixtures;
 }
 
@@ -395,7 +396,7 @@ int runSuiteTest(const std::vector<std::string> &argv) {
         if(!it->is_regular_file(ec) || ec) continue;
         const std::string name = it->path().filename().string();
         if(!name.ends_with(".jsonl")) continue;
-        if(!std::ranges::binary_search(fixtures, name.substr(0, name.length() - 6) + ".osu"))
+        if(!std::binary_search(fixtures.begin(), fixtures.end(), name.substr(0, name.length() - 6) + ".osu"))
             orphans.push_back(it->path());
     }
     for(const fs::path &orphan : orphans) {
@@ -514,8 +515,8 @@ int runCrosscheck(const std::vector<std::string> &argv) {
             const int n = static_cast<int>(reused.diffobjects.size());
             std::vector<int> prefixes = {0, 1, 2, n / 13, n / 7, n / 3, n / 2, (2 * n) / 3, n - 2, n - 1};
             std::erase_if(prefixes, [n](int k) { return k < 0 || k >= n; });
-            std::ranges::sort(prefixes);
-            prefixes.erase(std::ranges::unique(prefixes).begin(), prefixes.end());
+            Mc::ranges::sort(prefixes);
+            prefixes.erase(std::unique(prefixes.begin(), prefixes.end()), prefixes.end());
             for(const int k : prefixes) {
                 DiffCalc::LOAD_DIFFOBJ_RESULT freshLoad = load();
                 const CalcSnapshot truncatedFresh = calcOnce(freshLoad, setup, k, &freshLoad.strainState);

@@ -5,6 +5,7 @@
 #include "AsyncIOHandler.h"
 #include "AsyncPool.h"
 #include "Bancho.h"
+#include "ContainerRanges.h"
 #include "ConVar.h"
 #include "Environment.h"
 #include "File.h"
@@ -313,7 +314,7 @@ void PreviewTrackManager::Impl::add_to_cache(i32 cached_set_id, u64 size) {
     // the least recently played ones go first. never the current one, which may be streamed from its file. deleted
     // right here, since a deletion that runs later could hit the same set's file downloaded again meanwhile
     while(this->cached_bytes > CACHE_MAX_BYTES) {
-        const auto oldest = std::ranges::min_element(this->cached, {}, [this](const auto &entry) {
+        const auto oldest = Mc::ranges::min_element(this->cached, {}, [this](const auto &entry) {
             return entry.first == this->set_id ? INT64_MAX : entry.second.last_used;
         });
         if(oldest == this->cached.end() || oldest->first == this->set_id) break;

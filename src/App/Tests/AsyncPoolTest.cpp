@@ -1,6 +1,7 @@
 // Copyright (c) 2026, WH, All rights reserved.
 #include "AsyncPoolTest.h"
 
+#include "ContainerRanges.h"
 #include "TestMacros.h"
 #include "AsyncChannel.h"
 #include "Engine.h"
@@ -129,8 +130,8 @@ void AsyncPoolTest::update() {
             return;
 
         case WAIT_STRESS: {
-            const bool loadersDone = std::ranges::all_of(m_stressLoaders, [](const auto& f) { return f.is_ready(); });
-            const bool contsDone = std::ranges::all_of(m_stressConts, [](const auto& f) { return f.is_ready(); });
+            const bool loadersDone = Mc::ranges::all_of(m_stressLoaders, [](const auto& f) { return f.is_ready(); });
+            const bool contsDone = Mc::ranges::all_of(m_stressConts, [](const auto& f) { return f.is_ready(); });
             if(!(loadersDone && contsDone) && Timing::getTicksMS() - m_stressStartMS < 10000) return;
             m_phase = TEST_STRESS;
             [[fallthrough]];
@@ -146,7 +147,7 @@ void AsyncPoolTest::update() {
                     loadersCorrect = false;
                 }
             }
-            const bool contsDone = std::ranges::all_of(m_stressConts, [](const auto& f) { return f.is_ready(); });
+            const bool contsDone = Mc::ranges::all_of(m_stressConts, [](const auto& f) { return f.is_ready(); });
             TEST_ASSERT(loadersDone, "tasks waiting on their sub-tasks all completed (no wedge)");
             TEST_ASSERT(loadersCorrect, "sub-task results were collected correctly");
             TEST_ASSERT(contsDone, "continuation chains all completed (no wedge)");

@@ -5,6 +5,7 @@
 #include "BanchoNetworking.h"
 #include "BanchoProtocol.h"
 #include "Chat.h"
+#include "ContainerRanges.h"
 #include "OsuConVars.h"
 #include "Engine.h"
 #include "NotificationOverlay.h"
@@ -117,7 +118,7 @@ void logout_all_users() {
 }
 
 UserInfo* find_user(std::string_view username) {
-    if(const auto& it = std::ranges::find_if(
+    if(const auto& it = Mc::ranges::find_if(
            all_users, [&username](const auto& info_pair) { return info_pair.second.name == username; });
        it != all_users.end()) {
         return &it->second;

@@ -1,5 +1,6 @@
 // Copyright (c)  2026, WH, All rights reserved.
 #include "UIDebug.h"
+#include "ContainerRanges.h"
 #include "UI.h"
 #include "UIScreen.h"
 
@@ -184,7 +185,7 @@ void UIDebug::debugAssert(std::string_view args) {
         const GameplayJudge *judge = osu->getMapInterface()->getJudge();
         const auto expected = Parsing::strto<i32>(parts[2]);
         const auto actual =
-            judge ? (i32)std::ranges::count_if(judge->getHitObjects(), [](const auto &h) { return h->isFinished(); })
+            judge ? (i32)Mc::ranges::count_if(judge->getHitObjects(), [](const auto &h) { return h->isFinished(); })
                   : -1;
         logRaw("UITEST {} play finished expected={} actual={}", actual == expected ? "OK" : "FAIL", expected, actual);
         return;

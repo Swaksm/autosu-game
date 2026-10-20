@@ -6,6 +6,7 @@
 #include "SoLoudSoundEngine.h"
 
 #include "MakeDelegateWrapper.h"
+#include "ContainerRanges.h"
 #include "SString.h"
 #include "SoLoudSound.h"
 #include "LaunchArgs.h"
@@ -115,7 +116,7 @@ void SoLoudSoundEngine::restart() {
         // beats a fuzzy name match
         const auto &lastDevice = (getMAorSDLCV() == OutputDriver::SOLOUD_MA) ? this->lastMADevice : this->lastSDLDevice;
         if(lastDevice.has_value() && wanted.name != cv::snd_output_device.getString()) {
-            if(const auto &it = std::ranges::find(this->outputDevices, lastDevice->name, &OUTPUT_DEVICE::name);
+            if(const auto &it = Mc::ranges::find(this->outputDevices, lastDevice->name, &OUTPUT_DEVICE::name);
                it != this->outputDevices.end()) {
                 wanted = *it;
             }
@@ -676,7 +677,7 @@ void SoLoudSoundEngine::updateOutputDevices(bool printInfo) {
     }
 
     // sort to keep them in the same order for each query (MA/SDL devices first, their id is their position in the list)
-    std::ranges::stable_sort(devices, [](const DeviceInfo &a, const DeviceInfo &b) -> bool {
+    Mc::ranges::stable_sort(devices, [](const DeviceInfo &a, const DeviceInfo &b) -> bool {
         if(a.backend != b.backend) return a.backend < b.backend;
         return SString::strcase_comp(a.name.data(), b.name.data());
     });
@@ -884,7 +885,7 @@ bool SoLoudSoundEngine::initializeOutputDevice(const OUTPUT_DEVICE &device) {
             if(desiredDev.id != -1 || currentDevice.isExclusive) {
                 for(const auto &[id, slDevice] : this->mSoloudDevices) {
                     if(id < 0 || strcmp(slDevice.identifier.data(), currentDevice.identifier.data()) != 0) continue;
-                    if(const auto &it = std::ranges::find(this->outputDevices, id, &OUTPUT_DEVICE::id);
+                    if(const auto &it = Mc::ranges::find(this->outputDevices, id, &OUTPUT_DEVICE::id);
                        it != this->outputDevices.end()) {
                         desiredDev = *it;
                     }

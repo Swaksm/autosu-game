@@ -1098,7 +1098,7 @@ Slider::Slider(SLIDERCURVETYPE stype, i32 repeat, f32 pixelLength, std::span<con
     }
 
     // in time order, which is the order they are judged in (see update())
-    std::ranges::stable_sort(m_clicks, {}, &SLIDERCLICK::timeMS);
+    Mc::ranges::stable_sort(m_clicks, {}, &SLIDERCLICK::timeMS);
 
     m_durationMS = (i32)m_sliderTimeMS;
     m_durationMS = m_durationMS >= 0 ? m_durationMS : 1;  // force clamp to positive range
@@ -1669,7 +1669,7 @@ void Slider::update(i32 curPosMS, f64 /*frameTimeSecs*/) {
 
         // like osu!stable, judge at most one point per update, in order: the repeats and ticks, then the tail (even if
         // its check time comes before the last tick)
-        const auto nextClick = std::ranges::find_if(m_clicks, [](const SLIDERCLICK &click) { return !click.finished; });
+        const auto nextClick = Mc::ranges::find_if(m_clicks, [](const SLIDERCLICK &click) { return !click.finished; });
         const bool tailIsNext = nextClick == m_clicks.end();
 
         // we should only credit ticks/repeats/tails that passed after tracking began:

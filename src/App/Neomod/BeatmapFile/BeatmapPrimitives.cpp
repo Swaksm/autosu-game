@@ -2,6 +2,7 @@
 #include "BeatmapPrimitives.h"
 #include "BeatmapFile.h"
 
+#include "ContainerRanges.h"
 #include "Parsing.h"
 #include "SString.h"
 #include "SliderCurves.h"
@@ -53,7 +54,7 @@ void applyHitSample(const BeatmapFile::HitSample &sample, HITSAMPLE_BITS &sample
 
     samples.filename = 0;
     if(sample.filename.empty()) return;
-    auto it = std::ranges::find(sampleFiles, sample.filename);
+    auto it = Mc::ranges::find(sampleFiles, sample.filename);
     if(it == sampleFiles.end()) {
         if(sampleFiles.size() >= 0xffff) return;
         it = sampleFiles.emplace(sampleFiles.end(), sample.filename);
@@ -364,7 +365,7 @@ PRIMITIVE_CONTAINER loadPrimitiveObjectsFromData(std::span<const u8> fileBuffer,
         }
     }
     // (as osu!stable keeps them)
-    std::ranges::stable_sort(c.breaks, {}, &BREAK::startTime);
+    Mc::ranges::stable_sort(c.breaks, {}, &BREAK::startTime);
 
     std::array<std::optional<Color>, 8> tempColors;
     BeatmapFile::Colour colour;
@@ -531,7 +532,7 @@ PRIMITIVE_CONTAINER loadPrimitiveObjectsFromData(std::span<const u8> fileBuffer,
     // the objects as they come in time, which a file's lines don't have to follow (osu!stable and lazer sort them too;
     // equal times keep the order of their lines), and their combos in that order
     if(!inTimeOrder) {
-        std::ranges::stable_sort(
+        Mc::ranges::stable_sort(
             c.objects, {}, [](const auto &object) { return std::visit([](const auto &o) { return o.time; }, object); });
     }
     int hitobjectsWithoutSpinnerCounter = 0;

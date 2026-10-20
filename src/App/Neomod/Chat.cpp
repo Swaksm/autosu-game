@@ -12,6 +12,7 @@
 #include "CBaseUILabel.h"
 #include "CBaseUISelectableTextView.h"
 #include "CBaseUITextbox.h"
+#include "ContainerRanges.h"
 #include "Logging.h"
 #include "NetworkHandler.h"
 #include "OsuConVars.h"
@@ -682,7 +683,7 @@ void Chat::handle_command(std::string_view msg) {
             packet.write<i32>(user->user_id);
             BANCHO::Net::send_packet(packet);
 
-            auto it = std::ranges::find(BANCHO::User::friends, user->user_id);
+            auto it = Mc::ranges::find(BANCHO::User::friends, user->user_id);
             if(it != BANCHO::User::friends.end()) {
                 BANCHO::User::friends.erase(it);
             }
@@ -1132,7 +1133,7 @@ void Chat::addSystemMessage(std::string msg) {
 }
 
 void Chat::removeChannel(std::string_view channel_name) {
-    auto it = std::ranges::find(this->channels, channel_name, &ChatChannel::name);
+    auto it = Mc::ranges::find(this->channels, channel_name, &ChatChannel::name);
     if(it == this->channels.end()) return;
 
     ChatChannel *chan = *it;
@@ -1194,7 +1195,7 @@ void Chat::updateButtonLayout(vec2 screen) {
     const f32 initial_x = border;
     f32 total_x = initial_x;
 
-    std::ranges::sort(this->channels, [](ChatChannel *a, ChatChannel *b) { return a->name < b->name; });
+    Mc::ranges::sort(this->channels, [](ChatChannel *a, ChatChannel *b) { return a->name < b->name; });
 
     // Look, I really tried. But for some reason setPos() doesn't work until we change
     // the screen resolution once. So I'll just compute absolute position manually.
@@ -1297,7 +1298,7 @@ void Chat::updateUserList() {
     this->user_list->container.invalidate();  // clear scrollview container elements and rebuild
 
     // FIXME: dumb to sort this every time, can cause pop-in and jarring reshuffling in f9 menu buttons
-    std::ranges::sort(sorted_users, SString::alnum_comp, [](const UserInfo *ui) { return ui->name; });
+    Mc::ranges::sort(sorted_users, SString::alnum_comp, [](const UserInfo *ui) { return ui->name; });
 
     for(const auto *user : sorted_users) {
         if(total_x + card_size.x + MARGIN > size.x) {
@@ -1308,7 +1309,7 @@ void Chat::updateUserList() {
         UserCard2 *card = nullptr;
         // super overkill lazy hack
         if(auto old_card_it =
-               std::ranges::find_if(old_card_elems_copy, [user](const UserCard2 *card) { return card->info == user; });
+               Mc::ranges::find_if(old_card_elems_copy, [user](const UserCard2 *card) { return card->info == user; });
            old_card_it != old_card_elems_copy.end()) {
             card = *old_card_it;
 

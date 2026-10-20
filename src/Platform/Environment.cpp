@@ -4,6 +4,7 @@
 #include "Paths.h"
 
 #include "AsyncPool.h"
+#include "ContainerRanges.h"
 #include "Engine.h"
 #include "MakeDelegateWrapper.h"
 #include "Mouse.h"
@@ -1777,7 +1778,7 @@ void Environment::sdlFileDialogCallback(void *userdata, const char *const *filel
     // unfortunately, SDL says it might call the callback off of the main thread, so defer it to the main thread
     Async::queue_main([results{std::move(results)}, id = reinterpret_cast<uintptr_t>(userdata)]() {
         auto &pending = env->pendingFileDialogs;
-        const auto it = std::ranges::find(pending, static_cast<u64>(id), &PendingFileDialog::id);
+        const auto it = Mc::ranges::find(pending, static_cast<u64>(id), &PendingFileDialog::id);
         if(it == pending.end()) return;  // its Registration was reset meanwhile
         const FileDialogCallback callback = std::move(it->callback);
         pending.erase(it);

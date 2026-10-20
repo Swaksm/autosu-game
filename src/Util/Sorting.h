@@ -38,7 +38,7 @@ using boost::sort::pdqsort;
 
 template <typename Range, typename Compare = compare_iter<Range>>
 void pdqsort(Range& range, Compare comp = {}) {
-    pdqsort(std::ranges::begin(range), std::ranges::end(range), std::move(comp));
+    pdqsort(std::begin(range), std::end(range), std::move(comp));
 }
 
 #endif
@@ -48,7 +48,7 @@ using boost::sort::spinsort;
 // ranges wrappers since Boost.Sort is a bit of an old library which doesn't support them natively
 template <typename Range, typename Compare = compare_iter<Range>>
 void spinsort(Range& range, Compare comp = {}) {
-    spinsort(std::ranges::begin(range), std::ranges::end(range), std::move(comp));
+    spinsort(std::begin(range), std::end(range), std::move(comp));
 }
 
 #endif

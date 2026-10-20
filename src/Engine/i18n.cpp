@@ -6,12 +6,13 @@
 #if defined(MCENGINE_FEATURE_I18N)
 
 #include "binary_embed.h"
+#include "ContainerRanges.h"
 #include "Logging.h"
 #include "SString.h"
 #include "Thread.h"
 #include "types.h"
 
-#include <algorithm>  // std::ranges::lower_bound, std::ranges::is_sorted
+#include <algorithm>  // std::is_sorted
 #include <array>
 #include <utility>  // std::unreachable on gcc
 
@@ -111,7 +112,7 @@ void load_translation(const char* data) {
     for(u32 i = 0; i < mo->nb_strings; i++) {
         const std::string_view orig{data + origs[i].offset};
 
-        auto it = std::ranges::lower_bound(TRANSLATABLE_STRINGS, orig);
+        auto it = Mc::ranges::lower_bound(TRANSLATABLE_STRINGS, orig);
         if(it == std::end(TRANSLATABLE_STRINGS) || *it != orig) continue;
 
         const char* translation = data + trans[i].offset;
@@ -185,7 +186,7 @@ int get_plural(int n) {
 // instead of silently making _() return -1 for valid strings.
 
 // (this is moved to the .cpp to avoid redundantly running is_sorted on all strings in every compilation unit that includes it)
-static_assert(std::ranges::is_sorted(TRANSLATABLE_STRINGS),
+static_assert(std::is_sorted(std::begin(TRANSLATABLE_STRINGS), std::end(TRANSLATABLE_STRINGS)),
               "TRANSLATABLE_STRINGS must be sorted (string_index relies on binary search)");
 
 std::span<const Language> get_available_languages() { return {std::data(LANGUAGES), std::size(LANGUAGES)}; }

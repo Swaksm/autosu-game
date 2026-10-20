@@ -1,5 +1,6 @@
 // Copyright (c) 2025-2026, WH, All rights reserved.
 #include "AsyncIOHandler.h"
+#include "ContainerRanges.h"
 #include "ConVar.h"
 #include "Logging.h"
 #include "Timing.h"
@@ -32,7 +33,7 @@ struct PendingCallbacks {
     PendingCallbacks(PendingCallbacks &&) = delete;
     PendingCallbacks &operator=(PendingCallbacks &&) = delete;
     ~PendingCallbacks() {
-        assert(std::ranges::all_of(this->entries, &Entry::detached) &&
+        assert(Mc::ranges::all_of(this->entries, &Entry::detached) &&
                "an i/o callback's Registration outlived the AsyncIOHandler");
     }
 
@@ -42,7 +43,7 @@ struct PendingCallbacks {
     }
 
     void end(u64 id, Mc::Registration::End how) {
-        const auto it = std::ranges::find(this->entries, id, &Entry::id);
+        const auto it = Mc::ranges::find(this->entries, id, &Entry::id);
         if(it == this->entries.end()) return;
         if(how == Mc::Registration::End::DETACH) {
             it->detached = true;
@@ -60,7 +61,7 @@ struct PendingCallbacks {
 
     // the operation's callback, unless its Registration was reset meanwhile
     void deliver(u64 id, std::vector<u8> data, bool success) {
-        const auto it = std::ranges::find(this->entries, id, &Entry::id);
+        const auto it = Mc::ranges::find(this->entries, id, &Entry::id);
         if(it == this->entries.end()) return;
         const Entry entry = std::move(*it);
         this->entries.erase(it);

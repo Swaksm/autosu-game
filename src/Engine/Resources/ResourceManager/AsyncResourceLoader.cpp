@@ -2,6 +2,7 @@
 #include "AsyncResourceLoader.h"
 
 #include "AsyncPool.h"
+#include "ContainerRanges.h"
 #include "ConVar.h"
 #include "Engine.h"
 #include "Logging.h"
@@ -158,7 +159,7 @@ bool AsyncResourceLoader::waitForResource(Resource *resource) {
     Async::Future<void> future;
     {
         Sync::scoped_lock lock(this->m_inFlightMutex);
-        auto it = std::ranges::find(this->m_inFlight, resource, &InFlightResource::resource);
+        auto it = Mc::ranges::find(this->m_inFlight, resource, &InFlightResource::resource);
         if(it == this->m_inFlight.end()) return false;
         future = std::move(it->future);
         this->m_inFlight.erase(it);
@@ -230,5 +231,5 @@ void AsyncResourceLoader::reloadResources(const std::vector<Resource *> &resourc
 
 bool AsyncResourceLoader::isLoadingResource(const Resource *resource) const {
     Sync::scoped_lock lock(this->m_inFlightMutex);
-    return std::ranges::any_of(this->m_inFlight, [resource](const auto &e) { return e.resource == resource; });
+    return Mc::ranges::any_of(this->m_inFlight, [resource](const auto &e) { return e.resource == resource; });
 }

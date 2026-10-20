@@ -13,6 +13,7 @@
 #include "CBaseUIStyledTextbox.h"
 #include "CBaseUITabBar.h"
 #include "CBaseUITextbox.h"
+#include "ContainerRanges.h"
 #include "Engine.h"
 #include "Environment.h"
 #include "Font.h"
@@ -26,6 +27,7 @@
 
 #include "fmt/format.h"
 
+#include <algorithm>
 #include <cmath>
 #include <limits>
 #include <string>
@@ -551,7 +553,7 @@ void ToolUITest::testLists() {
     list.setActivateCallback([&](uSz row) { activated.push_back(row); });
     const auto selected = [&] {
         std::vector<u64> keys{list.getSelection().begin(), list.getSelection().end()};
-        std::ranges::sort(keys);
+        Mc::ranges::sort(keys);
         return keys;
     };
     const auto click = [&](uSz rowInView) {
@@ -599,8 +601,8 @@ void ToolUITest::testLists() {
     list.scrollTo(50);
     rows.asked.clear();
     list.draw();
-    std::ranges::sort(rows.asked);
-    rows.asked.erase(std::ranges::unique(rows.asked).begin(), rows.asked.end());
+    Mc::ranges::sort(rows.asked);
+    rows.asked.erase(std::unique(rows.asked.begin(), rows.asked.end()), rows.asked.end());
     TEST_ASSERT(rows.asked == std::vector<uSz>({46, 47, 48, 49, 50}), "only the rows in view are asked for their text");
     list.onWheel({.delta = 120, .ticks = 1}, {});
     TEST_ASSERT_EQ(list.getRowsInView().first, 43u, "the wheel scrolls by three rows");

@@ -1,6 +1,7 @@
 // Copyright (c) 2016, PG & 2025-2026 WH, All rights reserved.
 #include "OptionsOverlay.h"
 
+#include "ContainerRanges.h"
 #include "OsuConVars.h"
 
 #include "UniString.h"
@@ -3194,10 +3195,10 @@ void OptionsOverlayImpl::onSkinSelectOpened() {
             }
             if(cv::sort_skins_cleaned.getBool()) {
                 // Sort skins only by alphanum characters, ignore the others
-                std::ranges::sort(skinFolders, SString::alnum_comp);
+                Mc::ranges::sort(skinFolders, SString::alnum_comp);
             } else {
                 // more stable-like sorting (i.e. "-     Cookiezi" comes before "Cookiezi")
-                std::ranges::sort(skinFolders, SString::strcase_comp);
+                Mc::ranges::sort(skinFolders, SString::strcase_comp);
             }
             return skinFolders;
         },
@@ -3302,7 +3303,7 @@ void OptionsOverlayImpl::onResolutionSelect() {
 
     // native resolution at the end
     const ivec2 nativeResolution = env->getNativeScreenSize();
-    if(!std::ranges::contains(resolutions, nativeResolution)) resolutions.push_back(nativeResolution);
+    if(!Mc::ranges::contains(resolutions, nativeResolution)) resolutions.push_back(nativeResolution);
 
     // build context menu
     this->contextMenu->begin();
@@ -3907,7 +3908,7 @@ void OptionsOverlayImpl::onResetUpdate(ResetButton *resbtn) {
             break;
         case BINDBTN: {
             const auto binds = OsuKeyBinds::getAll();
-            if(const auto &it = std::ranges::find(binds, optelem->cvar, &OsuKeyBinds::Bind::cvar); it != binds.end()) {
+            if(const auto &it = Mc::ranges::find(binds, optelem->cvar, &OsuKeyBinds::Bind::cvar); it != binds.end()) {
                 resbtn->setEnabled(!(*it)->isDefault());
             }
             break;
@@ -3995,7 +3996,7 @@ void OptionsOverlayImpl::onResetClicked(ResetButton *resbtn) {
             break;
         case BINDBTN: {
             const auto binds = OsuKeyBinds::getAll();
-            if(const auto &it = std::ranges::find(binds, optelem->cvar, &OsuKeyBinds::Bind::cvar); it != binds.end()) {
+            if(const auto &it = Mc::ranges::find(binds, optelem->cvar, &OsuKeyBinds::Bind::cvar); it != binds.end()) {
                 (*it)->reset();
             }
         } break;
@@ -4472,7 +4473,7 @@ bool OptionsOverlayImpl::should_use_oauth_login() const {
     };
 
     const std::string server_endpoint{this->serverTextbox->getText()};
-    if(server_endpoint.empty() || !std::ranges::contains(oauth_servers, server_endpoint)) {
+    if(server_endpoint.empty() || !Mc::ranges::contains(oauth_servers, server_endpoint)) {
         return false;
     }
 

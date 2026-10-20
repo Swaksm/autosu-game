@@ -13,6 +13,7 @@
 #include "SDLGPUVertexArrayObject.h"
 #include "SDLGPUInterface.h"
 
+#include "ContainerRanges.h"
 #include "Engine.h"
 #include "Logging.h"
 
@@ -343,9 +344,8 @@ void SDLGPUVertexArrayObject::uploadPartialUpdates() {
 
     if(m_dirtyIndices.empty()) return;
 
-    std::ranges::sort(m_dirtyIndices);
-    const auto duplicates = std::ranges::unique(m_dirtyIndices);
-    m_dirtyIndices.erase(duplicates.begin(), duplicates.end());
+    Mc::ranges::sort(m_dirtyIndices);
+    m_dirtyIndices.erase(std::unique(m_dirtyIndices.begin(), m_dirtyIndices.end()), m_dirtyIndices.end());
 
     // bridging a small gap drags a few untouched vertices along with the run, which is far cheaper
     // than the extra copy command it saves

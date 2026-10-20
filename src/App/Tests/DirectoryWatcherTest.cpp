@@ -1,6 +1,7 @@
 // Copyright (c) 2026, WH, All rights reserved.
 #include "DirectoryWatcherTest.h"
 
+#include "ContainerRanges.h"
 #include "TestMacros.h"
 #include "Engine.h"
 #include "Environment.h"
@@ -65,7 +66,7 @@ Mc::Registration DirectoryWatcherTest::rearming() {
 
 size_t DirectoryWatcherTest::seen(const std::string &watch, const std::string &file) const {
     const auto it = m_seen.find(watch);
-    return it == m_seen.end() ? 0 : static_cast<size_t>(std::ranges::count(it->second, file));
+    return it == m_seen.end() ? 0 : static_cast<size_t>(Mc::ranges::count(it->second, file));
 }
 
 void DirectoryWatcherTest::update() {

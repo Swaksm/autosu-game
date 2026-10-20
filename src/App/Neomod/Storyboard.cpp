@@ -3,6 +3,7 @@
 
 #include "AnimationHandler.h"
 #include "AsyncPool.h"
+#include "ContainerRanges.h"
 #include "BeatmapFile/BeatmapFile.h"
 #include "DatabaseBeatmap.h"
 #include "Engine.h"
@@ -67,7 +68,7 @@ struct Group {
 
     void sort() {
         const auto byTime = [](auto &list) {
-            std::ranges::stable_sort(list, [](const auto &a, const auto &b) {
+            Mc::ranges::stable_sort(list, [](const auto &a, const auto &b) {
                 return a.start != b.start ? a.start < b.start : a.end < b.end;
             });
         };
@@ -153,7 +154,7 @@ struct Latest {
     f64 start{-INF};
 
     bool consider(const std::vector<Command<T>> &cmds, f64 offset, f64 time) {
-        const auto it = std::ranges::upper_bound(cmds, time - offset, {}, &Command<T>::start);
+        const auto it = Mc::ranges::upper_bound(cmds, time - offset, {}, &Command<T>::start);
         if(it == cmds.begin()) return false;
         const Command<T> &cmd = *std::prev(it);
         if(cmd.start + offset >= this->start) {
@@ -359,7 +360,7 @@ void Storyboard::Impl::parse(std::string_view file, bool isOsu,
                 const std::string_view name = SString::trimmed(line.substr(0, eq));
                 if(!name.starts_with('$')) continue;
                 std::string value{SString::trimmed(line.substr(eq + 1))};
-                if(auto it = std::ranges::find(variables, name, &std::pair<std::string, std::string>::first);
+                if(auto it = Mc::ranges::find(variables, name, &std::pair<std::string, std::string>::first);
                    it != variables.end()) {
                     it->second = std::move(value);
                 } else {
@@ -587,7 +588,7 @@ void Storyboard::Impl::finish() {
         collectAlphas(sprite.cmds.alpha, 0.0);
         for(const auto &loop : sprite.loops) collectAlphas(loop.cmds.alpha, loop.start);
         if(!alphas.empty()) {
-            const auto first = std::ranges::min_element(alphas, {}, &std::pair<f64, const Command<f32> *>::first);
+            const auto first = Mc::ranges::min_element(alphas, {}, &std::pair<f64, const Command<f32> *>::first);
             f64 firstVisible = INF;
             for(const auto &[start, cmd] : alphas) {
                 if(cmd->from > 0.f || cmd->to > 0.f) firstVisible = std::min(firstVisible, start);
@@ -599,7 +600,7 @@ void Storyboard::Impl::finish() {
         this->layers[(uSz)sprite.layer].push_back(i);
     }
 
-    std::ranges::stable_sort(this->samples, {}, &Sample::time);
+    Mc::ranges::stable_sort(this->samples, {}, &Sample::time);
     this->fired.resize(this->sprites.size());
 }
 
@@ -608,7 +609,7 @@ void Storyboard::Impl::resolveFiles(std::string_view skinFolder) {
 
     const auto resolve = [&files](std::string_view path) -> std::string {
         if(path.empty() || path.starts_with('/') ||
-           std::ranges::any_of(SString::split(path, '/'), [](std::string_view part) { return part == ".."; })) {
+           Mc::ranges::any_of(SString::split(path, '/'), [](std::string_view part) { return part == ".."; })) {
             return {};
         }
         if(const auto it = files.find(path); it != files.end()) return it->second;
@@ -861,11 +862,11 @@ std::string Storyboard::findOsbFile(std::string_view folder, std::string_view ar
     }
     if(osbs.empty()) return {};
     const std::string expected = fmt::format("{} - {} ({}).osb", artist, title, creator);
-    if(const auto it = std::ranges::find_if(osbs, [&](const auto &f) { return SString::strcase_equal(f, expected); });
+    if(const auto it = Mc::ranges::find_if(osbs, [&](const auto &f) { return SString::strcase_equal(f, expected); });
        it != osbs.end()) {
         return *it;
     }
-    return std::ranges::min(osbs);
+    return *Mc::ranges::min_element(osbs);
 }
 
 bool Storyboard::isEmpty() const { return this->impl->sprites.empty() && this->impl->samples.empty(); }
@@ -875,8 +876,8 @@ uSz Storyboard::getNumSprites() const { return this->impl->sprites.size(); }
 bool Storyboard::replacesBackground() const {
     const auto &bg = this->impl->backgroundFile;
     if(bg.empty()) return false;
-    return std::ranges::any_of(this->impl->layers[(uSz)Layer::BACKGROUND],
-                               [&](u32 i) { return SString::strcase_equal(this->impl->sprites[i].path, bg); });
+    return Mc::ranges::any_of(this->impl->layers[(uSz)Layer::BACKGROUND],
+                              [&](u32 i) { return SString::strcase_equal(this->impl->sprites[i].path, bg); });
 }
 
 std::optional<Storyboard::SpriteState> Storyboard::getSpriteState(uSz sprite, f64 time) const {
@@ -921,7 +922,7 @@ void Storyboard::load(bool visualsOnly) {
     // and do a bunch of parsing when they can just look at the most used hash
     // on the leaderboard.
     std::vector<std::pair<std::string, std::string>> used = std::move(sb.used);
-    std::ranges::sort(used);
+    Mc::ranges::sort(used);
     used.erase(std::unique(used.begin(), used.end()), used.end());
     sb.hashing = Async::submit(
         [folder = sb.folder, used = std::move(used), osb = sb.hasOsb ? std::optional{sb.osbHash} : std::nullopt]() {
@@ -936,10 +937,10 @@ void Storyboard::load(bool visualsOnly) {
 
 bool Storyboard::isReady() const {
     if(this->impl->hashing && !this->impl->hashing->is_ready()) return false;
-    return std::ranges::none_of(this->impl->images,
-                                [](const Image *i) { return i && resourceManager->isLoadingResource(i); }) &&
-           std::ranges::none_of(this->impl->sounds,
-                                [](const Sound *s) { return s && resourceManager->isLoadingResource(s); });
+    return Mc::ranges::none_of(this->impl->images,
+                               [](const Image *i) { return i && resourceManager->isLoadingResource(i); }) &&
+           Mc::ranges::none_of(this->impl->sounds,
+                               [](const Sound *s) { return s && resourceManager->isLoadingResource(s); });
 }
 
 MD5Hash Storyboard::getHash() {
@@ -961,7 +962,7 @@ void Storyboard::update(f64 time, bool passing, bool seeked) {
         for(auto &fired : sb.fired) fired.clear();
     } else if(time > sb.time) {
         for(auto it = sb.sounds.empty() ? sb.samples.end()
-                                        : std::ranges::upper_bound(sb.samples, sb.time, {}, &Sample::time);
+                                        : Mc::ranges::upper_bound(sb.samples, sb.time, {}, &Sample::time);
             it != sb.samples.end() && it->time <= time; ++it) {
             if((it->layer == Layer::FAIL && passing) || (it->layer == Layer::PASS && !passing)) continue;
             if(Sound *sound = sb.sounds[it->sound]; sound && sound->isReady()) {

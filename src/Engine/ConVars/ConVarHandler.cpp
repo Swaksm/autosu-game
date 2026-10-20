@@ -1,5 +1,6 @@
 // Copyright (c) 2011, PG & 2025, WH & 2025, kiwec, All rights reserved.
 #include "ConVarHandler.h"
+#include "ContainerRanges.h"
 #include "ConVar.h"
 #include "Console.h"
 
@@ -70,7 +71,7 @@ void ConVarHandler::remove(ConVar &cvar) {
     assert(this->iChangeDepth == 0 && this->iNotifyDepth == 0 && "a convar can't go away during a change");
 
     // (searched from the back: at exit, the statics go in the reverse order of their registration)
-    if(const auto it = std::ranges::find(this->vConVarArray.rbegin(), this->vConVarArray.rend(), &cvar);
+    if(const auto it = std::find(this->vConVarArray.rbegin(), this->vConVarArray.rend(), &cvar);
        it != this->vConVarArray.rend()) {
         this->vConVarArray.erase(std::next(it).base());
     }
@@ -166,7 +167,7 @@ bool ConVarHandler::remember(ConVar &cvar, bool callbacks) {
     if(this->iChangeDepth == 0) return false;
 
     // (callbacks run if anything that happened to the convar wanted them to)
-    if(const auto it = std::ranges::find(this->vPending, &cvar, &PendingChange::cvar); it != this->vPending.end()) {
+    if(const auto it = Mc::ranges::find(this->vPending, &cvar, &PendingChange::cvar); it != this->vPending.end()) {
         it->callbacks |= callbacks;
     } else {
         this->vPending.push_back({.cvar = &cvar, .old = *cvar.effectiveValue, .callbacks = callbacks});
@@ -237,7 +238,7 @@ std::vector<CvarSetResult> ConVarHandler::setLayer(CvarEditor editor,
         }
 
         for(auto *cv : this->vConVarArray) {
-            if(cv->layer(editor) && !std::ranges::contains(kept, cv)) cv->clearValue(editor);
+            if(cv->layer(editor) && !Mc::ranges::contains(kept, cv)) cv->clearValue(editor);
         }
     });
 
@@ -277,7 +278,7 @@ void ConVarHandler::ConVarBuiltins::find(std::string_view args) {
     }
 
     if(matchingConVars.size() > 0) {
-        std::ranges::sort(matchingConVars, {}, &ConVar::getName);
+        Mc::ranges::sort(matchingConVars, {}, &ConVar::getName);
     }
 
     if(matchingConVars.size() < 1) {
@@ -353,7 +354,7 @@ void ConVarHandler::ConVarBuiltins::listcommands(void) {
     logRaw("----------------------------------------------");
     {
         std::vector<ConVar *> convars = cvars().getConVarArray();
-        std::ranges::sort(convars, {}, &ConVar::getName);
+        Mc::ranges::sort(convars, {}, &ConVar::getName);
 
         for(auto &convar : convars) {
             if(convar->isFlagSet(cv::HIDDEN)) continue;
@@ -389,7 +390,7 @@ void ConVarHandler::ConVarBuiltins::dumpcommands(void) {
     std::string html_template{ALL_BINMAP.at("convar_template")};
 
     std::vector<ConVar *> convars = cvars().getConVarArray();
-    std::ranges::sort(convars, {}, &ConVar::getName);
+    Mc::ranges::sort(convars, {}, &ConVar::getName);
 
     std::string html = R"(<section class="variables">)";
     for(auto var : convars) {

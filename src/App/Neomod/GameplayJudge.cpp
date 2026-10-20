@@ -5,6 +5,7 @@
 #include <limits>
 
 #include "Bancho.h"
+#include "ContainerRanges.h"
 #include "DatabaseBeatmap.h"
 #include "GameRules.h"
 #include "HitObjects.h"
@@ -74,7 +75,7 @@ Primitives::LoadError GameplayJudge::load() {
     for(const auto &unq : this->hitobjects) {
         this->hitobjectsSortedByEndTime.push_back(unq.get());
     }
-    std::ranges::stable_sort(this->hitobjectsSortedByEndTime, {}, &HitObject::getEndTime);
+    Mc::ranges::stable_sort(this->hitobjectsSortedByEndTime, {}, &HitObject::getEndTime);
 
     // after the hitobjects have been loaded we can calculate the stacks
     this->calculateStacks();

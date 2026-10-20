@@ -2,6 +2,7 @@
 #include "CBaseUIPopupLayer.h"
 
 #include "CBaseUIDispatch.h"
+#include "ContainerRanges.h"
 #include "Engine.h"
 #include "KeyBindings.h"
 #include "KeyboardEvent.h"
@@ -39,7 +40,7 @@ u32 CBaseUIPopupLayer::open(CBaseUIElement *popup, vec2 pos, const McRect &passT
 }
 
 void CBaseUIPopupLayer::close(u32 id) {
-    const auto it = std::ranges::find(this->popups, id, &Popup::id);
+    const auto it = Mc::ranges::find(this->popups, id, &Popup::id);
     if(it == this->popups.end()) return;
 
     const uSz from = it - this->popups.begin();
@@ -59,7 +60,7 @@ void CBaseUIPopupLayer::closeAll() {
     if(!this->popups.empty()) this->close(this->popups.front().id);
 }
 
-bool CBaseUIPopupLayer::isOpen(u32 id) const { return std::ranges::contains(this->popups, id, &Popup::id); }
+bool CBaseUIPopupLayer::isOpen(u32 id) const { return Mc::ranges::contains(this->popups, id, &Popup::id); }
 
 void CBaseUIPopupLayer::tick() {
     for(CBaseUIElement *popup : this->closed) delete popup;
@@ -70,7 +71,7 @@ void CBaseUIPopupLayer::tick() {
 void CBaseUIPopupLayer::updateInput(CBaseUIEventCtx &c) {
     const vec2 cursor = mouse->getPos();
     this->bClickThroughSelf =
-        std::ranges::any_of(this->popups, [&cursor](const Popup &p) { return p.passThrough.contains(cursor); });
+        Mc::ranges::any_of(this->popups, [&cursor](const Popup &p) { return p.passThrough.contains(cursor); });
     CBaseUIContainer::updateInput(c);
 }
 

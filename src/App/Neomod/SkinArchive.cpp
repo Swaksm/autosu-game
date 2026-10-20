@@ -3,6 +3,7 @@
 
 #include "Archival.h"
 #include "AsyncPool.h"
+#include "ContainerRanges.h"
 #include "ConVar.h"
 #include "Environment.h"
 #include "File.h"
@@ -77,7 +78,7 @@ std::string element_key(std::string_view path) {
     const size_t dot = key.rfind('.');
     if(dot == std::string::npos || key.find('/', dot) != std::string::npos) return key;
 
-    if(std::ranges::contains(Skin::SOUND_EXTENSIONS, std::string_view{key}.substr(dot))) {
+    if(Mc::ranges::contains(Skin::SOUND_EXTENSIONS, std::string_view{key}.substr(dot))) {
         key.replace(dot, std::string::npos, ".<sound>");
     } else if(std::string_view{key}.substr(0, dot).ends_with("@2x")) {
         key.erase(dot - 3, 3);
@@ -119,8 +120,9 @@ std::string folder_name(std::string dir) {
 
 // one that works on every system, and that makes a skin folder that can be picked (unlike one called "default")
 std::string file_name(std::string name) {
-    std::ranges::replace_if(
-        name, [](char c) -> bool { return (static_cast<u8>(c) < 0x20) || R"(<>:"/\|?*)"sv.contains(c); }, '_');
+    std::replace_if(
+        name.begin(), name.end(),
+        [](char c) -> bool { return (static_cast<u8>(c) < 0x20) || R"(<>:"/\|?*)"sv.contains(c); }, '_');
     if(name.starts_with('.')) name[0] = '_';
     if(SString::to_lower(name) == "default") name = PACKAGE_NAME " default";
     return name;
@@ -141,7 +143,7 @@ ExportResult run(const Job &job) {
 
     std::vector<Source> sources;
     const auto source_of = [&](const std::string &dir) -> size_t {
-        if(const auto it = std::ranges::find(sources, dir, &Source::dir); it != sources.end()) {
+        if(const auto it = Mc::ranges::find(sources, dir, &Source::dir); it != sources.end()) {
             return it - sources.begin();
         }
         if(dir == job.default_dir) {
@@ -173,7 +175,7 @@ ExportResult run(const Job &job) {
         const size_t own = source_of(job.skin_dir);
         std::vector<std::string> files;
         list_files(job.skin_dir, "", 0, files, skipped);
-        std::ranges::sort(files);
+        Mc::ranges::sort(files);
         for(auto &path : files) {
             if(SString::to_lower(path) == SString::to_lower(LOG_NAME)) {
                 skipped.push_back(fmt::format("{} (log of an earlier export)", path));
@@ -195,7 +197,7 @@ ExportResult run(const Job &job) {
         for(const auto &[dir, path, name] : job.resolved) {
             found.push_back({.name = name, .disk_path = path, .source = source_of(dir)});
         }
-        std::ranges::stable_sort(found, {}, [&sources](const Entry &e) { return sources[e.source].tier; });
+        Mc::ranges::stable_sort(found, {}, [&sources](const Entry &e) { return sources[e.source].tier; });
 
         for(auto &file : found) {
             const std::string key = element_key(file.name);
@@ -216,9 +218,8 @@ ExportResult run(const Job &job) {
             }
         }
 
-        std::ranges::sort(left_to_default);
-        const auto [first, last] = std::ranges::unique(left_to_default);
-        left_to_default.erase(first, last);
+        Mc::ranges::sort(left_to_default);
+        left_to_default.erase(std::unique(left_to_default.begin(), left_to_default.end()), left_to_default.end());
     }
 
     Archive::Writer ar(ARCHIVE_CHARSET);
@@ -236,7 +237,7 @@ ExportResult run(const Job &job) {
     if(name.empty() && job.mixed) {
         name = fmt::format("random mix {:%F %H-%M-%S}", fmt::gmtime(now));
     } else if(name.empty()) {
-        const bool filled_in = std::ranges::any_of(
+        const bool filled_in = Mc::ranges::any_of(
             sources, [](const Source &source) { return source.tier == Tier::Fallback && !source.packed.empty(); });
         name = filled_in ? fmt::format("{} + {}", job.skin_name, job.fallback_name) : job.skin_name;
     }
@@ -246,7 +247,7 @@ ExportResult run(const Job &job) {
     {
         std::string log = fmt::format("{} skin export\n\n", PACKAGE_NAME);
         if(job.mixed) {
-            const auto skins = std::ranges::count_if(
+            const auto skins = Mc::ranges::count_if(
                 sources, [](const Source &source) { return source.tier != Tier::Default && !source.packed.empty(); });
             log += fmt::format("skin: a mix of random elements from {} skins (skin_random_elements)\n", skins);
         } else {
@@ -398,7 +399,7 @@ bool unpack(std::string_view osk_path, std::string_view skins_dir) {
 
         const auto folders = SString::split(filename, '/');
         // security check: skip files with path traversal attempts
-        if(std::ranges::contains(folders, ".."sv)) continue;
+        if(Mc::ranges::contains(folders, ".."sv)) continue;
 
         std::string file_path = skin_root;
         for(const auto &folder : folders) {

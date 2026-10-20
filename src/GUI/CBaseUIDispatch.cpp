@@ -2,6 +2,7 @@
 #include "CBaseUIDispatch.h"
 
 #include "CBaseUIElement.h"
+#include "ContainerRanges.h"
 #include "Engine.h"
 #include "Environment.h"
 #include "Mouse.h"
@@ -214,7 +215,7 @@ bool State::stealCapture(CBaseUIElement *thief) {
     if(this->captor == nullptr || this->captorLocked) return false;
     if(this->captor == thief) return true;
 
-    const auto thiefIt = std::ranges::find(this->capturePath, thief);
+    const auto thiefIt = Mc::ranges::find(this->capturePath, thief);
     if(thiefIt == this->capturePath.end()) return false;  // only observing ancestors may steal
 
     // detach the in-between ancestors before any handler runs (they may mutate the path);
@@ -270,7 +271,7 @@ void State::observeCapturedFrame() {
     const std::vector<CBaseUIElement *> path = this->capturePath;
     for(auto it = path.rbegin(); it != path.rend(); ++it) {
         if(this->captor == nullptr || this->elemGeneration != observeGeneration) break;
-        if(std::ranges::find(this->capturePath, *it) == this->capturePath.end()) continue;
+        if(Mc::ranges::find(this->capturePath, *it) == this->capturePath.end()) continue;
         (*it)->onCapturedMoveThrough();
     }
 }
@@ -322,7 +323,7 @@ void State::resolveHover(CBaseUIEventCtx &c, Root root) {
     for(const auto &cand : c.hitCandidates) {
         if(cand.wheelOnly) continue;
         CBaseUIElement *e = cand.elem;
-        const bool want = std::ranges::find(set, e) != set.end();
+        const bool want = Mc::ranges::find(set, e) != set.end();
         if(want && !e->bMouseInside) {
             e->bMouseInside = true;
             UI_TRACE_EVENT(0, e, "hoverIn");
@@ -419,7 +420,7 @@ void State::dispatchEvents(CBaseUIEventCtx &c, Root root) {
                 std::vector<uSz> order;
                 order.reserve(end - begin);
                 for(uSz i = begin; i < end; ++i) order.push_back(i);
-                std::ranges::sort(order, [&c](uSz a, uSz b) {
+                Mc::ranges::sort(order, [&c](uSz a, uSz b) {
                     return c.hitCandidates[a].tier != c.hitCandidates[b].tier
                                ? c.hitCandidates[a].tier > c.hitCandidates[b].tier
                                : a > b;

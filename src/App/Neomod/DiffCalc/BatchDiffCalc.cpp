@@ -312,7 +312,7 @@ void build_work_queue(const Sync::stop_token& stoken) {
     }
 
     // put maps with scores associated with them first, so scores are recalculated early instead of spread across all maps
-    std::ranges::sort(work_queue, std::ranges::less{}, [](const auto& work) { return work.scores.empty(); });
+    Mc::ranges::sort(work_queue, {}, [](const auto& work) { return work.scores.empty(); });
 }
 
 // star ratings for every precalculated mod combination, length, object counts and BPM of one difficulty
@@ -631,7 +631,7 @@ void internal::flush_score_results(std::span<const ScoreResult> pending) {
 
         auto& scorevec = it->second;
 
-        if(const auto& scoreIt = std::ranges::find(scorevec, res.score); scoreIt != scorevec.end()) {
+        if(const auto& scoreIt = Mc::ranges::find(scorevec, res.score); scoreIt != scorevec.end()) {
             scoreIt->ppv2_version = DiffCalc::PP_ALGORITHM_VERSION;
             scoreIt->ppv2_score = res.pp;
             scoreIt->ppv2_total_stars = res.total_stars;

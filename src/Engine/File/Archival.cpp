@@ -289,8 +289,7 @@ bool Archive::Reader::moveNext() {
 Archive::Entry* Archive::Reader::findEntry(std::string_view filename) {
     auto entries = getAllEntries();
 
-    auto it =
-        std::ranges::find_if(entries, [&filename](const Entry& entry) { return entry.getFilename() == filename; });
+    auto it = Mc::ranges::find_if(entries, [&filename](const Entry& entry) { return entry.getFilename() == filename; });
 
     if(it != entries.end()) {
         // note: this returns a pointer to a temporary object
@@ -331,7 +330,7 @@ bool Archive::Reader::extractAll(std::string_view outputDir, const std::vector<s
             std::string dirPath = fmt::format("{}/{}", outputDir, dir.getFilename());
 
             // check ignore list
-            bool shouldIgnore = std::ranges::any_of(ignorePaths, [&dirPath](std::string_view ignorePath) {
+            bool shouldIgnore = Mc::ranges::any_of(ignorePaths, [&dirPath](std::string_view ignorePath) {
                 return dirPath.find(ignorePath) != std::string::npos;
             });
 
@@ -356,7 +355,7 @@ bool Archive::Reader::extractAll(std::string_view outputDir, const std::vector<s
         std::string filePath = fmt::format("{}/{}", outputDir, file.getFilename());
 
         // check ignore list
-        bool shouldIgnore = std::ranges::any_of(ignorePaths, [&filePath](std::string_view ignorePath) {
+        bool shouldIgnore = Mc::ranges::any_of(ignorePaths, [&filePath](std::string_view ignorePath) {
             return filePath.find(ignorePath) != std::string::npos;
         });
 
