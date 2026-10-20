@@ -35,9 +35,9 @@ class VolumeOverlay final : public UIScreen {
     void volumeDown(int multiplier = 1) { this->onVolumeChange(-multiplier); }
     void onVolumeChange(int multiplier);
     void onMasterVolumeChange(float newValue);
-    void onEffectVolumeChange();
+    void onEffectVolumeChange(float oldValue, float newValue);
     void updateEffectVolume(Skin* skin);
-    void onMusicVolumeChange();
+    void onMusicVolumeChange(float oldValue, float newValue);
 
     AnimFloat fLastVolume;
     float fVolumeChangeTime;

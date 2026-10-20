@@ -15,6 +15,9 @@
 #include "Parsing.h"
 #include "Logging.h"
 
+#include <algorithm>
+#include <optional>
+
 #ifdef MCENGINE_PLATFORM_WINDOWS
 #include "WinDebloatDefs.h"
 
@@ -338,6 +341,7 @@ bool import_from_osu_stable() {
     std::string str;
     bool b;
     f32 flt;
+    std::optional<f32> volumeEffects, volumeMusic;
 
     for(auto line = file.readLine(); !line.empty() || file.canRead(); line = file.readLine()) {
         if(line.empty()) continue;
@@ -346,9 +350,9 @@ bool import_from_osu_stable() {
         } else if(Parsing::parse(line, "VolumeUniversal", '=', &flt))
             cv::volume_master.setValue(std::clamp<float>(flt / 100.f, 0.1f, 1.f));
         else if(Parsing::parse(line, "VolumeEffect", '=', &flt))
-            cv::volume_effects.setValue(flt / 100.f);
+            volumeEffects = flt;
         else if(Parsing::parse(line, "VolumeMusic", '=', &flt))
-            cv::volume_music.setValue(std::clamp<float>(flt / 100.f, 0.1f, 1.f));
+            volumeMusic = flt;
         else if(Parsing::parse(line, "AllowPublicInvites", '=', &b))
             cv::allow_mp_invites.setValue(b);
         else if(Parsing::parse(line, "AutoChatHide", '=', &b))
@@ -511,6 +515,16 @@ bool import_from_osu_stable() {
             try_set_key(str, binds::MOD_AUTO);
         else if(Parsing::parse(line, "keyScoreV2", '=', &str))
             try_set_key(str, binds::MOD_SCOREV2);
+    }
+
+    // music and effects volume add up to 1 here, so only the balance between them carries over
+    if(volumeEffects || volumeMusic) {
+        const f32 effects = std::max(volumeEffects.value_or(80.f), 0.f);
+        const f32 music = std::max(volumeMusic.value_or(80.f), 0.f);
+        if(effects + music > 0.f) {
+            cv::volume_music.setValue(music / (effects + music));
+            cv::volume_effects.setValue(effects / (effects + music));
+        }
     }
 
     return true;

@@ -403,6 +403,7 @@ void AboutScreen::buildChangelog() {
         R"(- Added nightcore beats (only plays if your skin has them))",
         R"(- Chat usernames and F9 user cards now highlight on hover)",
         R"(- The seeking timeline now shows where 100s, 50s and misses happened)",
+        R"(- Music and effects volume are now linked and always add up to 100%)",
         R"(- Fixed followpoint animation being half invisible)",
         R"(- Fixed skins opened with neomod not getting selected)",
         R"(- Fixed skins being listed twice when they're in both the neomod and osu! skins folders)",
