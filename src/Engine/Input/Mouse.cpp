@@ -123,8 +123,8 @@ void Mouse::update() {
         this->lastAbsolutePos.reset();
         rawDelta = rel;
         if(isRaw) {
-            // only relative input (raw) can have sensitivity
-            newPos += rel * (double)this->fSensitivity;
+            // only relative input (raw) can have sensitivity, and it moves in app pixels
+            newPos += rel * (double)this->fSensitivity / dvec2{this->vAppScale};
         } else {
             newPos = abs;
         }
@@ -167,11 +167,12 @@ void Mouse::update() {
 
     // the os cursor state this frame calls for, the only place it changes
     const McRect viewport = this->getAppViewport();
+    const vec2 pos{this->vPosWithoutOffsets};
     env->applyCursorState({
         .confineRect = viewport,
-        .pos = vec2{this->vPosWithoutOffsets},
-        .visible =
-            this->bOSCursorRequired || !this->bAppCursorHidden || !viewport.contains(vec2{this->vPosWithoutOffsets}),
+        .pos = pos,
+        .visible = this->bOSCursorRequired || !viewport.contains(pos) ||
+                   (!this->bAppCursorHidden && env->canShowCursorAt(pos)),
         .confined = this->isCursorConfined(),
         .raw = this->bIsRawInputDesired || this->bRawInputOverride,
     });
@@ -184,7 +185,7 @@ void Mouse::onPosChange(dvec2 pos) {
 
 void Mouse::applyPos(dvec2 pos) {
     this->vPosWithoutOffsets = pos;
-    this->vPos = vec2{pos} - this->appViewport.getMin();
+    this->vPos = (vec2{pos} - this->appViewport.getMin()) * this->vAppScale;
 }
 
 void Mouse::onWheelVertical(WheelDelta wheel) {
@@ -229,11 +230,12 @@ void Mouse::onButtonChange_internal(ButtonEvent &ev) {
     }
 }
 
-void Mouse::setPos(vec2 newPos) { this->applyPos(dvec2{newPos + this->appViewport.getMin()}); }
+void Mouse::setPos(vec2 newPos) { this->applyPos(dvec2{newPos / this->vAppScale + this->appViewport.getMin()}); }
 
-void Mouse::setAppViewport(const McRect &viewport) {
+void Mouse::setAppViewport(const McRect &viewport, vec2 appSize) {
     this->appViewport = viewport;
-    this->vPos = vec2{this->vPosWithoutOffsets} - viewport.getMin();
+    this->vAppScale = (appSize == vec2{} || viewport.getSize() == vec2{}) ? vec2{1.f} : appSize / viewport.getSize();
+    this->applyPos(this->vPosWithoutOffsets);
 }
 
 McRect Mouse::getAppViewport() const {

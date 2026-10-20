@@ -1046,6 +1046,8 @@ OptionsOverlayImpl::OptionsOverlayImpl(OptionsOverlay *parent) : parent(parent) 
     this->resolutionSelectButton = (CBaseUIButton *)resolutionSelect->baseElems[0].get();
     this->resolutionSelectButton->setClickCallback(SA::MakeDelegate<&OptionsOverlayImpl::onResolutionSelect>(this));
     this->resolutionLabel = (CBaseUILabel *)resolutionSelect->baseElems[1].get();
+    // browser fullscreen is sized by the browser
+    if constexpr(Env::cfg(OS::WASM)) resolutionSelect->render_condition = {[]() { return !cv::fullscreen.getBool(); }};
     this->fullscreenCheckbox = this->addCheckbox(_("Fullscreen"), &cv::fullscreen);
     this->fullscreenCheckbox->setChangeCallback(SA::MakeDelegate<&OptionsOverlayImpl::onFullscreenChange>(this));
     {
@@ -1055,25 +1057,29 @@ OptionsOverlayImpl::OptionsOverlayImpl(OptionsOverlay *parent) : parent(parent) 
         minimizeOnAltTabCbx->setChangeCallback(
             SA::MakeDelegate<&OptionsOverlayImpl::onCheckboxChangeWithLayoutUpdate>(this));
     }
-    this->addCheckbox(_("Keep Aspect Ratio"),
-                      _("Black borders instead of a stretched image.\nOnly relevant if fullscreen is enabled, and "
-                        "letterboxing is disabled.\nUse the two position sliders below to move the viewport around."),
-                      &cv::resolution_keep_aspect_ratio);
-    this->addCheckbox(
-        _("Letterboxing"),
-        _("Useful to get the low latency of fullscreen with a smaller game resolution.\nUse the two position "
-          "sliders below to move the viewport around."),
-        &cv::letterboxing);
-    this->letterboxingOffsetXSlider =
-        this->addSlider(_("Horizontal position"), -1.0f, 1.0f, &cv::letterboxing_offset_x, 170)
-            ->setChangeCallback(SA::MakeDelegate<&OptionsOverlayImpl::onSliderChangeLetterboxingOffset>(this))
-            ->setKeyDelta(0.01f)
-            ->setAnimated(false);
-    this->letterboxingOffsetYSlider =
-        this->addSlider(_("Vertical position"), -1.0f, 1.0f, &cv::letterboxing_offset_y, 170)
-            ->setChangeCallback(SA::MakeDelegate<&OptionsOverlayImpl::onSliderChangeLetterboxingOffset>(this))
-            ->setKeyDelta(0.01f)
-            ->setAnimated(false);
+    // the internal resolution always matches the window in browsers, nothing to letterbox or stretch
+    if constexpr(!Env::cfg(OS::WASM)) {
+        this->addCheckbox(
+            _("Keep Aspect Ratio"),
+            _("Black borders instead of a stretched image.\nOnly relevant if fullscreen is enabled, and "
+              "letterboxing is disabled.\nUse the two position sliders below to move the viewport around."),
+            &cv::resolution_keep_aspect_ratio);
+        this->addCheckbox(
+            _("Letterboxing"),
+            _("Useful to get the low latency of fullscreen with a smaller game resolution.\nUse the two position "
+              "sliders below to move the viewport around."),
+            &cv::letterboxing);
+        this->letterboxingOffsetXSlider =
+            this->addSlider(_("Horizontal position"), -1.0f, 1.0f, &cv::letterboxing_offset_x, 170)
+                ->setChangeCallback(SA::MakeDelegate<&OptionsOverlayImpl::onSliderChangeLetterboxingOffset>(this))
+                ->setKeyDelta(0.01f)
+                ->setAnimated(false);
+        this->letterboxingOffsetYSlider =
+            this->addSlider(_("Vertical position"), -1.0f, 1.0f, &cv::letterboxing_offset_y, 170)
+                ->setChangeCallback(SA::MakeDelegate<&OptionsOverlayImpl::onSliderChangeLetterboxingOffset>(this))
+                ->setKeyDelta(0.01f)
+                ->setAnimated(false);
+    }
 
     // TRANSLATORS: Global UI scale, to make text bigger on big screens
     this->addSubSection(_("UI Scaling"));

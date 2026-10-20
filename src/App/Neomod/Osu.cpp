@@ -177,8 +177,9 @@ Osu::Osu()
     cv::ui_scale.setCallback(SA::MakeDelegate<&Osu::onUIScaleChange>(this));
     cv::ui_scale_to_dpi.setCallback(SA::MakeDelegate<&Osu::onUIScaleToDPIChange>(this));
     cv::letterboxing.setCallback(SA::MakeDelegate<&Osu::onLetterboxingChange>(this));
-    cv::letterboxing_offset_x.setCallback(SA::MakeDelegate<&Osu::onLetterboxingOffsetChange>(this));
-    cv::letterboxing_offset_y.setCallback(SA::MakeDelegate<&Osu::onLetterboxingOffsetChange>(this));
+    cv::letterboxing_offset_x.setCallback(SA::MakeDelegate<&Osu::updateMouseViewport>(this));
+    cv::letterboxing_offset_y.setCallback(SA::MakeDelegate<&Osu::updateMouseViewport>(this));
+    cv::resolution_keep_aspect_ratio.setCallback(SA::MakeDelegate<&Osu::updateMouseViewport>(this));
     cv::confine_cursor_windowed.setCallback(SA::MakeDelegate<&Osu::updateConfineCursor>(this));
     cv::confine_cursor_fullscreen.setCallback(SA::MakeDelegate<&Osu::updateConfineCursor>(this));
     cv::confine_cursor_never.setCallback(SA::MakeDelegate<&Osu::updateConfineCursor>(this));
@@ -518,6 +519,7 @@ Osu::~Osu() {
         cv::letterboxing.removeAllCallbacks();
         cv::letterboxing_offset_x.removeAllCallbacks();
         cv::letterboxing_offset_y.removeAllCallbacks();
+        cv::resolution_keep_aspect_ratio.removeAllCallbacks();
         cv::confine_cursor_windowed.removeAllCallbacks();
         cv::confine_cursor_fullscreen.removeAllCallbacks();
         cv::confine_cursor_never.removeAllCallbacks();
@@ -1525,8 +1527,9 @@ void Osu::doResolutionChange(vec2 newResolution, ResolutionRequestFlags src) {
     const bool fs_letterboxed = fs && cv::letterboxing.getBool();
 
     // ignore engine resolution size request and find it from cvars, if we are in fullscreen/letterboxed
-    const bool res_from_cvars =
-        (fs || fs_letterboxed) && (src & (R_ENGINE | R_CV_LETTERBOXING | R_CV_RESOLUTION | R_CV_LETTERBOXED_RES));
+    // (not in browsers: their fullscreen is just the viewport, which the browser sizes)
+    const bool res_from_cvars = !Env::cfg(OS::WASM) && (fs || fs_letterboxed) &&
+                                (src & (R_ENGINE | R_CV_LETTERBOXING | R_CV_RESOLUTION | R_CV_LETTERBOXED_RES));
 
     if(res_from_cvars) {
         const std::string &res_cv_str =
@@ -1650,15 +1653,25 @@ void Osu::reloadFonts() {
     }
 }
 
-void Osu::updateMouseViewport() {
-    // the window rect the internal resolution is drawn into (see the letterboxed backbuffer draw in UI::draw)
-    McRect viewport{vec2{}, this->getVirtScreenSize()};
-    if((g->getResolution() != this->getVirtScreenSize()) && cv::letterboxing.getBool()) {
-        viewport.setPos((engine->getScreenSize() - this->getVirtScreenSize()) / 2.f *
-                        vec2{1.0f + cv::letterboxing_offset_x.getFloat(), 1.0f + cv::letterboxing_offset_y.getFloat()});
-    }
+McRect Osu::getVirtScreenViewport() const {
+    const vec2 res = g->getResolution();
+    const vec2 virt = this->getVirtScreenSize();
+    if(res == virt) return {vec2{}, virt};
 
-    mouse->setAppViewport(viewport);
+    const vec2 offsetScale{1.0f + cv::letterboxing_offset_x.getFloat(), 1.0f + cv::letterboxing_offset_y.getFloat()};
+    McRect viewport{vec2{}, res};
+    if(cv::letterboxing.getBool()) {
+        viewport = {(res - virt) / 2.f * offsetScale, virt};
+    } else if(cv::resolution_keep_aspect_ratio.getBool()) {
+        const vec2 size = virt * getRectScaleToFitResolution(virt, res);
+        viewport = {vec::max(res / 2.f - size / 2.f, vec2{0.f}) * offsetScale, size};
+    }
+    return {vec2{ivec2{viewport.getMin()}}, vec2{ivec2{viewport.getSize()}}};
+}
+
+void Osu::updateMouseViewport() {
+    const McRect viewport = this->getVirtScreenViewport();
+    mouse->setAppViewport(viewport, this->getVirtScreenSize());
     logIf(cv::debug_mouse.getBool() || cv::debug_osu.getBool(), "viewport {}", viewport);
 }
 
@@ -2068,8 +2081,6 @@ void Osu::onGameplayKey(GameplayKeys key_flag, bool down, u64 timestamp, bool fr
         }
     }
 }
-
-void Osu::onLetterboxingOffsetChange() { this->updateMouseViewport(); }
 
 void Osu::onUserCardChange(std::string_view new_username) {
     // NOTE: force update options textbox to avoid shutdown inconsistency

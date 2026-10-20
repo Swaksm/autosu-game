@@ -332,26 +332,10 @@ void UI::draw() {
         // draw a scaled version from the buffer to the screen
         osu->backBuffer->disable();
 
-        const vec2 offset{vec2{g->getResolution() - osu->getVirtScreenSize()} * 0.5f};
+        const McRect viewport = osu->getVirtScreenViewport();
         g->setBlending(false);
-        if(cv::letterboxing.getBool()) {
-            osu->backBuffer->draw(offset.x * (1.0f + cv::letterboxing_offset_x.getFloat()),
-                                  offset.y * (1.0f + cv::letterboxing_offset_y.getFloat()), osu->getVirtScreenWidth(),
-                                  osu->getVirtScreenHeight());
-        } else {
-            if(cv::resolution_keep_aspect_ratio.getBool()) {
-                const float scale = Osu::getRectScaleToFitResolution(osu->backBuffer->getSize(), g->getResolution());
-                const float scaledWidth = osu->backBuffer->getWidth() * scale;
-                const float scaledHeight = osu->backBuffer->getHeight() * scale;
-                osu->backBuffer->draw(std::max(0.0f, g->getResolution().x / 2.0f - scaledWidth / 2.0f) *
-                                          (1.0f + cv::letterboxing_offset_x.getFloat()),
-                                      std::max(0.0f, g->getResolution().y / 2.0f - scaledHeight / 2.0f) *
-                                          (1.0f + cv::letterboxing_offset_y.getFloat()),
-                                      scaledWidth, scaledHeight);
-            } else {
-                osu->backBuffer->draw(0, 0, g->getResolution().x, g->getResolution().y);
-            }
-        }
+        osu->backBuffer->draw((int)viewport.getX(), (int)viewport.getY(), (int)viewport.getWidth(),
+                              (int)viewport.getHeight());
         g->setBlending(true);
     }
 }

@@ -404,6 +404,10 @@ class Environment {
     void applyCursorState(const CursorState &wanted);
     void releaseCursor();  // visible, unconfined and absolute, for shutting down
 
+    // whether the os can show the current cursor shape with its hotspot at pos (window pixels): browsers replace a
+    // custom image (setNormalCursorImage) that doesn't fit inside the viewport with their fallback cursor
+    [[nodiscard]] bool canShowCursorAt(vec2 pos) const;
+
     CursorState m_cursorWanted;
     // what applyCursorState last handed to sdl (the confinement rect in desktop points)
     struct AppliedCursorState {
@@ -435,6 +439,7 @@ class Environment {
     std::array<SDL_Cursor *, (size_t)CURSORTYPE::CURSORTYPE_MAX> m_cursorIcons;
     std::vector<CursorImageLayer> m_normalCursorLayers;
     SDL_Cursor *m_normalCursorImage{nullptr};  // replaces the CURSOR_NORMAL icon while set
+    McRect m_normalCursorRect;                 // its image in points, relative to the hotspot
 
     // for state reconciliation when re-focusing the window
     friend class Keyboard;

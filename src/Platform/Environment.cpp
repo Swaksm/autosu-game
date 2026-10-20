@@ -1319,10 +1319,11 @@ bool Environment::setNormalCursorImage(const std::vector<CursorImageLayer> &laye
             if(base) SDL_AddSurfaceAlternateImage(base, composite);
         }
         if(base) {
-            const vec2 hotspot = -bounds.getMin() * pointScale;
-            m_normalCursorImage =
-                SDL_CreateColorCursor(base, std::clamp((int)std::round(hotspot.x), 0, pointSize.x - 1),
-                                      std::clamp((int)std::round(hotspot.y), 0, pointSize.y - 1));
+            const vec2 hotspotPos = -bounds.getMin() * pointScale;
+            const ivec2 hotspot{std::clamp((int)std::round(hotspotPos.x), 0, pointSize.x - 1),
+                                std::clamp((int)std::round(hotspotPos.y), 0, pointSize.y - 1)};
+            m_normalCursorImage = SDL_CreateColorCursor(base, hotspot.x, hotspot.y);
+            m_normalCursorRect = McRect{-vec2{hotspot}, vec2{pointSize}};
             if(!m_normalCursorImage) debugLog("couldn't create cursor: {}", SDL_GetError());
             if(base != composite) SDL_DestroySurface(base);
         }
@@ -1422,6 +1423,18 @@ void Environment::applyCursorState(const CursorState &wanted) {
 }
 
 void Environment::releaseCursor() { applyCursorState({.pos = m_cursorWanted.pos}); }
+
+bool Environment::canShowCursorAt(vec2 pos) const {
+    if constexpr(!Env::cfg(OS::WASM)) return true;
+    if(!m_normalCursorImage || m_cursorType != CURSORTYPE::CURSOR_NORMAL) return true;
+
+    // where the hotspot can go with the whole image inside the window, less a css pixel for rounding
+    const float pxd = getPixelDensity();
+    const vec2 margin{1.f};
+    const McRect hotspotArea{-m_normalCursorRect.getMin() + margin,
+                             getWindowSize() / pxd - m_normalCursorRect.getSize() - margin * 2.f};
+    return hotspotArea.contains(pos / pxd);
+}
 
 std::string Environment::scanCodeToString(SCANCODE scanCode) const {
     const char *name = SDL_GetScancodeName((SDL_Scancode)scanCode);

@@ -152,6 +152,8 @@ class Osu final : public App, public MouseListener, public TouchListener {
     [[nodiscard]] inline vec2 getVirtScreenSize() const { return this->internalRect.getSize(); }
     [[nodiscard]] inline int getVirtScreenWidth() const { return (int)this->internalRect.getWidth(); }
     [[nodiscard]] inline int getVirtScreenHeight() const { return (int)this->internalRect.getHeight(); }
+    // the window rect the internal resolution is drawn into (letterboxed, fitted or stretched), in whole pixels
+    [[nodiscard]] McRect getVirtScreenViewport() const;
 
     [[nodiscard]] inline UserCard *getUserButton() const { return this->userButton.get(); }
     [[nodiscard]] inline BGImageHandler *getBackgroundImageHandler() const {
@@ -257,8 +259,6 @@ class Osu final : public App, public MouseListener, public TouchListener {
     void onLetterboxingChange(float oldValue, float newValue);
 
     void onGameplayKey(GameplayKeys key_flag, bool down, u64 timestamp, bool fromMouse = false);
-
-    void onLetterboxingOffsetChange();
 
     void onUserCardChange(std::string_view new_username);
 

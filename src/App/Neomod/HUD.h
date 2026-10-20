@@ -62,7 +62,8 @@ class HUD final : public UIScreen {
         vec2 pos, f32 alphaMultiplier = 1.0f,
         bool secondTrail = false);  // NOTE: only use if drawCursor() with updateAndDrawTrail = false (FPoSu)
     void drawCursorRipples();
-    // hardware cursor: the os draws the skin cursor image, so drawCursor() only draws the trail and ripples.
+    // hardware cursor: the os draws the skin cursor image, so drawCursor() only draws the trail and ripples (and the
+    // image where the os hides it).
     // enable = true turns it on (if the skin cursor image can be loaded), false goes back to the system cursor.
     // returns true if the hardware cursor is on. call it every update, it only rebuilds the cursor on changes.
     bool updateHardwareCursor(bool enable);

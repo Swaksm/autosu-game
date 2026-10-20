@@ -534,11 +534,13 @@ void HUD::drawCursor(vec2 pos, f32 alphaMultiplier, bool secondTrail, bool updat
         this->cursorRipples.erase(this->cursorRipples.begin());
     }
 
-    if(this->bHardwareCursor) return;
+    // where the os hides the hardware cursor, it's drawn here without the animations it lacks
+    if(this->bHardwareCursor && env->isCursorVisible()) return;
+    const bool animated = !this->bHardwareCursor;
 
     const auto &cursorImg = skin->i_cursor;
     const f32 scale = HUD::getCursorScaleFactor() / (cursorImg.scale());
-    const f32 animatedScale = scale * (skin->o_cursor_expand ? this->fCursorExpandAnim : 1.0f);
+    const f32 animatedScale = scale * (skin->o_cursor_expand && animated ? this->fCursorExpandAnim : 1.0f);
 
     // draw cursor
     g->setColor(Color(0xffffffff).setA(cv::cursor_alpha.getFloat() * alphaMultiplier));
@@ -551,7 +553,7 @@ void HUD::drawCursor(vec2 pos, f32 alphaMultiplier, bool secondTrail, bool updat
             g->translate((cursorImg->getWidth() / 2.0f) * animatedScale * cv::cursor_scale.getFloat(),
                          (cursorImg->getHeight() / 2.0f) * animatedScale * cv::cursor_scale.getFloat());
 
-        if(skin->o_cursor_rotate) g->rotate(static_cast<float>(std::fmod(engine->getTime() * 37., 360.)));
+        if(skin->o_cursor_rotate && animated) g->rotate(static_cast<float>(std::fmod(engine->getTime() * 37., 360.)));
 
         g->translate(pos.x, pos.y);
         g->drawImage(cursorImg);
@@ -580,9 +582,10 @@ void HUD::drawCursor(vec2 pos, f32 alphaMultiplier, bool secondTrail, bool updat
 bool HUD::updateHardwareCursor(bool enable) {
     std::vector<Environment::CursorImageLayer> layers;
     if(enable) {
-        // same layout as drawCursor, without the rotation and expand animations
+        // same layout as drawCursor, without the rotation and expand animations (and in window pixels)
         const Skin *skin = osu->getSkin();
-        const f32 scale = HUD::getCursorScaleFactor() * cv::cursor_scale.getFloat();
+        const vec2 scale = HUD::getCursorScaleFactor() * cv::cursor_scale.getFloat() *
+                           (osu->getVirtScreenViewport().getSize() / osu->getVirtScreenSize());
         const f32 alpha = cv::cursor_alpha.getFloat();
         const auto addLayer = [&](const BasicSkinImage &img) {
             const vec2 size = vec2{img->getSize()} * (scale / img.scale());
