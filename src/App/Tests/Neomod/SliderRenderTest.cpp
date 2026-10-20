@@ -163,12 +163,8 @@ void SliderRenderTest::rebuildBattery() {
         if(solo && (int)i != soloShape) continue;
         const ShapeDef &shape = shapes[i];
 
-        // approximate the slider length from the control polyline (good enough for a synthetic test)
-        f32 pixelLength = 0.f;
-        for(uSz k = 1; k < shape.ctrl.size(); ++k) pixelLength += vec::length(shape.ctrl[k] - shape.ctrl[k - 1]);
-        if(pixelLength < 1.0f) continue;
-
-        SliderCurve curve{shape.type, shape.ctrl, pixelLength, cv::slider_curve_points_separation.getFloat()};
+        // as long as the curve itself: a longer slider would go on in a straight line past its last point
+        SliderCurve curve{shape.type, shape.ctrl, 0.f, cv::slider_curve_points_separation.getFloat()};
         const std::span<const vec2> local = curve.getPoints();
         if(local.size() < 2) continue;
 
