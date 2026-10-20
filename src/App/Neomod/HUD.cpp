@@ -2155,7 +2155,7 @@ void HUD::drawScrubbingTimeline(u32 beatmapTime, u32 beatmapLengthPlayable, u32 
         const f32 hitHeight = 20 * dpiScale;
         const f32 hitWidth = std::max(2.f, std::round(2 * dpiScale));
         const auto &hitresults = osu->getMapInterface()->getTimelineHitresults();
-        for(const auto [type, color] : {
+        for(const auto &[type, color] : {
                 std::pair{LiveHitResult::HIT_100, RGB_CV_TO_COL(hud_hiterrorbar_entry_100)},
                 std::pair{LiveHitResult::HIT_50, RGB_CV_TO_COL(hud_hiterrorbar_entry_50)},
                 std::pair{LiveHitResult::HIT_MISS, RGB_CV_TO_COL(hud_hiterrorbar_entry_miss)},
