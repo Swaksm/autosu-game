@@ -1,9 +1,8 @@
 # German translations for neomod package.
 # Copyright (C) 2026 THE neomod'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the neomod package.
-# Gemini <gemini@google.com>, 2026.
 #
-# WARNING: Machine-translated by Google's Gemini AI. Not human-reviewed.
+# WARNING: Machine-translated by LLMs. Not human-reviewed.
 # May contain errors in grammatical gender, politeness register, game-specific
 # terminology, or context-dependent meaning. Please flag mistranslations
 # or volunteer a review to replace these.
@@ -14,14 +13,12 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-23 09:28+0200\n"
 "PO-Revision-Date: 2026-05-23 09:28+0200\n"
-"Last-Translator: Gemini <gemini@google.com>\n"
 "Language-Team: none\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Gemini\n"
 
 #: src/App/Neomod/AboutScreen.cpp src/App/Neomod/MainMenu.cpp
 msgid "Changelog"
@@ -136,7 +133,7 @@ msgstr "Laden..."
 #: src/App/Neomod/Chat.cpp
 #, c++-format
 msgid "You are silenced for another {:d}h {:02d}m {:02d}s."
-msgstr ""
+msgstr "Du bist noch {:d}h {:02d}m {:02d}s stummgeschaltet."
 
 #: src/App/Neomod/Chat.cpp
 msgid "You are not listening to anything."
@@ -231,11 +228,13 @@ msgstr "{} wurde von einer neueren Version geschrieben und wird ignoriert"
 msgid "{} spectators"
 msgstr "{} Zuschauer"
 
+#. TRANSLATORS: multiplayer scoreboard tag for a player who left the match
 #: src/App/Neomod/HUD.cpp
 #, c++-format
 msgid "{} [quit]"
-msgstr "{} [verlassen]"
+msgstr "{} [ausgestiegen]"
 
+#. TRANSLATORS: multiplayer scoreboard tag for a player who voted to skip the intro
 #: src/App/Neomod/HUD.cpp
 #, c++-format
 msgid "{} [skip]"
@@ -368,6 +367,7 @@ msgstr "Mehrspieler-Räume"
 msgid "Create new room"
 msgstr "Neuen Raum erstellen"
 
+#. TRANSLATORS: online status shown to other players while browsing multiplayer rooms
 #: src/App/Neomod/Lobby.cpp
 msgid "Looking to play"
 msgstr "Möchte spielen"
@@ -378,7 +378,7 @@ msgstr "Es sind keine Spiele verfügbar."
 
 #: src/App/Neomod/Lobby.cpp
 msgid "Joining room..."
-msgstr "Trete Raum bei..."
+msgstr "Raum wird betreten..."
 
 #: src/App/Neomod/Lobby.cpp
 msgid "New room"
@@ -386,7 +386,7 @@ msgstr "Neuer Raum"
 
 #: src/App/Neomod/Lobby.cpp
 msgid "Creating room..."
-msgstr "Erstelle Raum..."
+msgstr "Raum wird erstellt..."
 
 #: src/App/Neomod/MainMenu.cpp
 msgid "Save everything from this session."
@@ -499,7 +499,7 @@ msgstr "Drücke {:s} während des Spielens, um Mods in Echtzeit zu ändern."
 #: src/App/Neomod/MainMenuTips.cpp
 #, c++-format
 msgid "Press {:s} or {:s} anywhere to open chat."
-msgstr "Drücke {:s} oder {:s} überall, um den Chat zu öffnen."
+msgstr "Drücke {:s} oder {:s} an beliebiger Stelle, um den Chat zu öffnen."
 
 #: src/App/Neomod/MainMenuTips.cpp
 msgid "Launch with the neomod-BASS shortcut to use BASS (ASIO/Exclusive mode) for audio."
@@ -600,7 +600,7 @@ msgstr "Links/Rechts spiegeln"
 
 #: src/App/Neomod/ModSelector.cpp
 msgid "Playfield is flipped left/right (mirrored at vertical axis)."
-msgstr "Das Spielfeld ist vertauscht (an der vertikalen Achse gespiegelt)."
+msgstr "Das Spielfeld ist seitenverkehrt (an der vertikalen Achse gespiegelt)."
 
 #: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "Singletap"
@@ -656,7 +656,7 @@ msgstr "Kein Pausieren"
 
 #: src/App/Neomod/ModSelector.cpp
 msgid "Pausing is cheating"
-msgstr "Pausieren ist cheaten"
+msgstr "Pausieren ist Cheaten"
 
 #: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "FPoSu: Strafing"
@@ -688,7 +688,7 @@ msgstr "Die Approach Rate schwankt zwischen -1 und +1."
 
 #: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "Approach Different"
-msgstr "Anderes Annähern"
+msgstr "Approach Different"
 
 #: src/App/Neomod/ModSelector.cpp
 msgid ""
@@ -745,7 +745,7 @@ msgstr "Egoperspektive"
 
 #: src/App/Neomod/ModSelector.cpp
 msgid "Massively reduced slider follow circle radius."
-msgstr "Massiv reduzierter Slider Follow Circle Radius."
+msgstr "Massiv verkleinerter Radius des Slider-Follow-Circles."
 
 #: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "Precise sliders"
@@ -865,20 +865,22 @@ msgstr "Verfehle eine Note und du scheiterst."
 msgid "SS or quit."
 msgstr "SS oder verlassen."
 
-#. TRANSLATORS: "A E S T H E T I C" is a vaporwave aesthetic meme. This is a joke tooltip for Half Time when Nightcore enjoyer mode is on.
+#. TRANSLATORS: Half Time tooltips. "Less zoom." means the song plays slower (not a camera zoom).
+#. "A E S T H E T I C" is a vaporwave aesthetic meme, shown instead when Nightcore enjoyer mode is on.
 #: src/App/Neomod/ModSelector.cpp
 msgid "A E S T H E T I C"
 msgstr "A E S T H E T I C"
 
 #: src/App/Neomod/ModSelector.cpp
 msgid "Less zoom."
-msgstr "Weniger Zoom."
+msgstr "Gemächlicher."
 
 #: src/App/Neomod/ModSelector.cpp
 msgid "Zoooooooooom."
 msgstr "Zoooooooooom."
 
-#. TRANSLATORS: "uguuuuuuuu" is an anime-style meme sound/expression. This is a joke tooltip for Double Time when Nightcore enjoyer mode is on.
+#. TRANSLATORS: Double Time tooltips. "Zoooooooooom." is the sound of going fast (not a camera zoom).
+#. "uguuuuuuuu" is an anime-style meme sound, shown instead when Nightcore enjoyer mode is on.
 #: src/App/Neomod/ModSelector.cpp
 msgid "uguuuuuuuu"
 msgstr "uguuuuuuuu"
@@ -956,11 +958,11 @@ msgstr "Zurücksetzen"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Mouse Left"
-msgstr "Maus Links"
+msgstr "Linke Maustaste"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Mouse Right"
-msgstr "Maus Rechts"
+msgstr "Rechte Maustaste"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "<UNBOUND>"
@@ -1061,7 +1063,7 @@ msgstr "Fehler: osu!stable-Installationsordner oder Konfigurationsdatei nicht ge
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Use osu!.db database (read-only)"
-msgstr "Nutze osu!.db Datenbank (schreibgeschützt)"
+msgstr "osu!.db-Datenbank nutzen (schreibgeschützt)"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid ""
@@ -1073,7 +1075,7 @@ msgstr ""
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Load osu! collection.db (read-only)"
-msgstr "Lade osu! collection.db (schreibgeschützt)"
+msgstr "osu! collection.db laden (schreibgeschützt)"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid ""
@@ -1386,7 +1388,7 @@ msgstr "Blinkende Elemente vermeiden"
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid ""
 "Disables cosmetic flash effects\n"
-"Disables dimming when holding silders with Flashlight mod enabled"
+"Disables dimming when holding sliders with Flashlight mod enabled"
 msgstr ""
 "Deaktiviert kosmetische Blitzeffekte\n"
 "Deaktiviert das Abdunkeln beim Halten von Slidern im Flashlight-Modus"
@@ -1557,7 +1559,7 @@ msgstr "Periodengröße:"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Restart SoundEngine"
-msgstr "SoundEngine neustarten"
+msgstr "SoundEngine neu starten"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "ASIO"
@@ -1660,8 +1662,8 @@ msgid ""
 "Shift-click a skin to set it as fallback.\n"
 "Missing elements fall back to it instead of \"default\"."
 msgstr ""
-"Shift-Klick auf einen Skin, um ihn als Fallback (Rückfall) festzulegen.\n"
-"Fehlende Elemente greifen auf ihn zurück anstelle von \"default\"."
+"Shift-Klick auf einen Skin, um ihn als Fallback festzulegen.\n"
+"Fehlende Elemente werden dann aus ihm statt aus \"default\" genommen."
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Export Skin"
@@ -1817,7 +1819,7 @@ msgstr "Zeichne den Cursor Trail, auch wenn der Cursor sich nicht bewegt"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Cursor trail spacing:"
-msgstr "Cursor Trail Abstand:"
+msgstr "Cursor-Trail-Abstand:"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Cursor Size:"
@@ -1913,7 +1915,7 @@ msgstr "Cursor einsperren (Vollbild)"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Confine Cursor (NEVER)"
-msgstr "Cursor einsperren (NIEMALS)"
+msgstr "Cursor nie einsperren"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Overrides automatic cursor clipping during gameplay."
@@ -2001,11 +2003,11 @@ msgstr "Scrubbing (+ Klicken & Ziehen!)"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Quick Seek -5sec <<<"
-msgstr "Schnellsuche -5Sek <<<"
+msgstr "Schnell zurückspulen -5 Sek. <<<"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Quick Seek +5sec >>>"
-msgstr "Schnellsuche +5Sek >>>"
+msgstr "Schnell vorspulen +5 Sek. >>>"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Increase Local Song Offset"
@@ -2029,7 +2031,7 @@ msgstr "Schnellladen"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Instant Replay"
-msgstr "Sofort-Wiederholung"
+msgstr "Sofort-Replay"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Keys - FPoSu"
@@ -2073,7 +2075,7 @@ msgstr "Map-Hintergrund umschalten"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Boss Key (Minimize)"
-msgstr "Boss Key (Minimieren)"
+msgstr "Boss-Taste (Minimieren)"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Open Skin Selection Menu"
@@ -2682,7 +2684,7 @@ msgstr "FOV (Zoom):"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Zoom Key Toggle"
-msgstr "Zoom-Taste umschalten (Toggle)"
+msgstr "Zoom-Taste als Umschalter"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid ""
@@ -2823,6 +2825,7 @@ msgstr ""
 "Ob Screenshots, zusätzlich zum Speichern im screenshots/ Ordner,\n"
 "in die Systemzwischenablage kopiert werden sollen."
 
+#. TRANSLATORS: Subsection with options for main menu tips and social media links
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Nags"
 msgstr "Hinweise"
@@ -2900,7 +2903,7 @@ msgstr "Drücke noch {:d} Mal zur Bestätigung!"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "This setting is locked in multiplayer rooms."
-msgstr "Diese Einstellung ist in Multiplayer-Räumen gesperrt."
+msgstr "Diese Einstellung ist in Mehrspieler-Räumen gesperrt."
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "This setting is forced by the server."
@@ -2921,7 +2924,7 @@ msgstr "Alle Einstellungen wurden zurückgesetzt."
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Unbind"
-msgstr "Taste lösen (Unbind)"
+msgstr "Zuweisung entfernen"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Failed to save osu.cfg"
@@ -3114,7 +3117,7 @@ msgstr "Du hast Platz 1 in der lokalen Rangliste erreicht!"
 
 #: src/App/Neomod/RankingScreen.cpp
 msgid "Watch replay"
-msgstr "Wiederholung (Replay) ansehen"
+msgstr "Replay ansehen"
 
 #: src/App/Neomod/RankingScreen.cpp
 #, c++-format
@@ -3144,7 +3147,7 @@ msgstr "Notelock: {}"
 #: src/App/Neomod/RankingScreen.cpp
 #, c++-format
 msgid "Error: {:.2f}ms - {:.2f}ms avg"
-msgstr "Fehler: {:.2f}ms - {:.2f}ms avg"
+msgstr "Fehler: {:.2f}ms - {:.2f}ms im Schnitt"
 
 #: src/App/Neomod/RankingScreen.cpp
 #, c++-format
@@ -3307,11 +3310,13 @@ msgstr "Combo"
 msgid "Calculating stars ({}/{}) ..."
 msgstr "Berechne Sterne ({}/{}) ..."
 
+#. TRANSLATORS: {} is the name of the exported collection, or "mapset"
 #: src/App/Neomod/SongBrowser/BottomBar.cpp
 #, c++-format
 msgid "Exporting {} {:.2f}%"
 msgstr "Exportiere {} {:.2f}%"
 
+#. TRANSLATORS: {} is the name of the exported collection, or "mapset"
 #: src/App/Neomod/SongBrowser/BottomBar.cpp
 msgid "mapset"
 msgstr "Mapset"
@@ -3398,7 +3403,7 @@ msgstr "Nach Titel"
 
 #: src/App/Neomod/SongBrowser/SongBrowser.cpp
 msgid "By Rank Achieved"
-msgstr "Nach erreichter Platzierung"
+msgstr "Nach erreichtem Rang"
 
 #: src/App/Neomod/SongBrowser/SongBrowser.cpp
 msgid "By Date Played"
@@ -3440,6 +3445,7 @@ msgstr "Nach Score"
 msgid "By pp"
 msgstr "Nach PP"
 
+#. TRANSLATORS: button that opens the selected beatmap on the website
 #: src/App/Neomod/SongBrowser/SongBrowser.cpp
 msgid "Web"
 msgstr "Web"
@@ -3470,7 +3476,7 @@ msgstr "Ungültiger osu!-Ordner (oder keine Beatmaps gefunden): "
 
 #: src/App/Neomod/SongBrowser/SongBrowser.cpp
 msgid "Go to Options -> osu!folder"
-msgstr "Gehe zu Optionen -> osu!Ordner"
+msgstr "Gehe zu Optionen -> osu!-Ordner"
 
 #: src/App/Neomod/SongBrowser/SongBrowser.cpp
 msgid "Drop .osz beatmaps onto this window to import them"
@@ -3516,9 +3522,14 @@ msgid "Above 10 stars"
 msgstr "Über 10 Sterne"
 
 #: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "1 star"
+msgstr "1 Stern"
+
+#. TRANSLATORS: song browser group of beatmaps by star rating, {:d} is between 2 and 10
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
 #, c++-format
-msgid "{:d} star{:s}"
-msgstr "{:d} Stern{:s}"
+msgid "{:d} stars"
+msgstr "{:d} Sterne"
 
 #: src/App/Neomod/SongBrowser/SongBrowser.cpp
 msgid "Under 60 BPM"
@@ -3583,12 +3594,12 @@ msgstr "FPoSu-Modus aktiviert."
 #: src/App/Neomod/SpectatorScreen.cpp
 #, c++-format
 msgid "Started spectating {:s}"
-msgstr "Angefangen {:s} zuzuschauen"
+msgstr "Du schaust jetzt {:s} zu"
 
 #: src/App/Neomod/SpectatorScreen.cpp
 #, c++-format
 msgid "Stopped spectating {:s}"
-msgstr "Aufgehört {:s} zuzuschauen"
+msgstr "Du schaust {:s} nicht mehr zu"
 
 #: src/App/Neomod/SpectatorScreen.cpp
 msgid "Spectating"
@@ -3607,22 +3618,21 @@ msgstr "Zuschauen beenden"
 msgid "Spectating {:s}"
 msgstr "Schaut {:s} zu"
 
+#. TRANSLATORS: {:s} is the name of the spectated player
 #: src/App/Neomod/SpectatorScreen.cpp
-msgid "AFK"
-msgstr "AFK"
-
-#: src/App/Neomod/SpectatorScreen.cpp
-msgid "picking a map..."
-msgstr "wählt eine Map aus..."
-
-#: src/App/Neomod/SpectatorScreen.cpp
-msgid "spectating someone else"
-msgstr "schaut jemand anderem zu"
+#, c++-format
+msgid "{:s} is AFK"
+msgstr "{:s} ist AFK"
 
 #: src/App/Neomod/SpectatorScreen.cpp
 #, c++-format
-msgid "{:s} is {}"
-msgstr "{:s} ist {}"
+msgid "{:s} is picking a map..."
+msgstr "{:s} wählt eine Map aus..."
+
+#: src/App/Neomod/SpectatorScreen.cpp
+#, c++-format
+msgid "{:s} is spectating someone else"
+msgstr "{:s} schaut jemand anderem zu"
 
 #: src/App/Neomod/SpectatorScreen.cpp
 #, c++-format

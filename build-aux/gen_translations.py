@@ -288,8 +288,10 @@ for code, lang in languages.items():
             # the locale/libc/msgmerge version that produced it (default-wrapped output churns
             # across platforms). --add-location=file matches the xgettext flag above so the
             # `#:` references in .po stay aligned with .pot if msgmerge ever runs standalone.
+            # --no-fuzzy-matching leaves new strings untranslated instead of guessing from
+            # similar ones; the guesses were wrong more often than not.
             subprocess.run(
-                ["msgmerge", "--no-wrap", "--add-location=file",
+                ["msgmerge", "--no-wrap", "--add-location=file", "--no-fuzzy-matching",
                  "-o", str(tmp_po), str(po), str(pot_path)],
                 check=True,
             )

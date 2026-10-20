@@ -398,14 +398,16 @@ void ModSelector::updateButtons(bool initial) {
     {
         const bool nce = cv::nightcore_enjoyer.getBool();
         // clang-format off
-        // TRANSLATORS: "A E S T H E T I C" is a vaporwave aesthetic meme. This is a joke tooltip for Half Time when Nightcore enjoyer mode is on.
+        // TRANSLATORS: Half Time tooltips. "Less zoom." means the song plays slower (not a camera zoom).
+        // "A E S T H E T I C" is a vaporwave aesthetic meme, shown instead when Nightcore enjoyer mode is on.
         std::string_view HTTooltip     = nce ? _("A E S T H E T I C") : _("Less zoom.");
         std::string_view HTName        = nce ? "dc"                : "ht";
         const SkinImageGetter HTMember = nce ?
                                          MKIMGGETR(i_modselect_dc) :
                                          MKIMGGETR(i_modselect_ht);
 
-        // TRANSLATORS: "uguuuuuuuu" is an anime-style meme sound/expression. This is a joke tooltip for Double Time when Nightcore enjoyer mode is on.
+        // TRANSLATORS: Double Time tooltips. "Zoooooooooom." is the sound of going fast (not a camera zoom).
+        // "uguuuuuuuu" is an anime-style meme sound, shown instead when Nightcore enjoyer mode is on.
         std::string_view DTTooltip     = nce ? _("uguuuuuuuu")     : _("Zoooooooooom.");
         std::string_view DTName        = nce ? "nc"             : "dt";
         const SkinImageGetter DTMember = nce ?

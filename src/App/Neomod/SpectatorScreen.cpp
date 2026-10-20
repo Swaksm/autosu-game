@@ -337,10 +337,13 @@ void SpectatorScreen::tick() {
         using enum LiveReplayAction;
         if(LiveReplayAction action = user_info->spec_action;
            action == NONE || action == SONG_SELECT || action == WATCHING_OTHER) {
-            std::string_view action_str = action == NONE          ? _("AFK")
-                                          : action == SONG_SELECT ? _("picking a map...")
-                                                                  : _("spectating someone else");
-            this->status->setText(tformat("{:s} is {}", user_info->name, action_str));
+            if(action == NONE)
+                // TRANSLATORS: {:s} is the name of the spectated player
+                this->status->setText(tformat("{:s} is AFK", user_info->name));
+            else if(action == SONG_SELECT)
+                this->status->setText(tformat("{:s} is picking a map...", user_info->name));
+            else
+                this->status->setText(tformat("{:s} is spectating someone else", user_info->name));
         }
     }
 

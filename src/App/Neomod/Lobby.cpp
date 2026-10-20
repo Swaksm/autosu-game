@@ -156,6 +156,7 @@ CBaseUIContainer* Lobby::setVisible(bool visible) {
         BANCHO::Net::send_packet(packet);
 
         // LOBBY presence is broken so we send MULTIPLAYER
+        // TRANSLATORS: online status shown to other players while browsing multiplayer rooms
         RichPresence::setBanchoStatus(_("Looking to play"), Action::MULTIPLAYER);
     } else {
         Packet packet;

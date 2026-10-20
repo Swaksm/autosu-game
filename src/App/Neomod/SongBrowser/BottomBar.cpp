@@ -266,6 +266,7 @@ void draw() {
             export_collection_copy = export_collection;
         }
         std::string msg1 =
+            // TRANSLATORS: {} is the name of the exported collection, or "mapset"
             tformat("Exporting {} {:.2f}%", !export_collection_copy.empty() ? export_collection_copy : _("mapset"),
                     progress * 100.f);
         std::string msg2 = tformat(" {:s}", export_entry_copy);

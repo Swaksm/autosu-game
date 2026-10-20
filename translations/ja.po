@@ -1,9 +1,8 @@
 # Japanese translations for neomod package.
 # Copyright (C) 2026 THE neomod'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the neomod package.
-# Gemini <gemini@google.com>, 2026.
 #
-# WARNING: Machine-translated by Google's Gemini AI. Not human-reviewed.
+# WARNING: Machine-translated by LLMs. Not human-reviewed.
 # May contain errors in grammatical gender, politeness register, game-specific
 # terminology, or context-dependent meaning. Please flag mistranslations
 # or volunteer a review to replace these.
@@ -14,14 +13,12 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-23 09:47+0200\n"
 "PO-Revision-Date: 2026-05-23 09:47+0200\n"
-"Last-Translator: Gemini <gemini@google.com>\n"
 "Language-Team: none\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Gemini\n"
 
 #: src/App/Neomod/AboutScreen.cpp src/App/Neomod/MainMenu.cpp
 msgid "Changelog"
@@ -136,7 +133,7 @@ msgstr "読み込み中 ..."
 #: src/App/Neomod/Chat.cpp
 #, c++-format
 msgid "You are silenced for another {:d}h {:02d}m {:02d}s."
-msgstr ""
+msgstr "あと {:d}時間 {:02d}分 {:02d}秒 の間、チャットが制限されています。"
 
 #: src/App/Neomod/Chat.cpp
 msgid "You are not listening to anything."
@@ -231,11 +228,13 @@ msgstr "{} は新しいバージョンで書き込まれたため、無視しま
 msgid "{} spectators"
 msgstr "観戦者 {}人"
 
+#. TRANSLATORS: multiplayer scoreboard tag for a player who left the match
 #: src/App/Neomod/HUD.cpp
 #, c++-format
 msgid "{} [quit]"
 msgstr "{} [退出]"
 
+#. TRANSLATORS: multiplayer scoreboard tag for a player who voted to skip the intro
 #: src/App/Neomod/HUD.cpp
 #, c++-format
 msgid "{} [skip]"
@@ -368,9 +367,10 @@ msgstr "マルチプレイヤールーム"
 msgid "Create new room"
 msgstr "新しいルームを作成"
 
+#. TRANSLATORS: online status shown to other players while browsing multiplayer rooms
 #: src/App/Neomod/Lobby.cpp
 msgid "Looking to play"
-msgstr "プレイ予定"
+msgstr "プレイ相手を募集中"
 
 #: src/App/Neomod/Lobby.cpp
 msgid "There are no matches available."
@@ -422,7 +422,7 @@ msgstr "保存"
 
 #: src/App/Neomod/MainMenu.cpp src/App/Neomod/OsuDirectScreen.cpp
 msgid "Online Beatmaps"
-msgstr "オンライン譜面"
+msgstr "オンラインビートマップ"
 
 #: src/App/Neomod/MainMenu.cpp
 #, c++-format
@@ -640,7 +640,7 @@ msgstr "ヒットサークルが見えなくなります。Hiddenと併用する
 
 #: src/App/Neomod/ModSelector.cpp
 msgid "Traceable"
-msgstr "トレース可能"
+msgstr "トレーサブル"
 
 #: src/App/Neomod/ModSelector.cpp
 msgid "Freeze Frame"
@@ -761,7 +761,7 @@ msgstr "すべてのスライダーの方向を逆にします。（適用する
 
 #: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "No 50s"
-msgstr "No 50s"
+msgstr "50なし"
 
 #: src/App/Neomod/ModSelector.cpp
 msgid "Only 300s or 100s. Try harder."
@@ -773,7 +773,7 @@ msgstr "300 またはミス。PFの「軽量版」です"
 
 #: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "No 100s no 50s"
-msgstr "No 100s no 50s"
+msgstr "100・50なし"
 
 #: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "MinG3012"
@@ -785,7 +785,7 @@ msgstr "100はありません。300 か 50 のみ。上達しましょう。"
 
 #: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "Half Timing Window"
-msgstr "半分のタイミングウィンドウ"
+msgstr "判定幅半減"
 
 #: src/App/Neomod/ModSelector.cpp
 msgid "The hit timing window is cut in half. Hit early or perfect (300)."
@@ -809,7 +809,7 @@ msgid ""
 "Uses very aggressive optimizations to keep the framerate high, you have been warned!"
 msgstr ""
 "アプローチレートがマイナス無限大に設定されます。ビートマップ全体を一度に見ることができます。\n"
-"フレームレートを高く保つために非常に攻撃的な最適化を使用します、自己責任でお願いします！"
+"フレームレートを維持するために非常に積極的な最適化を行います。ご注意ください！"
 
 #: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
 msgid "Strict clicks"
@@ -851,7 +851,7 @@ msgid ""
 msgstr ""
 "絶対に失敗（ゲームオーバー）しません。\n"
 "注意: HPドレインを完全に無効にするには:\n"
-"オプション > ゲームプレイ > メカニクス > \"Disable HP Drain\"。"
+"オプション > ゲームプレイ > メカニクス > \"HPドレインを無効にする\"。"
 
 #: src/App/Neomod/ModSelector.cpp
 msgid "Everything just got a bit harder..."
@@ -865,7 +865,8 @@ msgstr "ノートを1つでもミスすると失敗します。"
 msgid "SS or quit."
 msgstr "SSか、さもなくばリタイアか。"
 
-#. TRANSLATORS: "A E S T H E T I C" is a vaporwave aesthetic meme. This is a joke tooltip for Half Time when Nightcore enjoyer mode is on.
+#. TRANSLATORS: Half Time tooltips. "Less zoom." means the song plays slower (not a camera zoom).
+#. "A E S T H E T I C" is a vaporwave aesthetic meme, shown instead when Nightcore enjoyer mode is on.
 #: src/App/Neomod/ModSelector.cpp
 msgid "A E S T H E T I C"
 msgstr "A E S T H E T I C"
@@ -878,7 +879,8 @@ msgstr "少しゆっくりになります。"
 msgid "Zoooooooooom."
 msgstr "ズゥゥゥゥゥゥム。"
 
-#. TRANSLATORS: "uguuuuuuuu" is an anime-style meme sound/expression. This is a joke tooltip for Double Time when Nightcore enjoyer mode is on.
+#. TRANSLATORS: Double Time tooltips. "Zoooooooooom." is the sound of going fast (not a camera zoom).
+#. "uguuuuuuuu" is an anime-style meme sound, shown instead when Nightcore enjoyer mode is on.
 #: src/App/Neomod/ModSelector.cpp
 msgid "uguuuuuuuu"
 msgstr "うぐぅぅぅぅぅぅ"
@@ -1029,7 +1031,7 @@ msgstr "言語を選択"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Prefer metadata in original language"
-msgstr "メタデータのオリジナル言語を優先"
+msgstr "原語のメタデータを優先する"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "osu! folder"
@@ -1285,7 +1287,7 @@ msgstr "最大キューフレーム数"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Raise for higher fps, decrease for lower latency"
-msgstr "上げると高FPSになりますが、下げると低遅延になります"
+msgstr "上げるとFPSが向上し、下げると遅延が減少します"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "FPS Limiter:"
@@ -1386,7 +1388,7 @@ msgstr "点滅エフェクトを避ける"
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid ""
 "Disables cosmetic flash effects\n"
-"Disables dimming when holding silders with Flashlight mod enabled"
+"Disables dimming when holding sliders with Flashlight mod enabled"
 msgstr ""
 "装飾的なフラッシュエフェクトを無効にします\n"
 "Flashlightモッド有効時にスライダーをホールドした際の画面の暗転を無効にします"
@@ -1478,8 +1480,8 @@ msgid ""
 "Pick the one you feel works best,\n"
 "there should be very little difference."
 msgstr ""
-"最も機能すると思うものを選択してください、\n"
-"違いはほとんどないはずです。"
+"最適だと感じるものを選んでください。\n"
+"違いはほとんどありません。"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Auto-disable exclusive mode"
@@ -1913,7 +1915,7 @@ msgstr "カーソルを制限する (フルスクリーン)"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Confine Cursor (NEVER)"
-msgstr "カーソルを制限する (しない)"
+msgstr "カーソルを制限しない (常に)"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Overrides automatic cursor clipping during gameplay."
@@ -2073,7 +2075,7 @@ msgstr "マップの背景を切り替え"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Boss Key (Minimize)"
-msgstr "ボスが来たキー (最小化)"
+msgstr "ボスキー (最小化)"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Open Skin Selection Menu"
@@ -2209,7 +2211,7 @@ msgstr "メカニクス"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Kill Player upon Failing"
-msgstr "失敗時にプレイヤーをキルする"
+msgstr "失敗時にゲームオーバーにする"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid ""
@@ -2760,7 +2762,7 @@ msgstr ""
 #. TRANSLATORS: Name of a settings category containing joke/unnecessary options
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Bullshit"
-msgstr "ブルシット"
+msgstr "おふざけ"
 
 #. TRANSLATORS: Subcategory of "Bullshit" - contains joke visual settings (rainbow circles, etc.)
 #: src/App/Neomod/OptionsOverlay.cpp
@@ -2823,9 +2825,10 @@ msgstr ""
 "screenshots/ フォルダーに保存するのと同時に\n"
 "スクリーンショットをシステムクリップボードにもコピーします。"
 
+#. TRANSLATORS: Subsection with options for main menu tips and social media links
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Nags"
-msgstr "ナグ (催促/注意)"
+msgstr "お知らせ"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Show Main Menu Tips"
@@ -3307,11 +3310,13 @@ msgstr "コンボ"
 msgid "Calculating stars ({}/{}) ..."
 msgstr "スターを計算中 ({}/{}) ..."
 
+#. TRANSLATORS: {} is the name of the exported collection, or "mapset"
 #: src/App/Neomod/SongBrowser/BottomBar.cpp
 #, c++-format
 msgid "Exporting {} {:.2f}%"
 msgstr "エクスポート中 {} {:.2f}%"
 
+#. TRANSLATORS: {} is the name of the exported collection, or "mapset"
 #: src/App/Neomod/SongBrowser/BottomBar.cpp
 msgid "mapset"
 msgstr "マップセット"
@@ -3440,6 +3445,7 @@ msgstr "スコア別"
 msgid "By pp"
 msgstr "pp別"
 
+#. TRANSLATORS: button that opens the selected beatmap on the website
 #: src/App/Neomod/SongBrowser/SongBrowser.cpp
 msgid "Web"
 msgstr "ウェブ"
@@ -3516,9 +3522,14 @@ msgid "Above 10 stars"
 msgstr "10スター以上"
 
 #: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "1 star"
+msgstr "1 スター"
+
+#. TRANSLATORS: song browser group of beatmaps by star rating, {:d} is between 2 and 10
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
 #, c++-format
-msgid "{:d} star{:s}"
-msgstr "{:d} スター{:s}"
+msgid "{:d} stars"
+msgstr "{:d} スター"
 
 #: src/App/Neomod/SongBrowser/SongBrowser.cpp
 msgid "Under 60 BPM"
@@ -3607,22 +3618,21 @@ msgstr "観戦を終了する"
 msgid "Spectating {:s}"
 msgstr "{:s} を観戦中"
 
+#. TRANSLATORS: {:s} is the name of the spectated player
 #: src/App/Neomod/SpectatorScreen.cpp
-msgid "AFK"
-msgstr "離席中 (AFK)"
-
-#: src/App/Neomod/SpectatorScreen.cpp
-msgid "picking a map..."
-msgstr "マップを選んでいます..."
-
-#: src/App/Neomod/SpectatorScreen.cpp
-msgid "spectating someone else"
-msgstr "他の人を観戦しています"
+#, c++-format
+msgid "{:s} is AFK"
+msgstr "{:s} は離席中です (AFK)"
 
 #: src/App/Neomod/SpectatorScreen.cpp
 #, c++-format
-msgid "{:s} is {}"
-msgstr "{:s} は {}"
+msgid "{:s} is picking a map..."
+msgstr "{:s} はマップを選んでいます..."
+
+#: src/App/Neomod/SpectatorScreen.cpp
+#, c++-format
+msgid "{:s} is spectating someone else"
+msgstr "{:s} は他の人を観戦しています"
 
 #: src/App/Neomod/SpectatorScreen.cpp
 #, c++-format

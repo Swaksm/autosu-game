@@ -19,10 +19,6 @@ The default skin is made by:
 - Icomoon
 - Freepik
 
-Translations are provided by:
-- French: kiwec
-- German, Japanese, Polish, Russian: Google Gemini 3.1 Pro (please provide better translations if you can)
-
 We make use of a lot of open source dependencies:
 
 External libraries (downloaded/built from source):

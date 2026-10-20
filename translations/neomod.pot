@@ -206,11 +206,13 @@ msgstr ""
 msgid "{} spectators"
 msgstr ""
 
+#. TRANSLATORS: multiplayer scoreboard tag for a player who left the match
 #: src/App/Neomod/HUD.cpp
 #, c++-format
 msgid "{} [quit]"
 msgstr ""
 
+#. TRANSLATORS: multiplayer scoreboard tag for a player who voted to skip the intro
 #: src/App/Neomod/HUD.cpp
 #, c++-format
 msgid "{} [skip]"
@@ -343,6 +345,7 @@ msgstr ""
 msgid "Create new room"
 msgstr ""
 
+#. TRANSLATORS: online status shown to other players while browsing multiplayer rooms
 #: src/App/Neomod/Lobby.cpp
 msgid "Looking to play"
 msgstr ""
@@ -830,7 +833,8 @@ msgstr ""
 msgid "SS or quit."
 msgstr ""
 
-#. TRANSLATORS: "A E S T H E T I C" is a vaporwave aesthetic meme. This is a joke tooltip for Half Time when Nightcore enjoyer mode is on.
+#. TRANSLATORS: Half Time tooltips. "Less zoom." means the song plays slower (not a camera zoom).
+#. "A E S T H E T I C" is a vaporwave aesthetic meme, shown instead when Nightcore enjoyer mode is on.
 #: src/App/Neomod/ModSelector.cpp
 msgid "A E S T H E T I C"
 msgstr ""
@@ -843,7 +847,8 @@ msgstr ""
 msgid "Zoooooooooom."
 msgstr ""
 
-#. TRANSLATORS: "uguuuuuuuu" is an anime-style meme sound/expression. This is a joke tooltip for Double Time when Nightcore enjoyer mode is on.
+#. TRANSLATORS: Double Time tooltips. "Zoooooooooom." is the sound of going fast (not a camera zoom).
+#. "uguuuuuuuu" is an anime-style meme sound, shown instead when Nightcore enjoyer mode is on.
 #: src/App/Neomod/ModSelector.cpp
 msgid "uguuuuuuuu"
 msgstr ""
@@ -1319,7 +1324,7 @@ msgstr ""
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid ""
 "Disables cosmetic flash effects\n"
-"Disables dimming when holding silders with Flashlight mod enabled"
+"Disables dimming when holding sliders with Flashlight mod enabled"
 msgstr ""
 
 #: src/App/Neomod/OptionsOverlay.cpp
@@ -2690,6 +2695,7 @@ msgid ""
 "along with saving them to the screenshots/ folder."
 msgstr ""
 
+#. TRANSLATORS: Subsection with options for main menu tips and social media links
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Nags"
 msgstr ""
@@ -3172,11 +3178,13 @@ msgstr ""
 msgid "Calculating stars ({}/{}) ..."
 msgstr ""
 
+#. TRANSLATORS: {} is the name of the exported collection, or "mapset"
 #: src/App/Neomod/SongBrowser/BottomBar.cpp
 #, c++-format
 msgid "Exporting {} {:.2f}%"
 msgstr ""
 
+#. TRANSLATORS: {} is the name of the exported collection, or "mapset"
 #: src/App/Neomod/SongBrowser/BottomBar.cpp
 msgid "mapset"
 msgstr ""
@@ -3305,6 +3313,7 @@ msgstr ""
 msgid "By pp"
 msgstr ""
 
+#. TRANSLATORS: button that opens the selected beatmap on the website
 #: src/App/Neomod/SongBrowser/SongBrowser.cpp
 msgid "Web"
 msgstr ""
@@ -3381,8 +3390,13 @@ msgid "Above 10 stars"
 msgstr ""
 
 #: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "1 star"
+msgstr ""
+
+#. TRANSLATORS: song browser group of beatmaps by star rating, {:d} is between 2 and 10
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
 #, c++-format
-msgid "{:d} star{:s}"
+msgid "{:d} stars"
 msgstr ""
 
 #: src/App/Neomod/SongBrowser/SongBrowser.cpp
@@ -3472,21 +3486,20 @@ msgstr ""
 msgid "Spectating {:s}"
 msgstr ""
 
+#. TRANSLATORS: {:s} is the name of the spectated player
 #: src/App/Neomod/SpectatorScreen.cpp
-msgid "AFK"
-msgstr ""
-
-#: src/App/Neomod/SpectatorScreen.cpp
-msgid "picking a map..."
-msgstr ""
-
-#: src/App/Neomod/SpectatorScreen.cpp
-msgid "spectating someone else"
+#, c++-format
+msgid "{:s} is AFK"
 msgstr ""
 
 #: src/App/Neomod/SpectatorScreen.cpp
 #, c++-format
-msgid "{:s} is {}"
+msgid "{:s} is picking a map..."
+msgstr ""
+
+#: src/App/Neomod/SpectatorScreen.cpp
+#, c++-format
+msgid "{:s} is spectating someone else"
 msgstr ""
 
 #: src/App/Neomod/SpectatorScreen.cpp

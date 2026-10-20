@@ -422,6 +422,7 @@ SongBrowser::SongBrowser() : ScreenBackable(), global_songbrowser_(this) {
     this->sortScoresDropdown->setClickCallback(SA::MakeDelegate<&SongBrowser::onSortScoresClicked>(this));
     this->topbarLeft->addBaseUIElement(this->sortScoresDropdown);
 
+    // TRANSLATORS: button that opens the selected beatmap on the website
     this->webButton = new UIButtonRounded(0, 0, 0, 0, "", _("Web"), 5);
     this->webButton->setDrawShadow(true)->setDrawBackground(false);
     this->webButton->setClickCallback(SA::MakeDelegate<&SongBrowser::onWebClicked>(this));
@@ -2624,8 +2625,11 @@ void SongBrowser::initializeGroupingButtons() {
                 difficultyCollectionName = _("Below 1 star");
             else if(i > 10)
                 difficultyCollectionName = _("Above 10 stars");
+            else if(i == 1)
+                difficultyCollectionName = _("1 star");
             else
-                difficultyCollectionName = tformat("{:d} star{:s}", i, i == 1 ? "" : "s");
+                // TRANSLATORS: song browser group of beatmaps by star rating, {:d} is between 2 and 10
+                difficultyCollectionName = tformat("{:d} stars", i);
 
             diffbtns[i] = MKCBTN(std::move(difficultyCollectionName));
         }

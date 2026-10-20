@@ -1102,7 +1102,7 @@ OptionsOverlayImpl::OptionsOverlayImpl(OptionsOverlay *parent) : parent(parent) 
                       &cv::scoreboard_animations);
     this->addCheckbox(
         _("Avoid flashing elements"),
-        _("Disables cosmetic flash effects\nDisables dimming when holding silders with Flashlight mod enabled"),
+        _("Disables cosmetic flash effects\nDisables dimming when holding sliders with Flashlight mod enabled"),
         &cv::avoid_flashes);
     this->addCheckbox(
         _("Mipmaps"),
@@ -1901,6 +1901,7 @@ OptionsOverlayImpl::OptionsOverlayImpl(OptionsOverlay *parent) : parent(parent) 
                           &cv::screenshot_clipboard);
     }
 
+    // TRANSLATORS: Subsection with options for main menu tips and social media links
     this->addSubSection(_("Nags"), "tip menu social links");
 
     this->addCheckbox(_("Show Main Menu Tips"), &cv::main_menu_tips);

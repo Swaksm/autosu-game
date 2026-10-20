@@ -1404,10 +1404,12 @@ std::span<const SCORE_ENTRY> HUD::updateAndGetCurrentScores() {
 
             if(slot.has_quit()) {
                 slot.current_hp = 0;
+                // TRANSLATORS: multiplayer scoreboard tag for a player who left the match
                 scoreEntry.name = tformat("{} [quit]", user_info->name.c_str());
             } else if(pf->isInSkippableSection() && pf->getCurrentHitObjectIndex() < 1) {
                 if(slot.skipped) {
                     // XXX: Draw pretty "Skip" image instead
+                    // TRANSLATORS: multiplayer scoreboard tag for a player who voted to skip the intro
                     scoreEntry.name = tformat("{} [skip]", user_info->name.c_str());
                 }
             }
