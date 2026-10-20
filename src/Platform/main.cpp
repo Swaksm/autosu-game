@@ -273,6 +273,9 @@ MAIN_FUNC /* int argc, char *argv[] */
     }
 #endif
 
+    // use IOHID mouse input on macOS
+    SDL_SetHintWithPriority("SDL_MAC_MOUSE_RAW_HID", "1", SDL_HINT_NORMAL);
+
     // we have no way of knowing when "char" event listeners are actually interested in text input,
     // so we have SDL_StartTextInput enabled most of the time
     // disable IME input panels so that it isn't annoying

@@ -1,0 +1,494 @@
+From 0450ddfec40127eb9921fe349d92e8dc11dadb84 Mon Sep 17 00:00:00 2001
+From: William Horvath <william@horvath.blog>
+Date: Wed, 21 Oct 2026 03:47:05 +0900
+Subject: [PATCH] cocoa: Add IOHID-based mouse raw input path.
+
+Workaround for GCMouse losing motion on high polling rate devices.
+---
+ CMakeLists.txt                    |   2 +
+ include/SDL3/SDL_hints.h          |  36 ++++
+ src/video/cocoa/SDL_cocoaevents.m |   1 +
+ src/video/cocoa/SDL_cocoamouse.h  |   3 +
+ src/video/cocoa/SDL_cocoamouse.m  | 338 +++++++++++++++++++++++++++++-
+ 5 files changed, 379 insertions(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 2bedb9808..67390dd37 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -2779,6 +2779,8 @@ elseif(APPLE)
+     set(SDL_FRAMEWORK_COCOA 1)
+     set(SDL_FRAMEWORK_CARBON 1)
+     set(SDL_FRAMEWORK_UTTYPES 1)
++    # raw HID mouse input in src/video/cocoa/SDL_cocoamouse.m
++    set(SDL_FRAMEWORK_IOKIT 1)
+   endif()
+   set(SDL_FRAMEWORK_FOUNDATION 1)
+   set(SDL_FRAMEWORK_COREVIDEO 1)
+diff --git a/include/SDL3/SDL_hints.h b/include/SDL3/SDL_hints.h
+index 68b67cc07..54c830875 100644
+--- a/include/SDL3/SDL_hints.h
++++ b/include/SDL3/SDL_hints.h
+@@ -2857,6 +2857,42 @@ extern "C" {
+  */
+ #define SDL_HINT_MAC_USE_GCMOUSE "SDL_MAC_USE_GCMOUSE"
+ 
++/**
++ * A variable controlling whether relative mouse motion is read directly from
++ * HID devices on macOS.
++ *
++ * Relative mouse motion normally comes from GCMouse or Cocoa mouse events,
++ * which are delivered through the window server. When the system is busy, the
++ * window server merges queued mouse events, and the raw (unaccelerated)
++ * motion of all but the newest one is lost. Reading the mice through IOKit
++ * HID avoids this, but requires the Input Monitoring permission.
++ *
++ * SDL never requests that permission itself. HID input is only used if the
++ * application already has it, for example after calling
++ * IOHIDRequestAccess(kIOHIDRequestTypeListenEvent) from its own UI.
++ * Otherwise relative motion comes from the usual sources. The permission is
++ * checked once, the first time it's needed, so granting it while the
++ * application is running takes effect the next time it's started.
++ *
++ * Only relative motion is read from HID devices, buttons and the wheel are
++ * reported as usual. Devices that don't report relative motion through HID,
++ * like built-in trackpads, may not generate relative motion while this is
++ * in use.
++ *
++ * The variable can be set to the following values:
++ *
++ * - "0": Relative motion comes from GCMouse or Cocoa mouse events. (default)
++ * - "1": Relative motion is read from HID devices if the application has the
++ *   Input Monitoring permission.
++ *
++ * This hint is checked whenever relative mouse mode is enabled. Setting it
++ * before SDL_Init() avoids a short stall the first time relative mouse mode
++ * is enabled, while the HID devices are opened.
++ *
++ * \since This hint is available since SDL 3.6.0.
++ */
++#define SDL_HINT_MAC_MOUSE_RAW_HID "SDL_MAC_MOUSE_RAW_HID"
++
+ /**
+  * A variable controlling whether holding down a key will repeat the pressed
+  * key or open the accents menu on macOS.
+diff --git a/src/video/cocoa/SDL_cocoaevents.m b/src/video/cocoa/SDL_cocoaevents.m
+index 5d561dbc9..a32040f25 100644
+--- a/src/video/cocoa/SDL_cocoaevents.m
++++ b/src/video/cocoa/SDL_cocoaevents.m
+@@ -648,6 +648,7 @@ void Cocoa_PumpEvents(SDL_VideoDevice *_this)
+ {
+     @autoreleasepool {
+         Cocoa_PumpEventsUntilDate(_this, [NSDate distantPast], true);
++        Cocoa_PumpHIDMouse();
+     }
+ }
+ 
+diff --git a/src/video/cocoa/SDL_cocoamouse.h b/src/video/cocoa/SDL_cocoamouse.h
+index c53056c8d..0117223cb 100644
+--- a/src/video/cocoa/SDL_cocoamouse.h
++++ b/src/video/cocoa/SDL_cocoamouse.h
+@@ -37,6 +37,9 @@ extern bool Cocoa_GCMouseRelativeMode(void);
+ extern bool Cocoa_HasGCMouse(void);
+ extern void Cocoa_QuitGCMouse(void);
+ 
++extern bool Cocoa_HIDMouseRelativeMode(void);
++extern void Cocoa_PumpHIDMouse(void);
++
+ struct SDL_CursorData
+ {
+     NSTimer *frameTimer;
+diff --git a/src/video/cocoa/SDL_cocoamouse.m b/src/video/cocoa/SDL_cocoamouse.m
+index 7925502cc..32102556b 100644
+--- a/src/video/cocoa/SDL_cocoamouse.m
++++ b/src/video/cocoa/SDL_cocoamouse.m
+@@ -28,6 +28,10 @@
+ #include "../../events/SDL_mouse_c.h"
+ 
+ #import <GameController/GameController.h>
++#include <IOKit/hid/IOHIDManager.h>
++#include <IOKit/hidsystem/IOHIDLib.h>
++#include <mach/mach_time.h>
++#include <pthread/qos.h>
+ 
+ #if 0
+ #define DEBUG_COCOAMOUSE
+@@ -380,7 +384,7 @@ static void Cocoa_OnGCMouseConnected(GCMouse *mouse)
+ 
+     mouse.mouseInput.mouseMovedHandler =
+         ^(GCMouseInput *mouseInput, float deltaX, float deltaY) {
+-            if (Cocoa_GCMouseRelativeMode()) {
++            if (Cocoa_GCMouseRelativeMode() && !Cocoa_HIDMouseRelativeMode()) {
+                 // Skip raw input if user wants system-scaled (accelerated) deltas
+                 SDL_Mouse *m = SDL_GetMouse();
+                 if (m && m->enable_relative_system_scale) {
+@@ -528,6 +532,326 @@ void Cocoa_QuitGCMouse(void)
+     }
+ }
+ 
++/* Raw HID relative motion (SDL_HINT_MAC_MOUSE_RAW_HID)
++
++   GCMouse gets its raw deltas from the WindowServer event stream. When WindowServer falls behind, it merges
++   queued mouse moved events, keeping the summed accelerated delta but only the newest event's unaccelerated
++   delta, so raw motion is lost under load. Reading the mice through IOKit HID doesn't have that problem, but
++   needs the Input Monitoring permission. SDL never asks for it: this is only used if the application already
++   has it.
++
++   The values arrive on a dedicated thread and are queued here; Cocoa_PumpHIDMouse() sends them as mouse
++   motion on the main thread.
++*/
++#define COCOA_HIDMOUSE_MAX_MOTION         4096
++#define COCOA_HIDMOUSE_MAX_DEVICE_CHANGES 32
++
++typedef struct
++{
++    Uint64 timestamp; // mach_absolute_time() units
++    SDL_MouseID mouseID;
++    Sint32 dx;
++    Sint32 dy;
++} Cocoa_HIDMouseMotion;
++
++typedef struct
++{
++    SDL_MouseID mouseID;
++    bool added;
++    char name[128];
++} Cocoa_HIDMouseDeviceChange;
++
++static struct
++{
++    SDL_Thread *thread;
++    SDL_Semaphore *started;
++    CFRunLoopRef runloop;
++    bool opened;
++    SDL_AtomicInt relative_mode;
++
++    // Protected by lock: filled by the HID thread, emptied by Cocoa_PumpHIDMouse()
++    SDL_Mutex *lock;
++    Cocoa_HIDMouseMotion *motion;
++    int num_motion;
++    Cocoa_HIDMouseDeviceChange device_changes[COCOA_HIDMOUSE_MAX_DEVICE_CHANGES];
++    int num_device_changes;
++
++    // Swapped with motion while draining
++    Cocoa_HIDMouseMotion *drain;
++} cocoa_hidmouse;
++
++bool Cocoa_HIDMouseRelativeMode(void)
++{
++    // System-scaled (accelerated) deltas come from NSEvents, so leave relative motion to the other paths then
++    return SDL_GetAtomicInt(&cocoa_hidmouse.relative_mode) != 0 && !SDL_GetMouse()->enable_relative_system_scale;
++}
++
++static void Cocoa_WakeupForHIDMouse(void)
++{
++    // Like SDL_PushEvent() from another thread: wake up SDL_WaitEvent() so it pumps the queued motion
++    SDL_VideoDevice *_this = SDL_GetVideoDevice();
++    if (_this && _this->SendWakeupEvent) {
++        SDL_Window *wakeup_window = (SDL_Window *)SDL_SetAtomicPointer(&_this->wakeup_window, NULL);
++        if (wakeup_window) {
++            _this->SendWakeupEvent(_this, wakeup_window);
++        }
++    }
++}
++
++static void Cocoa_HIDMouseValueCallback(void *context, IOReturn result, void *sender, IOHIDValueRef value)
++{
++    if (!Cocoa_HIDMouseRelativeMode()) {
++        return;
++    }
++
++    IOHIDElementRef element = IOHIDValueGetElement(value);
++    if (IOHIDElementGetUsagePage(element) != kHIDPage_GenericDesktop || !IOHIDElementIsRelative(element)) {
++        return;
++    }
++    const uint32_t usage = IOHIDElementGetUsage(element);
++    if (usage != kHIDUsage_GD_X && usage != kHIDUsage_GD_Y) {
++        return;
++    }
++    const Sint32 delta = (Sint32)IOHIDValueGetIntegerValue(value);
++    if (delta == 0) {
++        return;
++    }
++    const SDL_MouseID mouseID = (SDL_MouseID)(uintptr_t)IOHIDElementGetDevice(element);
++    const Uint64 timestamp = IOHIDValueGetTimeStamp(value);
++
++    SDL_LockMutex(cocoa_hidmouse.lock);
++    const bool was_empty = (cocoa_hidmouse.num_motion == 0);
++    Cocoa_HIDMouseMotion *motion = was_empty ? NULL : &cocoa_hidmouse.motion[cocoa_hidmouse.num_motion - 1];
++    // The X and Y values of one report share its timestamp, so they become one motion event. If the queue is
++    // full, the delta is added to the newest entry instead, so no motion is ever dropped.
++    if (!motion || ((motion->mouseID != mouseID || motion->timestamp != timestamp) &&
++                    cocoa_hidmouse.num_motion < COCOA_HIDMOUSE_MAX_MOTION)) {
++        motion = &cocoa_hidmouse.motion[cocoa_hidmouse.num_motion++];
++        motion->timestamp = timestamp;
++        motion->mouseID = mouseID;
++        motion->dx = 0;
++        motion->dy = 0;
++    }
++    if (usage == kHIDUsage_GD_X) {
++        motion->dx += delta;
++    } else {
++        motion->dy += delta;
++    }
++    SDL_UnlockMutex(cocoa_hidmouse.lock);
++
++    if (was_empty) {
++        Cocoa_WakeupForHIDMouse();
++    }
++}
++
++static void Cocoa_QueueHIDMouseDeviceChange(IOHIDDeviceRef device, bool added)
++{
++    Cocoa_HIDMouseDeviceChange change;
++    change.mouseID = (SDL_MouseID)(uintptr_t)device;
++    change.added = added;
++    change.name[0] = '\0';
++    CFTypeRef product = IOHIDDeviceGetProperty(device, CFSTR(kIOHIDProductKey));
++    if (product && CFGetTypeID(product) == CFStringGetTypeID()) {
++        CFStringGetCString((CFStringRef)product, change.name, sizeof(change.name), kCFStringEncodingUTF8);
++    }
++
++    SDL_LockMutex(cocoa_hidmouse.lock);
++    if (cocoa_hidmouse.num_device_changes < COCOA_HIDMOUSE_MAX_DEVICE_CHANGES) {
++        cocoa_hidmouse.device_changes[cocoa_hidmouse.num_device_changes++] = change;
++    }
++    SDL_UnlockMutex(cocoa_hidmouse.lock);
++}
++
++static void Cocoa_HIDMouseDeviceAdded(void *context, IOReturn result, void *sender, IOHIDDeviceRef device)
++{
++    Cocoa_QueueHIDMouseDeviceChange(device, true);
++}
++
++static void Cocoa_HIDMouseDeviceRemoved(void *context, IOReturn result, void *sender, IOHIDDeviceRef device)
++{
++    Cocoa_QueueHIDMouseDeviceChange(device, false);
++}
++
++static CFDictionaryRef Cocoa_CreateHIDMouseMatching(void)
++{
++    const int page = kHIDPage_GenericDesktop;
++    const int usage = kHIDUsage_GD_Mouse;
++    CFNumberRef page_number = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &page);
++    CFNumberRef usage_number = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &usage);
++    const void *keys[] = { CFSTR(kIOHIDDeviceUsagePageKey), CFSTR(kIOHIDDeviceUsageKey) };
++    const void *values[] = { page_number, usage_number };
++    CFDictionaryRef matching = CFDictionaryCreate(kCFAllocatorDefault, keys, values, SDL_arraysize(keys),
++                                                  &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
++    CFRelease(page_number);
++    CFRelease(usage_number);
++    return matching;
++}
++
++static int SDLCALL Cocoa_HIDMouseThread(void *data)
++{
++    pthread_set_qos_class_self_np(QOS_CLASS_USER_INTERACTIVE, 0);
++
++    IOHIDManagerRef manager = IOHIDManagerCreate(kCFAllocatorDefault, kIOHIDOptionsTypeNone);
++    if (manager) {
++        /* Mice also list the Pointer usage, so matching it too would match every mouse twice and deliver
++           each value twice. */
++        CFDictionaryRef matching = Cocoa_CreateHIDMouseMatching();
++        IOHIDManagerSetDeviceMatching(manager, matching);
++        CFRelease(matching);
++
++        IOHIDManagerRegisterDeviceMatchingCallback(manager, Cocoa_HIDMouseDeviceAdded, NULL);
++        IOHIDManagerRegisterDeviceRemovalCallback(manager, Cocoa_HIDMouseDeviceRemoved, NULL);
++        IOHIDManagerRegisterInputValueCallback(manager, Cocoa_HIDMouseValueCallback, NULL);
++        IOHIDManagerScheduleWithRunLoop(manager, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
++        cocoa_hidmouse.opened = (IOHIDManagerOpen(manager, kIOHIDOptionsTypeNone) == kIOReturnSuccess);
++    }
++    cocoa_hidmouse.runloop = (CFRunLoopRef)CFRetain(CFRunLoopGetCurrent());
++    SDL_SignalSemaphore(cocoa_hidmouse.started);
++
++    if (cocoa_hidmouse.opened) {
++        CFRunLoopRun();
++    }
++
++    if (manager) {
++        if (cocoa_hidmouse.opened) {
++            IOHIDManagerClose(manager, kIOHIDOptionsTypeNone);
++        }
++        IOHIDManagerUnscheduleFromRunLoop(manager, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
++        CFRelease(manager);
++    }
++    return 0;
++}
++
++static void Cocoa_StopHIDMouse(void)
++{
++    if (!cocoa_hidmouse.thread) {
++        return;
++    }
++
++    SDL_SetAtomicInt(&cocoa_hidmouse.relative_mode, 0);
++    // Performed blocks run even if the thread hasn't entered CFRunLoopRun() yet
++    CFRunLoopPerformBlock(cocoa_hidmouse.runloop, kCFRunLoopDefaultMode, ^{
++        CFRunLoopStop(CFRunLoopGetCurrent());
++    });
++    CFRunLoopWakeUp(cocoa_hidmouse.runloop);
++    SDL_WaitThread(cocoa_hidmouse.thread, NULL);
++    CFRelease(cocoa_hidmouse.runloop);
++
++    SDL_DestroyMutex(cocoa_hidmouse.lock);
++    SDL_free(cocoa_hidmouse.motion);
++    SDL_free(cocoa_hidmouse.drain);
++    SDL_zero(cocoa_hidmouse);
++}
++
++static bool Cocoa_StartHIDMouse(void)
++{
++    if (cocoa_hidmouse.thread) {
++        return true;
++    }
++
++    cocoa_hidmouse.lock = SDL_CreateMutex();
++    cocoa_hidmouse.motion = (Cocoa_HIDMouseMotion *)SDL_malloc(COCOA_HIDMOUSE_MAX_MOTION * sizeof(Cocoa_HIDMouseMotion));
++    cocoa_hidmouse.drain = (Cocoa_HIDMouseMotion *)SDL_malloc(COCOA_HIDMOUSE_MAX_MOTION * sizeof(Cocoa_HIDMouseMotion));
++    cocoa_hidmouse.started = SDL_CreateSemaphore(0);
++    if (cocoa_hidmouse.lock && cocoa_hidmouse.motion && cocoa_hidmouse.drain && cocoa_hidmouse.started) {
++        cocoa_hidmouse.thread = SDL_CreateThread(Cocoa_HIDMouseThread, "SDLHIDMouse", NULL);
++    }
++    if (cocoa_hidmouse.thread) {
++        SDL_WaitSemaphore(cocoa_hidmouse.started);
++    }
++    SDL_DestroySemaphore(cocoa_hidmouse.started);
++    cocoa_hidmouse.started = NULL;
++
++    if (!cocoa_hidmouse.thread || !cocoa_hidmouse.opened) {
++        if (cocoa_hidmouse.thread) {
++            Cocoa_StopHIDMouse();
++        } else {
++            SDL_DestroyMutex(cocoa_hidmouse.lock);
++            SDL_free(cocoa_hidmouse.motion);
++            SDL_free(cocoa_hidmouse.drain);
++            SDL_zero(cocoa_hidmouse);
++        }
++        return false;
++    }
++    return true;
++}
++
++static bool Cocoa_WantHIDMouse(void)
++{
++    // Asking TCC takes several milliseconds, too long to do whenever relative mode is enabled
++    static int has_access = -1;
++
++    if (!SDL_GetHintBoolean(SDL_HINT_MAC_MOUSE_RAW_HID, false)) {
++        return false;
++    }
++    if (has_access < 0) {
++        has_access = 0;
++        if (@available(macOS 10.15, *)) {
++            // This only reads the permission state, it never prompts
++            has_access = (IOHIDCheckAccess(kIOHIDRequestTypeListenEvent) == kIOHIDAccessTypeGranted);
++        }
++    }
++    return has_access != 0;
++}
++
++static void Cocoa_SetHIDMouseRelativeMode(bool enabled)
++{
++    // Started here if the hint or the permission only became available after SDL_Init(), which stalls briefly
++    const bool use_hid = enabled && Cocoa_WantHIDMouse() && Cocoa_StartHIDMouse();
++
++    if (use_hid) {
++        // Drop anything left over from a previous relative mode session
++        SDL_LockMutex(cocoa_hidmouse.lock);
++        cocoa_hidmouse.num_motion = 0;
++        SDL_UnlockMutex(cocoa_hidmouse.lock);
++    }
++    SDL_SetAtomicInt(&cocoa_hidmouse.relative_mode, use_hid ? 1 : 0);
++}
++
++void Cocoa_PumpHIDMouse(void)
++{
++    if (!cocoa_hidmouse.thread) {
++        return;
++    }
++
++    Cocoa_HIDMouseDeviceChange device_changes[COCOA_HIDMOUSE_MAX_DEVICE_CHANGES];
++    SDL_LockMutex(cocoa_hidmouse.lock);
++    Cocoa_HIDMouseMotion *motion = cocoa_hidmouse.motion;
++    const int num_motion = cocoa_hidmouse.num_motion;
++    cocoa_hidmouse.motion = cocoa_hidmouse.drain;
++    cocoa_hidmouse.drain = motion;
++    cocoa_hidmouse.num_motion = 0;
++    const int num_device_changes = cocoa_hidmouse.num_device_changes;
++    SDL_memcpy(device_changes, cocoa_hidmouse.device_changes, num_device_changes * sizeof(device_changes[0]));
++    cocoa_hidmouse.num_device_changes = 0;
++    SDL_UnlockMutex(cocoa_hidmouse.lock);
++
++    for (int i = 0; i < num_device_changes; ++i) {
++        if (device_changes[i].added) {
++            SDL_AddMouse(device_changes[i].mouseID, device_changes[i].name[0] ? device_changes[i].name : NULL);
++        } else {
++            SDL_RemoveMouse(device_changes[i].mouseID);
++        }
++    }
++
++    // Relative mode may have ended after these were queued
++    if (num_motion == 0 || !Cocoa_HIDMouseRelativeMode()) {
++        return;
++    }
++
++    static mach_timebase_info_data_t timebase;
++    if (timebase.denom == 0) {
++        mach_timebase_info(&timebase);
++    }
++    SDL_Window *focus = SDL_GetMouseFocus();
++    for (int i = 0; i < num_motion; ++i) {
++        // HID values are timestamped with mach_absolute_time(), like NSEvents
++        const double seconds = (double)motion[i].timestamp * timebase.numer / timebase.denom / SDL_NS_PER_SECOND;
++        SDL_SendMouseMotion(Cocoa_GetEventTimestamp(seconds), focus, motion[i].mouseID, true,
++                            (float)motion[i].dx, (float)motion[i].dy);
++    }
++}
++
+ static void Cocoa_FreeCursor(SDL_Cursor *cursor)
+ {
+     @autoreleasepool {
+@@ -640,6 +964,7 @@ static bool Cocoa_SetRelativeMouseMode(bool enabled)
+     if (Cocoa_HasGCMouse()) {
+         Cocoa_SetGCMouseRelativeMode(enabled);
+     }
++    Cocoa_SetHIDMouseRelativeMode(enabled);
+ 
+     if (enabled) {
+         SDL_Window *window = SDL_GetKeyboardFocus();
+@@ -736,6 +1061,11 @@ bool Cocoa_InitMouse(SDL_VideoDevice *_this)
+     location = [NSEvent mouseLocation];
+     data->lastMoveX = location.x;
+     data->lastMoveY = location.y;
++
++    // Opening the HID devices takes a moment, so do it now rather than when relative mode is first enabled
++    if (Cocoa_WantHIDMouse()) {
++        Cocoa_StartHIDMouse();
++    }
+     return true;
+ }
+ 
+@@ -876,6 +1206,11 @@ void Cocoa_HandleMouseEvent(SDL_VideoDevice *_this, NSEvent *event)
+         return;
+     }
+ 
++    // Raw HID motion replaces both GCMouse and NSEvent deltas
++    if (Cocoa_HIDMouseRelativeMode()) {
++        return;
++    }
++
+     // When GCMouse is active in relative mode, it handles motion events
+     // directly with raw (unaccelerated) deltas. Skip NSEvent-based motion
+     // unless the user wants system-scaled (accelerated) input.
+@@ -966,6 +1301,7 @@ void Cocoa_HandleMouseWarp(CGFloat x, CGFloat y)
+ 
+ void Cocoa_QuitMouse(SDL_VideoDevice *_this)
+ {
++    Cocoa_StopHIDMouse();
+ }
+ 
+ #endif // SDL_VIDEO_DRIVER_COCOA
+-- 
+2.54.0 (Apple Git-157)
+
