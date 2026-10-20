@@ -11,19 +11,19 @@ layout(std140, set = 3, binding = 0) uniform FragParams {
     float bodyColorSaturation;
     float bodyAlphaMultiplier;
     float borderSizeMultiplier;
-    float borderFeather;
     float alphaMultiplier;
-    float _pad0; float _pad1;
+    float _pad0; float _pad1; float _pad2;
     vec3 colBorder;
     float _pad3;
     vec3 colBody;
     float _pad4;
     vec4 channel;  // which of tex0's channels holds this slider's field
+    // the stored field value where the shadow, shadow -> border transition, border and border -> body transition end
+    vec4 regionEnds;
+    // the shadow, shadow -> border, border -> body and body ramps' position, field * rampScale + rampBias
+    vec4 rampScale;
+    vec4 rampBias;
 } fu;
-
-const float defaultTransitionSize = 0.011;
-const float defaultBorderSize = 0.11;
-const float outerShadowSize = 0.08;
 
 vec4 getInnerBodyColor(in vec4 bodyColor) {
     float brightnessMultiplier = 0.25;
@@ -47,10 +47,9 @@ void main() {
     // primitive, but resolved to the nearest curve feature. shading it here runs the gradient once per pixel
     // no matter how much the body geometry self-overlaps, and radial ramping to 0 keeps the silhouette
     // analytically round at any tessellation density.
-    float radial = dot(texture(tex0, tex_coord), fu.channel);
-
-    float borderSize = (defaultBorderSize + fu.borderFeather) * fu.borderSizeMultiplier;
-    float transitionSize = defaultTransitionSize + fu.borderFeather;
+    // the field is stored encoded (see SliderRenderer.cpp), linear within each region below
+    float field = dot(texture(tex0, tex_coord), fu.channel);
+    vec4 delta = field * fu.rampScale + fu.rampBias;
 
     // output var
     vec4 out_color = vec4(0.0);
@@ -79,31 +78,16 @@ void main() {
 
     // conditional variant
 
-    if (radial < outerShadowSize - transitionSize) // just shadow
-    {
-        float delta = radial / (outerShadowSize - transitionSize);
-        out_color = mix(vec4(0), outerShadowColor, delta);
-    }
-    if (radial > outerShadowSize - transitionSize && radial < outerShadowSize + transitionSize) // shadow + border
-    {
-        float delta = (radial - outerShadowSize + transitionSize) / (2.0 * transitionSize);
-        out_color = mix(outerShadowColor, borderColor, delta);
-    }
-    if (radial > outerShadowSize + transitionSize && radial < outerShadowSize + borderSize - transitionSize) // just border
-    {
+    if (field < fu.regionEnds.x) // just shadow
+        out_color = mix(vec4(0), outerShadowColor, delta.x);
+    else if (field < fu.regionEnds.y) // shadow + border
+        out_color = mix(outerShadowColor, borderColor, delta.y);
+    else if (field < fu.regionEnds.z) // just border
         out_color = borderColor;
-    }
-    if (radial > outerShadowSize + borderSize - transitionSize && radial < outerShadowSize + borderSize + transitionSize) // border + outer body
-    {
-        float delta = (radial - outerShadowSize - borderSize + transitionSize) / (2.0 * transitionSize);
-        out_color = mix(borderColor, outerBodyColor, delta);
-    }
-    if (radial > outerShadowSize + borderSize + transitionSize) // outer body + inner body
-    {
-        float size = outerShadowSize + borderSize + transitionSize;
-        float delta = ((radial - size) / (1.0 - size));
-        out_color = mix(outerBodyColor, innerBodyColor, delta);
-    }
+    else if (field < fu.regionEnds.w) // border + outer body
+        out_color = mix(borderColor, outerBodyColor, delta.z);
+    else // outer body + inner body
+        out_color = mix(outerBodyColor, innerBodyColor, delta.w);
 
     // the slider's overall fade percent
     out_color.a *= fu.alphaMultiplier;

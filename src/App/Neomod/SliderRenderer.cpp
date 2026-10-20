@@ -245,13 +245,93 @@ forceinline Color get_border_color(const SkinSettings &settings, bool doRainbow,
     }
 }
 
+// the composite shades five regions of radial (1 at the centerline, 0 at the edge): shadow, shadow -> border transition,
+// border, border -> body transition and body. a linear field leaves a big body's narrow transitions only a few of the
+// target's 8-bit levels (each spanning several pixels: a staircase), so the field gives them extra levels. it stays
+// linear within each region, so the composite shades the stored value directly
+struct FieldEncoding {
+    // the field is the sum of these clamped linear pieces of radial (from, to, rise): a base slope over the whole body
+    // and the remaining levels over the transitions
+    std::array<vec3, 3> pieces;
+    vec4 regionEnds;  // the field where the regions end, past its range for a region that reaches the centerline
+    // the shadow, shadow -> border, border -> body and body ramps' position: field * rampScale + rampBias
+    vec4 rampScale;
+    vec4 rampBias;
+};
+
+FieldEncoding field_encoding() {
+    constexpr f32 shadowSize = 0.08f, borderSize = 0.11f, transitionSize = 0.011f;
+    constexpr f32 baseSlope = 168.0f / 255.0f;  // per radial; leaves the body ~134 of the levels
+    const f32 feather = cv::slider_border_feather.getFloat();
+    const f32 border = std::max((borderSize + feather) * cv::slider_border_size_multiplier.getFloat(), 0.0f);
+    const f32 transition = std::max(transitionSize + feather, 0.0f);
+
+    // where each ramp runs from 0 to 1, in radial, and the region it shades
+    const std::array<vec2, 4> ramps{{{0.0f, shadowSize - transition},
+                                     {shadowSize - transition, shadowSize + transition},
+                                     {shadowSize + border - transition, shadowSize + border + transition},
+                                     {shadowSize + border + transition, 1.0f}}};
+    constexpr std::array<int, 4> rampRegions{0, 1, 3, 4};
+
+    // a thin border's transitions overlap, the border -> body one wins
+    const f32 bodyTransition = ramps[2].x;
+    const std::array<f32, 4> starts{std::min(ramps[1].x, bodyTransition), std::min(ramps[1].y, bodyTransition),
+                                    bodyTransition, ramps[2].y};
+
+    // the regions' bounds in radial, 0 to 1
+    std::array<f32, 6> knots{};
+    knots[5] = 1.0f;
+    for(int i = 0; i < 4; ++i) knots[i + 1] = std::clamp(starts[i], knots[i], 1.0f);
+
+    FieldEncoding enc{};
+    const std::array<bool, 2> transitions{knots[2] > knots[1], knots[4] > knots[3]};
+    const int numTransitions = (int)transitions[0] + (int)transitions[1];
+    const f32 base = numTransitions > 0 ? baseSlope : 1.0f;
+    const f32 boost = numTransitions > 0 ? (1.0f - base) / (f32)numTransitions : 0.0f;
+    enc.pieces = {vec3{0.0f, 1.0f, base}, vec3{knots[1], knots[2], transitions[0] ? boost : 0.0f},
+                  vec3{knots[3], knots[4], transitions[1] ? boost : 0.0f}};
+
+    // what the field stores at the knots
+    std::array<f32, 6> levels{};
+    for(int i = 0; i < 6; ++i)
+        for(const vec3 &piece : enc.pieces)
+            levels[i] += piece.z * std::clamp((knots[i] - piece.x) / std::max(piece.y - piece.x, 1e-6f), 0.0f, 1.0f);
+    for(int i = 0; i < 4; ++i) enc.regionEnds[i] = knots[i + 1] < 1.0f ? levels[i + 1] : 2.0f;
+
+    for(int i = 0; i < 4; ++i) {
+        const int r = rampRegions[i];
+        // radial = knots[r] + (field - levels[r]) * slope within the region
+        const f32 slope = (knots[r + 1] - knots[r]) / std::max(levels[r + 1] - levels[r], 1e-6f);
+        const f32 length = std::max(ramps[i].y - ramps[i].x, 1e-6f);
+        enc.rampScale[i] = slope / length;
+        enc.rampBias[i] = (knots[r] - levels[r] * slope - ramps[i].x) / length;
+    }
+    return enc;
+}
+
+// the field shader's pieces, of the distance to the nearest curve feature (d = 1 - radial); just radial for the
+// gradient image
+void set_field_encoding_uniforms(Shader *shader, const FieldEncoding &enc, bool linear) {
+    vec3 scale, bias, rise;
+    for(int i = 0; i < 3; ++i) {
+        const vec3 piece = !linear ? enc.pieces[i] : i == 0 ? vec3{0.0f, 1.0f, 1.0f} : vec3{0.0f};
+        // (1 - d - from) / (to - from)
+        const f32 width = std::max(piece.y - piece.x, 1e-6f);
+        scale[i] = -1.0f / width;
+        bias[i] = (1.0f - piece.x) / width;
+        rise[i] = piece.z;
+    }
+    shader->setUniform3f("encodeScale", scale.x, scale.y, scale.z);
+    shader->setUniform3f("encodeBias", bias.x, bias.y, bias.z);
+    shader->setUniform3f("encodeRise", rise.x, rise.y, rise.z);
+}
+
 struct UniformCache {
     // convar-dependent settings (updated by convar callbacks)
     i32 style{-1};
     f32 bodyAlphaMultiplier{-1.0f};
     f32 bodyColorSaturation{-1.0f};
     f32 borderSizeMultiplier{-1.0f};
-    f32 borderFeather{-1.0f};
 
     // uniforms that change often (colors)
     Color lastBorderColor{0};
@@ -285,7 +365,6 @@ void update_shader_config_uniforms(Shader *shader) {
     const f32 newBodyAlpha = cv::slider_body_alpha_multiplier.getFloat();
     const f32 newBodySat = cv::slider_body_color_saturation.getFloat();
     const f32 newBorderSize = cv::slider_border_size_multiplier.getFloat();
-    const f32 newBorderFeather = cv::slider_border_feather.getFloat();
 
     if(s_uniformCache.style != newStyle) {
         shader->setUniform1i("style", newStyle);
@@ -307,10 +386,10 @@ void update_shader_config_uniforms(Shader *shader) {
         s_uniformCache.borderSizeMultiplier = newBorderSize;
     }
 
-    if(s_uniformCache.borderFeather != newBorderFeather) {
-        shader->setUniform1f("borderFeather", newBorderFeather);
-        s_uniformCache.borderFeather = newBorderFeather;
-    }
+    const FieldEncoding enc = field_encoding();
+    shader->setUniform4f("regionEnds", enc.regionEnds.x, enc.regionEnds.y, enc.regionEnds.z, enc.regionEnds.w);
+    shader->setUniform4f("rampScale", enc.rampScale.x, enc.rampScale.y, enc.rampScale.z, enc.rampScale.w);
+    shader->setUniform4f("rampBias", enc.rampBias.x, enc.rampBias.y, enc.rampBias.z, enc.rampBias.w);
 
     s_uniformCache.needsConfigUpdate = false;
 }
@@ -328,8 +407,9 @@ struct Entry {
     uSz pointsAt;
     uSz numPoints;
     uSz numAlwaysPoints;
-    McIRect area;   // what its composite covers
-    u8 channel{0};  // the render target channel its field goes into
+    McIRect area;           // what its composite covers
+    u8 channel{0};          // the render target channel its field goes into
+    const Image *gradient;  // the skin's slidergradient.png when it takes the place of the dynamic colors and border
 };
 
 // the active Batch, kept around for the capacity
@@ -348,12 +428,15 @@ std::optional<Entry> make_entry(const BodySource &source, const Body &b) {
     const McIRect area = composite_area(b, s_batch.rt->getSize());
     if(area.getWidth() <= 0 || area.getHeight() <= 0) return std::nullopt;
 
-    Entry entry{.source = &source,
-                .body = b,
-                .pointsAt = s_batch.points.size(),
-                .numPoints = b.points.size(),
-                .numAlwaysPoints = b.alwaysPoints.size(),
-                .area = area};
+    const Image *gradient = b.skinSettings.i_slider_gradient;
+    Entry entry{
+        .source = &source,
+        .body = b,
+        .pointsAt = s_batch.points.size(),
+        .numPoints = b.points.size(),
+        .numAlwaysPoints = b.alwaysPoints.size(),
+        .area = area,
+        .gradient = cv::slider_use_gradient_image.getBool() && gradient && gradient->isReady() ? gradient : nullptr};
     entry.body.points = {};
     entry.body.alwaysPoints = {};
     s_batch.points.insert(s_batch.points.end(), b.points.begin(), b.points.end());
@@ -425,10 +508,14 @@ void render_fields(uSz first) {
         // thousands of blocks on the same pixels) costs only trivial blended fills. the expensive gradient shading
         // runs exactly once per covered pixel in composite().
         g->setBlendMode(DrawBlendMode::MAX);
+        const FieldEncoding enc = field_encoding();
         s_FIELD_SHADER->enable();
         for(uSz i = first; i < s_batch.residentEnd; ++i) {
-            set_shader_channel_uniform(s_FIELD_SHADER, s_batch.entries[i].channel);
-            draw_shape(body_of(s_batch.entries[i]), target);
+            const Entry &entry = s_batch.entries[i];
+            set_shader_channel_uniform(s_FIELD_SHADER, entry.channel);
+            // the gradient image is sampled at the field value itself
+            set_field_encoding_uniforms(s_FIELD_SHADER, enc, /*linear=*/entry.gradient != nullptr);
+            draw_shape(body_of(entry), target);
         }
         s_FIELD_SHADER->disable();
 
@@ -446,9 +533,7 @@ void composite(const Entry &entry) {
     const McIRect &area = entry.area;
     const f32 alpha = b.alpha * cv::slider_alpha_multiplier.getFloat();
 
-    // the gradient image takes the place of the dynamic colors and border
-    if(const Image *gradient = b.skinSettings.i_slider_gradient;
-       cv::slider_use_gradient_image.getBool() && gradient && gradient->isReady()) {
+    if(const Image *gradient = entry.gradient) {
         s_GRADIENT_SHADER->enable();
         {
             s_GRADIENT_SHADER->setUniform1f("colorRGBMultiplier", b.colorRGBMultiplier);
