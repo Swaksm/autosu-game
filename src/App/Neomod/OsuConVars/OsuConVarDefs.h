@@ -822,6 +822,7 @@ CONVAR(load_beatmap_background_images, true, CLIENT | SKINS | SERVER);
 CONVAR(nightcore_enjoyer, false, CLIENT | SKINS | SERVER);
 CONVAR(normalize_loudness, true, CLIENT | SKINS | SERVER, "normalize loudness across songs",
        CFUNC(VolNormalization::loudness_cb));
+CONVAR(nightcore_beats_behavior, 0, CLIENT | SKINS | SERVER, "0 = only if nightcore, 1 = always, 2 = never play");
 CONVAR(notelock_stable_tolerance2b, 3, CLIENT | SERVER | PROTECTED | GAMEPLAY,
        "time tolerance in milliseconds to allow hitting simultaneous objects close "
        "together (e.g. circle at end of slider)");

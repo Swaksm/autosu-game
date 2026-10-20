@@ -2384,8 +2384,10 @@ void BeatmapInterface::update2() {
     // a kick and a clap on alternating beats with hats between them, and a finish every 4 measures.
     // hats only play if the slider tick rate gives a regular offbeat.
     // meters other than 3/4 and 4/4 only get the finish.
-    if(this->getMods().has(ModFlags::NoPitchCorrection) && this->getSpeedMultiplier() > 1.f &&
-       !this->judge->getMapTimingPoints().empty()) {
+    const bool alwaysNightcore = cv::nightcore_beats_behavior.getInt() == 1;
+    const bool neverNightcore = cv::nightcore_beats_behavior.getInt() == 2;
+    const bool regularNightcore = this->getMods().has(ModFlags::NoPitchCorrection) && this->getSpeedMultiplier() > 1.f;
+    if(!neverNightcore && (alwaysNightcore || regularNightcore) && !this->judge->getMapTimingPoints().empty()) {
         const auto &timing = this->judge->getMapTimingPoints().getUninherited(this->iCurMusicPosWithOffsets);
         if(timing.msPerBeat > 0.0) {
             f64 halfBeatLength = timing.msPerBeat / 2.0;
