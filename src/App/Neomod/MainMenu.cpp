@@ -1395,10 +1395,10 @@ void MainMenu::onKeyDown(KeyboardEvent &e) {
     if(!this->bVisible || e.isConsumed()) return;
 
     if(!ui->getOptionsOverlay()->isMouseInside()) {
-        if(e == KEY_PREV || e == KEY_LEFT) {
+        const bool shiftF2 = e == KEY_F2 && keyboard->isShiftDown();
+        if(e == KEY_PREV || e == KEY_LEFT || shiftF2) {
             this->selectPreviousRandomBeatmap();
-        }
-        if(e == KEY_NEXT || e == KEY_RIGHT || e == KEY_F2) {
+        } else if(e == KEY_NEXT || e == KEY_RIGHT || e == KEY_F2) {
             this->selectRandomBeatmap();
         }
         if(e == KEY_PLAYPAUSE || (e == KEY_PLAY && !osu->getMusicTrack()->isPlaying()) ||
