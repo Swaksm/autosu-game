@@ -657,6 +657,8 @@ CONVAR(screenshot_clipboard, true, CLIENT, "copy screenshots to the clipboard as
 CONVAR(cursor_alpha, 1.0f, CLIENT | SKINS | SERVER);
 CONVAR(cursor_expand_duration, 0.1f, CLIENT | SKINS | SERVER);
 CONVAR(cursor_expand_scale_multiplier, 1.3f, CLIENT | SKINS | SERVER);
+CONVAR(cursor_hardware, Env::cfg(OS::WASM) ? true : false, CLIENT | SKINS | SERVER,
+       "use the skin cursor as the os cursor (unless raw input or conflicting mods are enabled)");
 CONVAR(cursor_idle_time_before_fade, 15.f, CLIENT | SKINS | SERVER, "0 to disable");
 CONVAR(cursor_ripple_additive, true, CLIENT | SKINS | SERVER, "use additive blending");
 CONVAR(cursor_ripple_alpha, 1.0f, CLIENT | SKINS | SERVER);

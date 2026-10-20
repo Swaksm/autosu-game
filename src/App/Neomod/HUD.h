@@ -62,6 +62,10 @@ class HUD final : public UIScreen {
         vec2 pos, f32 alphaMultiplier = 1.0f,
         bool secondTrail = false);  // NOTE: only use if drawCursor() with updateAndDrawTrail = false (FPoSu)
     void drawCursorRipples();
+    // hardware cursor: the os draws the skin cursor image, so drawCursor() only draws the trail and ripples.
+    // enable = true turns it on (if the skin cursor image can be loaded), false goes back to the system cursor.
+    // returns true if the hardware cursor is on. call it every update, it only rebuilds the cursor on changes.
+    bool updateHardwareCursor(bool enable);
     void drawFps();
     // how much of the screen's bottom right corner drawFps() covers (none while it's off), with room for four-digit
     // rates: what a screen keeps its controls out of
@@ -307,6 +311,7 @@ class HUD final : public UIScreen {
 
     // cursor & trail & ripples
     AnimFloat fCursorExpandAnim;
+    bool bHardwareCursor{false};
     CursorTrail cursorTrail;
     CursorTrail cursorTrail2;
     CursorTrail cursorTrailSpectator1;

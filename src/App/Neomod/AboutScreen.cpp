@@ -411,6 +411,7 @@ void AboutScreen::buildChangelog() {
         R"(- Fixed seeking in replays reacting to clicks in options menu or outside the window)",
         R"(- Fixed the song sometimes restarting at the end of a map)",
         R"(- ScoreV2: slider judgements are now shown on the slider head instead of the tail)",
+        R"(- Web: Added hardware cursor to reduce visual latency)",
     };
     changelogs.push_back(std::move(v44_01));
 

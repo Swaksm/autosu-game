@@ -447,6 +447,7 @@ Osu::~Osu() {
         // another piece of global state, don't forget!
         mouse->setAppViewport({});
         mouse->setAppCursorHidden(false);
+        env->setNormalCursorImage({});
         mouse->setAppCursorConfined(false);
         mouse->setRawInputOverride(false);
     }
@@ -1950,10 +1951,17 @@ void Osu::onLetterboxingChange(float oldValue, float newValue) {
 void Osu::updateCursorVisibility() {
     if(!this->UIReady()) return;
 
-    const bool forced_visible = this->isInPlayMode() && !this->map_iface->isPaused() &&
+    const bool playing = this->isInPlayMode();
+    const bool forced_visible = playing && !this->map_iface->isPaused() &&
                                 (cv::mod_autoplay.getBool() || cv::mod_autopilot.getBool() ||
                                  this->map_iface->is_watching || BanchoState::spectating);
-    mouse->setAppCursorHidden(!forced_visible);
+
+    // the os cursor can show the game cursor instead, as long as it can stay visible and in absolute mode
+    const bool hardware_wanted = cv::cursor_hardware.getBool() && !forced_visible && !mouse->isRawInputWanted() &&
+                                 !(playing && (cv::mod_fposu.getBool() || cv::mod_fadingcursor.getBool()));
+    const bool hardware = ui->getHUD()->updateHardwareCursor(hardware_wanted);
+
+    mouse->setAppCursorHidden(!forced_visible && !hardware);
 }
 
 void Osu::updateConfineCursor() {

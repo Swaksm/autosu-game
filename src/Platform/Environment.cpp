@@ -251,6 +251,7 @@ Environment::~Environment() {
         }
     }
     m_cursorIcons = {};
+    if(m_normalCursorImage) SDL_DestroyCursor(m_normalCursorImage);
 
     env = nullptr;
 }
@@ -1248,8 +1249,92 @@ void Environment::setCursor(CURSORTYPE cur) {
     if(!m_cursorIcons[0]) initCursors();
     if(m_cursorType != cur && cur >= CURSORTYPE::CURSOR_NORMAL && cur < CURSORTYPE::CURSORTYPE_MAX) {
         m_cursorType = cur;
-        SDL_SetCursor(m_cursorIcons[(size_t)m_cursorType]);  // does not make visible if the cursor isn't visible
+        SDL_Cursor *icon = (cur == CURSORTYPE::CURSOR_NORMAL && m_normalCursorImage) ? m_normalCursorImage
+                                                                                     : m_cursorIcons[(size_t)cur];
+        SDL_SetCursor(icon);  // does not make visible if the cursor isn't visible
     }
+}
+
+bool Environment::setNormalCursorImage(const std::vector<CursorImageLayer> &layers) {
+    if(layers == m_normalCursorLayers) return layers.empty() || m_normalCursorImage;
+    m_normalCursorLayers = layers;
+    if(!m_cursorIcons[0]) initCursors();
+
+    SDL_Cursor *previous = m_normalCursorImage;
+    m_normalCursorImage = nullptr;
+
+    // bounding box of all layers in window pixels, the hotspot is the origin
+    McRect bounds;
+    for(size_t i = 0; i < layers.size(); i++) {
+        bounds = i == 0 ? layers[i].rect : bounds.Union(layers[i].rect);
+    }
+    const ivec2 size{(int)std::ceil(bounds.getWidth()), (int)std::ceil(bounds.getHeight())};
+
+    SDL_Surface *composite = nullptr;
+    if(size.x > 0 && size.y > 0) {
+        composite = SDL_CreateSurface(size.x, size.y, SDL_PIXELFORMAT_RGBA32);
+        if(composite) SDL_FillSurfaceRect(composite, nullptr, 0);
+    }
+
+    bool anyLoaded = false;
+    for(const auto &layer : layers) {
+        if(!composite) break;
+
+        std::unique_ptr<u8[]> fileBuffer;
+        size_t fileSize{0};
+        {
+            File file(layer.path);
+            if(!file.canRead() || (fileSize = file.getFileSize()) == 0) continue;
+            fileBuffer = file.takeFileBuffer();
+            if(!fileBuffer) continue;
+        }
+
+        SDL_Surface *img = SDL_LoadSurface_IO(SDL_IOFromConstMem(fileBuffer.get(), fileSize), true);
+        if(!img) {
+            debugLog("couldn't load cursor image {}: {}", layer.path, SDL_GetError());
+            continue;
+        }
+        const vec2 dstMin = layer.rect.getMin() - bounds.getMin();
+        SDL_Rect dst{(int)std::round(dstMin.x), (int)std::round(dstMin.y), (int)std::round(layer.rect.getWidth()),
+                     (int)std::round(layer.rect.getHeight())};
+        SDL_SetSurfaceBlendMode(img, SDL_BLENDMODE_BLEND);
+        SDL_SetSurfaceAlphaMod(img, (Uint8)std::round(std::clamp(layer.alpha, 0.f, 1.f) * 255.f));
+        anyLoaded |= SDL_BlitSurfaceScaled(img, nullptr, composite, &dst, SDL_SCALEMODE_LINEAR);
+        SDL_DestroySurface(img);
+    }
+
+    if(anyLoaded) {
+        // sdl takes the cursor surface in points, the full resolution version is the high dpi alternate
+        f32 pointScale = 1.f / getPixelDensity();
+        if constexpr(Env::cfg(OS::WASM)) {
+            // browsers ignore css cursors larger than 128x128
+            pointScale = std::min(pointScale, 128.f / (f32)std::max(size.x, size.y));
+        }
+        const ivec2 pointSize{std::max(1, (int)std::round(size.x * pointScale)),
+                              std::max(1, (int)std::round(size.y * pointScale))};
+
+        SDL_Surface *base = composite;
+        if(pointSize != size) {
+            base = SDL_ScaleSurface(composite, pointSize.x, pointSize.y, SDL_SCALEMODE_LINEAR);
+            if(base) SDL_AddSurfaceAlternateImage(base, composite);
+        }
+        if(base) {
+            const vec2 hotspot = -bounds.getMin() * pointScale;
+            m_normalCursorImage =
+                SDL_CreateColorCursor(base, std::clamp((int)std::round(hotspot.x), 0, pointSize.x - 1),
+                                      std::clamp((int)std::round(hotspot.y), 0, pointSize.y - 1));
+            if(!m_normalCursorImage) debugLog("couldn't create cursor: {}", SDL_GetError());
+            if(base != composite) SDL_DestroySurface(base);
+        }
+    }
+    if(composite) SDL_DestroySurface(composite);
+
+    if(m_cursorType == CURSORTYPE::CURSOR_NORMAL) {
+        SDL_SetCursor(m_normalCursorImage ? m_normalCursorImage : m_cursorIcons[0]);
+    }
+    if(previous) SDL_DestroyCursor(previous);
+
+    return layers.empty() || m_normalCursorImage;
 }
 
 void Environment::setRawKeyboardInput(bool raw) {

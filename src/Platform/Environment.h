@@ -277,6 +277,18 @@ class Environment {
 
     void setCursor(CURSORTYPE cur);
 
+    // an image file (png/jpg/bmp) drawn into a custom cursor, rect in window pixels relative to the hotspot
+    struct CursorImageLayer {
+        std::string path;
+        McRect rect;
+        float alpha{1.f};
+        bool operator==(const CursorImageLayer &) const = default;
+    };
+    // replaces the CURSOR_NORMAL shape with the layers composited in order, or with the system cursor if empty.
+    // returns false if no layer could be loaded (the system cursor is used then).
+    // only rebuilds the cursor when the layers change, so it can be called every frame
+    bool setNormalCursorImage(const std::vector<CursorImageLayer> &layers);
+
     // keyboard
     [[nodiscard]] std::string scanCodeToString(SCANCODE scanCode) const;
     [[nodiscard]] std::string keyCodeToString(KEYCODE keyCode) const;
@@ -421,6 +433,8 @@ class Environment {
     bool m_bCursorClipped;  // the rect is applied
     CURSORTYPE m_cursorType;
     std::array<SDL_Cursor *, (size_t)CURSORTYPE::CURSORTYPE_MAX> m_cursorIcons;
+    std::vector<CursorImageLayer> m_normalCursorLayers;
+    SDL_Cursor *m_normalCursorImage{nullptr};  // replaces the CURSOR_NORMAL icon while set
 
     // for state reconciliation when re-focusing the window
     friend class Keyboard;

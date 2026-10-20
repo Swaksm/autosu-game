@@ -529,6 +529,13 @@ void HUD::drawCursor(vec2 pos, f32 alphaMultiplier, bool secondTrail, bool updat
         this->drawCursorTrailInt(this->cursorTrailShader, trail, pos, alphaMultiplier, false);
     }
 
+    // cursor ripples cleanup
+    if(this->cursorRipples.size() > 0 && engine->getTime() > this->cursorRipples.front().time) {
+        this->cursorRipples.erase(this->cursorRipples.begin());
+    }
+
+    if(this->bHardwareCursor) return;
+
     const auto &cursorImg = skin->i_cursor;
     const f32 scale = HUD::getCursorScaleFactor() / (cursorImg.scale());
     const f32 animatedScale = scale * (skin->o_cursor_expand ? this->fCursorExpandAnim : 1.0f);
@@ -568,11 +575,27 @@ void HUD::drawCursor(vec2 pos, f32 alphaMultiplier, bool secondTrail, bool updat
         }
         g->popTransform();
     }
+}
 
-    // cursor ripples cleanup
-    if(this->cursorRipples.size() > 0 && engine->getTime() > this->cursorRipples.front().time) {
-        this->cursorRipples.erase(this->cursorRipples.begin());
+bool HUD::updateHardwareCursor(bool enable) {
+    std::vector<Environment::CursorImageLayer> layers;
+    if(enable) {
+        // same layout as drawCursor, without the rotation and expand animations
+        const Skin *skin = osu->getSkin();
+        const f32 scale = HUD::getCursorScaleFactor() * cv::cursor_scale.getFloat();
+        const f32 alpha = cv::cursor_alpha.getFloat();
+        const auto addLayer = [&](const BasicSkinImage &img) {
+            const vec2 size = vec2{img->getSize()} * (scale / img.scale());
+            layers.push_back({.path = img->getFilePath(),
+                              .rect = McRect{skin->o_cursor_centered ? -size / 2.f : vec2{}, size},
+                              .alpha = alpha});
+        };
+        addLayer(skin->i_cursor);
+        if(skin->useSmoothCursorTrail()) addLayer(skin->i_cursor_middle);
     }
+
+    this->bHardwareCursor = env->setNormalCursorImage(layers) && enable;
+    return this->bHardwareCursor;
 }
 
 void HUD::drawCursorTrail(vec2 pos, f32 alphaMultiplier, bool secondTrail) {
