@@ -1,6 +1,7 @@
 #pragma once
 // Copyright (c) 2024, kiwec, All rights reserved.
 
+#include "AnimationHandler.h"
 #include "CBaseUILabel.h"
 #include "UIScreen.h"
 
@@ -26,7 +27,13 @@ class UIUserLabel final : public CBaseUILabel {
    public:
     UIUserLabel(i32 user_id, std::string username);
 
+    void draw() override;
     void onMouseUpInside(bool left = true, bool right = false) override;
+    void onMouseInside() override;
+    void onMouseOutside() override;
 
     i32 user_id;
+
+   private:
+    AnimFloat hover_anim{0.f};
 };

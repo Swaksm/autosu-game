@@ -2,6 +2,7 @@
 #include "UserCard2.h"
 
 #include "BanchoUsers.h"
+#include "Color.h"
 #include "Engine.h"
 #include "ResourceManager.h"
 #include "Skin.h"
@@ -151,6 +152,12 @@ void UserCard2::draw() {
     }
     g->fillRect(this->getPos(), this->getSize());
 
+    // the background brightens on hover, so that the card reads as clickable
+    if(this->hover_anim > 0.f) {
+        g->setColor(argb(0.2f * this->hover_anim, 1.f, 1.f, 1.f));
+        g->fillRect(this->getPos(), this->getSize());
+    }
+
     // draw user icon
     g->setColor(0xff1a1a1a);
     g->fillRect(this->getPos().x + AVATAR_MARGIN, this->getPos().y + AVATAR_MARGIN, this->avatar->getSize().x,
@@ -202,4 +209,14 @@ void UserCard2::draw() {
     }
 
     g->popClipRect();
+}
+
+void UserCard2::onMouseInside() {
+    CBaseUIButton::onMouseInside();
+    this->hover_anim.set(1.f, 0.1f, anim::QuadOut);
+}
+
+void UserCard2::onMouseOutside() {
+    CBaseUIButton::onMouseOutside();
+    this->hover_anim.set(0.f, 0.15f, anim::QuadOut);
 }

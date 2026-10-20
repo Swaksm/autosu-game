@@ -7,11 +7,13 @@
 #include "BanchoNetworking.h"
 #include "BanchoUsers.h"
 #include "Chat.h"
+#include "Color.h"
 #include "ContainerRanges.h"
 #include "OsuConVars.h"
 #include "Database.h"
 #include "Engine.h"
 #include "Environment.h"
+#include "Graphics.h"
 #include "MakeDelegateWrapper.h"
 #include "Mouse.h"
 #include "NotificationOverlay.h"
@@ -281,8 +283,33 @@ UIUserLabel::UIUserLabel(i32 user_id, std::string username) : CBaseUILabel() {
     this->setText(std::move(username));
     this->setDrawFrame(false);
     this->setDrawBackground(false);
+    this->setBackgroundColor(argb(0.3f, 1.f, 1.f, 1.f));
+}
+
+void UIUserLabel::draw() {
+    if(!this->bVisible) return;
+
+    // the background fades in on hover, so that the name reads as clickable
+    if(this->hover_anim > 0.f) {
+        Color bg = this->backgroundColor;
+        bg.setA(bg.Af() * this->hover_anim);
+        g->setColor(bg);
+        g->fillRect(this->getPos(), this->getSize());
+    }
+
+    CBaseUILabel::draw();
 }
 
 void UIUserLabel::onMouseUpInside(bool /*left*/, bool /*right*/) {
     ui->getUIUserContextMenuScreen()->open(this->user_id);
+}
+
+void UIUserLabel::onMouseInside() {
+    CBaseUILabel::onMouseInside();
+    this->hover_anim.set(1.f, 0.1f, anim::QuadOut);
+}
+
+void UIUserLabel::onMouseOutside() {
+    CBaseUILabel::onMouseOutside();
+    this->hover_anim.set(0.f, 0.15f, anim::QuadOut);
 }
