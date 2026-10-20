@@ -1,0 +1,32 @@
+From: William Horvath <william@horvath.blog>
+Subject: [PATCH] main: Fix quitting from SDL_EVENT_TERMINATING on Emscripten
+
+Since SDL_MainCallbacksSawEventTerminating, the Emscripten beforeunload handler
+calls SDL_QuitMainCallbacks() from inside the event watcher dispatch, so
+SDL_Quit() frees the watcher list while SDL_DispatchEventWatchList is still
+walking it ("null function" on the next watcher). The main loop also kept
+running, so its next iteration called SDL_AppQuit() a second time with a NULL
+appstate.
+---
+--- a/src/events/SDL_eventwatch.c
++++ b/src/events/SDL_eventwatch.c
+@@ -58,7 +58,8 @@
+         }
+ 
+         list->dispatching = true;
+-        for (i = 0; i < count; ++i) {
++        // a watcher can shut down the event subsystem (SDL_EVENT_TERMINATING quits the app on some platforms), freeing the list
++        for (i = 0; i < count && list->watchers; ++i) {
+             if (!list->watchers[i].removed) {
+                 list->watchers[i].callback(list->watchers[i].userdata, event);
+             }
+--- a/src/main/emscripten/SDL_sysmain_callbacks.c
++++ b/src/main/emscripten/SDL_sysmain_callbacks.c
+@@ -28,6 +28,7 @@
+ {
+     // We leave `result` alone, so if SDL_AppEvent didn't set something else, SDL_APP_CONTINUE will signify the app is terminating in an unexpected way during SDL_AppQuit.
+     const SDL_AppResult result = (SDL_AppResult) SDL_GetAtomicInt(apprc);
++    emscripten_cancel_main_loop();  // otherwise its next iteration would see the result and quit again.
+     SDL_QuitMainCallbacks(result);  // we need to call this directly because we won't be returning to where this would be called later.
+ }
+ 
