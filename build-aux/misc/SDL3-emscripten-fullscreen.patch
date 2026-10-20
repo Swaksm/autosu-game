@@ -1,0 +1,139 @@
+From: William Horvath <william@horvath.blog>
+Subject: [PATCH] emscripten: Fix desktop fullscreen state and sizing
+
+- report the fullscreen size instead of the screen size
+- leave the canvas alone until a desktop fullscreen change lands, so a pending or refused request
+  doesn't leave it at the screen size
+- treat an update to the same kind of fullscreen as done instead of requesting fullscreen again
+- handle fullscreenerror, which left the change in progress forever
+---
+--- a/src/video/emscripten/SDL_emscriptenvideo.c
++++ b/src/video/emscripten/SDL_emscriptenvideo.c
+@@ -147,6 +147,8 @@
+      * See https://bugzilla.mozilla.org/show_bug.cgi?id=1144964
+      */
+     SDL_SetHint(SDL_HINT_VIDEO_MINIMIZE_ON_FOCUS_LOSS, "0");
++
++    device->device_caps = VIDEO_DEVICE_CAPS_SENDS_FULLSCREEN_DIMENSIONS;
+ 
+     // Set the function pointers
+     device->VideoInit = Emscripten_VideoInit;
+@@ -732,6 +734,10 @@
+         if (emscripten_get_fullscreen_status(&fsevent) == EMSCRIPTEN_RESULT_SUCCESS) {
+             if ((fullscreen == SDL_FULLSCREEN_OP_ENTER) == fsevent.isFullscreen) {
+                 return SDL_FULLSCREEN_SUCCEEDED;  // already there.
++            }
++            // an update to the same kind of fullscreen has nothing to request, and a request would need another user gesture
++            if (fullscreen == SDL_FULLSCREEN_OP_UPDATE && fsevent.isFullscreen && data->fullscreen_resize == !window->fullscreen_exclusive) {
++                return SDL_FULLSCREEN_SUCCEEDED;
+             }
+         }
+ 
+@@ -739,15 +745,12 @@
+             EmscriptenFullscreenStrategy strategy;
+             bool is_fullscreen_desktop = !window->fullscreen_exclusive;
+ 
+-            SDL_zero(strategy);
+-            strategy.scaleMode = is_fullscreen_desktop ? EMSCRIPTEN_FULLSCREEN_SCALE_STRETCH : EMSCRIPTEN_FULLSCREEN_SCALE_ASPECT;
+-
++            // desktop fullscreen leaves the canvas alone: the browser's :fullscreen style stretches it, and
++            // Emscripten_HandleFullscreenChange sizes it once the change actually happens (or doesn't)
++            SDL_zero(strategy);
+             if (!is_fullscreen_desktop) {
++                strategy.scaleMode = EMSCRIPTEN_FULLSCREEN_SCALE_ASPECT;
+                 strategy.canvasResolutionScaleMode = EMSCRIPTEN_FULLSCREEN_CANVAS_SCALE_NONE;
+-            } else if (window->flags & SDL_WINDOW_HIGH_PIXEL_DENSITY) {
+-                strategy.canvasResolutionScaleMode = EMSCRIPTEN_FULLSCREEN_CANVAS_SCALE_HIDEF;
+-            } else {
+-                strategy.canvasResolutionScaleMode = EMSCRIPTEN_FULLSCREEN_CANVAS_SCALE_STDDEF;
+             }
+ 
+             strategy.filteringMode = EMSCRIPTEN_FULLSCREEN_FILTERING_DEFAULT;
+--- a/src/video/emscripten/SDL_emscriptenevents.c
++++ b/src/video/emscripten/SDL_emscriptenevents.c
+@@ -496,7 +496,28 @@
+     }
+ 
+     SDL_UpdateFullscreenMode(window_data->window, fullscreenChangeEvent->isFullscreen, false);
++
++    if (window_data->fullscreen_resize) {
++        SDL_Window *window = window_data->window;
++        double w = window->windowed.w;
++        double h = window->windowed.h;
++        if (fullscreenChangeEvent->isFullscreen || window_data->external_size) {
++            emscripten_get_element_css_size(window_data->canvas_id, &w, &h);
++        } else if (window == Emscripten_fill_document_window) {
++            w = MAIN_THREAD_EM_ASM_INT({ return window.innerWidth; });
++            h = MAIN_THREAD_EM_ASM_INT({ return window.innerHeight; });
++        }
++
++        emscripten_set_canvas_element_size(window_data->canvas_id, SDL_lroundf(w * window_data->pixel_ratio), SDL_lroundf(h * window_data->pixel_ratio));
++
++        // (while fullscreen, the browser's :fullscreen style sizes it)
++        if (!fullscreenChangeEvent->isFullscreen && !window_data->external_size && window_data->pixel_ratio != 1.0f) {
++            emscripten_set_element_css_size(window_data->canvas_id, w, h);
++        }
+ 
++        SDL_SendWindowEvent(window, SDL_EVENT_WINDOW_RESIZED, SDL_lroundf(w), SDL_lroundf(h));
++    }
++
+     return 0;
+ }
+ 
+@@ -521,6 +542,40 @@
+     return EM_FALSE;
+ }
+ 
++// the browser refused a fullscreen request: the windows waiting on one stay as they are
++EMSCRIPTEN_KEEPALIVE void Emscripten_HandleFullscreenError(SDL_VideoDevice *device)
++{
++    EmscriptenFullscreenChangeEvent fsevent;
++    if (emscripten_get_fullscreen_status(&fsevent) != EMSCRIPTEN_RESULT_SUCCESS) {
++        return;
++    }
++
++    for (SDL_Window *window = device->windows; window; window = window->next) {
++        if (window->internal->fullscreen_change_in_progress) {
++            Emscripten_HandleFullscreenChange(EMSCRIPTEN_EVENT_FULLSCREENCHANGE, &fsevent, window->internal);
++        }
++    }
++}
++
++// Emscripten has no fullscreenerror callback
++static void Emscripten_set_fullscreenerror_callback(SDL_VideoDevice *device)
++{
++    MAIN_THREAD_EM_ASM({
++        document.sdlEventHandlerFullscreenError = function(event) {
++            _Emscripten_HandleFullscreenError(Module['SDL3'].JSVarToCPtr($0));
++        };
++        document.addEventListener("fullscreenerror", document.sdlEventHandlerFullscreenError);
++    }, device);
++}
++
++static void Emscripten_unset_fullscreenerror_callback(void)
++{
++    MAIN_THREAD_EM_ASM({
++        document.removeEventListener("fullscreenerror", document.sdlEventHandlerFullscreenError);
++        document.sdlEventHandlerFullscreenError = undefined;
++    });
++}
++
+ static EM_BOOL Emscripten_HandleResize(int eventType, const EmscriptenUiEvent *uiEvent, void *userData)
+ {
+     SDL_WindowData *window_data = userData;
+@@ -1307,6 +1362,7 @@
+     emscripten_set_pointerlockchange_callback(EMSCRIPTEN_EVENT_TARGET_DOCUMENT, device, 0, Emscripten_HandlePointerLockChangeGlobal);
+ 
+     emscripten_set_fullscreenchange_callback(EMSCRIPTEN_EVENT_TARGET_DOCUMENT, device, 0, Emscripten_HandleFullscreenChangeGlobal);
++    Emscripten_set_fullscreenerror_callback(device);
+ 
+     emscripten_set_resize_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, device, 0, Emscripten_HandleResizeGlobal);
+ }
+@@ -1321,6 +1377,7 @@
+     emscripten_set_pointerlockchange_callback(EMSCRIPTEN_EVENT_TARGET_DOCUMENT, NULL, 0, NULL);
+ 
+     emscripten_set_fullscreenchange_callback(EMSCRIPTEN_EVENT_TARGET_DOCUMENT, NULL, 0, NULL);
++    Emscripten_unset_fullscreenerror_callback();
+ 
+     emscripten_set_resize_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, NULL, 0, NULL);
+ }

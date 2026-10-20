@@ -2506,7 +2506,9 @@ void OptionsOverlayImpl::updateLayout() {
                 case CBX:
                 case CBX_BTN: {
                     auto *checkboxPointer = dynamic_cast<CBaseUICheckbox *>(baseElem.get());
-                    if(checkboxPointer != nullptr) checkboxPointer->setChecked(element->cvar->getBool());
+                    // the fullscreen one shows the window instead (below), firing it would request fullscreen again
+                    if(checkboxPointer != nullptr && checkboxPointer != this->fullscreenCheckbox)
+                        checkboxPointer->setChecked(element->cvar->getBool());
                 } break;
                 case SLDR:
                     if(element->baseElems.size() == 3) {
