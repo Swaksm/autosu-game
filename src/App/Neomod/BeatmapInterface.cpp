@@ -2507,7 +2507,7 @@ bool BeatmapInterface::clickableHitobjectAt(vec2 cursor_pos) const {
 
 // played at the end of update2()
 void BeatmapInterface::playNightcoreBeats(bool wasSeekFrame) {
-    const int nightcoreBehavior = cv::nightcore_beats_behavior.getInt() == 2;
+    const int nightcoreBehavior = cv::nightcore_beats_behavior.getInt();
     const bool playBeats = nightcoreBehavior != 2 /* never */ &&
                            (nightcoreBehavior == 1 /*always*/ ||
                             (this->getMods().has(ModFlags::NoPitchCorrection) && this->getSpeedMultiplier() > 1.f));
