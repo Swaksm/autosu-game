@@ -128,6 +128,9 @@ class BeatmapInterface final : public GameplayJudge::Listener, public PlayfieldV
 
     const AsyncPPC::pp_res &getWholeMapPPInfo() const;
 
+    // the judgements shown on the scrubbing timeline: all of them when watching a replay, the ones so far otherwise
+    [[nodiscard]] const std::vector<LiveScore::TimedHitResult> &getTimelineHitresults() const;
+
     // hud
     [[nodiscard]] bool isSpinnerActive() const;
 
@@ -185,6 +188,7 @@ class BeatmapInterface final : public GameplayJudge::Listener, public PlayfieldV
 
     // replay replaying (prerecorded)
     FinishedScore replay_data;
+    std::vector<LiveScore::TimedHitResult> replay_hitresults;  // every judgement of replay_data
     vec2 interpolatedMousePos{0.f};
     bool is_watching = false;
     i32 current_frame_idx = 0;

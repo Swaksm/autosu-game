@@ -2,6 +2,7 @@
 #include "HUD.h"
 
 #include <algorithm>
+#include <utility>
 
 #include "AnimationHandler.h"
 #include "Bancho.h"
@@ -2147,6 +2148,25 @@ void HUD::drawScrubbingTimeline(u32 beatmapTime, u32 beatmapLengthPlayable, u32 
         const i32 width =
             std::max((i32)(osu->getVirtScreenWidth() * std::clamp<f32>(i.endPercent - i.startPercent, 0.0f, 1.0f)), 2);
         g->fillRect(osu->getVirtScreenWidth() * i.startPercent, cursorPos.y + 1, width, breakHeight);
+    }
+
+    // non-300 hit results, misses drawn last so they stay visible in dense sections
+    {
+        const f32 hitHeight = 20 * dpiScale;
+        const f32 hitWidth = std::max(2.f, std::round(2 * dpiScale));
+        const auto &hitresults = osu->getMapInterface()->getTimelineHitresults();
+        for(const auto [type, color] : {
+                std::pair{LiveHitResult::HIT_100, RGB_CV_TO_COL(hud_hiterrorbar_entry_100)},
+                std::pair{LiveHitResult::HIT_50, RGB_CV_TO_COL(hud_hiterrorbar_entry_50)},
+                std::pair{LiveHitResult::HIT_MISS, RGB_CV_TO_COL(hud_hiterrorbar_entry_miss)},
+            }) {
+            g->setColor(Color(color).setA(galpha));
+            for(const auto &hit : hitresults) {
+                if(hit.result != type) continue;
+                const f32 x = std::clamp<f32>((f32)hit.timeMS / (f32)endTimeMS, 0.f, 1.f) * osu->getVirtScreenWidth();
+                g->fillRect(x - hitWidth / 2.f, cursorPos.y, hitWidth, hitHeight);
+            }
+        }
     }
 
     // line

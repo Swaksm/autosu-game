@@ -110,7 +110,7 @@ void LiveScore::addHitResult(GameplayJudge *judge, HitObject * /*hitObject*/, Li
     // store the result, get hit value
     u64 hitValue = 0;
     if(!hitErrorBarOnly) {
-        this->hitresults.push_back(hit);
+        this->hitresults.push_back({.result = hit, .timeMS = judge->getCurMusicPos()});
 
         switch(hit) {
             case LiveHitResult::HIT_MISS:

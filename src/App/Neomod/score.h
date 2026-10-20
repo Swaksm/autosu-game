@@ -258,7 +258,12 @@ class LiveScore final {
     [[nodiscard]] f64 getScoreMultiplier() const;
     void onScoreChange();
 
-    std::vector<LiveHitResult> hitresults;
+    // score results in judgement order, with the music position they were judged at
+    struct TimedHitResult {
+        LiveHitResult result;
+        i32 timeMS;
+    };
+    std::vector<TimedHitResult> hitresults;
     std::vector<int> hitdeltas;
 
     ScoreGrade grade;

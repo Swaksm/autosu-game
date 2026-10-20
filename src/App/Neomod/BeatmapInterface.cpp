@@ -498,6 +498,21 @@ bool BeatmapInterface::watch(const FinishedScore &score, u32 start_ms) {
 
     this->judge->replay = score.replay;
 
+    // judge the whole replay up front, without sounds or effects
+    {
+        LiveScore simScore(true);
+        simScore.mods = osu->getScore()->mods;
+        GameplayJudge simJudge(this->beatmap, simScore);
+        this->replay_hitresults.clear();
+        if(const auto err = simJudge.load()) {
+            debugLog("failed to judge replay ahead: {}", err.error_string());
+        } else {
+            simJudge.replay = score.replay;
+            simJudge.simulate_to(std::numeric_limits<i32>::max());
+            this->replay_hitresults = std::move(simScore.hitresults);
+        }
+    }
+
     // Don't seek to beginning, since that would skip waiting time
     if(start_ms > 0) {
         this->seekMS(start_ms);
@@ -1070,6 +1085,10 @@ void BeatmapInterface::seekMS(u32 ms) {
     if(!this->frame_batch.empty()) {
         this->broadcast_spectator_frames();
     }
+}
+
+const std::vector<LiveScore::TimedHitResult> &BeatmapInterface::getTimelineHitresults() const {
+    return this->is_watching ? this->replay_hitresults : osu->getScore()->hitresults;
 }
 
 u32 BeatmapInterface::getTime() const { return (u32)std::max(this->music.getTime(), 0); }
