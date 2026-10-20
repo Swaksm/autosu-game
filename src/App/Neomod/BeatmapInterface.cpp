@@ -977,6 +977,13 @@ bool BeatmapInterface::failPlay(bool force_death) {
         // Send a score update with health = 0 so server knows we died
         ui->getRoomScreen()->onClientScoreChange(true);
 
+        // Only sent on first death, since there is no packet for reviving
+        if(BanchoState::is_playing_a_multi_map() && !osu->getScore()->hasDied()) {
+            Packet packet;
+            packet.id = OUTP_MATCH_FAILED;
+            BANCHO::Net::send_packet(packet);
+        }
+
         if(cv::drain_kill_notification_duration.getFloat() > 0.0f) {
             if(!osu->getScore()->hasDied())
                 ui->getNotificationOverlay()->addNotification("You have failed, but you can keep playing!", 0xffffffff,
