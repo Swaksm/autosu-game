@@ -112,6 +112,10 @@ class TimingPoints {
     // the beats since the uninherited point that applies at a time, with their fraction: for what pulses with the music
     // (0 without a beat length)
     [[nodiscard]] f64 getBeat(i32 positionMS) const;
+    // the uninherited point that applies at a time (the first point if there's none)
+    [[nodiscard]] const DBType::TIMINGPOINT &getUninherited(i32 positionMS) const {
+        return this->entries[this->entries[this->entryAt(positionMS)].lastUninherited].point;
+    }
 
     [[nodiscard]] uSz size() const { return this->entries.size(); }
     [[nodiscard]] bool empty() const { return this->entries.empty(); }

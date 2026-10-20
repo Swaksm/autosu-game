@@ -31,7 +31,9 @@ TIMINGPOINT toTimingPoint(const BeatmapFile::TimingPoint &tp) {
             .sampleIndex = tp.sampleIndex,
             .volume = std::clamp(tp.volume, 0, 100),
             .uninherited = tp.uninherited,
-            .kiai = (tp.effects & BeatmapFile::TimingPoint::EFFECT_KIAI) != 0};
+            .kiai = (tp.effects & BeatmapFile::TimingPoint::EFFECT_KIAI) != 0,
+            .meter = static_cast<u8>(std::clamp(tp.meter, 1, 0xff)),
+            .omitFirstBarline = (tp.effects & BeatmapFile::TimingPoint::EFFECT_OMIT_FIRST_BARLINE) != 0};
 }
 
 // parse a sample set value with lenient handling, matching lazer behavior:
@@ -260,7 +262,7 @@ TIMING_INFO TimingPoints::getTimingInfo(i32 positionMS) const {
 
 f64 TimingPoints::getBeat(i32 positionMS) const {
     if(this->entries.empty()) return 0.0;
-    const TIMINGPOINT &timing = this->entries[this->entries[this->entryAt(positionMS)].lastUninherited].point;
+    const TIMINGPOINT &timing = this->getUninherited(positionMS);
     if(!(timing.msPerBeat > 0.0)) return 0.0;  // (NaN too)
     return (positionMS - timing.offset) / timing.msPerBeat;
 }

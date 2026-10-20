@@ -436,6 +436,10 @@ struct Skin final {
     Sound *s_shutter{nullptr};
     Sound *s_section_pass{nullptr};
     Sound *s_section_fail{nullptr};
+    Sound *s_nightcore_kick{nullptr};
+    Sound *s_nightcore_clap{nullptr};
+    Sound *s_nightcore_hat{nullptr};
+    Sound *s_nightcore_finish{nullptr};
 
     // colors
     Color c_spinner_approach_circle;

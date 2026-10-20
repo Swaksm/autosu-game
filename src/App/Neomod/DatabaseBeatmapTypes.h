@@ -29,6 +29,10 @@ struct TIMINGPOINT final {
     bool uninherited;  // <=> timingChange
     bool kiai;
 
+    // beats per measure, and whether the measure starting at this point has no barline (uninherited points only)
+    u8 meter{4};
+    bool omitFirstBarline{false};
+
     bool operator==(const TIMINGPOINT &) const = default;
 };
 

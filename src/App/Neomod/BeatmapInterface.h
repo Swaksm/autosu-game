@@ -13,6 +13,7 @@
 
 #include "Storyboard.h"
 
+#include <limits>
 #include <memory>
 
 class RenderTarget;
@@ -326,6 +327,7 @@ class BeatmapInterface final : public GameplayJudge::Listener, public PlayfieldV
     bool bSkipScheduled{false};
     bool bClickedSkipButton{false};  // (keeps the click on the skip button from seeking)
     i32 iPreviousSectionPassFailTime;
+    i32 iLastNightcoreBeatTime{std::numeric_limits<i32>::min()};
 
     struct KeyEvent {
         Click click;  // when and where (screen px)

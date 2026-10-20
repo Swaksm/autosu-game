@@ -505,11 +505,15 @@ void BeatmapFileTest::runTests() {
         TEST_ASSERT_EQ(bom.version, 5, "the version after a BOM");
 
         const auto cr = load(
-            "osu file format v14\r[TimingPoints]\r0,500,4,1,0,100,1,8\r100,500,4,1,0,100,1,9\r"
+            "osu file format v14\r[TimingPoints]\r0,500,4,1,0,100,1,8\r100,500,3,1,0,100,1,9\r"
             "[HitObjects]\r1,2,3,1,0,0:0:0:-5:\r1,2,4,1,0,0:0:0:300:\r");
         TEST_ASSERT_EQ(cr.getNumObjects<DBType::HITCIRCLE>(), 2, "a file with CR line breaks");
         TEST_ASSERT(cr.timingpoints.size() == 2 && !cr.timingpoints[0].kiai && cr.timingpoints[1].kiai,
                     "kiai is the effects field's first bit (8 omits the first barline)");
+        TEST_ASSERT(cr.timingpoints.size() == 2 && cr.timingpoints[0].omitFirstBarline &&
+                        cr.timingpoints[1].omitFirstBarline && cr.timingpoints[0].meter == 4 &&
+                        cr.timingpoints[1].meter == 3,
+                    "the meter, and the effects field's fourth bit omits the first barline");
         const auto volume = [&cr](uSz i) { return std::get<DBType::HITCIRCLE>(cr.objects[i]).samples.volume; };
         TEST_ASSERT(cr.getNumObjects<DBType::HITCIRCLE>() == 2 && volume(0) == 0 && volume(1) == 100,
                     "sample volumes clamped to 0-100");

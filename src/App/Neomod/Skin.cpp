@@ -692,6 +692,10 @@ void Skin::loadElements() {
     this->loadSound(this->s_shutter, "shutter", "SK_S_SHUTTER", OVERLAYABLE | SAMPLE);
     this->loadSound(this->s_section_pass, "sectionpass", "SK_S_SECTIONPASS", BEATMAP);
     this->loadSound(this->s_section_fail, "sectionfail", "SK_S_SECTIONFAIL", BEATMAP);
+    this->loadSound(this->s_nightcore_kick, "nightcore-kick", "SK_S_NIGHTCORE_KICK", OVERLAYABLE | SAMPLE);
+    this->loadSound(this->s_nightcore_clap, "nightcore-clap", "SK_S_NIGHTCORE_CLAP", OVERLAYABLE | SAMPLE);
+    this->loadSound(this->s_nightcore_hat, "nightcore-hat", "SK_S_NIGHTCORE_HAT", OVERLAYABLE | SAMPLE);
+    this->loadSound(this->s_nightcore_finish, "nightcore-finish", "SK_S_NIGHTCORE_FINISH", OVERLAYABLE | SAMPLE);
 
     // UI feedback
     this->loadSound(this->s_message_sent, "key-confirm", "SK_S_MESSAGE_SENT", OVERLAYABLE | SAMPLE);

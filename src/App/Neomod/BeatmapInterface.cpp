@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <array>
 #include <chrono>
+#include <cmath>
 #include <limits>
 #include <span>
 #include <utility>
@@ -2374,6 +2375,43 @@ void BeatmapInterface::update2() {
                         soundEngine->play(this->getSkin()->s_section_pass);
                     else
                         soundEngine->play(this->getSkin()->s_section_fail);
+                }
+            }
+        }
+    }
+
+    // nightcore beats
+    // a kick and a clap on alternating beats with hats between them, and a finish every 4 measures.
+    // hats only play if the slider tick rate gives a regular offbeat.
+    // meters other than 3/4 and 4/4 only get the finish.
+    if(this->getMods().has(ModFlags::NoPitchCorrection) && this->getSpeedMultiplier() > 1.f &&
+       !this->judge->getMapTimingPoints().empty()) {
+        const auto &timing = this->judge->getMapTimingPoints().getUninherited(this->iCurMusicPosWithOffsets);
+        if(timing.msPerBeat > 0.0) {
+            f64 halfBeatLength = timing.msPerBeat / 2.0;
+            while(halfBeatLength < 50.0) halfBeatLength *= 2.0;
+
+            const i64 halfBeat = (i64)std::floor((this->iCurMusicPosWithOffsets - timing.offset) / halfBeatLength);
+            const i32 halfBeatTime = (i32)(timing.offset + (f64)halfBeat * halfBeatLength);
+            if(halfBeatTime != this->iLastNightcoreBeatTime) {
+                this->iLastNightcoreBeatTime = halfBeatTime;
+
+                if(halfBeat >= 0 && !wasSeekFrame && this->music.isPlaying() && !this->judge->hasFailed()) {
+                    const Skin *skin = this->getSkin();
+                    if(halfBeat % (timing.meter * 2 * 4) == 0 && (halfBeat > 0 || !timing.omitFirstBarline)) {
+                        soundEngine->play(skin->s_nightcore_finish);
+                    }
+
+                    if(timing.meter == 3 || timing.meter == 4) {
+                        const i64 inBar = halfBeat % (timing.meter == 3 ? 6 : 4);
+                        if(inBar == 0) {
+                            soundEngine->play(skin->s_nightcore_kick);
+                        } else if(inBar == (timing.meter == 3 ? 3 : 2)) {
+                            soundEngine->play(skin->s_nightcore_clap);
+                        } else if(std::fmod(this->beatmap->getSliderTickRate(), 2.f) == 0.f) {
+                            soundEngine->play(skin->s_nightcore_hat);
+                        }
+                    }
                 }
             }
         }
