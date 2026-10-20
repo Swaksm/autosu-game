@@ -241,6 +241,10 @@ struct StarCalcParams {
 
     std::vector<f32> *outAimStrains;
     std::vector<f32> *outSpeedStrains;
+    // if non-null, receive where the exported strain sections lie in (unscaled) beatmap time:
+    // the first section's start and every section's duration, in ms
+    f64 *outStrainsStartMS{nullptr};
+    f64 *outStrainSectionMS{nullptr};
     i32 upToObjectIndex{-1};
 
     // cancellation

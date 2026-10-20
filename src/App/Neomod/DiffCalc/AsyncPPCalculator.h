@@ -23,6 +23,9 @@ struct pp_res {
 
     std::vector<f32> aimStrains{};
     std::vector<f32> speedStrains{};
+    // beatmap time (ms) the first strain section starts at, and each section's duration
+    f64 strainsStartMS{0.0};
+    f64 strainSectionMS{0.0};
 
     bool operator==(const pp_res&) const = default;
 };

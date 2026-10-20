@@ -192,8 +192,8 @@ struct LivePPCalc::LivePPCalcImpl {
             // larger upToObjectIndex reuse them via diffres.strainState
             DiffCalc::StarCalcParams params{.outAttributes = diffattrsOut,
                                             .beatmapData = diffcalcData,
-                                            .outAimStrains = &retInfo.aimStrains,
-                                            .outSpeedStrains = &retInfo.speedStrains,
+                                            .outAimStrains = nullptr,
+                                            .outSpeedStrains = nullptr,
                                             .upToObjectIndex = p.current_hitobject,
                                             .cancelCheck = {},
                                             .strainState = &diffres.strainState};

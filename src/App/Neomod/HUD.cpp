@@ -2132,13 +2132,15 @@ void HUD::drawScrubbingTimeline(u32 beatmapTime, u32 beatmapLengthPlayable, u32 
 
     // draw strain graph
     if(cv::draw_scrubbing_timeline_strain_graph.getBool()) {
-        const f32 offsetX = (f32)beatmapStartTimePlayable / (f32)endTimeMS * (f32)osu->getVirtScreenWidth();
+        const auto &ppInfo = osu->getMapInterface()->getWholeMapPPInfo();
+        const f64 pxPerMS = (f64)osu->getVirtScreenWidth() / (f64)endTimeMS;
+        const f32 offsetX = (f32)(ppInfo.strainsStartMS * pxPerMS);
+        const f32 graphWidth = (f32)((f64)ppInfo.aimStrains.size() * ppInfo.strainSectionMS * pxPerMS);
         const f32 strainHeight = cv::hud_scrubbing_timeline_strains_height.getFloat() * dpiScale;
         const f32 alpha = cv::hud_scrubbing_timeline_strains_alpha.getFloat() * (f32)galpha;
 
-        const auto &ppInfo = osu->getMapInterface()->getWholeMapPPInfo();
         this->strainGraph.draw(ppInfo.aimStrains, ppInfo.speedStrains, ppInfo.total_stars, vec2(offsetX, cursorPos.y),
-                               (f32)osu->getVirtScreenWidth() - offsetX, strainHeight, alpha);
+                               graphWidth, strainHeight, alpha);
     }
 
     // breaks

@@ -66,6 +66,9 @@ inline constexpr const f64 performance_base_multiplier = 1.12;  // keep final pp
 // normalized EMA decay bases per skill (strain = strain * decay + noteDiff * (1 - decay))
 inline constexpr const f64 decay_base[Skills::NUM_SKILLS] = {0.3, 0.2, 0.2};
 
+// section length of build_fixed_strain_sections (rate-adjusted ms)
+inline constexpr const f64 fixed_strain_section_length = 400.0;
+
 static void calculateScoreV1Attributes(DifficultyAttributes &attributes, const BeatmapDiffcalcData &beatmapData,
                                        i32 upToObjectIndex);
 static f64 calculateScoreV1SpinnerScore(f64 spinnerDuration);
@@ -123,7 +126,8 @@ static f64 calculate_flashlight_difficulty(const DifficultyHitObject *dobjects, 
 template <typename T>
     requires(std::is_same_v<T, float> || std::is_same_v<T, double>)
 static std::vector<T> build_fixed_strain_sections(const DifficultyHitObject *dobjects, uSz dobjectCount, f64 decayBase,
-                                                  f64 (*strainOf)(const DifficultyHitObject &));
+                                                  f64 (*strainOf)(const DifficultyHitObject &),
+                                                  f64 *outFirstSectionStart = nullptr);
 
 // per-object weighted counts (lazer Count*/Relevant*/GetDifficultSliders)
 static f64 count_top_weighted_strains_geometric(const DifficultyHitObject *dobjects, uSz dobjectCount,
@@ -1038,9 +1042,15 @@ f64 calculateStarDiffForHitObjects(StarCalcParams &params) {
     // series share the same section grid so they always have equal sizes
     // NOTE: using floats here to reduce memory usage
     if(params.outAimStrains != nullptr) {
+        f64 firstSectionStart = 0.0;
         *params.outAimStrains = build_fixed_strain_sections<f32>(
             diffObjects, numDiffObjects, decay_base[Skills::AIM_SLIDERS],
-            [](const DifficultyHitObject &o) { return o.c->strains[Skills::AIM_SLIDERS]; });
+            [](const DifficultyHitObject &o) { return o.c->strains[Skills::AIM_SLIDERS]; }, &firstSectionStart);
+
+        // the sections are in rate-adjusted time
+        const f64 speed = params.beatmapData.speedMultiplier;
+        if(params.outStrainsStartMS != nullptr) *params.outStrainsStartMS = firstSectionStart * speed;
+        if(params.outStrainSectionMS != nullptr) *params.outStrainSectionMS = fixed_strain_section_length * speed;
     }
     if(params.outSpeedStrains != nullptr) {
         *params.outSpeedStrains = build_fixed_strain_sections<f32>(
@@ -1690,14 +1700,13 @@ f64 calculate_reading_difficulty(const DifficultyHitObject *dobjects, uSz dobjec
 template <typename T>
     requires(std::is_same_v<T, float> || std::is_same_v<T, double>)
 std::vector<T> build_fixed_strain_sections(const DifficultyHitObject *dobjects, uSz dobjectCount, f64 decayBase,
-                                           f64 (*strainOf)(const DifficultyHitObject &)) {
-    static constexpr f64 strain_step = 400.0;
-
+                                           f64 (*strainOf)(const DifficultyHitObject &), f64 *outFirstSectionStart) {
     std::vector<T> highestStrains;
     if(dobjectCount < 2) return highestStrains;
 
     // the first lazer object begins with an incremented section end
-    f64 interval_end = (std::ceil((f64)dobjects[1].time / strain_step) * strain_step);
+    f64 interval_end = (std::ceil((f64)dobjects[1].time / fixed_strain_section_length) * fixed_strain_section_length);
+    if(outFirstSectionStart != nullptr) *outFirstSectionStart = interval_end - fixed_strain_section_length;
     f64 max_strain = 0.0;
 
     for(uSz i = 1; i < dobjectCount; i++) {
@@ -1714,7 +1723,7 @@ std::vector<T> build_fixed_strain_sections(const DifficultyHitObject *dobjects, 
             else
                 max_strain = strainOf(dobjects[i - 1]) * std::pow(decayBase, strainDelta / 1000.0);
 
-            interval_end += strain_step;
+            interval_end += fixed_strain_section_length;
         }
 
         max_strain = std::max(max_strain, strainOf(cur));

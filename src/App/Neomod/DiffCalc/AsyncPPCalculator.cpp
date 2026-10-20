@@ -234,6 +234,8 @@ void drain_work(const std::shared_ptr<calc_session>& s, const Sync::stop_token& 
                                             .beatmapData = diffcalcData,
                                             .outAimStrains = &new_info.info.aimStrains,
                                             .outSpeedStrains = &new_info.info.speedStrains,
+                                            .outStrainsStartMS = &new_info.info.strainsStartMS,
+                                            .outStrainSectionMS = &new_info.info.strainSectionMS,
                                             .upToObjectIndex = -1,
                                             .cancelCheck = stoken,
                                             .strainState = &computed_ho->diffres.strainState};
