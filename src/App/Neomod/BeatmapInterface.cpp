@@ -2381,43 +2381,8 @@ void BeatmapInterface::update2() {
     }
 
     // nightcore beats
-    // a kick and a clap on alternating beats with hats between them, and a finish every 4 measures.
-    // hats only play if the slider tick rate gives a regular offbeat.
-    // meters other than 3/4 and 4/4 only get the finish.
-    const bool alwaysNightcore = cv::nightcore_beats_behavior.getInt() == 1;
-    const bool neverNightcore = cv::nightcore_beats_behavior.getInt() == 2;
-    const bool regularNightcore = this->getMods().has(ModFlags::NoPitchCorrection) && this->getSpeedMultiplier() > 1.f;
-    if(!neverNightcore && (alwaysNightcore || regularNightcore) && !this->judge->getMapTimingPoints().empty()) {
-        const auto &timing = this->judge->getMapTimingPoints().getUninherited(this->iCurMusicPosWithOffsets);
-        if(timing.msPerBeat > 0.0) {
-            f64 halfBeatLength = timing.msPerBeat / 2.0;
-            while(halfBeatLength < 50.0) halfBeatLength *= 2.0;
-
-            const i64 halfBeat = (i64)std::floor((this->iCurMusicPosWithOffsets - timing.offset) / halfBeatLength);
-            const i32 halfBeatTime = (i32)(timing.offset + (f64)halfBeat * halfBeatLength);
-            if(halfBeatTime != this->iLastNightcoreBeatTime) {
-                this->iLastNightcoreBeatTime = halfBeatTime;
-
-                if(halfBeat >= 0 && !wasSeekFrame && this->music.isPlaying() && !this->judge->hasFailed()) {
-                    const Skin *skin = this->getSkin();
-                    if(halfBeat % (timing.meter * 2 * 4) == 0 && (halfBeat > 0 || !timing.omitFirstBarline)) {
-                        soundEngine->play(skin->s_nightcore_finish);
-                    }
-
-                    if(timing.meter == 3 || timing.meter == 4) {
-                        const i64 inBar = halfBeat % (timing.meter == 3 ? 6 : 4);
-                        if(inBar == 0) {
-                            soundEngine->play(skin->s_nightcore_kick);
-                        } else if(inBar == (timing.meter == 3 ? 3 : 2)) {
-                            soundEngine->play(skin->s_nightcore_clap);
-                        } else if(std::fmod(this->beatmap->getSliderTickRate(), 2.f) == 0.f) {
-                            soundEngine->play(skin->s_nightcore_hat);
-                        }
-                    }
-                }
-            }
-        }
-    }
+    // TODO: is this the right place to put this?
+    this->playNightcoreBeats(wasSeekFrame);
 
     // handle fail animation
     if(this->judge->hasFailed()) {
@@ -2519,6 +2484,52 @@ bool BeatmapInterface::clickableHitobjectAt(vec2 cursor_pos) const {
     }
 
     return false;
+}
+
+// played at the end of update2()
+void BeatmapInterface::playNightcoreBeats(bool wasSeekFrame) {
+    const int nightcoreBehavior = cv::nightcore_beats_behavior.getInt() == 2;
+    const bool playBeats = nightcoreBehavior != 2 /* never */ &&
+                           (nightcoreBehavior == 1 /*always*/ ||
+                            (this->getMods().has(ModFlags::NoPitchCorrection) && this->getSpeedMultiplier() > 1.f));
+    if(!playBeats) return;
+
+    // no timingpoints (is this even reachable here?)
+    const auto &timingPoints = this->judge->getMapTimingPoints();
+    if(timingPoints.empty()) return;
+
+    // a kick and a clap on alternating beats with hats between them, and a finish every 4 measures.
+    // hats only play if the slider tick rate gives a regular offbeat.
+    // meters other than 3/4 and 4/4 only get the finish.
+    const auto &timing = timingPoints.getUninherited(this->iCurMusicPosWithOffsets);
+    if(timing.msPerBeat <= 0.0) return;  // need >0 msPerBeat
+
+    f64 halfBeatLength = timing.msPerBeat / 2.0;
+    while(halfBeatLength < 50.0) halfBeatLength *= 2.0;
+
+    const i64 halfBeat = (i64)std::floor((this->iCurMusicPosWithOffsets - timing.offset) / halfBeatLength);
+    const i32 halfBeatTime = (i32)(timing.offset + (f64)halfBeat * halfBeatLength);
+    if(halfBeatTime != this->iLastNightcoreBeatTime) {
+        this->iLastNightcoreBeatTime = halfBeatTime;
+
+        if(halfBeat >= 0 && !wasSeekFrame && this->music.isPlaying() && !this->judge->hasFailed()) {
+            const Skin *skin = this->getSkin();
+            if(halfBeat % (timing.meter * 2 * 4) == 0 && (halfBeat > 0 || !timing.omitFirstBarline)) {
+                soundEngine->play(skin->s_nightcore_finish);
+            }
+
+            if(timing.meter == 3 || timing.meter == 4) {
+                const i64 inBar = halfBeat % (timing.meter == 3 ? 6 : 4);
+                if(inBar == 0) {
+                    soundEngine->play(skin->s_nightcore_kick);
+                } else if(inBar == (timing.meter == 3 ? 3 : 2)) {
+                    soundEngine->play(skin->s_nightcore_clap);
+                } else if(std::fmod(this->beatmap->getSliderTickRate(), 2.f) == 0.f) {
+                    soundEngine->play(skin->s_nightcore_hat);
+                }
+            }
+        }
+    }
 }
 
 void BeatmapInterface::broadcast_spectator_frames() {

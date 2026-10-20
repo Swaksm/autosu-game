@@ -343,26 +343,12 @@ class BeatmapInterface final : public GameplayJudge::Listener, public PlayfieldV
     std::vector<neomod::HitObject *> objectsToDraw;  // for drawHitObjects, temp buffer
 
    private:
+    void playNightcoreBeats(bool wasSeekFrame = false);
+
     // yes, you're looking at the third fail method (not counting cancelFailing).
     // but between regular dying, replay watching, spectating, multiplayer and others...
     // the complexity really is hard to eliminate.
     bool failPlay(bool force_death);
-
-    static inline vec2 mapNormalizedCoordsOntoUnitCircle(const vec2 &in) {
-        return vec2(in.x * std::sqrt(1.0f - in.y * in.y / 2.0f), in.y * std::sqrt(1.0f - in.x * in.x / 2.0f));
-    }
-
-    static f32 quadLerp3f(f32 left, f32 center, f32 right, f32 percent) {
-        if(percent >= 0.5f) {
-            percent = (percent - 0.5f) / 0.5f;
-            percent *= percent;
-            return std::lerp(center, right, percent);
-        } else {
-            percent = percent / 0.5f;
-            percent = 1.0f - (1.0f - percent) * (1.0f - percent);
-            return std::lerp(left, center, percent);
-        }
-    }
 
     FinishedScore saveAndSubmitScore(bool quit);
 
