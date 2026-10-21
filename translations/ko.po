@@ -1,0 +1,3695 @@
+# Korean translations for neomod package.
+# Copyright (C) 2026 kiwec.
+# This file is distributed under the same license as the neomod package.
+#
+# WARNING: Machine-translated by LLMs. Not human-reviewed.
+# May contain errors in grammatical gender, politeness register, game-specific
+# terminology, or context-dependent meaning. Please flag mistranslations
+# or volunteer a review to replace these.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: neomod\n"
+"Report-Msgid-Bugs-To: \n"
+"Language-Team: none\n"
+"Language: ko\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: src/App/Neomod/AboutScreen.cpp src/App/Neomod/MainMenu.cpp
+msgid "Changelog"
+msgstr "변경 내역"
+
+#: src/App/Neomod/AboutScreen.cpp
+msgid "Credits"
+msgstr "제작진"
+
+#: src/App/Neomod/AboutScreen.cpp
+msgid "Licenses"
+msgstr "라이선스"
+
+#: src/App/Neomod/BanchoLeaderboard.cpp
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Global"
+msgstr "전체"
+
+#: src/App/Neomod/BanchoLeaderboard.cpp
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Selected mods"
+msgstr "선택한 모드"
+
+#: src/App/Neomod/BanchoLeaderboard.cpp
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Friends"
+msgstr "친구"
+
+#: src/App/Neomod/BanchoLeaderboard.cpp
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Country"
+msgstr "국가"
+
+#: src/App/Neomod/BanchoLeaderboard.cpp
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Team"
+msgstr "팀"
+
+#: src/App/Neomod/BeatmapInstallOverlay.cpp
+#, c++-format
+msgid "Beatmap #{:d}"
+msgstr "비트맵 #{:d}"
+
+#: src/App/Neomod/BeatmapInstallOverlay.cpp
+msgid "Failed"
+msgstr "실패"
+
+#: src/App/Neomod/BeatmapInstallOverlay.cpp
+msgid "Installing..."
+msgstr "설치 중..."
+
+#: src/App/Neomod/BeatmapInstallOverlay.cpp
+msgid "Extracting..."
+msgstr "압축 해제 중..."
+
+#: src/App/Neomod/BeatmapInstallOverlay.cpp
+msgid "Queued"
+msgstr "대기 중"
+
+#: src/App/Neomod/BeatmapInstaller.cpp
+#, c++-format
+msgid "{} is already installed"
+msgstr "{}은(는) 이미 설치되어 있습니다"
+
+#: src/App/Neomod/BeatmapInstaller.cpp
+#, c++-format
+msgid "Beatmapset #{:d} is already installed"
+msgstr "비트맵셋 #{:d}은(는) 이미 설치되어 있습니다"
+
+#: src/App/Neomod/BeatmapInstaller.cpp
+#, c++-format
+msgid "Downloaded beatmapset #{:d}"
+msgstr "비트맵셋 #{:d} 다운로드 완료"
+
+#: src/App/Neomod/BeatmapInstaller.cpp
+#, c++-format
+msgid "Failed to import {}"
+msgstr "{}을(를) 가져오지 못했습니다"
+
+#: src/App/Neomod/BeatmapInstaller.cpp
+#, c++-format
+msgid "Failed to download beatmapset #{:d} :("
+msgstr "비트맵셋 #{:d}을(를) 다운로드하지 못했습니다 :("
+
+#: src/App/Neomod/BeatmapInstaller.cpp
+#, c++-format
+msgid "Couldn't delete {}"
+msgstr "{}을(를) 삭제할 수 없습니다"
+
+#: src/App/Neomod/BeatmapInstaller.cpp
+#, c++-format
+msgid "Deleted {}"
+msgstr "{} 삭제됨"
+
+#: src/App/Neomod/BeatmapInterface.cpp
+msgid "Buffering ..."
+msgstr "버퍼링 중 ..."
+
+#: src/App/Neomod/BeatmapInterface.cpp
+#, c++-format
+msgid "{} has paused"
+msgstr "{} 님이 일시 정지했습니다"
+
+#: src/App/Neomod/BeatmapInterface.cpp
+msgid "Waiting for players ..."
+msgstr "플레이어를 기다리는 중 ..."
+
+#: src/App/Neomod/BeatmapInterface.cpp
+msgid "Loading ..."
+msgstr "불러오는 중 ..."
+
+#: src/App/Neomod/Chat.cpp
+#, c++-format
+msgid "You are silenced for another {:d}h {:02d}m {:02d}s."
+msgstr "{:d}시간 {:02d}분 {:02d}초 동안 채팅이 금지되었습니다."
+
+#: src/App/Neomod/Chat.cpp
+msgid "You are not listening to anything."
+msgstr "아무것도 듣고 있지 않습니다."
+
+#: src/App/Neomod/Chat.cpp
+#, c++-format
+msgid "User '{:s}' not found. Are they online?"
+msgstr "'{:s}' 사용자를 찾을 수 없습니다. 온라인 상태인가요?"
+
+#: src/App/Neomod/Chat.cpp
+#, c++-format
+msgid "You are already friends with {:s}!"
+msgstr "이미 {:s} 님과 친구입니다!"
+
+#: src/App/Neomod/Chat.cpp
+#, c++-format
+msgid "You are now friends with {:s}."
+msgstr "이제 {:s} 님과 친구입니다."
+
+#: src/App/Neomod/Chat.cpp
+msgid "Away message removed."
+msgstr "자리 비움 메시지를 삭제했습니다."
+
+#: src/App/Neomod/Chat.cpp
+#, c++-format
+msgid "Away message set to '{:s}'."
+msgstr "자리 비움 메시지를 '{:s}'(으)로 설정했습니다."
+
+#: src/App/Neomod/Chat.cpp
+#, c++-format
+msgid "You are no longer friends with {:s}."
+msgstr "더 이상 {:s} 님과 친구가 아닙니다."
+
+#: src/App/Neomod/Chat.cpp
+#, c++-format
+msgid "You aren't friends with {:s}!"
+msgstr "{:s} 님과 친구가 아닙니다!"
+
+#: src/App/Neomod/Chat.cpp
+msgid "You are not in a multiplayer room!"
+msgstr "멀티플레이 방에 있지 않습니다!"
+
+#: src/App/Neomod/Chat.cpp
+#, c++-format
+msgid "{:s} has been invited to the game."
+msgstr "{:s} 님을 게임에 초대했습니다."
+
+#: src/App/Neomod/Chat.cpp
+msgid "This command is not supported."
+msgstr "지원하지 않는 명령어입니다."
+
+#: src/App/Neomod/Chat.cpp
+#, c++-format
+msgid "{} mentioned you in {}"
+msgstr "{} 님이 {}에서 당신을 언급했습니다"
+
+#: src/App/Neomod/Chat.cpp
+#, c++-format
+msgid "{} sent you a message"
+msgstr "{} 님이 메시지를 보냈습니다"
+
+#: src/App/Neomod/Chat.cpp
+#, c++-format
+msgid "You were mentioned in {:s}"
+msgstr "{:s}에서 언급되었습니다"
+
+#: src/App/Neomod/Chat.cpp src/App/Neomod/Osu.cpp
+msgid "You must log in to chat!"
+msgstr "채팅하려면 로그인해야 합니다!"
+
+#: src/App/Neomod/Chat.cpp
+msgid "Type in the channel you want to join (e.g. '#osu'):"
+msgstr "참여할 채널을 입력하세요 (예: '#osu'):"
+
+#: src/App/Neomod/Database.cpp
+#, c++-format
+msgid "Added {:d} new beatmapset(s)."
+msgstr "새 비트맵셋 {:d}개를 추가했습니다."
+
+#: src/App/Neomod/Database.cpp
+msgid "No new beatmaps detected."
+msgstr "새 비트맵이 없습니다."
+
+#: src/App/Neomod/Database.cpp
+#, c++-format
+msgid "{} was written by a newer version, ignoring it"
+msgstr "{}은(는) 더 새로운 버전에서 작성되어 무시합니다"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "{} spectators"
+msgstr "관전자 {}명"
+
+#. TRANSLATORS: multiplayer scoreboard tag for a player who left the match
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "{} [quit]"
+msgstr "{} [나감]"
+
+#. TRANSLATORS: multiplayer scoreboard tag for a player who voted to skip the intro
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "{} [skip]"
+msgstr "{} [건너뜀]"
+
+#: src/App/Neomod/HUD.cpp src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Local"
+msgstr "로컬"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "{} UR"
+msgstr "{} UR"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "{:.{}f}pp"
+msgstr "{:.{}f}pp"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "SS: {:.{}f}pp"
+msgstr "SS: {:.{}f}pp"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "Miss: {:d}"
+msgstr "미스: {:d}"
+
+#. TRANSLATORS: "SBrk" stands for "Slider Breaks" (number of slider breaks/missed slider ticks)
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "SBrk: {:d}"
+msgstr "SBrk: {:d}"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "FC: {:d}x"
+msgstr "FC: {:d}x"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "{:.3g}***"
+msgstr "{:.3g}***"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "{:.3g}*"
+msgstr "{:.3g}*"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "BPM: {:d}"
+msgstr "BPM: {:d}"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "AR: {:g}"
+msgstr "AR: {:g}"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "CS: {:g}"
+msgstr "CS: {:g}"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "OD: {:g}"
+msgstr "OD: {:g}"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "HP: {:g}"
+msgstr "HP: {:g}"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "300: +-{:d}ms"
+msgstr "300: +-{:d}ms"
+
+#. TRANSLATORS: "NPS" stands for "Notes Per Second"
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "NPS: {:d}"
+msgstr "NPS: {:d}"
+
+#. TRANSLATORS: "ND" stands for "Note Density"
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "ND: {:d}"
+msgstr "ND: {:d}"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "UR: {:d}"
+msgstr "UR: {:d}"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "-{:d}ms +{:d}ms"
+msgstr "-{:d}ms +{:d}ms"
+
+#: src/App/Neomod/LoadingScreen.cpp
+#, c++-format
+msgid "Loading ... ({:d} %)"
+msgstr "불러오는 중 ... ({:d} %)"
+
+#: src/App/Neomod/Lobby.cpp
+#, c++-format
+msgid "Players: {:d}/{:d}"
+msgstr "플레이어: {:d}/{:d}"
+
+#: src/App/Neomod/Lobby.cpp
+msgid "Join room"
+msgstr "방 참가"
+
+#: src/App/Neomod/Lobby.cpp
+msgid "(password required)"
+msgstr "(비밀번호 필요)"
+
+#: src/App/Neomod/Lobby.cpp
+msgid "Room password:"
+msgstr "방 비밀번호:"
+
+#: src/App/Neomod/Lobby.cpp
+msgid "Multiplayer rooms"
+msgstr "멀티플레이 방"
+
+#: src/App/Neomod/Lobby.cpp
+msgid "Create new room"
+msgstr "새 방 만들기"
+
+#. TRANSLATORS: online status shown to other players while browsing multiplayer rooms
+#: src/App/Neomod/Lobby.cpp
+msgid "Looking to play"
+msgstr "게임 상대 찾는 중"
+
+#: src/App/Neomod/Lobby.cpp
+msgid "There are no matches available."
+msgstr "참가할 수 있는 매치가 없습니다."
+
+#: src/App/Neomod/Lobby.cpp
+msgid "Joining room..."
+msgstr "방에 참가하는 중..."
+
+#: src/App/Neomod/Lobby.cpp
+msgid "New room"
+msgstr "새 방"
+
+#: src/App/Neomod/Lobby.cpp
+msgid "Creating room..."
+msgstr "방을 만드는 중..."
+
+#: src/App/Neomod/MainMenu.cpp
+msgid "Save everything from this session."
+msgstr "이번 세션의 모든 내용을 저장합니다."
+
+#: src/App/Neomod/MainMenu.cpp
+msgid "(Optional, automatic on tab close.)"
+msgstr "(선택 사항, 탭을 닫으면 자동 저장)"
+
+#: src/App/Neomod/MainMenu.cpp
+msgid "Checking for updates ..."
+msgstr "업데이트 확인 중 ..."
+
+#: src/App/Neomod/MainMenu.cpp
+msgid "Singleplayer"
+msgstr "싱글플레이"
+
+#: src/App/Neomod/MainMenu.cpp
+msgid "Multiplayer"
+msgstr "멀티플레이"
+
+#: src/App/Neomod/MainMenu.cpp
+msgid "Options"
+msgstr "설정"
+
+#: src/App/Neomod/MainMenu.cpp
+msgid "Exit"
+msgstr "종료"
+
+#: src/App/Neomod/MainMenu.cpp
+msgid "Save"
+msgstr "저장"
+
+#: src/App/Neomod/MainMenu.cpp src/App/Neomod/OsuDirectScreen.cpp
+msgid "Online Beatmaps"
+msgstr "온라인 비트맵"
+
+#: src/App/Neomod/MainMenu.cpp
+#, c++-format
+msgid "Version {:.2f} ({:s})"
+msgstr "버전 {:.2f} ({:s})"
+
+#: src/App/Neomod/MainMenu.cpp
+#, c++-format
+msgid "Version {:.2f}"
+msgstr "버전 {:.2f}"
+
+#: src/App/Neomod/MainMenu.cpp
+msgid "Downloading ..."
+msgstr "다운로드 중 ..."
+
+#: src/App/Neomod/MainMenu.cpp
+#, c++-format
+msgid "A new version of {} is ready!"
+msgstr "{}의 새 버전이 준비되었습니다!"
+
+#: src/App/Neomod/MainMenu.cpp
+msgid "Click here to install the update!"
+msgstr "여기를 클릭해 업데이트를 설치하세요!"
+
+#: src/App/Neomod/MainMenu.cpp
+msgid "A new version is available! Click to open the download page."
+msgstr "새 버전이 있습니다! 클릭하면 다운로드 페이지가 열립니다."
+
+#: src/App/Neomod/MainMenu.cpp
+msgid "Update Error! Click to retry ..."
+msgstr "업데이트 오류! 클릭해서 다시 시도 ..."
+
+#: src/App/Neomod/MainMenu.cpp
+msgid "You must log in to join Multiplayer!"
+msgstr "멀티플레이에 참가하려면 로그인해야 합니다!"
+
+#: src/App/Neomod/MainMenu.cpp
+msgid "You must log in to download beatmaps!"
+msgstr "비트맵을 다운로드하려면 로그인해야 합니다!"
+
+#: src/App/Neomod/MainMenuNowPlaying.cpp
+msgid "Collapse when idle"
+msgstr "유휴 시 접기"
+
+#: src/App/Neomod/MainMenuNowPlaying.cpp
+msgid "Keep expanded"
+msgstr "항상 펼치기"
+
+#: src/App/Neomod/MainMenuNowPlaying.cpp
+msgid "Previous song"
+msgstr "이전 곡"
+
+#: src/App/Neomod/MainMenuNowPlaying.cpp
+msgid "Next song"
+msgstr "다음 곡"
+
+#: src/App/Neomod/MainMenuTips.cpp
+msgid "Press Alt + Enter to toggle Fullscreen."
+msgstr "Alt + Enter를 눌러 전체 화면을 전환하세요."
+
+#: src/App/Neomod/MainMenuTips.cpp
+msgid "Press Shift + F1 to open the in-game console."
+msgstr "Shift + F1을 눌러 게임 내 콘솔을 여세요."
+
+#: src/App/Neomod/MainMenuTips.cpp
+msgid "Shift + Click on a skin in the dropdown list to change the source for base skin elements."
+msgstr "드롭다운 목록에서 스킨을 Shift + 클릭하면 기본 스킨 요소의 출처를 바꿀 수 있습니다."
+
+#: src/App/Neomod/MainMenuTips.cpp
+#, c++-format
+msgid "Press {:s} during gameplay to change mods in realtime."
+msgstr "플레이 중에 {:s}을(를) 누르면 실시간으로 모드를 바꿀 수 있습니다."
+
+#: src/App/Neomod/MainMenuTips.cpp
+#, c++-format
+msgid "Press {:s} or {:s} anywhere to open chat."
+msgstr "어디서나 {:s} 또는 {:s}을(를) 눌러 채팅을 여세요."
+
+#: src/App/Neomod/MainMenuTips.cpp
+msgid "Launch with the neomod-BASS shortcut to use BASS (ASIO/Exclusive mode) for audio."
+msgstr "neomod-BASS 바로 가기로 실행하면 오디오에 BASS(ASIO/독점 모드)를 사용합니다."
+
+#: src/App/Neomod/MainMenuTips.cpp
+msgid "Launch with \"-sound bass\" as a commandline argument to use BASS for audio."
+msgstr "명령줄 인수로 \"-sound bass\"를 붙여 실행하면 오디오에 BASS를 사용합니다."
+
+#: src/App/Neomod/MainMenuTips.cpp
+msgid "Put \"-gpu vk\" after the \"Target:\" field in a shortcut to neomod to use the Vulkan renderer."
+msgstr "neomod 바로 가기의 \"대상:\" 필드 뒤에 \"-gpu vk\"를 넣으면 Vulkan 렌더러를 사용합니다."
+
+#: src/App/Neomod/MainMenuTips.cpp
+msgid "Put \"-dx11\" after the \"Target:\" field in a shortcut to neomod to use the D3D11 renderer."
+msgstr "neomod 바로 가기의 \"대상:\" 필드 뒤에 \"-dx11\"을 넣으면 D3D11 렌더러를 사용합니다."
+
+#: src/App/Neomod/MainMenuTips.cpp
+msgid "Launch with \"-dx11\" as a commandline argument to use the D3D11 renderer."
+msgstr "명령줄 인수로 \"-dx11\"을 붙여 실행하면 D3D11 렌더러를 사용합니다."
+
+#: src/App/Neomod/MainMenuTips.cpp
+msgid "Press Ctrl + O to open the options menu from anywhere."
+msgstr "Ctrl + O를 누르면 어디서나 설정 메뉴를 열 수 있습니다."
+
+#: src/App/Neomod/MainMenuTips.cpp
+#, c++-format
+msgid "Tip: {:s}"
+msgstr "팁: {:s}"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "CS Override"
+msgstr "CS 강제 설정"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "CS:"
+msgstr "CS:"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Circle Size (higher number = smaller circles)."
+msgstr "서클 크기 (숫자가 클수록 서클이 작아짐)."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "AR Override"
+msgstr "AR 강제 설정"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "AR:"
+msgstr "AR:"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Approach Rate (higher number = faster circles)."
+msgstr "어프로치 속도 (숫자가 클수록 서클이 빨라짐)."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "OD Override"
+msgstr "OD 강제 설정"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "OD:"
+msgstr "OD:"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Overall Difficulty (higher number = harder accuracy)."
+msgstr "전체 난이도 (숫자가 클수록 정확도가 어려워짐)."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "HP Override"
+msgstr "HP 강제 설정"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "HP:"
+msgstr "HP:"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Hit/Health Points (higher number = harder survival)."
+msgstr "체력 (숫자가 클수록 버티기 어려워짐)."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Speed/BPM Multiplier"
+msgstr "속도/BPM 배율"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid " Experimental Mods (!)"
+msgstr " 실험적 모드 (!)"
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Flip Up/Down"
+msgstr "상하 반전"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Playfield is flipped upside down (mirrored at horizontal axis)."
+msgstr "플레이 영역이 위아래로 뒤집힙니다 (가로축 기준 반전)."
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Flip Left/Right"
+msgstr "좌우 반전"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Playfield is flipped left/right (mirrored at vertical axis)."
+msgstr "플레이 영역이 좌우로 뒤집힙니다 (세로축 기준 반전)."
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Singletap"
+msgstr "Singletap"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "You can only press one key."
+msgstr "키를 하나만 누를 수 있습니다."
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Alternate"
+msgstr "Alternate"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "You can never use the same key twice in a row."
+msgstr "같은 키를 연속으로 두 번 사용할 수 없습니다."
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "No keylock"
+msgstr "키 잠금 없음"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "You can use 4 keys instead of only 2."
+msgstr "키를 2개 대신 4개까지 사용할 수 있습니다."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Also click hitcircles when releasing a key."
+msgstr "키를 뗄 때도 히트서클을 칩니다."
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "DKS"
+msgstr "DKS"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Hitcircles are invisible. Good luck if you use this with Hidden!"
+msgstr "히트서클이 보이지 않습니다. Hidden과 함께 쓴다면 행운을 빕니다!"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Traceable"
+msgstr "Traceable"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Freeze Frame"
+msgstr "Freeze Frame"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Draw all hitobjects in a combo group together. Try it with Hidden for an extra challenge!"
+msgstr "콤보 그룹의 모든 오브젝트를 한꺼번에 표시합니다. Hidden과 함께 더 어려운 도전을 해 보세요!"
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "No pausing"
+msgstr "일시 정지 금지"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Pausing is cheating"
+msgstr "일시 정지는 반칙입니다"
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "FPoSu: Strafing"
+msgstr "FPoSu: Strafing"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid ""
+"Playfield moves in 3D space (see fposu_mod_strafing_...).\n"
+"Only works in FPoSu mode!"
+msgstr ""
+"플레이 영역이 3D 공간에서 움직입니다 (fposu_mod_strafing_... 참고).\n"
+"FPoSu 모드에서만 작동합니다!"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Playfield rotates and moves."
+msgstr "플레이 영역이 회전하며 움직입니다."
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Wobble"
+msgstr "Wobble"
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "AR Wobble"
+msgstr "AR Wobble"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Approach rate oscillates between -1 and +1."
+msgstr "어프로치 속도가 -1과 +1 사이에서 흔들립니다."
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Approach Different"
+msgstr "Approach Different"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid ""
+"Customize the approach circle animation.\n"
+"See mod_approach_different_style.\n"
+"See mod_approach_different_initial_size."
+msgstr ""
+"어프로치 서클 애니메이션을 사용자 지정합니다.\n"
+"mod_approach_different_style 참고.\n"
+"mod_approach_different_initial_size 참고."
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Timewarp"
+msgstr "Timewarp"
+
+#: src/App/Neomod/ModSelector.cpp
+#, no-c-format
+msgid "Speed increases from 100% to 150% over the course of the beatmap."
+msgstr "비트맵이 진행되면서 속도가 100%에서 150%로 빨라집니다."
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "AR Timewarp"
+msgstr "AR Timewarp"
+
+#: src/App/Neomod/ModSelector.cpp
+#, no-c-format
+msgid "Approach rate decreases from 100% to 50% over the course of the beatmap."
+msgstr "비트맵이 진행되면서 어프로치 속도가 100%에서 50%로 느려집니다."
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Minimize"
+msgstr "Minimize"
+
+#: src/App/Neomod/ModSelector.cpp
+#, no-c-format
+msgid "Circle size decreases from 100% to 50% over the course of the beatmap."
+msgstr "비트맵이 진행되면서 서클 크기가 100%에서 50%로 작아집니다."
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Fading Cursor"
+msgstr "Fading Cursor"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "The cursor fades the higher the combo, becoming invisible at 50."
+msgstr "콤보가 높을수록 커서가 흐려지며, 50에서 보이지 않게 됩니다."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Centered cursor."
+msgstr "커서가 가운데 고정됩니다."
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "First Person"
+msgstr "1인칭"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Massively reduced slider follow circle radius."
+msgstr "슬라이더 팔로우 서클 반경이 크게 줄어듭니다."
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Precise sliders"
+msgstr "정밀한 슬라이더"
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Reverse Sliders"
+msgstr "Reverse Sliders"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Reverses the direction of all sliders. (Reload beatmap to apply!)"
+msgstr "모든 슬라이더의 방향을 뒤집습니다. (적용하려면 비트맵을 다시 불러오세요!)"
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "No 50s"
+msgstr "50 금지"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Only 300s or 100s. Try harder."
+msgstr "300이나 100만 허용. 더 열심히 하세요."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "300 or miss. PF \"lite\""
+msgstr "300 아니면 미스. 라이트 PF"
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "No 100s no 50s"
+msgstr "100과 50 금지"
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "MinG3012"
+msgstr "MinG3012"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "No 100s. Only 300s or 50s. Git gud."
+msgstr "100 금지. 300이나 50만 허용. Git gud."
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Half Timing Window"
+msgstr "절반 판정 범위"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "The hit timing window is cut in half. Hit early or perfect (300)."
+msgstr "히트 판정 범위가 절반으로 줄어듭니다. 일찍 치거나 완벽하게(300) 치세요."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Go below AR 0. Doubled approach time."
+msgstr "AR 0 미만으로 내려갑니다. 어프로치 시간이 두 배가 됩니다."
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "MillhioreF"
+msgstr "MillhioreF"
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Mafham"
+msgstr "Mafham"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid ""
+"Approach rate is set to negative infinity. See the entire beatmap at once.\n"
+"Uses very aggressive optimizations to keep the framerate high, you have been warned!"
+msgstr ""
+"어프로치 속도를 음의 무한대로 설정합니다. 비트맵 전체가 한 번에 보입니다.\n"
+"프레임레이트를 높게 유지하려고 매우 공격적인 최적화를 사용하니 주의하세요!"
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Strict clicks"
+msgstr "엄격한 클릭"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Unnecessary clicks count as misses."
+msgstr "불필요한 클릭은 미스로 처리됩니다."
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Strict Tracking"
+msgstr "엄격한 트래킹"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Leaving sliders in any way counts as a miss and combo break. (Reload beatmap to apply!)"
+msgstr "어떤 식으로든 슬라이더를 벗어나면 미스 및 콤보 끊김으로 처리됩니다. (적용하려면 비트맵을 다시 불러오세요!)"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "WARNING: Score submission will be disabled due to non-vanilla mod selection."
+msgstr "경고: 기본이 아닌 모드를 선택했으므로 점수 제출이 비활성화됩니다."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "1. Reset All Mods"
+msgstr "1. 모든 모드 초기화"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "2. Close"
+msgstr "2. 닫기"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Reduces overall difficulty - larger circles, more forgiving HP drain, less accuracy required."
+msgstr "전체 난이도를 낮춥니다 - 더 큰 서클, 더 너그러운 HP 감소, 더 낮은 정확도 요구."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid ""
+"You can't fail. No matter what.\n"
+"NOTE: To disable drain completely:\n"
+"Options > Gameplay > Mechanics > \"Disable HP Drain\"."
+msgstr ""
+"절대 실패하지 않습니다. 무슨 일이 있어도.\n"
+"참고: HP 감소를 완전히 끄려면:\n"
+"설정 > 게임플레이 > 메커니즘 > \"HP 감소 비활성화\"."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Everything just got a bit harder..."
+msgstr "모든 게 조금 더 어려워졌습니다..."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Miss a note and fail."
+msgstr "노트 하나라도 놓치면 실패."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "SS or quit."
+msgstr "SS가 아니면 포기."
+
+#. TRANSLATORS: Half Time tooltips. "Less zoom." means the song plays slower (not a camera zoom).
+#. "A E S T H E T I C" is a vaporwave aesthetic meme, shown instead when Nightcore enjoyer mode is on.
+#: src/App/Neomod/ModSelector.cpp
+msgid "A E S T H E T I C"
+msgstr "A E S T H E T I C"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Less zoom."
+msgstr "줌 감소."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Zoooooooooom."
+msgstr "주우우우우우우우움."
+
+#. TRANSLATORS: Double Time tooltips. "Zoooooooooom." is the sound of going fast (not a camera zoom).
+#. "uguuuuuuuu" is an anime-style meme sound, shown instead when Nightcore enjoyer mode is on.
+#: src/App/Neomod/ModSelector.cpp
+msgid "uguuuuuuuu"
+msgstr "우구우우우우우우"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Play with no approach circles and fading notes for a slight score advantage."
+msgstr "어프로치 서클 없이 사라지는 노트로 플레이해 점수에서 약간의 이점을 얻습니다."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Restricted view area."
+msgstr "시야가 제한됩니다."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Actual flashlight."
+msgstr "진짜 손전등."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid ""
+"You don't need to click.\n"
+"Give your clicking/tapping fingers a break from the heat of things.\n"
+"** UNRANKED **"
+msgstr ""
+"클릭할 필요가 없습니다.\n"
+"클릭/탭하는 손가락을 잠시 쉬게 해 주세요.\n"
+"** 랭크 미적용 **"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid ""
+"Automatic cursor movement - just follow the rhythm.\n"
+"** UNRANKED **"
+msgstr ""
+"커서가 자동으로 움직입니다 - 리듬만 따라가세요.\n"
+"** 랭크 미적용 **"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Spinners will be automatically completed."
+msgstr "스피너가 자동으로 완료됩니다."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Watch a perfect automated play through the song."
+msgstr "곡의 완벽한 자동 플레이를 감상하세요."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid ""
+"Accuracy is based on the distance to the center of all hitobjects.\n"
+"300s still require at least being in the hit window of a 100 in addition to the rule above."
+msgstr ""
+"정확도는 모든 오브젝트 중심까지의 거리를 기준으로 합니다.\n"
+"300은 위 규칙과 별개로 최소한 100 판정 범위 안에 들어와야 합니다."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid ""
+"Try the future scoring system.\n"
+"** UNRANKED **"
+msgstr ""
+"미래의 점수 시스템을 체험해 보세요.\n"
+"** 랭크 미적용 **"
+
+#: src/App/Neomod/ModSelector.cpp
+#, c++-format
+msgid "Score Multiplier: {:.2f}X"
+msgstr "점수 배율: {:.2f}X"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Experimental Mods"
+msgstr "실험적 모드"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Hold [ALT] to slide in 0.01 increments."
+msgstr "[ALT]를 누른 채 0.01 단위로 조절합니다."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Reset"
+msgstr "초기화"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Mouse Left"
+msgstr "마우스 왼쪽"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Mouse Right"
+msgstr "마우스 오른쪽"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "<UNBOUND>"
+msgstr "<지정 안 됨>"
+
+#: src/App/Neomod/OptionsOverlay.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "McOsu"
+msgstr "McOsu"
+
+#: src/App/Neomod/OptionsOverlay.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "None"
+msgstr "없음"
+
+#: src/App/Neomod/OptionsOverlay.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "osu!lazer 2020"
+msgstr "osu!lazer 2020"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "osu!stable (default)"
+msgstr "osu!stable (기본값)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "General"
+msgstr "일반"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Online server"
+msgstr "온라인 서버"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+#, c++-format
+msgid "If the server admins don't explicitly allow {},"
+msgstr "서버 관리자가 {}을(를) 명시적으로 허용하지 않으면,"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "you might get banned!"
+msgstr "밴당할 수 있습니다!"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Server address:"
+msgstr "서버 주소:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Submit scores"
+msgstr "점수 제출"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Login details (username/password)"
+msgstr "로그인 정보 (사용자 이름/비밀번호)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Keep me logged in"
+msgstr "로그인 상태 유지"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Log in"
+msgstr "로그인"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Localization"
+msgstr "현지화"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Select language"
+msgstr "언어 선택"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Prefer metadata in original language"
+msgstr "원어 메타데이터 우선 표시"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "osu! folder"
+msgstr "osu! 폴더"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "1) If you have an existing osu!stable installation:"
+msgstr "1) 기존 osu!stable이 설치되어 있다면:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "2) osu! > Options > \"Open osu! folder\""
+msgstr "2) osu! > 설정 > \"osu! 폴더 열기\""
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "3) Copy paste the full path into the textbox:"
+msgstr "3) 전체 경로를 복사해 텍스트 상자에 붙여 넣으세요:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Import settings from osu!stable"
+msgstr "osu!stable에서 설정 가져오기"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Successfully imported settings from osu!stable."
+msgstr "osu!stable에서 설정을 가져왔습니다."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Error: Couldn't find osu!stable install directory or config file!"
+msgstr "오류: osu!stable 설치 폴더나 설정 파일을 찾을 수 없습니다!"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Use osu!.db database (read-only)"
+msgstr "osu!.db 데이터베이스 사용 (읽기 전용)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"If you have an existing osu! installation,\n"
+"then this will speed up the initial loading process."
+msgstr ""
+"기존 osu!가 설치되어 있다면,\n"
+"초기 로딩 속도가 빨라집니다."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Load osu! collection.db (read-only)"
+msgstr "osu! collection.db 불러오기 (읽기 전용)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"If you have an existing osu! installation,\n"
+"also load and display your created collections from there."
+msgstr ""
+"기존 osu!가 설치되어 있다면,\n"
+"거기서 만든 컬렉션도 불러와 표시합니다."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Include Relax/Autopilot for total weighted pp/acc"
+msgstr "총 가중 pp/정확도에 Relax/Autopilot 포함"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"NOTE: osu! does not allow this (since these mods are unranked).\n"
+"Should relax/autopilot scores be included in the weighted pp/acc calculation?"
+msgstr ""
+"참고: osu!에서는 허용되지 않습니다 (이 모드들은 랭크 미적용이므로).\n"
+"relax/autopilot 점수를 가중 pp/정확도 계산에 포함할까요?"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Always show pp instead of score in scorebrowser"
+msgstr "점수 목록에서 항상 점수 대신 pp 표시"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Ignore score sorting type entirely."
+msgstr "점수 정렬 방식을 완전히 무시합니다."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Show osu! scores.db user names in user switcher"
+msgstr "사용자 전환 목록에 osu! scores.db의 사용자 이름 표시"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Only relevant if \"Load osu! scores.db\" is enabled.\n"
+"Should the user switcher show ALL user names from ALL scores?\n"
+"(Even from ones you got in your database because you watched a replay?)"
+msgstr ""
+"\"osu! scores.db 불러오기\"가 켜져 있을 때만 적용됩니다.\n"
+"사용자 전환 목록에 모든 점수의 모든 사용자 이름을 표시할까요?\n"
+"(리플레이를 봐서 데이터베이스에 들어온 점수까지 포함?)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Songbrowser"
+msgstr "곡 선택"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Strain Graph in Songbrowser"
+msgstr "곡 선택 화면에 스트레인 그래프 표시"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Hold either SHIFT/CTRL to show only speed/aim strains.\n"
+"Speed strain is red, aim strain is green.\n"
+"(See osu_hud_scrubbing_timeline_strains_*)"
+msgstr ""
+"SHIFT/CTRL을 누르면 스피드/에임 스트레인만 표시합니다.\n"
+"스피드 스트레인은 빨간색, 에임 스트레인은 초록색입니다.\n"
+"(osu_hud_scrubbing_timeline_strains_* 참고)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Strain Graph in Scrubbing Timeline"
+msgstr "타임라인에 스트레인 그래프 표시"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Speed strain is red, aim strain is green.\n"
+"(See osu_hud_scrubbing_timeline_strains_*)"
+msgstr ""
+"스피드 스트레인은 빨간색, 에임 스트레인은 초록색입니다.\n"
+"(osu_hud_scrubbing_timeline_strains_* 참고)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Song Buttons Velocity Animation"
+msgstr "곡 버튼 속도 애니메이션"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "If enabled, then song buttons are pushed to the right depending on the scrolling velocity."
+msgstr "켜면 스크롤 속도에 따라 곡 버튼이 오른쪽으로 밀려납니다."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Song Buttons Curved Layout"
+msgstr "곡 버튼 곡선 배치"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "If enabled, then song buttons are positioned on a vertically centered curve."
+msgstr "켜면 곡 버튼이 세로 중앙에 맞춘 곡선 위에 배치됩니다."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Window"
+msgstr "창"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Pause on Focus Loss"
+msgstr "포커스를 잃으면 일시 정지"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Should the game pause when you switch to another application?"
+msgstr "다른 앱으로 전환할 때 게임을 일시 정지할까요?"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Alerts"
+msgstr "알림"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Notify when friends change status"
+msgstr "친구의 상태가 바뀌면 알림"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Notify when receiving a direct message"
+msgstr "개인 메시지를 받으면 알림"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Notify when mentioned"
+msgstr "언급되면 알림"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Ping when mentioned"
+msgstr "언급되면 소리 알림"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Show notifications during gameplay"
+msgstr "플레이 중에도 알림 표시"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "In-game chat"
+msgstr "게임 내 채팅"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Chat ticker"
+msgstr "채팅 티커"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Automatically hide chat during gameplay"
+msgstr "플레이 중 채팅 자동 숨기기"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Chat word ignore list (space-separated):"
+msgstr "채팅 무시 단어 목록 (공백으로 구분):"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Privacy"
+msgstr "개인정보"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Automatically update to the latest version"
+msgstr "최신 버전으로 자동 업데이트"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Replace main menu logo with server logo"
+msgstr "메인 메뉴 로고를 서버 로고로 바꾸기"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Show spectator list"
+msgstr "관전자 목록 표시"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Share currently played map with spectators"
+msgstr "플레이 중인 맵을 관전자와 공유"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Enable Discord Rich Presence"
+msgstr "Discord Rich Presence 사용"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Shows your current game state in your friends' friendslists.\n"
+"e.g.: Playing Gavin G - Reach Out [Cherry Blossom's Insane]"
+msgstr ""
+"친구들의 친구 목록에 현재 게임 상태를 표시합니다.\n"
+"예: Gavin G - Reach Out [Cherry Blossom's Insane] 플레이 중"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw map backgrounds in Discord Rich Presence"
+msgstr "Discord Rich Presence에 맵 배경 표시"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Graphics"
+msgstr "그래픽"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Renderer"
+msgstr "렌더러"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "If enabled: plz enjoy input lag."
+msgstr "켜면: 입력 지연을 즐기세요."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "VSync"
+msgstr "수직 동기화"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "High Priority"
+msgstr "높은 우선순위"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Sets the game process priority to high"
+msgstr "게임 프로세스 우선순위를 높음으로 설정합니다"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Show FPS Counter"
+msgstr "FPS 표시"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Max Queued Frames"
+msgstr "최대 대기 프레임"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Raise for higher fps, decrease for lower latency"
+msgstr "올리면 fps가 높아지고, 내리면 지연이 줄어듭니다"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "FPS Limiter:"
+msgstr "FPS 제한:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "FPS Limiter (menus):"
+msgstr "FPS 제한 (메뉴):"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Layout"
+msgstr "레이아웃"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Select Resolution"
+msgstr "해상도 선택"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Fullscreen"
+msgstr "전체 화면"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Minimize On ALT+TAB"
+msgstr "ALT+TAB 시 최소화"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Keep Aspect Ratio"
+msgstr "화면 비율 유지"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Black borders instead of a stretched image.\n"
+"Only relevant if fullscreen is enabled, and letterboxing is disabled.\n"
+"Use the two position sliders below to move the viewport around."
+msgstr ""
+"이미지를 늘리는 대신 검은 테두리를 넣습니다.\n"
+"전체 화면이 켜져 있고 레터박스가 꺼져 있을 때만 적용됩니다.\n"
+"아래 위치 슬라이더 두 개로 화면 위치를 옮기세요."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Letterboxing"
+msgstr "레터박스"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Useful to get the low latency of fullscreen with a smaller game resolution.\n"
+"Use the two position sliders below to move the viewport around."
+msgstr ""
+"더 작은 게임 해상도로 전체 화면의 낮은 지연을 얻는 데 유용합니다.\n"
+"아래 위치 슬라이더 두 개로 화면 위치를 옮기세요."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Horizontal position"
+msgstr "가로 위치"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Vertical position"
+msgstr "세로 위치"
+
+#. TRANSLATORS: Global UI scale, to make text bigger on big screens
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "UI Scaling"
+msgstr "UI 크기 조절"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "DPI Scaling"
+msgstr "DPI 크기 조절"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+#, c++-format
+msgid ""
+"Automatically scale to the DPI of your display: {} DPI.\n"
+"Scale factor = {} / 96 = {:.2g}x"
+msgstr ""
+"디스플레이 DPI에 맞춰 자동 조절: {} DPI.\n"
+"배율 = {} / 96 = {:.2g}x"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "UI Scale:"
+msgstr "UI 크기:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Detail Settings"
+msgstr "세부 설정"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Animate scoreboard"
+msgstr "스코어보드 애니메이션"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Use fancy animations for the in-game scoreboard"
+msgstr "게임 내 스코어보드에 화려한 애니메이션 사용"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Avoid flashing elements"
+msgstr "깜빡이는 요소 피하기"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Disables cosmetic flash effects\n"
+"Disables dimming when holding sliders with Flashlight mod enabled"
+msgstr ""
+"장식용 번쩍임 효과를 끕니다\n"
+"Flashlight 모드에서 슬라이더를 누를 때 어두워지는 효과를 끕니다"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Mipmaps"
+msgstr "밉맵"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Reload your skin to apply! (CTRL + ALT + S)\n"
+"Generate mipmaps for each skin element, at the cost of VRAM.\n"
+"Provides smoother visuals on lower resolutions for @2x-only skins."
+msgstr ""
+"적용하려면 스킨을 다시 불러오세요! (CTRL + ALT + S)\n"
+"VRAM을 더 써서 모든 스킨 요소의 밉맵을 생성합니다.\n"
+"@2x만 있는 스킨을 낮은 해상도에서 더 부드럽게 보여 줍니다."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Snaking in sliders"
+msgstr "슬라이더 펼쳐지며 나타나기"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"\"Growing\" sliders.\n"
+"Sliders gradually snake out from their starting point while fading in.\n"
+"Has no impact on performance whatsoever."
+msgstr ""
+"\"자라나는\" 슬라이더.\n"
+"슬라이더가 나타나면서 시작점부터 점점 뻗어 나옵니다.\n"
+"성능에는 전혀 영향이 없습니다."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Snaking out sliders"
+msgstr "슬라이더 접히며 사라지기"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"\"Shrinking\" sliders.\n"
+"Sliders will shrink with the sliderball while sliding.\n"
+"Can improve performance a tiny bit, since there will be less to draw overall."
+msgstr ""
+"\"줄어드는\" 슬라이더.\n"
+"슬라이더볼이 지나가는 동안 슬라이더가 함께 줄어듭니다.\n"
+"그릴 것이 줄어들어 성능이 약간 좋아질 수 있습니다."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Higher Quality Sliders (!)"
+msgstr "고품질 슬라이더 (!)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Disable this if your fps drop too low while sliders are visible."
+msgstr "슬라이더가 보일 때 fps가 너무 떨어지면 끄세요."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Slider Quality"
+msgstr "슬라이더 품질"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Audio"
+msgstr "오디오"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Devices"
+msgstr "장치"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Default"
+msgstr "기본값"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Select Output Device"
+msgstr "출력 장치 선택"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Backend"
+msgstr "백엔드"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "MiniAudio"
+msgstr "MiniAudio"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "SDL"
+msgstr "SDL"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Pick the one you feel works best,\n"
+"there should be very little difference."
+msgstr ""
+"가장 잘 맞는 것을 고르세요,\n"
+"차이는 거의 없을 겁니다."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Auto-disable exclusive mode"
+msgstr "독점 모드 자동 해제"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Toggle exclusive mode off/on\n"
+"when losing/gaining focus, if already\n"
+"in exclusive mode."
+msgstr ""
+"이미 독점 모드일 때\n"
+"포커스를 잃거나 얻으면\n"
+"독점 모드를 끄고 켭니다."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Lower Latency (!)"
+msgstr "낮은 지연 (!)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "NOTE: Enabling this may result in audio crackling!"
+msgstr "참고: 켜면 오디오가 지직거릴 수 있습니다!"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "WASAPI"
+msgstr "WASAPI"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Low-latency Callbacks"
+msgstr "저지연 콜백"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Run BASSWASAPI in callback mode to potentially further decrease latency.\n"
+"(period/buffer size are ignored)"
+msgstr ""
+"BASSWASAPI를 콜백 모드로 실행해 지연을 더 줄일 수 있습니다.\n"
+"(주기/버퍼 크기는 무시됨)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Buffer Size:"
+msgstr "버퍼 크기:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Windows 7: Start at 11 ms,"
+msgstr "Windows 7: 11 ms부터 시작,"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Windows 10: Start at 1 ms,"
+msgstr "Windows 10: 1 ms부터 시작,"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "and if crackling: increment until fixed."
+msgstr "지직거리면: 없어질 때까지 올리세요."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "(lower is better, non-wasapi has ~40 ms minimum)"
+msgstr "(낮을수록 좋음, wasapi가 아니면 최소 ~40 ms)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Exclusive Mode"
+msgstr "독점 모드"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Dramatically reduces latency, but prevents other applications from capturing/playing audio."
+msgstr "지연을 크게 줄이지만, 다른 앱이 오디오를 녹음/재생하지 못하게 됩니다."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "WARNING: Only if you know what you are doing"
+msgstr "경고: 무엇을 하는지 아는 경우에만"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Period Size:"
+msgstr "주기 크기:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Restart SoundEngine"
+msgstr "사운드 엔진 재시작"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "ASIO"
+msgstr "ASIO"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Open ASIO settings"
+msgstr "ASIO 설정 열기"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Volume"
+msgstr "음량"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Normalize loudness across songs"
+msgstr "곡 간 음량 평준화"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Master:"
+msgstr "전체:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Inactive:"
+msgstr "비활성:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Music:"
+msgstr "음악:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Effects:"
+msgstr "효과음:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Offset Adjustment"
+msgstr "오프셋 조정"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Scaled Offset:"
+msgstr "배율 적용 오프셋:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Behaves the same as \"Universal Offset\" in osu! (is multiplied by playback rate)."
+msgstr "osu!의 \"전역 오프셋\"과 같게 동작합니다 (재생 속도가 곱해짐)."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Unscaled Offset:"
+msgstr "배율 미적용 오프셋:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"\"Universal Offset\", but unaffected by rate adjustments.\n"
+"+15 unscaled offset is the same as using -15 local offset on every map."
+msgstr ""
+"\"전역 오프셋\"이지만 속도 변경의 영향을 받지 않습니다.\n"
+"배율 미적용 오프셋 +15는 모든 맵에서 로컬 오프셋 -15를 쓰는 것과 같습니다."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Gameplay"
+msgstr "게임플레이"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Boost hitsound volume"
+msgstr "히트사운드 음량 증폭"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Apply a small logarithmic multiplier to non-sliderslide hitsounds."
+msgstr "슬라이더 슬라이드 소리를 제외한 히트사운드에 작은 로그 배율을 적용합니다."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Change hitsound pitch based on accuracy"
+msgstr "정확도에 따라 히트사운드 음높이 변경"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Prefer Nightcore over Double Time"
+msgstr "Double Time 대신 Nightcore 우선"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Apply speed/pitch mods while browsing"
+msgstr "둘러보는 중에도 속도/음높이 모드 적용"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Whether to always apply all mods, or keep the preview music normal."
+msgstr "항상 모든 모드를 적용할지, 미리 듣기 음악을 그대로 둘지 정합니다."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Skin"
+msgstr "스킨"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "To import a skin, just drop the .osk file on this window!"
+msgstr "스킨을 가져오려면 .osk 파일을 이 창에 끌어다 놓으세요!"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Select Skin"
+msgstr "스킨 선택"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Shift-click a skin to set it as fallback.\n"
+"Missing elements fall back to it instead of \"default\"."
+msgstr ""
+"스킨을 Shift + 클릭하면 대체 스킨으로 설정합니다.\n"
+"없는 요소는 \"default\" 대신 그 스킨에서 가져옵니다."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Export Skin"
+msgstr "스킨 내보내기"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Open current Skin folder"
+msgstr "현재 스킨 폴더 열기"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Packs the current skin into an .osk file in the exports folder,\n"
+"together with whatever the fallback skin fills in."
+msgstr ""
+"현재 스킨을 대체 스킨이 채운 요소와 함께\n"
+"exports 폴더에 .osk 파일로 묶습니다."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Random Skin"
+msgstr "무작위 스킨"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Reload Skin"
+msgstr "스킨 다시 불러오기"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "(CTRL + ALT + S)"
+msgstr "(CTRL + ALT + S)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Temporary, does not change your configured skin (reload to reset).\n"
+"Use \"skin_random 1\" to randomize on every skin reload.\n"
+"Use \"skin_random_elements 1\" to mix multiple skins.\n"
+"Use \"skin_export\" to export the currently active skin."
+msgstr ""
+"임시 설정이며, 설정된 스킨은 바뀌지 않습니다 (다시 불러오면 원래대로).\n"
+"\"skin_random 1\"을 쓰면 스킨을 불러올 때마다 무작위로 바뀝니다.\n"
+"\"skin_random_elements 1\"을 쓰면 여러 스킨을 섞습니다.\n"
+"\"skin_export\"를 쓰면 현재 스킨을 내보냅니다."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Let Skins Change Settings"
+msgstr "스킨이 설정을 바꾸도록 허용"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Skins can come with settings of their own ([neomod] section in skin.ini).\n"
+"While such a skin is in use, those settings can't be changed here."
+msgstr ""
+"스킨은 자체 설정을 가질 수 있습니다 (skin.ini의 [neomod] 섹션).\n"
+"그런 스킨을 사용하는 동안에는 여기서 해당 설정을 바꿀 수 없습니다."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Number Scale:"
+msgstr "숫자 크기:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "HitResult Scale:"
+msgstr "판정 결과 크기:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Numbers"
+msgstr "숫자 표시"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Approach Circles"
+msgstr "어프로치 서클 표시"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Instafade Circles"
+msgstr "서클 즉시 사라짐"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Instafade Sliders"
+msgstr "슬라이더 즉시 사라짐"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Storyboards"
+msgstr "스토리보드 표시"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Ignore Beatmap Skins"
+msgstr "비트맵 스킨 무시"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Use your skin's elements and slider colours instead of the ones that come with a beatmap."
+msgstr "비트맵에 포함된 것 대신 내 스킨의 요소와 슬라이더 색을 사용합니다."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Ignore Beatmap Hitsounds"
+msgstr "비트맵 히트사운드 무시"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Use your skin's sounds instead of the ones that come with a beatmap."
+msgstr "비트맵에 포함된 것 대신 내 스킨의 소리를 사용합니다."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Ignore Beatmap Combo Colors"
+msgstr "비트맵 콤보 색 무시"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Ignore Beatmap Sample Volume"
+msgstr "비트맵 샘플 음량 무시"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Ignore beatmap timingpoint effect volumes.\n"
+"Quiet hitsounds can destroy accuracy and concentration, enabling this will fix that."
+msgstr ""
+"비트맵 타이밍 포인트의 효과음 음량을 무시합니다.\n"
+"작은 히트사운드는 정확도와 집중력을 망칠 수 있는데, 이 설정으로 해결됩니다."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Use skin's sound samples"
+msgstr "스킨의 사운드 샘플 사용"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "If this is not selected, then the default skin hitsounds will be used."
+msgstr "선택하지 않으면 기본 스킨의 히트사운드를 사용합니다."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Load HD @2x"
+msgstr "HD @2x 불러오기"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "On very low resolutions (below 1600x900) you can disable this to get smoother visuals."
+msgstr "매우 낮은 해상도(1600x900 미만)에서는 끄면 더 부드럽게 보입니다."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Cursor Trail"
+msgstr "커서 꼬리 표시"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Force Smooth Cursor Trail"
+msgstr "부드러운 커서 꼬리 강제"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Usually, the presence of the cursormiddle.png skin image enables smooth cursortrails.\n"
+"This option allows you to force enable smooth cursortrails for all skins."
+msgstr ""
+"보통 스킨에 cursormiddle.png가 있으면 부드러운 커서 꼬리가 켜집니다.\n"
+"이 옵션은 모든 스킨에서 부드러운 커서 꼬리를 강제로 켭니다."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Always draw Cursor Trail"
+msgstr "항상 커서 꼬리 표시"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw the cursor trail even when the cursor isn't moving"
+msgstr "커서가 움직이지 않을 때도 커서 꼬리를 표시합니다"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Cursor trail spacing:"
+msgstr "커서 꼬리 간격:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Cursor Size:"
+msgstr "커서 크기:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Automatic Cursor Size"
+msgstr "자동 커서 크기"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Cursor size will adjust based on the CS of the current beatmap."
+msgstr "현재 비트맵의 CS에 맞춰 커서 크기를 조절합니다."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Slider Border Size"
+msgstr "슬라이더 테두리 크기"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Slider Opacity"
+msgstr "슬라이더 불투명도"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Slider Body Opacity"
+msgstr "슬라이더 몸체 불투명도"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Slider Body Saturation"
+msgstr "슬라이더 몸체 채도"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Use slidergradient.png"
+msgstr "slidergradient.png 사용"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"This will block all dynamic slider (color/border) features,\n"
+"but is more easily customizable."
+msgstr ""
+"동적 슬라이더 기능(색/테두리)이 모두 막히지만,\n"
+"사용자 지정이 더 쉽습니다."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Use osu!lazer Slider Style"
+msgstr "osu!lazer 슬라이더 스타일 사용"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Only really looks good if your skin doesn't \"SliderTrackOverride\" too dark."
+msgstr "스킨의 \"SliderTrackOverride\"가 너무 어둡지 않을 때만 보기 좋습니다."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Use combo color as tint for slider ball"
+msgstr "슬라이더볼에 콤보 색 입히기"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Use combo color as tint for slider border"
+msgstr "슬라이더 테두리에 콤보 색 입히기"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Slider End Circle"
+msgstr "슬라이더 끝 서클 표시"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Input"
+msgstr "입력"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Mouse"
+msgstr "마우스"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Sensitivity:"
+msgstr "감도:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "WARNING: Set Sensitivity to 1 for tablets!"
+msgstr "경고: 태블릿은 감도를 1로 설정하세요!"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Not recommended if you're using a tablet."
+msgstr "태블릿을 사용한다면 권장하지 않습니다."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Raw Mouse Input"
+msgstr "마우스 원시 입력"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Confine Cursor (Windowed)"
+msgstr "커서 가두기 (창 모드)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Confine Cursor (Fullscreen)"
+msgstr "커서 가두기 (전체 화면)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Confine Cursor (NEVER)"
+msgstr "커서 가두기 (안 함)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Overrides automatic cursor clipping during gameplay."
+msgstr "플레이 중 자동 커서 가두기를 덮어씁니다."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Disable Mouse Wheel in Play Mode"
+msgstr "플레이 중 마우스 휠 비활성화"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Disable Mouse Buttons in Play Mode"
+msgstr "플레이 중 마우스 버튼 비활성화"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Cursor ripples"
+msgstr "커서 파문"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "The cursor will ripple outwards on clicking."
+msgstr "클릭하면 커서에서 파문이 퍼집니다."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Keyboard"
+msgstr "키보드"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Raw Keyboard Input"
+msgstr "키보드 원시 입력"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Global Media Hotkeys"
+msgstr "전역 미디어 단축키"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Allows controlling main menu music with\n"
+"keyboard media shortcuts, even while alt-tabbed"
+msgstr ""
+"alt-tab 상태에서도 키보드 미디어 키로\n"
+"메인 메뉴 음악을 조작할 수 있습니다"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Reset all key bindings"
+msgstr "모든 키 설정 초기화"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Keys - In-Game"
+msgstr "키 - 게임 내"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Left Click"
+msgstr "왼쪽 클릭"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Right Click"
+msgstr "오른쪽 클릭"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Left Click (2)"
+msgstr "왼쪽 클릭 (2)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Right Click (2)"
+msgstr "오른쪽 클릭 (2)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Smoke"
+msgstr "연기"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Game Pause"
+msgstr "게임 일시 정지"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Skip Cutscene"
+msgstr "컷신 건너뛰기"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Toggle Scoreboard"
+msgstr "스코어보드 표시/숨기기"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Scrubbing (+ Click Drag!)"
+msgstr "탐색 (+ 클릭 후 드래그!)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Quick Seek -5sec <<<"
+msgstr "빠른 탐색 -5초 <<<"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Quick Seek +5sec >>>"
+msgstr "빠른 탐색 +5초 >>>"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Increase Local Song Offset"
+msgstr "곡 로컬 오프셋 증가"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Decrease Local Song Offset"
+msgstr "곡 로컬 오프셋 감소"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Quick Retry (hold briefly)"
+msgstr "빠른 재시작 (잠깐 누르기)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Quick Save"
+msgstr "빠른 저장"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Quick Load"
+msgstr "빠른 불러오기"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Instant Replay"
+msgstr "즉시 리플레이"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Keys - FPoSu"
+msgstr "키 - FPoSu"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Zoom"
+msgstr "줌"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Keys - Universal"
+msgstr "키 - 공통"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Toggle chat"
+msgstr "채팅 표시/숨기기"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Toggle user list"
+msgstr "사용자 목록 표시/숨기기"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Save Screenshot"
+msgstr "스크린샷 저장"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Increase Volume"
+msgstr "음량 높이기"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Decrease Volume"
+msgstr "음량 낮추기"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Disable Mouse Buttons"
+msgstr "마우스 버튼 비활성화"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Toggle Map Background"
+msgstr "맵 배경 표시/숨기기"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Boss Key (Minimize)"
+msgstr "보스 키 (최소화)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Open Skin Selection Menu"
+msgstr "스킨 선택 메뉴 열기"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Keys - Song Select"
+msgstr "키 - 곡 선택"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Toggle Mod Selection Screen"
+msgstr "모드 선택 화면 표시/숨기기"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "(F1 can not be unbound. This is just an additional key.)"
+msgstr "(F1은 해제할 수 없습니다. 추가 키일 뿐입니다.)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Random Beatmap"
+msgstr "무작위 비트맵"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "(F2 can not be unbound. This is just an additional key.)"
+msgstr "(F2는 해제할 수 없습니다. 추가 키일 뿐입니다.)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Keys - Mod Select"
+msgstr "키 - 모드 선택"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Easy"
+msgstr "Easy"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "No Fail"
+msgstr "No Fail"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Half Time"
+msgstr "Half Time"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Hard Rock"
+msgstr "Hard Rock"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Sudden Death"
+msgstr "Sudden Death"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Double Time"
+msgstr "Double Time"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Hidden"
+msgstr "Hidden"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Flashlight"
+msgstr "Flashlight"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Relax"
+msgstr "Relax"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Autopilot"
+msgstr "Autopilot"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Spunout"
+msgstr "Spunout"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Auto"
+msgstr "Auto"
+
+#: src/App/Neomod/OptionsOverlay.cpp src/App/Neomod/RoomScreen.cpp
+msgid "Score V2"
+msgstr "Score V2"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Background Dim:"
+msgstr "배경 어둡게:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Background Brightness:"
+msgstr "배경 밝기:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Don't change dim level during breaks"
+msgstr "휴식 구간에서 어둡기 유지"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Makes the background basically impossible to see during breaks.\n"
+"Not recommended."
+msgstr ""
+"휴식 구간에서 배경이 거의 보이지 않게 됩니다.\n"
+"권장하지 않습니다."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Show approach circle on first \"Hidden\" object"
+msgstr "첫 번째 \"Hidden\" 오브젝트에 어프로치 서클 표시"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "SuddenDeath restart on miss"
+msgstr "SuddenDeath 미스 시 재시작"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Skips the failing animation, and instantly restarts like SS/PF."
+msgstr "실패 애니메이션을 건너뛰고 SS/PF처럼 바로 재시작합니다."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Show Skip Button during Intro"
+msgstr "인트로에서 건너뛰기 버튼 표시"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Skip intro to first hitobject."
+msgstr "첫 오브젝트까지 인트로를 건너뜁니다."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Show Skip Button during Breaks"
+msgstr "휴식 구간에서 건너뛰기 버튼 표시"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Skip breaks in the middle of beatmaps."
+msgstr "비트맵 중간의 휴식 구간을 건너뜁니다."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Mechanics"
+msgstr "메커니즘"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Kill Player upon Failing"
+msgstr "실패 시 플레이어 사망"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Enabled: Singleplayer default. You die upon failing and the beatmap stops.\n"
+"Disabled: Multiplayer default. Allows you to keep playing even after failing."
+msgstr ""
+"켜짐: 싱글플레이 기본값. 실패하면 죽고 비트맵이 멈춥니다.\n"
+"꺼짐: 멀티플레이 기본값. 실패한 뒤에도 계속 플레이할 수 있습니다."
+
+#: src/App/Neomod/OptionsOverlay.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Disable HP drain"
+msgstr "HP 감소 비활성화"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Like NF, but entirely disables HP mechanics. Will block online score submission."
+msgstr "NF와 비슷하지만 HP 메커니즘을 완전히 끕니다. 온라인 점수 제출이 막힙니다."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Select [Notelock]"
+msgstr "[노트락] 선택"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Info about different notelock algorithms:"
+msgstr "노트락 알고리즘별 설명:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "- McOsu: Auto miss previous circle, always."
+msgstr "- McOsu: 항상 이전 서클을 자동으로 미스 처리."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "- osu!stable: Locked until previous circle is miss."
+msgstr "- osu!stable: 이전 서클이 미스될 때까지 잠김."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "- osu!lazer 2020: Auto miss previous circle if > time."
+msgstr "- osu!lazer 2020: 시간 초과 시 이전 서클을 자동으로 미스 처리."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Backgrounds"
+msgstr "배경"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Load Background Images (!)"
+msgstr "배경 이미지 불러오기 (!)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "NOTE: Disabling this will disable ALL beatmap images everywhere!"
+msgstr "참고: 끄면 모든 곳의 비트맵 이미지가 전부 꺼집니다!"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Background in Beatmap"
+msgstr "비트맵에서 배경 표시"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Background in SongBrowser"
+msgstr "곡 선택 화면에서 배경 표시"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "NOTE: You can disable this if you always want menu-background."
+msgstr "참고: 항상 menu-background를 원한다면 끌 수 있습니다."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Background Thumbnails in SongBrowser"
+msgstr "곡 선택 화면에서 배경 썸네일 표시"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Background in Ranking/Results Screen"
+msgstr "결과 화면에서 배경 표시"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Prefer beatmap background in Menu"
+msgstr "메뉴에서 비트맵 배경 우선"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Use the background from the currently playing song, even in the main menu."
+msgstr "메인 메뉴에서도 재생 중인 곡의 배경을 사용합니다."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw menu-background in Menu"
+msgstr "메뉴에서 menu-background 표시"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw menu-background in SongBrowser"
+msgstr "곡 선택 화면에서 menu-background 표시"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "NOTE: Only applies if \"Draw Background in SongBrowser\" is disabled."
+msgstr "참고: \"곡 선택 화면에서 배경 표시\"가 꺼져 있을 때만 적용됩니다."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Key Overlay"
+msgstr "키 오버레이"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Key Overlay"
+msgstr "키 오버레이 표시"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Key Overlay Trail"
+msgstr "키 오버레이 꼬리 표시"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Scrolling blocks next to the key overlay, visualizing how long each key was held."
+msgstr "키 오버레이 옆에 흐르는 블록으로 각 키를 얼마나 오래 눌렀는지 보여 줍니다."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Trail Opacity:"
+msgstr "꼬리 불투명도:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Trail Speed:"
+msgstr "꼬리 속도:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Trail Fade Distance:"
+msgstr "꼬리 사라짐 거리:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "HUD"
+msgstr "HUD"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw HUD"
+msgstr "HUD 표시"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "NOTE: You can also press SHIFT + TAB while playing to toggle this."
+msgstr "참고: 플레이 중 SHIFT + TAB을 눌러도 전환할 수 있습니다."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "SHIFT + TAB toggles everything"
+msgstr "SHIFT + TAB으로 모두 전환"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Enabled: "
+msgstr "켜짐: "
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Score"
+msgstr "점수 표시"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Combo"
+msgstr "콤보 표시"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Accuracy"
+msgstr "정확도 표시"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Clock"
+msgstr "시계 표시"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw HitErrorBar"
+msgstr "HitErrorBar 표시"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw HitErrorBar UR"
+msgstr "HitErrorBar UR 표시"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Unstable Rate"
+msgstr "Unstable Rate"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw ScoreBar"
+msgstr "ScoreBar 표시"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Health/HP Bar."
+msgstr "체력/HP 바."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw ScoreBar-bg"
+msgstr "ScoreBar-bg 표시"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Some skins abuse this as the playfield background image.\n"
+"It is actually just the background image for the Health/HP Bar."
+msgstr ""
+"일부 스킨은 이것을 플레이 영역 배경으로 악용합니다.\n"
+"실제로는 체력/HP 바의 배경 이미지일 뿐입니다."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw ScoreBoard in singleplayer"
+msgstr "싱글플레이에서 스코어보드 표시"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw ScoreBoard in multiplayer"
+msgstr "멀티플레이에서 스코어보드 표시"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Scrubbing Timeline"
+msgstr "탐색 타임라인 표시"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Miss Window on HitErrorBar"
+msgstr "HitErrorBar에 미스 범위 표시"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: pp"
+msgstr "통계 표시: pp"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Realtime pp counter.\n"
+"Dynamically calculates earned pp by incrementally updating the star rating."
+msgstr ""
+"실시간 pp 카운터.\n"
+"별점을 점진적으로 갱신하며 획득한 pp를 동적으로 계산합니다."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: pp (SS)"
+msgstr "통계 표시: pp (SS)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Max possible total pp for active mods (full combo + perfect acc)."
+msgstr "현재 모드로 얻을 수 있는 최대 총 pp (풀콤보 + 완벽한 정확도)."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: Misses"
+msgstr "통계 표시: 미스"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Number of misses."
+msgstr "미스 횟수."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: SliderBreaks"
+msgstr "통계 표시: 슬라이더 브레이크"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Number of slider breaks."
+msgstr "슬라이더 브레이크 횟수."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: Max Possible Combo"
+msgstr "통계 표시: 가능한 최대 콤보"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: Stars*** (Until Now)"
+msgstr "통계 표시: 별점*** (현재까지)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Incrementally updates the star rating (aka \"realtime stars\")."
+msgstr "별점을 점진적으로 갱신합니다 (일명 \"실시간 별점\")."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: Stars* (Total)"
+msgstr "통계 표시: 별점* (전체)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Total stars for active mods."
+msgstr "현재 모드 기준 전체 별점."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: BPM"
+msgstr "통계 표시: BPM"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: AR"
+msgstr "통계 표시: AR"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: CS"
+msgstr "통계 표시: CS"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: OD"
+msgstr "통계 표시: OD"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: HP"
+msgstr "통계 표시: HP"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: 300 hitwindow"
+msgstr "통계 표시: 300 판정 범위"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Timing window for hitting a 300 (e.g. +-25ms)."
+msgstr "300을 받기 위한 판정 범위 (예: +-25ms)."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: Notes Per Second"
+msgstr "통계 표시: 초당 노트 수"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "How many clicks per second are currently required."
+msgstr "현재 초당 몇 번 클릭해야 하는지."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: Note Density"
+msgstr "통계 표시: 노트 밀도"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "How many objects are visible at the same time."
+msgstr "동시에 보이는 오브젝트 수."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: Unstable Rate"
+msgstr "통계 표시: Unstable Rate"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: Accuracy Error"
+msgstr "통계 표시: 정확도 오차"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Average hit error delta (e.g. -5ms +15ms).\n"
+"See \"hud_statistics_hitdelta_chunksize 30\",\n"
+"it defines how many recent hit deltas are averaged."
+msgstr ""
+"평균 히트 오차 (예: -5ms +15ms).\n"
+"\"hud_statistics_hitdelta_chunksize 30\" 참고,\n"
+"최근 몇 개의 히트 오차를 평균 낼지 정합니다."
+
+#. TRANSLATORS: Section of option sliders to set the scale of in-game UI elements
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Scaling"
+msgstr "크기 조절"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "HUD:"
+msgstr "HUD:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Score:"
+msgstr "점수:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Combo:"
+msgstr "콤보:"
+
+#: src/App/Neomod/OptionsOverlay.cpp src/App/Neomod/RankingScreen.cpp
+msgid "Accuracy:"
+msgstr "정확도:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "HitErrorBar:"
+msgstr "HitErrorBar:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "HitErrorBar UR:"
+msgstr "HitErrorBar UR:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Clock:"
+msgstr "시계:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "ScoreBar:"
+msgstr "ScoreBar:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "ScoreBoard:"
+msgstr "스코어보드:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Key Overlay:"
+msgstr "키 오버레이:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Statistics:"
+msgstr "통계:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Statistics Offset"
+msgstr "통계 위치 오프셋"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "X Offset:"
+msgstr "X 오프셋:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Y Offset:"
+msgstr "Y 오프셋:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Playfield"
+msgstr "플레이 영역"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw FollowPoints"
+msgstr "팔로우 포인트 표시"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Correct border relative to the current Circle Size."
+msgstr "현재 서클 크기에 맞춰 테두리를 보정합니다."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Playfield Border"
+msgstr "플레이 영역 테두리 표시"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Border Size:"
+msgstr "테두리 크기:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Hitobjects"
+msgstr "히트 오브젝트"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Use Fast Hidden Fading Sliders (!)"
+msgstr "Hidden 슬라이더 빠르게 사라지기 (!)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"NOTE: osu! doesn't do this, so don't enable it for serious practicing.\n"
+"If enabled: Fade out sliders with the same speed as circles."
+msgstr ""
+"참고: osu!는 이렇게 하지 않으므로 진지한 연습에는 켜지 마세요.\n"
+"켜면: 슬라이더가 서클과 같은 속도로 사라집니다."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "FPoSu (3D)"
+msgstr "FPoSu (3D)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "FPoSu - General"
+msgstr "FPoSu - 일반"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "FPoSu"
+msgstr "FPoSu"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"The real 3D FPS mod.\n"
+"Play from a first person shooter perspective in a 3D environment.\n"
+"This is only intended for mouse! (Enable \"Tablet/Absolute Mode\" for tablets.)"
+msgstr ""
+"진짜 3D FPS 모드.\n"
+"3D 환경에서 1인칭 슈팅 시점으로 플레이합니다.\n"
+"마우스 전용입니다! (태블릿은 \"태블릿/절대 좌표 모드\"를 켜세요.)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "NOTE: Use CTRL + O during gameplay to get here!"
+msgstr "참고: 플레이 중 CTRL + O로 여기에 올 수 있습니다!"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "LEFT/RIGHT arrow keys to precisely adjust sliders."
+msgstr "왼쪽/오른쪽 화살표 키로 슬라이더를 정밀하게 조절합니다."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Distance:"
+msgstr "거리:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"If enabled: Vertical FOV.\n"
+"If disabled: Horizontal FOV (default)."
+msgstr ""
+"켜면: 세로 FOV.\n"
+"끄면: 가로 FOV (기본값)."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Vertical FOV"
+msgstr "세로 FOV"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "FOV:"
+msgstr "FOV:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "FOV (Zoom):"
+msgstr "FOV (줌):"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Zoom Key Toggle"
+msgstr "줌 키 전환 방식"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Enabled: Zoom key toggles zoom.\n"
+"Disabled: Zoom while zoom key is held."
+msgstr ""
+"켜짐: 줌 키로 줌을 켜고 끕니다.\n"
+"꺼짐: 줌 키를 누르는 동안만 줌."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "FPoSu - Playfield"
+msgstr "FPoSu - 플레이 영역"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Curved play area"
+msgstr "곡면 플레이 영역"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Background cube"
+msgstr "배경 큐브"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Skybox"
+msgstr "스카이박스"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"NOTE: Overrides \"Background cube\".\n"
+"See skybox_example.png for cubemap layout."
+msgstr ""
+"참고: \"배경 큐브\"를 덮어씁니다.\n"
+"큐브맵 배치는 skybox_example.png를 참고하세요."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Background Opacity"
+msgstr "배경 불투명도"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "FPoSu - Mouse"
+msgstr "FPoSu - 마우스"
+
+#: src/App/Neomod/OptionsOverlay.cpp src/App/Neomod/OsuDirectScreen.cpp
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Opening browser, please wait ..."
+msgstr "브라우저를 여는 중, 잠시 기다려 주세요 ..."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "DPI:"
+msgstr "DPI:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "cm per 360:"
+msgstr "360도당 cm:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Invert Vertical"
+msgstr "세로 반전"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Invert Horizontal"
+msgstr "가로 반전"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Tablet/Absolute Mode (!)"
+msgstr "태블릿/절대 좌표 모드 (!)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Don't enable this if you are using a mouse.\n"
+"If this is enabled, then DPI and cm per 360 will be ignored!"
+msgstr ""
+"마우스를 쓴다면 켜지 마세요.\n"
+"켜면 DPI와 360도당 cm는 무시됩니다!"
+
+#. TRANSLATORS: Name of a settings category containing joke/unnecessary options
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Bullshit"
+msgstr "헛짓거리"
+
+#. TRANSLATORS: Subcategory of "Bullshit" - contains joke visual settings (rainbow circles, etc.)
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Why"
+msgstr "왜"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Rainbow Circles"
+msgstr "무지개 서클"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Rainbow Sliders"
+msgstr "무지개 슬라이더"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Rainbow Numbers"
+msgstr "무지개 숫자"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw 300s"
+msgstr "300 표시"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Miscellaneous"
+msgstr "기타"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Testing"
+msgstr "테스트"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Use bleeding edge release stream"
+msgstr "최신 개발 버전 채널 사용"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Screenshots"
+msgstr "스크린샷"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Crop Screenshots"
+msgstr "스크린샷 자르기"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Crop screenshots to the letterbox resolution,\n"
+"if letterboxing is enabled."
+msgstr ""
+"레터박스가 켜져 있으면\n"
+"스크린샷을 레터박스 해상도로 자릅니다."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Copy Screenshots to Clipboard"
+msgstr "스크린샷을 클립보드에 복사"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"If screenshots should be copied to the system clipboard\n"
+"along with saving them to the screenshots/ folder."
+msgstr ""
+"스크린샷을 screenshots/ 폴더에 저장하면서\n"
+"시스템 클립보드에도 복사할지 정합니다."
+
+#. TRANSLATORS: Subsection with options for main menu tips and social media links
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Nags"
+msgstr "안내"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Show Main Menu Tips"
+msgstr "메인 메뉴 팁 표시"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Hide Discord/X Links"
+msgstr "Discord/X 링크 숨기기"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Import/Reset"
+msgstr "가져오기/초기화"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Import collections/scores/settings from McOsu"
+msgstr "McOsu에서 컬렉션/점수/설정 가져오기"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Successfully imported settings from McOsu."
+msgstr "McOsu에서 설정을 가져왔습니다."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Couldn't find McOsu config files! Make sure to select the directory containing McOsu.exe."
+msgstr "McOsu 설정 파일을 찾을 수 없습니다! McOsu.exe가 있는 폴더를 선택했는지 확인하세요."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Opening file browser ..."
+msgstr "파일 탐색기를 여는 중 ..."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "You must select the McOsu folder to import its settings."
+msgstr "설정을 가져오려면 McOsu 폴더를 선택해야 합니다."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Reset all settings"
+msgstr "모든 설정 초기화"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Disconnect"
+msgstr "연결 끊기"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Waiting for browser..."
+msgstr "브라우저를 기다리는 중..."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Error: Couldn't find any skins"
+msgstr "오류: 스킨을 찾을 수 없습니다"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Tried to enable exclusive mode, but couldn't :("
+msgstr "독점 모드를 켜려 했지만 실패했습니다 :("
+
+#: src/App/Neomod/OptionsOverlay.cpp
+#, c++-format
+msgid "Press new key for {}:"
+msgstr "{}에 지정할 새 키를 누르세요:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "All key bindings have been reset."
+msgstr "모든 키 설정을 초기화했습니다."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+#, c++-format
+msgid "Press {:d} more times to confirm."
+msgstr "확인하려면 {:d}번 더 누르세요."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+#, c++-format
+msgid "Press {:d} more time to confirm!"
+msgstr "확인하려면 {:d}번 더 누르세요!"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "This setting is locked in multiplayer rooms."
+msgstr "멀티플레이 방에서는 이 설정이 잠겨 있습니다."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "This setting is forced by the server."
+msgstr "이 설정은 서버에서 강제하고 있습니다."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "This setting is forced by the current skin."
+msgstr "이 설정은 현재 스킨에서 강제하고 있습니다."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+#, c++-format
+msgid "(turn off \"{}\" in the skin options to change it)"
+msgstr "(바꾸려면 스킨 설정에서 \"{}\"을(를) 끄세요)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "All settings have been reset."
+msgstr "모든 설정을 초기화했습니다."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Unbind"
+msgstr "지정 해제"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Failed to save osu.cfg"
+msgstr "osu.cfg를 저장하지 못했습니다"
+
+#: src/App/Neomod/Osu.cpp
+msgid "This replay's beatmap is not installed."
+msgstr "이 리플레이의 비트맵이 설치되어 있지 않습니다."
+
+#: src/App/Neomod/Osu.cpp
+#, c++-format
+msgid "Skin reloaded!{:s}"
+msgstr "스킨을 다시 불러왔습니다!{:s}"
+
+#: src/App/Neomod/Osu.cpp
+msgid "Mouse buttons are disabled."
+msgstr "마우스 버튼이 비활성화되었습니다."
+
+#: src/App/Neomod/Osu.cpp
+msgid "Mouse buttons are enabled."
+msgstr "마우스 버튼이 활성화되었습니다."
+
+#: src/App/Neomod/Osu.cpp
+msgid "No beatmap is currently selected."
+msgstr "선택된 비트맵이 없습니다."
+
+#: src/App/Neomod/Osu.cpp
+msgid "In-game interface has been enabled."
+msgstr "게임 내 인터페이스를 켰습니다."
+
+#: src/App/Neomod/Osu.cpp
+msgid "In-game interface has been disabled."
+msgstr "게임 내 인터페이스를 껐습니다."
+
+#: src/App/Neomod/Osu.cpp
+msgid "Scoreboard is hidden."
+msgstr "스코어보드를 숨겼습니다."
+
+#: src/App/Neomod/Osu.cpp
+msgid "Scoreboard is shown."
+msgstr "스코어보드를 표시합니다."
+
+#: src/App/Neomod/Osu.cpp
+#, c++-format
+msgid "Local beatmap offset set to {:d} ms"
+msgstr "로컬 비트맵 오프셋을 {:d} ms로 설정했습니다"
+
+#: src/App/Neomod/Osu.cpp
+msgid "Error: Couldn't grab a screenshot :("
+msgstr "오류: 스크린샷을 찍을 수 없습니다 :("
+
+#: src/App/Neomod/Osu.cpp
+msgid "Screenshot copied to clipboard (click to open in a new tab)"
+msgstr "스크린샷을 클립보드에 복사했습니다 (클릭하면 새 탭에서 열기)"
+
+#: src/App/Neomod/Osu.cpp
+msgid "Screenshot taken (click to open in a new tab)"
+msgstr "스크린샷을 찍었습니다 (클릭하면 새 탭에서 열기)"
+
+#: src/App/Neomod/Osu.cpp
+#, c++-format
+msgid "Screenshot copied to clipboard and saved to {:s}"
+msgstr "스크린샷을 클립보드에 복사하고 {:s}에 저장했습니다"
+
+#: src/App/Neomod/Osu.cpp
+#, c++-format
+msgid "Screenshot saved to {:s}"
+msgstr "스크린샷을 {:s}에 저장했습니다"
+
+#: src/App/Neomod/Osu.cpp
+#, c++-format
+msgid "Skin exported to {:s}"
+msgstr "스킨을 {:s}(으)로 내보냈습니다"
+
+#: src/App/Neomod/Osu.cpp
+msgid "Can't export the default skin."
+msgstr "기본 스킨은 내보낼 수 없습니다."
+
+#: src/App/Neomod/Osu.cpp
+#, c++-format
+msgid "Couldn't export the skin to {:s}"
+msgstr "스킨을 {:s}(으)로 내보내지 못했습니다"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+#, c++-format
+msgid "+{:d} more"
+msgstr "+{:d}개 더"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "View beatmap page"
+msgstr "비트맵 페이지 보기"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "Close"
+msgstr "닫기"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "Download"
+msgstr "다운로드"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "Cancel download"
+msgstr "다운로드 취소"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "Go to beatmap"
+msgstr "비트맵으로 이동"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid ""
+"Click a beatmap to see its details.\n"
+"Click it again to download it."
+msgstr ""
+"비트맵을 클릭하면 상세 정보를 봅니다.\n"
+"다시 클릭하면 다운로드합니다."
+
+#: src/App/Neomod/OsuDirectScreen.cpp src/App/Neomod/SongBrowser/InfoLabel.cpp
+#, c++-format
+msgid "Mapped by {:s}"
+msgstr "매퍼: {:s}"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "Pending"
+msgstr "Pending"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "Ranked"
+msgstr "Ranked"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "Approved"
+msgstr "Approved"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "Loved"
+msgstr "Loved"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+#, c++-format
+msgid "Updated {:s}"
+msgstr "{:s} 업데이트됨"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "Video"
+msgstr "동영상"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "Storyboard"
+msgstr "스토리보드"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "Newest maps"
+msgstr "최신 맵"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "Best maps"
+msgstr "인기 맵"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "Only show ranked beatmaps"
+msgstr "랭크된 비트맵만 표시"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "Auto-select downloaded beatmaps"
+msgstr "다운로드한 비트맵 자동 선택"
+
+#: src/App/Neomod/PauseOverlay.cpp
+msgid "Resume"
+msgstr "계속하기"
+
+#: src/App/Neomod/PauseOverlay.cpp src/App/Neomod/RankingScreen.cpp
+msgid "Retry"
+msgstr "다시 하기"
+
+#: src/App/Neomod/PauseOverlay.cpp
+msgid "Quit"
+msgstr "나가기"
+
+#: src/App/Neomod/PromptOverlay.cpp
+msgid "OK"
+msgstr "확인"
+
+#: src/App/Neomod/PromptOverlay.cpp
+msgid "Cancel"
+msgstr "취소"
+
+#: src/App/Neomod/RankingScreen.cpp
+msgid "You achieved the #1 score on local rankings!"
+msgstr "로컬 순위에서 1위를 달성했습니다!"
+
+#: src/App/Neomod/RankingScreen.cpp
+msgid "Watch replay"
+msgstr "리플레이 보기"
+
+#: src/App/Neomod/RankingScreen.cpp
+#, c++-format
+msgid "{:.2f}pp"
+msgstr "{:.2f}pp"
+
+#: src/App/Neomod/RankingScreen.cpp
+#, c++-format
+msgid "Stars: {:.2f} ({:.2f} aim, {:.2f} speed)"
+msgstr "별점: {:.2f} (에임 {:.2f}, 스피드 {:.2f})"
+
+#: src/App/Neomod/RankingScreen.cpp
+#, c++-format
+msgid "Speed: {:.3g}x"
+msgstr "속도: {:.3g}x"
+
+#: src/App/Neomod/RankingScreen.cpp
+#, c++-format
+msgid "CS:{:.2f} AR:{:.2f} OD:{:.2f} HP:{:.2f}"
+msgstr "CS:{:.2f} AR:{:.2f} OD:{:.2f} HP:{:.2f}"
+
+#: src/App/Neomod/RankingScreen.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+#, c++-format
+msgid "Notelock: {}"
+msgstr "노트락: {}"
+
+#: src/App/Neomod/RankingScreen.cpp
+#, c++-format
+msgid "Error: {:.2f}ms - {:.2f}ms avg"
+msgstr "오차: {:.2f}ms - {:.2f}ms 평균"
+
+#: src/App/Neomod/RankingScreen.cpp
+#, c++-format
+msgid "Unstable Rate: {:.2f}"
+msgstr "Unstable Rate: {:.2f}"
+
+#: src/App/Neomod/RankingScreen.cpp
+msgid "Mods: "
+msgstr "모드: "
+
+#: src/App/Neomod/RankingScreen.cpp
+#, c++-format
+msgid "You achieved the #{} score on local rankings!"
+msgstr "로컬 순위에서 #{}위를 달성했습니다!"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Multiplayer room"
+msgstr "멀티플레이 방"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Host: None"
+msgstr "방장: 없음"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Room name"
+msgstr "방 이름"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Change password"
+msgstr "비밀번호 변경"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Win condition: Score"
+msgstr "승리 조건: 점수"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Beatmap"
+msgstr "비트맵"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Select map"
+msgstr "맵 선택"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Download maps"
+msgstr "맵 다운로드"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "(no map selected)"
+msgstr "(선택한 맵 없음)"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Mods"
+msgstr "모드"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Select mods [F1]"
+msgstr "모드 선택 [F1]"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Freemod"
+msgstr "Freemod"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "No mods selected."
+msgstr "선택한 모드가 없습니다."
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Start game"
+msgstr "게임 시작"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Player list"
+msgstr "플레이어 목록"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Host is selecting a map..."
+msgstr "방장이 맵을 고르는 중..."
+
+#: src/App/Neomod/RoomScreen.cpp src/App/Neomod/SpectatorScreen.cpp
+#, c++-format
+msgid "Failed to download Beatmap #{:d} :("
+msgstr "비트맵 #{:d}을(를) 다운로드하지 못했습니다 :("
+
+#: src/App/Neomod/RoomScreen.cpp
+#, c++-format
+msgid "Downloading... {:.2f}%"
+msgstr "다운로드 중... {:.2f}%"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Hit 'Escape' once more to exit this multiplayer match."
+msgstr "'Escape'를 한 번 더 누르면 이 멀티플레이 매치에서 나갑니다."
+
+#: src/App/Neomod/RoomScreen.cpp
+#, c++-format
+msgid "Host: {}"
+msgstr "방장: {}"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Win condition: Accuracy"
+msgstr "승리 조건: 정확도"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Win condition: Combo"
+msgstr "승리 조건: 콤보"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Win condition: ScoreV2"
+msgstr "승리 조건: ScoreV2"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Win condition: ???"
+msgstr "승리 조건: ???"
+
+#: src/App/Neomod/RoomScreen.cpp
+#, c++-format
+msgid "Force start ({:d}/{:d})"
+msgstr "강제 시작 ({:d}/{:d})"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Not ready"
+msgstr "준비 안 됨"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Ready!"
+msgstr "준비 완료!"
+
+#: src/App/Neomod/RoomScreen.cpp
+#, c++-format
+msgid "[playing] {}"
+msgstr "[플레이 중] {}"
+
+#: src/App/Neomod/RoomScreen.cpp
+#, c++-format
+msgid "[no map] {}"
+msgstr "[맵 없음] {}"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Failed to load map"
+msgstr "맵을 불러오지 못했습니다"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "New password:"
+msgstr "새 비밀번호:"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Score V1"
+msgstr "Score V1"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Accuracy"
+msgstr "정확도"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Combo"
+msgstr "콤보"
+
+#: src/App/Neomod/SongBrowser/BottomBar.cpp
+#, c++-format
+msgid "Calculating stars ({}/{}) ..."
+msgstr "별점 계산 중 ({}/{}) ..."
+
+#. TRANSLATORS: {} is the name of the exported collection, or "mapset"
+#: src/App/Neomod/SongBrowser/BottomBar.cpp
+#, c++-format
+msgid "Exporting {} {:.2f}%"
+msgstr "{} 내보내는 중 {:.2f}%"
+
+#. TRANSLATORS: {} is the name of the exported collection, or "mapset"
+#: src/App/Neomod/SongBrowser/BottomBar.cpp
+msgid "mapset"
+msgstr "맵셋"
+
+#: src/App/Neomod/SongBrowser/BottomBar.cpp
+#, c++-format
+msgid " {:s}"
+msgstr " {:s}"
+
+#: src/App/Neomod/SongBrowser/BottomBar.cpp
+#, c++-format
+msgid "Computing loudness ({}/{}) ..."
+msgstr "음량 계산 중 ({}/{}) ..."
+
+#: src/App/Neomod/SongBrowser/BottomBar.cpp
+#, c++-format
+msgid "Converting scores ({}/{}) ..."
+msgstr "점수 변환 중 ({}/{}) ..."
+
+#: src/App/Neomod/SongBrowser/InfoLabel.cpp
+#, c++-format
+msgid "Length: {:02d}:{:02d} BPM: {} Objects: {}"
+msgstr "길이: {:02d}:{:02d} BPM: {} 오브젝트: {}"
+
+#: src/App/Neomod/SongBrowser/InfoLabel.cpp
+#, c++-format
+msgid "Length: {:02d}:{:02d} BPM: {}-{} ({}) Objects: {}"
+msgstr "길이: {:02d}:{:02d} BPM: {}-{} ({}) 오브젝트: {}"
+
+#: src/App/Neomod/SongBrowser/InfoLabel.cpp
+#, c++-format
+msgid "CS:{:.3g} AR:{:.3g} OD:{:.3g} HP:{:.3g} Stars:{:.3g} ({}pp)"
+msgstr "CS:{:.3g} AR:{:.3g} OD:{:.3g} HP:{:.3g} 별점:{:.3g} ({}pp)"
+
+#: src/App/Neomod/SongBrowser/InfoLabel.cpp
+#, c++-format
+msgid "CS:{:.3g} AR:{:.3g} OD:{:.3g} HP:{:.3g} Stars:{:.3g} -> {:.3g} ({}pp)"
+msgstr "CS:{:.3g} AR:{:.3g} OD:{:.3g} HP:{:.3g} 별점:{:.3g} -> {:.3g} ({}pp)"
+
+#: src/App/Neomod/SongBrowser/InfoLabel.cpp
+#, c++-format
+msgid "CS:{:.3g} AR:{:.3g} OD:{:.3g} HP:{:.3g} Stars:{:.3g} * (??? pp)"
+msgstr "CS:{:.3g} AR:{:.3g} OD:{:.3g} HP:{:.3g} 별점:{:.3g} * (??? pp)"
+
+#: src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Wobble 2"
+msgstr "Wobble 2"
+
+#: src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Shirone"
+msgstr "Shirone"
+
+#: src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "osu!stable"
+msgstr "osu!stable"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By Artist"
+msgstr "아티스트순"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By BPM"
+msgstr "BPM순"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By Creator"
+msgstr "제작자순"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By Date Added"
+msgstr "추가한 날짜순"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By Difficulty"
+msgstr "난이도순"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By Length"
+msgstr "길이순"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By Title"
+msgstr "제목순"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By Rank Achieved"
+msgstr "달성 랭크순"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By Date Played"
+msgstr "플레이한 날짜순"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By Date"
+msgstr "날짜순"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Collections"
+msgstr "컬렉션"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "No Grouping"
+msgstr "그룹 없음"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By accuracy"
+msgstr "정확도순"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By combo"
+msgstr "콤보순"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By date"
+msgstr "날짜순"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By misses"
+msgstr "미스순"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By score"
+msgstr "점수순"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By pp"
+msgstr "pp순"
+
+#. TRANSLATORS: button that opens the selected beatmap on the website
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Web"
+msgstr "웹"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Group:"
+msgstr "그룹:"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Sort:"
+msgstr "정렬:"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Loading..."
+msgstr "불러오는 중..."
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "No records set!"
+msgstr "기록이 없습니다!"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Personal Best (from local scores)"
+msgstr "개인 최고 기록 (로컬 점수 기준)"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Invalid osu! folder (or no beatmaps found): "
+msgstr "잘못된 osu! 폴더 (또는 비트맵을 찾을 수 없음): "
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Go to Options -> osu!folder"
+msgstr "설정 -> osu! 폴더로 이동하세요"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Drop .osz beatmaps onto this window to import them"
+msgstr ".osz 비트맵을 이 창에 끌어다 놓아 가져오세요"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Or click \"Online Beatmaps\" in the Main Menu"
+msgstr "또는 메인 메뉴에서 \"온라인 비트맵\"을 클릭하세요"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Beatmapset has no difficulties"
+msgstr "비트맵셋에 난이도가 없습니다"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+#, c++-format
+msgid "Failed to find Beatmap #{:d} :("
+msgstr "비트맵 #{:d}을(를) 찾을 수 없습니다 :("
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+#, c++-format
+msgid "Scanning beatmap folders ({:d}/{:d})"
+msgstr "비트맵 폴더 검색 중 ({:d}/{:d})"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+#, c++-format
+msgid "Importing beatmaps ({:d}/{:d})"
+msgstr "비트맵 가져오는 중 ({:d}/{:d})"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "0-9"
+msgstr "0-9"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Other"
+msgstr "기타"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Below 1 star"
+msgstr "1성 미만"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Above 10 stars"
+msgstr "10성 초과"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "1 star"
+msgstr "1성"
+
+#. TRANSLATORS: song browser group of beatmaps by star rating, {:d} is between 2 and 10
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+#, c++-format
+msgid "{:d} stars"
+msgstr "{:d}성"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Under 60 BPM"
+msgstr "60 BPM 미만"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Under 120 BPM"
+msgstr "120 BPM 미만"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Under 180 BPM"
+msgstr "180 BPM 미만"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Under 240 BPM"
+msgstr "240 BPM 미만"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Under 300 BPM"
+msgstr "300 BPM 미만"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Over 300 BPM"
+msgstr "300 BPM 초과"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "1 minute or less"
+msgstr "1분 이하"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "2 minutes or less"
+msgstr "2분 이하"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "3 minutes or less"
+msgstr "3분 이하"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "4 minutes or less"
+msgstr "4분 이하"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "5 minutes or less"
+msgstr "5분 이하"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "10 minutes or less"
+msgstr "10분 이하"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Over 10 minutes"
+msgstr "10분 초과"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Disabled FPoSu mode."
+msgstr "FPoSu 모드를 껐습니다."
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Enabled FPoSu mode."
+msgstr "FPoSu 모드를 켰습니다."
+
+#: src/App/Neomod/SpectatorScreen.cpp
+#, c++-format
+msgid "Started spectating {:s}"
+msgstr "{:s} 님 관전을 시작했습니다"
+
+#: src/App/Neomod/SpectatorScreen.cpp
+#, c++-format
+msgid "Stopped spectating {:s}"
+msgstr "{:s} 님 관전을 중단했습니다"
+
+#: src/App/Neomod/SpectatorScreen.cpp
+msgid "Spectating"
+msgstr "관전 중"
+
+#: src/App/Neomod/SpectatorScreen.cpp
+msgid "..."
+msgstr "..."
+
+#: src/App/Neomod/SpectatorScreen.cpp
+msgid "Stop spectating"
+msgstr "관전 중단"
+
+#: src/App/Neomod/SpectatorScreen.cpp
+#, c++-format
+msgid "Spectating {:s}"
+msgstr "{:s} 님 관전 중"
+
+#. TRANSLATORS: {:s} is the name of the spectated player
+#: src/App/Neomod/SpectatorScreen.cpp
+#, c++-format
+msgid "{:s} is AFK"
+msgstr "{:s} 님은 자리 비움 상태입니다"
+
+#: src/App/Neomod/SpectatorScreen.cpp
+#, c++-format
+msgid "{:s} is picking a map..."
+msgstr "{:s} 님이 맵을 고르는 중..."
+
+#: src/App/Neomod/SpectatorScreen.cpp
+#, c++-format
+msgid "{:s} is spectating someone else"
+msgstr "{:s} 님이 다른 사람을 관전 중입니다"
+
+#: src/App/Neomod/SpectatorScreen.cpp
+#, c++-format
+msgid "{:s} is playing minigames"
+msgstr "{:s} 님이 미니게임을 하는 중입니다"
+
+#: src/App/Neomod/SpectatorScreen.cpp
+#, c++-format
+msgid "Database not loaded, cannot install map"
+msgstr "데이터베이스가 로드되지 않아 맵을 설치할 수 없습니다"
+
+#: src/App/Neomod/SpectatorScreen.cpp
+msgid "Downloading map..."
+msgstr "맵 다운로드 중..."
+
+#: src/App/Neomod/UIIconButton.cpp
+msgid "Play"
+msgstr "플레이"
+
+#: src/App/Neomod/UIIconButton.cpp
+msgid "Pause"
+msgstr "일시 정지"
+
+#: src/App/Neomod/UISearchOverlay.cpp
+msgid "Search: "
+msgstr "검색: "
+
+#: src/App/Neomod/UISearchOverlay.cpp
+msgid "Type to search!"
+msgstr "입력해서 검색하세요!"
+
+#: src/App/Neomod/UISearchOverlay.cpp
+msgid "No matches found. Hit ESC to reset."
+msgstr "결과가 없습니다. ESC를 눌러 초기화하세요."
+
+#: src/App/Neomod/UISearchOverlay.cpp
+msgid "Hit ESC to reset."
+msgstr "ESC를 눌러 초기화하세요."
+
+#: src/App/Neomod/UISearchOverlay.cpp
+msgid "Searching, please wait ..."
+msgstr "검색 중, 잠시 기다려 주세요 ..."
+
+#: src/App/Neomod/UIUserContextMenu.cpp
+msgid "Switch User:"
+msgstr "사용자 전환:"
+
+#: src/App/Neomod/UIUserContextMenu.cpp
+msgid "Set custom name"
+msgstr "사용자 지정 이름 설정"
+
+#: src/App/Neomod/UIUserContextMenu.cpp
+msgid "Enter Username:"
+msgstr "사용자 이름 입력:"
+
+#: src/App/Neomod/UIUserContextMenu.cpp
+msgid "(Press ENTER to confirm.)"
+msgstr "(ENTER를 눌러 확인)"
+
+#: src/Engine/Sound/SoundEngine.cpp
+msgid "No sound"
+msgstr "소리 없음"

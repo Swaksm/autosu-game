@@ -8,12 +8,22 @@ from pathlib import Path
 keywords = ["_", "tformat"]
 
 # Add a new language here to automatically generate a new .po file!
+# Codes are gettext locales (pt_BR, not pt-BR) since they also become embedded symbol names.
+# Names are endonyms; the language list is sorted by name, after English.
 languages = {
-    "fr": "French (Français)",
-    "de": "German (Deutsch)",
-    "ja": "Japanese (日本語)",
-    "pl": "Polish (Polski)",
-    "ru": "Russian (Русский)",
+    "de": "Deutsch",
+    "es": "Español",
+    "fr": "Français",
+    "id": "Bahasa Indonesia",
+    "it": "Italiano",
+    "ja": "日本語",
+    "ko": "한국어",
+    "pl": "Polski",
+    "pt_BR": "Português (Brasil)",
+    "ru": "Русский",
+    "tr": "Türkçe",
+    "uk": "Українська",
+    "zh_CN": "简体中文",
 }
 
 # Resolve both inputs to absolute paths for unambiguous filesystem ops. xgettext records
@@ -133,7 +143,7 @@ struct Language final {
 inline constexpr Language LANGUAGES[] = {
     Language{"en"sv, "English"sv},
 """
-    for code, lang in languages.items():
+    for code, lang in sorted(languages.items(), key=lambda item: item[1]):
         out += f'    Language{{"{code}"sv, "{lang}"sv}},\n'
     out += "};\n}  // namespace i18n\n\n"
     return out

@@ -1,0 +1,3695 @@
+# Indonesian translations for neomod package.
+# Copyright (C) 2026 kiwec.
+# This file is distributed under the same license as the neomod package.
+#
+# WARNING: Machine-translated by LLMs. Not human-reviewed.
+# May contain errors in grammatical gender, politeness register, game-specific
+# terminology, or context-dependent meaning. Please flag mistranslations
+# or volunteer a review to replace these.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: neomod\n"
+"Report-Msgid-Bugs-To: \n"
+"Language-Team: none\n"
+"Language: id\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: src/App/Neomod/AboutScreen.cpp src/App/Neomod/MainMenu.cpp
+msgid "Changelog"
+msgstr "Catatan perubahan"
+
+#: src/App/Neomod/AboutScreen.cpp
+msgid "Credits"
+msgstr "Kredit"
+
+#: src/App/Neomod/AboutScreen.cpp
+msgid "Licenses"
+msgstr "Lisensi"
+
+#: src/App/Neomod/BanchoLeaderboard.cpp
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Global"
+msgstr "Global"
+
+#: src/App/Neomod/BanchoLeaderboard.cpp
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Selected mods"
+msgstr "Mod terpilih"
+
+#: src/App/Neomod/BanchoLeaderboard.cpp
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Friends"
+msgstr "Teman"
+
+#: src/App/Neomod/BanchoLeaderboard.cpp
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Country"
+msgstr "Negara"
+
+#: src/App/Neomod/BanchoLeaderboard.cpp
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Team"
+msgstr "Tim"
+
+#: src/App/Neomod/BeatmapInstallOverlay.cpp
+#, c++-format
+msgid "Beatmap #{:d}"
+msgstr "Beatmap #{:d}"
+
+#: src/App/Neomod/BeatmapInstallOverlay.cpp
+msgid "Failed"
+msgstr "Gagal"
+
+#: src/App/Neomod/BeatmapInstallOverlay.cpp
+msgid "Installing..."
+msgstr "Memasang..."
+
+#: src/App/Neomod/BeatmapInstallOverlay.cpp
+msgid "Extracting..."
+msgstr "Mengekstrak..."
+
+#: src/App/Neomod/BeatmapInstallOverlay.cpp
+msgid "Queued"
+msgstr "Dalam antrean"
+
+#: src/App/Neomod/BeatmapInstaller.cpp
+#, c++-format
+msgid "{} is already installed"
+msgstr "{} sudah terpasang"
+
+#: src/App/Neomod/BeatmapInstaller.cpp
+#, c++-format
+msgid "Beatmapset #{:d} is already installed"
+msgstr "Beatmapset #{:d} sudah terpasang"
+
+#: src/App/Neomod/BeatmapInstaller.cpp
+#, c++-format
+msgid "Downloaded beatmapset #{:d}"
+msgstr "Beatmapset #{:d} telah diunduh"
+
+#: src/App/Neomod/BeatmapInstaller.cpp
+#, c++-format
+msgid "Failed to import {}"
+msgstr "Gagal mengimpor {}"
+
+#: src/App/Neomod/BeatmapInstaller.cpp
+#, c++-format
+msgid "Failed to download beatmapset #{:d} :("
+msgstr "Gagal mengunduh beatmapset #{:d} :("
+
+#: src/App/Neomod/BeatmapInstaller.cpp
+#, c++-format
+msgid "Couldn't delete {}"
+msgstr "Tidak dapat menghapus {}"
+
+#: src/App/Neomod/BeatmapInstaller.cpp
+#, c++-format
+msgid "Deleted {}"
+msgstr "{} dihapus"
+
+#: src/App/Neomod/BeatmapInterface.cpp
+msgid "Buffering ..."
+msgstr "Buffering ..."
+
+#: src/App/Neomod/BeatmapInterface.cpp
+#, c++-format
+msgid "{} has paused"
+msgstr "{} menjeda permainan"
+
+#: src/App/Neomod/BeatmapInterface.cpp
+msgid "Waiting for players ..."
+msgstr "Menunggu pemain ..."
+
+#: src/App/Neomod/BeatmapInterface.cpp
+msgid "Loading ..."
+msgstr "Memuat ..."
+
+#: src/App/Neomod/Chat.cpp
+#, c++-format
+msgid "You are silenced for another {:d}h {:02d}m {:02d}s."
+msgstr "Kamu dibisukan selama {:d}j {:02d}m {:02d}d lagi."
+
+#: src/App/Neomod/Chat.cpp
+msgid "You are not listening to anything."
+msgstr "Kamu tidak sedang mendengarkan apa pun."
+
+#: src/App/Neomod/Chat.cpp
+#, c++-format
+msgid "User '{:s}' not found. Are they online?"
+msgstr "Pengguna '{:s}' tidak ditemukan. Apakah dia sedang online?"
+
+#: src/App/Neomod/Chat.cpp
+#, c++-format
+msgid "You are already friends with {:s}!"
+msgstr "Kamu sudah berteman dengan {:s}!"
+
+#: src/App/Neomod/Chat.cpp
+#, c++-format
+msgid "You are now friends with {:s}."
+msgstr "Kamu sekarang berteman dengan {:s}."
+
+#: src/App/Neomod/Chat.cpp
+msgid "Away message removed."
+msgstr "Pesan away dihapus."
+
+#: src/App/Neomod/Chat.cpp
+#, c++-format
+msgid "Away message set to '{:s}'."
+msgstr "Pesan away diatur ke '{:s}'."
+
+#: src/App/Neomod/Chat.cpp
+#, c++-format
+msgid "You are no longer friends with {:s}."
+msgstr "Kamu tidak lagi berteman dengan {:s}."
+
+#: src/App/Neomod/Chat.cpp
+#, c++-format
+msgid "You aren't friends with {:s}!"
+msgstr "Kamu tidak berteman dengan {:s}!"
+
+#: src/App/Neomod/Chat.cpp
+msgid "You are not in a multiplayer room!"
+msgstr "Kamu tidak berada di ruang multiplayer!"
+
+#: src/App/Neomod/Chat.cpp
+#, c++-format
+msgid "{:s} has been invited to the game."
+msgstr "{:s} telah diundang ke permainan."
+
+#: src/App/Neomod/Chat.cpp
+msgid "This command is not supported."
+msgstr "Perintah ini tidak didukung."
+
+#: src/App/Neomod/Chat.cpp
+#, c++-format
+msgid "{} mentioned you in {}"
+msgstr "{} menyebutmu di {}"
+
+#: src/App/Neomod/Chat.cpp
+#, c++-format
+msgid "{} sent you a message"
+msgstr "{} mengirimimu pesan"
+
+#: src/App/Neomod/Chat.cpp
+#, c++-format
+msgid "You were mentioned in {:s}"
+msgstr "Kamu disebut di {:s}"
+
+#: src/App/Neomod/Chat.cpp src/App/Neomod/Osu.cpp
+msgid "You must log in to chat!"
+msgstr "Kamu harus masuk untuk mengobrol!"
+
+#: src/App/Neomod/Chat.cpp
+msgid "Type in the channel you want to join (e.g. '#osu'):"
+msgstr "Ketik kanal yang ingin kamu masuki (mis. '#osu'):"
+
+#: src/App/Neomod/Database.cpp
+#, c++-format
+msgid "Added {:d} new beatmapset(s)."
+msgstr "Menambahkan {:d} beatmapset baru."
+
+#: src/App/Neomod/Database.cpp
+msgid "No new beatmaps detected."
+msgstr "Tidak ada beatmap baru yang terdeteksi."
+
+#: src/App/Neomod/Database.cpp
+#, c++-format
+msgid "{} was written by a newer version, ignoring it"
+msgstr "{} ditulis oleh versi yang lebih baru, diabaikan"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "{} spectators"
+msgstr "{} penonton"
+
+#. TRANSLATORS: multiplayer scoreboard tag for a player who left the match
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "{} [quit]"
+msgstr "{} [keluar]"
+
+#. TRANSLATORS: multiplayer scoreboard tag for a player who voted to skip the intro
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "{} [skip]"
+msgstr "{} [lewati]"
+
+#: src/App/Neomod/HUD.cpp src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Local"
+msgstr "Lokal"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "{} UR"
+msgstr "{} UR"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "{:.{}f}pp"
+msgstr "{:.{}f}pp"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "SS: {:.{}f}pp"
+msgstr "SS: {:.{}f}pp"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "Miss: {:d}"
+msgstr "Miss: {:d}"
+
+#. TRANSLATORS: "SBrk" stands for "Slider Breaks" (number of slider breaks/missed slider ticks)
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "SBrk: {:d}"
+msgstr "SBrk: {:d}"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "FC: {:d}x"
+msgstr "FC: {:d}x"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "{:.3g}***"
+msgstr "{:.3g}***"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "{:.3g}*"
+msgstr "{:.3g}*"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "BPM: {:d}"
+msgstr "BPM: {:d}"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "AR: {:g}"
+msgstr "AR: {:g}"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "CS: {:g}"
+msgstr "CS: {:g}"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "OD: {:g}"
+msgstr "OD: {:g}"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "HP: {:g}"
+msgstr "HP: {:g}"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "300: +-{:d}ms"
+msgstr "300: +-{:d}ms"
+
+#. TRANSLATORS: "NPS" stands for "Notes Per Second"
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "NPS: {:d}"
+msgstr "NPS: {:d}"
+
+#. TRANSLATORS: "ND" stands for "Note Density"
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "ND: {:d}"
+msgstr "ND: {:d}"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "UR: {:d}"
+msgstr "UR: {:d}"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "-{:d}ms +{:d}ms"
+msgstr "-{:d}ms +{:d}ms"
+
+#: src/App/Neomod/LoadingScreen.cpp
+#, c++-format
+msgid "Loading ... ({:d} %)"
+msgstr "Memuat ... ({:d} %)"
+
+#: src/App/Neomod/Lobby.cpp
+#, c++-format
+msgid "Players: {:d}/{:d}"
+msgstr "Pemain: {:d}/{:d}"
+
+#: src/App/Neomod/Lobby.cpp
+msgid "Join room"
+msgstr "Masuk ruang"
+
+#: src/App/Neomod/Lobby.cpp
+msgid "(password required)"
+msgstr "(perlu kata sandi)"
+
+#: src/App/Neomod/Lobby.cpp
+msgid "Room password:"
+msgstr "Kata sandi ruang:"
+
+#: src/App/Neomod/Lobby.cpp
+msgid "Multiplayer rooms"
+msgstr "Ruang multiplayer"
+
+#: src/App/Neomod/Lobby.cpp
+msgid "Create new room"
+msgstr "Buat ruang baru"
+
+#. TRANSLATORS: online status shown to other players while browsing multiplayer rooms
+#: src/App/Neomod/Lobby.cpp
+msgid "Looking to play"
+msgstr "Mencari lawan"
+
+#: src/App/Neomod/Lobby.cpp
+msgid "There are no matches available."
+msgstr "Tidak ada pertandingan yang tersedia."
+
+#: src/App/Neomod/Lobby.cpp
+msgid "Joining room..."
+msgstr "Masuk ke ruang..."
+
+#: src/App/Neomod/Lobby.cpp
+msgid "New room"
+msgstr "Ruang baru"
+
+#: src/App/Neomod/Lobby.cpp
+msgid "Creating room..."
+msgstr "Membuat ruang..."
+
+#: src/App/Neomod/MainMenu.cpp
+msgid "Save everything from this session."
+msgstr "Simpan semua dari sesi ini."
+
+#: src/App/Neomod/MainMenu.cpp
+msgid "(Optional, automatic on tab close.)"
+msgstr "(Opsional, otomatis saat tab ditutup.)"
+
+#: src/App/Neomod/MainMenu.cpp
+msgid "Checking for updates ..."
+msgstr "Memeriksa pembaruan ..."
+
+#: src/App/Neomod/MainMenu.cpp
+msgid "Singleplayer"
+msgstr "Singleplayer"
+
+#: src/App/Neomod/MainMenu.cpp
+msgid "Multiplayer"
+msgstr "Multiplayer"
+
+#: src/App/Neomod/MainMenu.cpp
+msgid "Options"
+msgstr "Opsi"
+
+#: src/App/Neomod/MainMenu.cpp
+msgid "Exit"
+msgstr "Keluar"
+
+#: src/App/Neomod/MainMenu.cpp
+msgid "Save"
+msgstr "Simpan"
+
+#: src/App/Neomod/MainMenu.cpp src/App/Neomod/OsuDirectScreen.cpp
+msgid "Online Beatmaps"
+msgstr "Beatmap Online"
+
+#: src/App/Neomod/MainMenu.cpp
+#, c++-format
+msgid "Version {:.2f} ({:s})"
+msgstr "Versi {:.2f} ({:s})"
+
+#: src/App/Neomod/MainMenu.cpp
+#, c++-format
+msgid "Version {:.2f}"
+msgstr "Versi {:.2f}"
+
+#: src/App/Neomod/MainMenu.cpp
+msgid "Downloading ..."
+msgstr "Mengunduh ..."
+
+#: src/App/Neomod/MainMenu.cpp
+#, c++-format
+msgid "A new version of {} is ready!"
+msgstr "Versi baru {} sudah siap!"
+
+#: src/App/Neomod/MainMenu.cpp
+msgid "Click here to install the update!"
+msgstr "Klik di sini untuk memasang pembaruan!"
+
+#: src/App/Neomod/MainMenu.cpp
+msgid "A new version is available! Click to open the download page."
+msgstr "Versi baru tersedia! Klik untuk membuka halaman unduhan."
+
+#: src/App/Neomod/MainMenu.cpp
+msgid "Update Error! Click to retry ..."
+msgstr "Pembaruan gagal! Klik untuk mencoba lagi ..."
+
+#: src/App/Neomod/MainMenu.cpp
+msgid "You must log in to join Multiplayer!"
+msgstr "Kamu harus masuk untuk bermain Multiplayer!"
+
+#: src/App/Neomod/MainMenu.cpp
+msgid "You must log in to download beatmaps!"
+msgstr "Kamu harus masuk untuk mengunduh beatmap!"
+
+#: src/App/Neomod/MainMenuNowPlaying.cpp
+msgid "Collapse when idle"
+msgstr "Ciutkan saat tidak aktif"
+
+#: src/App/Neomod/MainMenuNowPlaying.cpp
+msgid "Keep expanded"
+msgstr "Tetap terbuka"
+
+#: src/App/Neomod/MainMenuNowPlaying.cpp
+msgid "Previous song"
+msgstr "Lagu sebelumnya"
+
+#: src/App/Neomod/MainMenuNowPlaying.cpp
+msgid "Next song"
+msgstr "Lagu berikutnya"
+
+#: src/App/Neomod/MainMenuTips.cpp
+msgid "Press Alt + Enter to toggle Fullscreen."
+msgstr "Tekan Alt + Enter untuk mengalihkan layar penuh."
+
+#: src/App/Neomod/MainMenuTips.cpp
+msgid "Press Shift + F1 to open the in-game console."
+msgstr "Tekan Shift + F1 untuk membuka konsol dalam game."
+
+#: src/App/Neomod/MainMenuTips.cpp
+msgid "Shift + Click on a skin in the dropdown list to change the source for base skin elements."
+msgstr "Shift + klik skin di daftar dropdown untuk mengganti sumber elemen dasar skin."
+
+#: src/App/Neomod/MainMenuTips.cpp
+#, c++-format
+msgid "Press {:s} during gameplay to change mods in realtime."
+msgstr "Tekan {:s} saat bermain untuk mengganti mod secara langsung."
+
+#: src/App/Neomod/MainMenuTips.cpp
+#, c++-format
+msgid "Press {:s} or {:s} anywhere to open chat."
+msgstr "Tekan {:s} atau {:s} di mana saja untuk membuka obrolan."
+
+#: src/App/Neomod/MainMenuTips.cpp
+msgid "Launch with the neomod-BASS shortcut to use BASS (ASIO/Exclusive mode) for audio."
+msgstr "Jalankan lewat pintasan neomod-BASS untuk memakai BASS (mode ASIO/Eksklusif) sebagai audio."
+
+#: src/App/Neomod/MainMenuTips.cpp
+msgid "Launch with \"-sound bass\" as a commandline argument to use BASS for audio."
+msgstr "Jalankan dengan \"-sound bass\" sebagai argumen baris perintah untuk memakai BASS sebagai audio."
+
+#: src/App/Neomod/MainMenuTips.cpp
+msgid "Put \"-gpu vk\" after the \"Target:\" field in a shortcut to neomod to use the Vulkan renderer."
+msgstr "Tambahkan \"-gpu vk\" setelah kolom \"Target:\" pada pintasan neomod untuk memakai renderer Vulkan."
+
+#: src/App/Neomod/MainMenuTips.cpp
+msgid "Put \"-dx11\" after the \"Target:\" field in a shortcut to neomod to use the D3D11 renderer."
+msgstr "Tambahkan \"-dx11\" setelah kolom \"Target:\" pada pintasan neomod untuk memakai renderer D3D11."
+
+#: src/App/Neomod/MainMenuTips.cpp
+msgid "Launch with \"-dx11\" as a commandline argument to use the D3D11 renderer."
+msgstr "Jalankan dengan \"-dx11\" sebagai argumen baris perintah untuk memakai renderer D3D11."
+
+#: src/App/Neomod/MainMenuTips.cpp
+msgid "Press Ctrl + O to open the options menu from anywhere."
+msgstr "Tekan Ctrl + O untuk membuka menu opsi dari mana saja."
+
+#: src/App/Neomod/MainMenuTips.cpp
+#, c++-format
+msgid "Tip: {:s}"
+msgstr "Tips: {:s}"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "CS Override"
+msgstr "Paksa CS"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "CS:"
+msgstr "CS:"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Circle Size (higher number = smaller circles)."
+msgstr "Ukuran lingkaran (angka lebih tinggi = lingkaran lebih kecil)."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "AR Override"
+msgstr "Paksa AR"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "AR:"
+msgstr "AR:"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Approach Rate (higher number = faster circles)."
+msgstr "Approach Rate (angka lebih tinggi = lingkaran lebih cepat)."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "OD Override"
+msgstr "Paksa OD"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "OD:"
+msgstr "OD:"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Overall Difficulty (higher number = harder accuracy)."
+msgstr "Overall Difficulty (angka lebih tinggi = akurasi lebih sulit)."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "HP Override"
+msgstr "Paksa HP"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "HP:"
+msgstr "HP:"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Hit/Health Points (higher number = harder survival)."
+msgstr "Hit/Health Points (angka lebih tinggi = lebih sulit bertahan)."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Speed/BPM Multiplier"
+msgstr "Pengali Kecepatan/BPM"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid " Experimental Mods (!)"
+msgstr " Mod Eksperimental (!)"
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Flip Up/Down"
+msgstr "Balik Atas/Bawah"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Playfield is flipped upside down (mirrored at horizontal axis)."
+msgstr "Area bermain dibalik atas-bawah (dicerminkan pada sumbu horizontal)."
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Flip Left/Right"
+msgstr "Balik Kiri/Kanan"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Playfield is flipped left/right (mirrored at vertical axis)."
+msgstr "Area bermain dibalik kiri-kanan (dicerminkan pada sumbu vertikal)."
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Singletap"
+msgstr "Singletap"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "You can only press one key."
+msgstr "Kamu hanya boleh menekan satu tombol."
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Alternate"
+msgstr "Alternate"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "You can never use the same key twice in a row."
+msgstr "Kamu tidak boleh memakai tombol yang sama dua kali berturut-turut."
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "No keylock"
+msgstr "Tanpa keylock"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "You can use 4 keys instead of only 2."
+msgstr "Kamu bisa memakai 4 tombol, bukan hanya 2."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Also click hitcircles when releasing a key."
+msgstr "Juga mengenai hitcircle saat tombol dilepas."
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "DKS"
+msgstr "DKS"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Hitcircles are invisible. Good luck if you use this with Hidden!"
+msgstr "Hitcircle tidak terlihat. Semoga beruntung jika memakainya bersama Hidden!"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Traceable"
+msgstr "Traceable"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Freeze Frame"
+msgstr "Freeze Frame"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Draw all hitobjects in a combo group together. Try it with Hidden for an extra challenge!"
+msgstr "Tampilkan semua objek dalam satu grup combo sekaligus. Coba bersama Hidden untuk tantangan ekstra!"
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "No pausing"
+msgstr "Tanpa jeda"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Pausing is cheating"
+msgstr "Menjeda itu curang"
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "FPoSu: Strafing"
+msgstr "FPoSu: Strafing"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid ""
+"Playfield moves in 3D space (see fposu_mod_strafing_...).\n"
+"Only works in FPoSu mode!"
+msgstr ""
+"Area bermain bergerak dalam ruang 3D (lihat fposu_mod_strafing_...).\n"
+"Hanya berfungsi di mode FPoSu!"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Playfield rotates and moves."
+msgstr "Area bermain berputar dan bergerak."
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Wobble"
+msgstr "Wobble"
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "AR Wobble"
+msgstr "AR Wobble"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Approach rate oscillates between -1 and +1."
+msgstr "Approach rate berosilasi antara -1 dan +1."
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Approach Different"
+msgstr "Approach Different"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid ""
+"Customize the approach circle animation.\n"
+"See mod_approach_different_style.\n"
+"See mod_approach_different_initial_size."
+msgstr ""
+"Sesuaikan animasi approach circle.\n"
+"Lihat mod_approach_different_style.\n"
+"Lihat mod_approach_different_initial_size."
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Timewarp"
+msgstr "Timewarp"
+
+#: src/App/Neomod/ModSelector.cpp
+#, no-c-format
+msgid "Speed increases from 100% to 150% over the course of the beatmap."
+msgstr "Kecepatan naik dari 100% ke 150% sepanjang beatmap."
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "AR Timewarp"
+msgstr "AR Timewarp"
+
+#: src/App/Neomod/ModSelector.cpp
+#, no-c-format
+msgid "Approach rate decreases from 100% to 50% over the course of the beatmap."
+msgstr "Approach rate turun dari 100% ke 50% sepanjang beatmap."
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Minimize"
+msgstr "Minimize"
+
+#: src/App/Neomod/ModSelector.cpp
+#, no-c-format
+msgid "Circle size decreases from 100% to 50% over the course of the beatmap."
+msgstr "Ukuran lingkaran turun dari 100% ke 50% sepanjang beatmap."
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Fading Cursor"
+msgstr "Fading Cursor"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "The cursor fades the higher the combo, becoming invisible at 50."
+msgstr "Kursor memudar seiring naiknya combo, menjadi tak terlihat di 50."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Centered cursor."
+msgstr "Kursor di tengah."
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "First Person"
+msgstr "Sudut Pandang Orang Pertama"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Massively reduced slider follow circle radius."
+msgstr "Radius follow circle slider sangat dikurangi."
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Precise sliders"
+msgstr "Slider presisi"
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Reverse Sliders"
+msgstr "Reverse Sliders"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Reverses the direction of all sliders. (Reload beatmap to apply!)"
+msgstr "Membalik arah semua slider. (Muat ulang beatmap untuk menerapkan!)"
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "No 50s"
+msgstr "Tanpa 50"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Only 300s or 100s. Try harder."
+msgstr "Hanya 300 atau 100. Berusahalah lebih keras."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "300 or miss. PF \"lite\""
+msgstr "300 atau miss. PF \"lite\""
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "No 100s no 50s"
+msgstr "Tanpa 100 dan 50"
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "MinG3012"
+msgstr "MinG3012"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "No 100s. Only 300s or 50s. Git gud."
+msgstr "Tanpa 100. Hanya 300 atau 50. Git gud."
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Half Timing Window"
+msgstr "Jendela Timing Setengah"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "The hit timing window is cut in half. Hit early or perfect (300)."
+msgstr "Jendela timing dipotong setengah. Tekan lebih awal atau sempurna (300)."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Go below AR 0. Doubled approach time."
+msgstr "Turun di bawah AR 0. Waktu approach dua kali lipat."
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "MillhioreF"
+msgstr "MillhioreF"
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Mafham"
+msgstr "Mafham"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid ""
+"Approach rate is set to negative infinity. See the entire beatmap at once.\n"
+"Uses very aggressive optimizations to keep the framerate high, you have been warned!"
+msgstr ""
+"Approach rate diatur ke minus tak hingga. Lihat seluruh beatmap sekaligus.\n"
+"Memakai optimasi yang sangat agresif agar framerate tetap tinggi, kamu sudah diperingatkan!"
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Strict clicks"
+msgstr "Klik ketat"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Unnecessary clicks count as misses."
+msgstr "Klik yang tidak perlu dihitung sebagai miss."
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Strict Tracking"
+msgstr "Tracking Ketat"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Leaving sliders in any way counts as a miss and combo break. (Reload beatmap to apply!)"
+msgstr "Keluar dari slider dengan cara apa pun dihitung sebagai miss dan combo break. (Muat ulang beatmap untuk menerapkan!)"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "WARNING: Score submission will be disabled due to non-vanilla mod selection."
+msgstr "PERINGATAN: Pengiriman skor akan dinonaktifkan karena pilihan mod non-vanilla."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "1. Reset All Mods"
+msgstr "1. Atur Ulang Semua Mod"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "2. Close"
+msgstr "2. Tutup"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Reduces overall difficulty - larger circles, more forgiving HP drain, less accuracy required."
+msgstr "Mengurangi kesulitan keseluruhan - lingkaran lebih besar, HP drain lebih ringan, akurasi yang dibutuhkan lebih rendah."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid ""
+"You can't fail. No matter what.\n"
+"NOTE: To disable drain completely:\n"
+"Options > Gameplay > Mechanics > \"Disable HP Drain\"."
+msgstr ""
+"Kamu tidak bisa gagal. Apa pun yang terjadi.\n"
+"CATATAN: Untuk menonaktifkan drain sepenuhnya:\n"
+"Opsi > Gameplay > Mekanik > \"Nonaktifkan HP Drain\"."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Everything just got a bit harder..."
+msgstr "Semuanya jadi sedikit lebih sulit..."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Miss a note and fail."
+msgstr "Miss satu not dan kamu gagal."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "SS or quit."
+msgstr "SS atau keluar."
+
+#. TRANSLATORS: Half Time tooltips. "Less zoom." means the song plays slower (not a camera zoom).
+#. "A E S T H E T I C" is a vaporwave aesthetic meme, shown instead when Nightcore enjoyer mode is on.
+#: src/App/Neomod/ModSelector.cpp
+msgid "A E S T H E T I C"
+msgstr "A E S T H E T I C"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Less zoom."
+msgstr "Zoom lebih kecil."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Zoooooooooom."
+msgstr "Zoooooooooom."
+
+#. TRANSLATORS: Double Time tooltips. "Zoooooooooom." is the sound of going fast (not a camera zoom).
+#. "uguuuuuuuu" is an anime-style meme sound, shown instead when Nightcore enjoyer mode is on.
+#: src/App/Neomod/ModSelector.cpp
+msgid "uguuuuuuuu"
+msgstr "uguuuuuuuu"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Play with no approach circles and fading notes for a slight score advantage."
+msgstr "Bermain tanpa approach circle dan dengan not yang memudar untuk sedikit keuntungan skor."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Restricted view area."
+msgstr "Area pandang terbatas."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Actual flashlight."
+msgstr "Senter sungguhan."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid ""
+"You don't need to click.\n"
+"Give your clicking/tapping fingers a break from the heat of things.\n"
+"** UNRANKED **"
+msgstr ""
+"Kamu tidak perlu mengklik.\n"
+"Istirahatkan jari klik/ketukmu dari panasnya permainan.\n"
+"** TIDAK BERPERINGKAT **"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid ""
+"Automatic cursor movement - just follow the rhythm.\n"
+"** UNRANKED **"
+msgstr ""
+"Gerakan kursor otomatis - cukup ikuti ritmenya.\n"
+"** TIDAK BERPERINGKAT **"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Spinners will be automatically completed."
+msgstr "Spinner akan diselesaikan secara otomatis."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Watch a perfect automated play through the song."
+msgstr "Tonton permainan otomatis sempurna dari lagu ini."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid ""
+"Accuracy is based on the distance to the center of all hitobjects.\n"
+"300s still require at least being in the hit window of a 100 in addition to the rule above."
+msgstr ""
+"Akurasi didasarkan pada jarak ke pusat semua objek.\n"
+"300 tetap memerlukan setidaknya masuk dalam jendela hit 100 selain aturan di atas."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid ""
+"Try the future scoring system.\n"
+"** UNRANKED **"
+msgstr ""
+"Coba sistem skor masa depan.\n"
+"** TIDAK BERPERINGKAT **"
+
+#: src/App/Neomod/ModSelector.cpp
+#, c++-format
+msgid "Score Multiplier: {:.2f}X"
+msgstr "Pengali Skor: {:.2f}X"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Experimental Mods"
+msgstr "Mod Eksperimental"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Hold [ALT] to slide in 0.01 increments."
+msgstr "Tahan [ALT] untuk menggeser dengan kenaikan 0.01."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Reset"
+msgstr "Atur ulang"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Mouse Left"
+msgstr "Mouse Kiri"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Mouse Right"
+msgstr "Mouse Kanan"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "<UNBOUND>"
+msgstr "<TIDAK DIATUR>"
+
+#: src/App/Neomod/OptionsOverlay.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "McOsu"
+msgstr "McOsu"
+
+#: src/App/Neomod/OptionsOverlay.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "None"
+msgstr "Tidak ada"
+
+#: src/App/Neomod/OptionsOverlay.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "osu!lazer 2020"
+msgstr "osu!lazer 2020"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "osu!stable (default)"
+msgstr "osu!stable (bawaan)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "General"
+msgstr "Umum"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Online server"
+msgstr "Server online"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+#, c++-format
+msgid "If the server admins don't explicitly allow {},"
+msgstr "Jika admin server tidak secara eksplisit mengizinkan {},"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "you might get banned!"
+msgstr "kamu bisa saja di-ban!"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Server address:"
+msgstr "Alamat server:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Submit scores"
+msgstr "Kirim skor"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Login details (username/password)"
+msgstr "Detail login (nama pengguna/kata sandi)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Keep me logged in"
+msgstr "Biarkan saya tetap masuk"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Log in"
+msgstr "Masuk"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Localization"
+msgstr "Lokalisasi"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Select language"
+msgstr "Pilih bahasa"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Prefer metadata in original language"
+msgstr "Utamakan metadata dalam bahasa asli"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "osu! folder"
+msgstr "Folder osu!"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "1) If you have an existing osu!stable installation:"
+msgstr "1) Jika kamu punya instalasi osu!stable:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "2) osu! > Options > \"Open osu! folder\""
+msgstr "2) osu! > Opsi > \"Buka folder osu!\""
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "3) Copy paste the full path into the textbox:"
+msgstr "3) Salin dan tempel path lengkapnya ke kotak teks:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Import settings from osu!stable"
+msgstr "Impor pengaturan dari osu!stable"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Successfully imported settings from osu!stable."
+msgstr "Berhasil mengimpor pengaturan dari osu!stable."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Error: Couldn't find osu!stable install directory or config file!"
+msgstr "Error: Tidak dapat menemukan direktori instalasi atau file konfigurasi osu!stable!"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Use osu!.db database (read-only)"
+msgstr "Gunakan database osu!.db (hanya baca)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"If you have an existing osu! installation,\n"
+"then this will speed up the initial loading process."
+msgstr ""
+"Jika kamu punya instalasi osu!,\n"
+"ini akan mempercepat proses pemuatan awal."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Load osu! collection.db (read-only)"
+msgstr "Muat collection.db osu! (hanya baca)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"If you have an existing osu! installation,\n"
+"also load and display your created collections from there."
+msgstr ""
+"Jika kamu punya instalasi osu!,\n"
+"juga muat dan tampilkan koleksi yang kamu buat di sana."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Include Relax/Autopilot for total weighted pp/acc"
+msgstr "Sertakan Relax/Autopilot dalam total pp/acc berbobot"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"NOTE: osu! does not allow this (since these mods are unranked).\n"
+"Should relax/autopilot scores be included in the weighted pp/acc calculation?"
+msgstr ""
+"CATATAN: osu! tidak mengizinkan ini (karena mod ini tidak berperingkat).\n"
+"Apakah skor relax/autopilot perlu dihitung dalam pp/acc berbobot?"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Always show pp instead of score in scorebrowser"
+msgstr "Selalu tampilkan pp alih-alih skor di daftar skor"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Ignore score sorting type entirely."
+msgstr "Abaikan jenis pengurutan skor sepenuhnya."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Show osu! scores.db user names in user switcher"
+msgstr "Tampilkan nama pengguna dari scores.db osu! di pengalih pengguna"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Only relevant if \"Load osu! scores.db\" is enabled.\n"
+"Should the user switcher show ALL user names from ALL scores?\n"
+"(Even from ones you got in your database because you watched a replay?)"
+msgstr ""
+"Hanya relevan jika \"Muat scores.db osu!\" diaktifkan.\n"
+"Apakah pengalih pengguna perlu menampilkan SEMUA nama dari SEMUA skor?\n"
+"(Bahkan dari skor yang ada di database karena kamu menonton replay?)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Songbrowser"
+msgstr "Pemilih Lagu"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Strain Graph in Songbrowser"
+msgstr "Tampilkan Grafik Strain di Pemilih Lagu"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Hold either SHIFT/CTRL to show only speed/aim strains.\n"
+"Speed strain is red, aim strain is green.\n"
+"(See osu_hud_scrubbing_timeline_strains_*)"
+msgstr ""
+"Tahan SHIFT/CTRL untuk hanya menampilkan strain speed/aim.\n"
+"Strain speed berwarna merah, strain aim berwarna hijau.\n"
+"(Lihat osu_hud_scrubbing_timeline_strains_*)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Strain Graph in Scrubbing Timeline"
+msgstr "Tampilkan Grafik Strain di Timeline"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Speed strain is red, aim strain is green.\n"
+"(See osu_hud_scrubbing_timeline_strains_*)"
+msgstr ""
+"Strain speed berwarna merah, strain aim berwarna hijau.\n"
+"(Lihat osu_hud_scrubbing_timeline_strains_*)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Song Buttons Velocity Animation"
+msgstr "Animasi Kecepatan Tombol Lagu"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "If enabled, then song buttons are pushed to the right depending on the scrolling velocity."
+msgstr "Jika diaktifkan, tombol lagu terdorong ke kanan sesuai kecepatan scroll."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Song Buttons Curved Layout"
+msgstr "Tata Letak Lengkung Tombol Lagu"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "If enabled, then song buttons are positioned on a vertically centered curve."
+msgstr "Jika diaktifkan, tombol lagu diletakkan pada lengkungan yang berada di tengah secara vertikal."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Window"
+msgstr "Jendela"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Pause on Focus Loss"
+msgstr "Jeda Saat Kehilangan Fokus"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Should the game pause when you switch to another application?"
+msgstr "Apakah game perlu dijeda saat kamu beralih ke aplikasi lain?"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Alerts"
+msgstr "Peringatan"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Notify when friends change status"
+msgstr "Beri tahu saat status teman berubah"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Notify when receiving a direct message"
+msgstr "Beri tahu saat menerima pesan langsung"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Notify when mentioned"
+msgstr "Beri tahu saat disebut"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Ping when mentioned"
+msgstr "Bunyi saat disebut"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Show notifications during gameplay"
+msgstr "Tampilkan notifikasi saat bermain"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "In-game chat"
+msgstr "Obrolan dalam game"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Chat ticker"
+msgstr "Ticker obrolan"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Automatically hide chat during gameplay"
+msgstr "Sembunyikan obrolan otomatis saat bermain"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Chat word ignore list (space-separated):"
+msgstr "Daftar kata yang diabaikan di obrolan (dipisahkan spasi):"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Privacy"
+msgstr "Privasi"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Automatically update to the latest version"
+msgstr "Perbarui otomatis ke versi terbaru"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Replace main menu logo with server logo"
+msgstr "Ganti logo menu utama dengan logo server"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Show spectator list"
+msgstr "Tampilkan daftar penonton"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Share currently played map with spectators"
+msgstr "Bagikan map yang sedang dimainkan ke penonton"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Enable Discord Rich Presence"
+msgstr "Aktifkan Discord Rich Presence"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Shows your current game state in your friends' friendslists.\n"
+"e.g.: Playing Gavin G - Reach Out [Cherry Blossom's Insane]"
+msgstr ""
+"Menampilkan status permainanmu di daftar teman milik temanmu.\n"
+"mis.: Memainkan Gavin G - Reach Out [Cherry Blossom's Insane]"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw map backgrounds in Discord Rich Presence"
+msgstr "Tampilkan latar map di Discord Rich Presence"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Graphics"
+msgstr "Grafis"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Renderer"
+msgstr "Renderer"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "If enabled: plz enjoy input lag."
+msgstr "Jika diaktifkan: silakan nikmati input lag."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "VSync"
+msgstr "VSync"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "High Priority"
+msgstr "Prioritas Tinggi"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Sets the game process priority to high"
+msgstr "Mengatur prioritas proses game menjadi tinggi"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Show FPS Counter"
+msgstr "Tampilkan Penghitung FPS"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Max Queued Frames"
+msgstr "Maks. Frame dalam Antrean"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Raise for higher fps, decrease for lower latency"
+msgstr "Naikkan untuk fps lebih tinggi, turunkan untuk latensi lebih rendah"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "FPS Limiter:"
+msgstr "Pembatas FPS:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "FPS Limiter (menus):"
+msgstr "Pembatas FPS (menu):"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Layout"
+msgstr "Tata Letak"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Select Resolution"
+msgstr "Pilih Resolusi"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Fullscreen"
+msgstr "Layar Penuh"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Minimize On ALT+TAB"
+msgstr "Minimalkan saat ALT+TAB"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Keep Aspect Ratio"
+msgstr "Pertahankan Rasio Aspek"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Black borders instead of a stretched image.\n"
+"Only relevant if fullscreen is enabled, and letterboxing is disabled.\n"
+"Use the two position sliders below to move the viewport around."
+msgstr ""
+"Batas hitam alih-alih gambar yang direnggangkan.\n"
+"Hanya relevan jika layar penuh aktif dan letterboxing nonaktif.\n"
+"Gunakan dua slider posisi di bawah untuk menggeser viewport."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Letterboxing"
+msgstr "Letterboxing"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Useful to get the low latency of fullscreen with a smaller game resolution.\n"
+"Use the two position sliders below to move the viewport around."
+msgstr ""
+"Berguna untuk mendapat latensi rendah layar penuh dengan resolusi game yang lebih kecil.\n"
+"Gunakan dua slider posisi di bawah untuk menggeser viewport."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Horizontal position"
+msgstr "Posisi horizontal"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Vertical position"
+msgstr "Posisi vertikal"
+
+#. TRANSLATORS: Global UI scale, to make text bigger on big screens
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "UI Scaling"
+msgstr "Skala UI"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "DPI Scaling"
+msgstr "Skala DPI"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+#, c++-format
+msgid ""
+"Automatically scale to the DPI of your display: {} DPI.\n"
+"Scale factor = {} / 96 = {:.2g}x"
+msgstr ""
+"Skala otomatis mengikuti DPI layarmu: {} DPI.\n"
+"Faktor skala = {} / 96 = {:.2g}x"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "UI Scale:"
+msgstr "Skala UI:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Detail Settings"
+msgstr "Pengaturan Detail"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Animate scoreboard"
+msgstr "Animasikan papan skor"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Use fancy animations for the in-game scoreboard"
+msgstr "Gunakan animasi mewah untuk papan skor dalam game"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Avoid flashing elements"
+msgstr "Hindari elemen berkedip"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Disables cosmetic flash effects\n"
+"Disables dimming when holding sliders with Flashlight mod enabled"
+msgstr ""
+"Menonaktifkan efek kilat kosmetik\n"
+"Menonaktifkan peredupan saat menahan slider dengan mod Flashlight"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Mipmaps"
+msgstr "Mipmap"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Reload your skin to apply! (CTRL + ALT + S)\n"
+"Generate mipmaps for each skin element, at the cost of VRAM.\n"
+"Provides smoother visuals on lower resolutions for @2x-only skins."
+msgstr ""
+"Muat ulang skin untuk menerapkan! (CTRL + ALT + S)\n"
+"Membuat mipmap untuk tiap elemen skin, dengan biaya VRAM.\n"
+"Menghasilkan tampilan lebih halus di resolusi rendah untuk skin yang hanya @2x."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Snaking in sliders"
+msgstr "Slider muncul berkelok"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"\"Growing\" sliders.\n"
+"Sliders gradually snake out from their starting point while fading in.\n"
+"Has no impact on performance whatsoever."
+msgstr ""
+"Slider yang \"tumbuh\".\n"
+"Slider perlahan memanjang dari titik awalnya sambil muncul.\n"
+"Sama sekali tidak memengaruhi performa."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Snaking out sliders"
+msgstr "Slider hilang berkelok"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"\"Shrinking\" sliders.\n"
+"Sliders will shrink with the sliderball while sliding.\n"
+"Can improve performance a tiny bit, since there will be less to draw overall."
+msgstr ""
+"Slider yang \"menyusut\".\n"
+"Slider menyusut bersama sliderball saat meluncur.\n"
+"Bisa sedikit meningkatkan performa, karena lebih sedikit yang digambar."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Higher Quality Sliders (!)"
+msgstr "Slider Kualitas Lebih Tinggi (!)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Disable this if your fps drop too low while sliders are visible."
+msgstr "Nonaktifkan ini jika fps turun terlalu rendah saat slider terlihat."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Slider Quality"
+msgstr "Kualitas Slider"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Audio"
+msgstr "Audio"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Devices"
+msgstr "Perangkat"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Default"
+msgstr "Bawaan"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Select Output Device"
+msgstr "Pilih Perangkat Output"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Backend"
+msgstr "Backend"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "MiniAudio"
+msgstr "MiniAudio"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "SDL"
+msgstr "SDL"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Pick the one you feel works best,\n"
+"there should be very little difference."
+msgstr ""
+"Pilih yang menurutmu paling baik,\n"
+"perbedaannya seharusnya sangat kecil."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Auto-disable exclusive mode"
+msgstr "Nonaktifkan mode eksklusif otomatis"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Toggle exclusive mode off/on\n"
+"when losing/gaining focus, if already\n"
+"in exclusive mode."
+msgstr ""
+"Matikan/nyalakan mode eksklusif\n"
+"saat kehilangan/mendapat fokus, jika sedang\n"
+"dalam mode eksklusif."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Lower Latency (!)"
+msgstr "Latensi Lebih Rendah (!)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "NOTE: Enabling this may result in audio crackling!"
+msgstr "CATATAN: Mengaktifkan ini bisa menyebabkan audio berderak!"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "WASAPI"
+msgstr "WASAPI"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Low-latency Callbacks"
+msgstr "Callback Latensi Rendah"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Run BASSWASAPI in callback mode to potentially further decrease latency.\n"
+"(period/buffer size are ignored)"
+msgstr ""
+"Jalankan BASSWASAPI dalam mode callback untuk berpotensi menurunkan latensi lebih jauh.\n"
+"(ukuran period/buffer diabaikan)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Buffer Size:"
+msgstr "Ukuran Buffer:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Windows 7: Start at 11 ms,"
+msgstr "Windows 7: Mulai dari 11 ms,"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Windows 10: Start at 1 ms,"
+msgstr "Windows 10: Mulai dari 1 ms,"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "and if crackling: increment until fixed."
+msgstr "dan jika berderak: naikkan sampai beres."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "(lower is better, non-wasapi has ~40 ms minimum)"
+msgstr "(lebih rendah lebih baik, non-wasapi minimal ~40 ms)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Exclusive Mode"
+msgstr "Mode Eksklusif"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Dramatically reduces latency, but prevents other applications from capturing/playing audio."
+msgstr "Menurunkan latensi secara drastis, tetapi mencegah aplikasi lain merekam/memutar audio."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "WARNING: Only if you know what you are doing"
+msgstr "PERINGATAN: Hanya jika kamu tahu apa yang kamu lakukan"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Period Size:"
+msgstr "Ukuran Period:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Restart SoundEngine"
+msgstr "Mulai Ulang SoundEngine"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "ASIO"
+msgstr "ASIO"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Open ASIO settings"
+msgstr "Buka pengaturan ASIO"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Volume"
+msgstr "Volume"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Normalize loudness across songs"
+msgstr "Seimbangkan kenyaringan antarlagu"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Master:"
+msgstr "Utama:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Inactive:"
+msgstr "Tidak aktif:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Music:"
+msgstr "Musik:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Effects:"
+msgstr "Efek:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Offset Adjustment"
+msgstr "Penyesuaian Offset"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Scaled Offset:"
+msgstr "Offset Terskala:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Behaves the same as \"Universal Offset\" in osu! (is multiplied by playback rate)."
+msgstr "Berperilaku sama seperti \"Universal Offset\" di osu! (dikalikan dengan kecepatan putar)."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Unscaled Offset:"
+msgstr "Offset Tak Terskala:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"\"Universal Offset\", but unaffected by rate adjustments.\n"
+"+15 unscaled offset is the same as using -15 local offset on every map."
+msgstr ""
+"\"Universal Offset\", tetapi tidak terpengaruh perubahan kecepatan.\n"
+"Offset tak terskala +15 sama dengan memakai offset lokal -15 di setiap map."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Gameplay"
+msgstr "Gameplay"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Boost hitsound volume"
+msgstr "Perkuat volume hitsound"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Apply a small logarithmic multiplier to non-sliderslide hitsounds."
+msgstr "Terapkan pengali logaritmik kecil pada hitsound selain sliderslide."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Change hitsound pitch based on accuracy"
+msgstr "Ubah nada hitsound berdasarkan akurasi"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Prefer Nightcore over Double Time"
+msgstr "Utamakan Nightcore daripada Double Time"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Apply speed/pitch mods while browsing"
+msgstr "Terapkan mod kecepatan/nada saat menjelajah"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Whether to always apply all mods, or keep the preview music normal."
+msgstr "Apakah selalu menerapkan semua mod, atau membiarkan musik pratinjau normal."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Skin"
+msgstr "Skin"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "To import a skin, just drop the .osk file on this window!"
+msgstr "Untuk mengimpor skin, cukup jatuhkan file .osk ke jendela ini!"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Select Skin"
+msgstr "Pilih Skin"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Shift-click a skin to set it as fallback.\n"
+"Missing elements fall back to it instead of \"default\"."
+msgstr ""
+"Shift + klik sebuah skin untuk menjadikannya cadangan.\n"
+"Elemen yang hilang akan diambil dari skin itu, bukan dari \"default\"."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Export Skin"
+msgstr "Ekspor Skin"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Open current Skin folder"
+msgstr "Buka folder Skin saat ini"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Packs the current skin into an .osk file in the exports folder,\n"
+"together with whatever the fallback skin fills in."
+msgstr ""
+"Mengemas skin saat ini menjadi file .osk di folder exports,\n"
+"beserta elemen yang diisi oleh skin cadangan."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Random Skin"
+msgstr "Skin Acak"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Reload Skin"
+msgstr "Muat Ulang Skin"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "(CTRL + ALT + S)"
+msgstr "(CTRL + ALT + S)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Temporary, does not change your configured skin (reload to reset).\n"
+"Use \"skin_random 1\" to randomize on every skin reload.\n"
+"Use \"skin_random_elements 1\" to mix multiple skins.\n"
+"Use \"skin_export\" to export the currently active skin."
+msgstr ""
+"Sementara, tidak mengubah skin yang kamu atur (muat ulang untuk mengembalikan).\n"
+"Gunakan \"skin_random 1\" untuk mengacak setiap kali skin dimuat ulang.\n"
+"Gunakan \"skin_random_elements 1\" untuk mencampur beberapa skin.\n"
+"Gunakan \"skin_export\" untuk mengekspor skin yang sedang aktif."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Let Skins Change Settings"
+msgstr "Izinkan Skin Mengubah Pengaturan"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Skins can come with settings of their own ([neomod] section in skin.ini).\n"
+"While such a skin is in use, those settings can't be changed here."
+msgstr ""
+"Skin bisa membawa pengaturannya sendiri (bagian [neomod] di skin.ini).\n"
+"Selama skin tersebut dipakai, pengaturan itu tidak bisa diubah di sini."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Number Scale:"
+msgstr "Skala Angka:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "HitResult Scale:"
+msgstr "Skala HitResult:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Numbers"
+msgstr "Tampilkan Angka"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Approach Circles"
+msgstr "Tampilkan Approach Circle"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Instafade Circles"
+msgstr "Instafade Lingkaran"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Instafade Sliders"
+msgstr "Instafade Slider"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Storyboards"
+msgstr "Tampilkan Storyboard"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Ignore Beatmap Skins"
+msgstr "Abaikan Skin Beatmap"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Use your skin's elements and slider colours instead of the ones that come with a beatmap."
+msgstr "Gunakan elemen dan warna slider dari skinmu, bukan dari beatmap."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Ignore Beatmap Hitsounds"
+msgstr "Abaikan Hitsound Beatmap"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Use your skin's sounds instead of the ones that come with a beatmap."
+msgstr "Gunakan suara dari skinmu, bukan dari beatmap."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Ignore Beatmap Combo Colors"
+msgstr "Abaikan Warna Combo Beatmap"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Ignore Beatmap Sample Volume"
+msgstr "Abaikan Volume Sample Beatmap"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Ignore beatmap timingpoint effect volumes.\n"
+"Quiet hitsounds can destroy accuracy and concentration, enabling this will fix that."
+msgstr ""
+"Abaikan volume efek timingpoint beatmap.\n"
+"Hitsound yang terlalu pelan bisa merusak akurasi dan konsentrasi, mengaktifkan ini akan memperbaikinya."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Use skin's sound samples"
+msgstr "Gunakan sample suara skin"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "If this is not selected, then the default skin hitsounds will be used."
+msgstr "Jika tidak dipilih, hitsound skin bawaan yang akan dipakai."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Load HD @2x"
+msgstr "Muat HD @2x"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "On very low resolutions (below 1600x900) you can disable this to get smoother visuals."
+msgstr "Pada resolusi sangat rendah (di bawah 1600x900) kamu bisa menonaktifkan ini untuk tampilan lebih halus."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Cursor Trail"
+msgstr "Tampilkan Jejak Kursor"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Force Smooth Cursor Trail"
+msgstr "Paksa Jejak Kursor Halus"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Usually, the presence of the cursormiddle.png skin image enables smooth cursortrails.\n"
+"This option allows you to force enable smooth cursortrails for all skins."
+msgstr ""
+"Biasanya, adanya gambar skin cursormiddle.png mengaktifkan jejak kursor halus.\n"
+"Opsi ini memaksa jejak kursor halus untuk semua skin."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Always draw Cursor Trail"
+msgstr "Selalu tampilkan Jejak Kursor"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw the cursor trail even when the cursor isn't moving"
+msgstr "Tampilkan jejak kursor walau kursor tidak bergerak"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Cursor trail spacing:"
+msgstr "Jarak jejak kursor:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Cursor Size:"
+msgstr "Ukuran Kursor:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Automatic Cursor Size"
+msgstr "Ukuran Kursor Otomatis"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Cursor size will adjust based on the CS of the current beatmap."
+msgstr "Ukuran kursor akan menyesuaikan dengan CS beatmap saat ini."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Slider Border Size"
+msgstr "Ukuran Tepi Slider"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Slider Opacity"
+msgstr "Opasitas Slider"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Slider Body Opacity"
+msgstr "Opasitas Badan Slider"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Slider Body Saturation"
+msgstr "Saturasi Badan Slider"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Use slidergradient.png"
+msgstr "Gunakan slidergradient.png"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"This will block all dynamic slider (color/border) features,\n"
+"but is more easily customizable."
+msgstr ""
+"Ini akan memblokir semua fitur slider dinamis (warna/tepi),\n"
+"tetapi lebih mudah disesuaikan."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Use osu!lazer Slider Style"
+msgstr "Gunakan Gaya Slider osu!lazer"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Only really looks good if your skin doesn't \"SliderTrackOverride\" too dark."
+msgstr "Hanya terlihat bagus jika \"SliderTrackOverride\" skinmu tidak terlalu gelap."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Use combo color as tint for slider ball"
+msgstr "Gunakan warna combo sebagai tint sliderball"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Use combo color as tint for slider border"
+msgstr "Gunakan warna combo sebagai tint tepi slider"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Slider End Circle"
+msgstr "Tampilkan Lingkaran Ujung Slider"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Input"
+msgstr "Input"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Mouse"
+msgstr "Mouse"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Sensitivity:"
+msgstr "Sensitivitas:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "WARNING: Set Sensitivity to 1 for tablets!"
+msgstr "PERINGATAN: Atur Sensitivitas ke 1 untuk tablet!"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Not recommended if you're using a tablet."
+msgstr "Tidak disarankan jika kamu memakai tablet."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Raw Mouse Input"
+msgstr "Input Mouse Mentah"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Confine Cursor (Windowed)"
+msgstr "Kurung Kursor (Jendela)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Confine Cursor (Fullscreen)"
+msgstr "Kurung Kursor (Layar Penuh)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Confine Cursor (NEVER)"
+msgstr "Kurung Kursor (TIDAK PERNAH)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Overrides automatic cursor clipping during gameplay."
+msgstr "Mengesampingkan pengurungan kursor otomatis saat bermain."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Disable Mouse Wheel in Play Mode"
+msgstr "Nonaktifkan Roda Mouse saat Bermain"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Disable Mouse Buttons in Play Mode"
+msgstr "Nonaktifkan Tombol Mouse saat Bermain"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Cursor ripples"
+msgstr "Riak kursor"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "The cursor will ripple outwards on clicking."
+msgstr "Kursor akan beriak keluar saat diklik."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Keyboard"
+msgstr "Keyboard"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Raw Keyboard Input"
+msgstr "Input Keyboard Mentah"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Global Media Hotkeys"
+msgstr "Hotkey Media Global"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Allows controlling main menu music with\n"
+"keyboard media shortcuts, even while alt-tabbed"
+msgstr ""
+"Memungkinkan mengontrol musik menu utama dengan\n"
+"pintasan media keyboard, bahkan saat alt-tab"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Reset all key bindings"
+msgstr "Atur ulang semua tombol"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Keys - In-Game"
+msgstr "Tombol - Dalam Game"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Left Click"
+msgstr "Klik Kiri"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Right Click"
+msgstr "Klik Kanan"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Left Click (2)"
+msgstr "Klik Kiri (2)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Right Click (2)"
+msgstr "Klik Kanan (2)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Smoke"
+msgstr "Asap"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Game Pause"
+msgstr "Jeda Game"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Skip Cutscene"
+msgstr "Lewati Cutscene"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Toggle Scoreboard"
+msgstr "Tampilkan/Sembunyikan Papan Skor"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Scrubbing (+ Click Drag!)"
+msgstr "Scrubbing (+ Klik Seret!)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Quick Seek -5sec <<<"
+msgstr "Lompat Cepat -5 dtk <<<"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Quick Seek +5sec >>>"
+msgstr "Lompat Cepat +5 dtk >>>"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Increase Local Song Offset"
+msgstr "Naikkan Offset Lagu Lokal"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Decrease Local Song Offset"
+msgstr "Turunkan Offset Lagu Lokal"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Quick Retry (hold briefly)"
+msgstr "Ulang Cepat (tahan sebentar)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Quick Save"
+msgstr "Simpan Cepat"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Quick Load"
+msgstr "Muat Cepat"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Instant Replay"
+msgstr "Replay Instan"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Keys - FPoSu"
+msgstr "Tombol - FPoSu"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Zoom"
+msgstr "Zoom"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Keys - Universal"
+msgstr "Tombol - Universal"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Toggle chat"
+msgstr "Tampilkan/sembunyikan obrolan"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Toggle user list"
+msgstr "Tampilkan/sembunyikan daftar pengguna"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Save Screenshot"
+msgstr "Simpan Tangkapan Layar"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Increase Volume"
+msgstr "Naikkan Volume"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Decrease Volume"
+msgstr "Turunkan Volume"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Disable Mouse Buttons"
+msgstr "Nonaktifkan Tombol Mouse"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Toggle Map Background"
+msgstr "Tampilkan/Sembunyikan Latar Map"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Boss Key (Minimize)"
+msgstr "Boss Key (Minimalkan)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Open Skin Selection Menu"
+msgstr "Buka Menu Pemilihan Skin"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Keys - Song Select"
+msgstr "Tombol - Pemilih Lagu"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Toggle Mod Selection Screen"
+msgstr "Tampilkan/Sembunyikan Layar Pemilihan Mod"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "(F1 can not be unbound. This is just an additional key.)"
+msgstr "(F1 tidak bisa dilepas. Ini hanya tombol tambahan.)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Random Beatmap"
+msgstr "Beatmap Acak"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "(F2 can not be unbound. This is just an additional key.)"
+msgstr "(F2 tidak bisa dilepas. Ini hanya tombol tambahan.)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Keys - Mod Select"
+msgstr "Tombol - Pemilihan Mod"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Easy"
+msgstr "Easy"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "No Fail"
+msgstr "No Fail"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Half Time"
+msgstr "Half Time"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Hard Rock"
+msgstr "Hard Rock"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Sudden Death"
+msgstr "Sudden Death"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Double Time"
+msgstr "Double Time"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Hidden"
+msgstr "Hidden"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Flashlight"
+msgstr "Flashlight"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Relax"
+msgstr "Relax"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Autopilot"
+msgstr "Autopilot"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Spunout"
+msgstr "Spunout"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Auto"
+msgstr "Auto"
+
+#: src/App/Neomod/OptionsOverlay.cpp src/App/Neomod/RoomScreen.cpp
+msgid "Score V2"
+msgstr "Score V2"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Background Dim:"
+msgstr "Peredupan Latar:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Background Brightness:"
+msgstr "Kecerahan Latar:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Don't change dim level during breaks"
+msgstr "Jangan ubah tingkat peredupan saat break"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Makes the background basically impossible to see during breaks.\n"
+"Not recommended."
+msgstr ""
+"Membuat latar hampir mustahil terlihat saat break.\n"
+"Tidak disarankan."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Show approach circle on first \"Hidden\" object"
+msgstr "Tampilkan approach circle pada objek \"Hidden\" pertama"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "SuddenDeath restart on miss"
+msgstr "Mulai ulang SuddenDeath saat miss"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Skips the failing animation, and instantly restarts like SS/PF."
+msgstr "Melewati animasi gagal, dan langsung mulai ulang seperti SS/PF."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Show Skip Button during Intro"
+msgstr "Tampilkan Tombol Lewati saat Intro"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Skip intro to first hitobject."
+msgstr "Lewati intro sampai hitobject pertama."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Show Skip Button during Breaks"
+msgstr "Tampilkan Tombol Lewati saat Break"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Skip breaks in the middle of beatmaps."
+msgstr "Lewati break di tengah beatmap."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Mechanics"
+msgstr "Mekanik"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Kill Player upon Failing"
+msgstr "Matikan Pemain saat Gagal"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Enabled: Singleplayer default. You die upon failing and the beatmap stops.\n"
+"Disabled: Multiplayer default. Allows you to keep playing even after failing."
+msgstr ""
+"Aktif: Bawaan singleplayer. Kamu mati saat gagal dan beatmap berhenti.\n"
+"Nonaktif: Bawaan multiplayer. Kamu tetap bisa bermain walau sudah gagal."
+
+#: src/App/Neomod/OptionsOverlay.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Disable HP drain"
+msgstr "Nonaktifkan HP drain"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Like NF, but entirely disables HP mechanics. Will block online score submission."
+msgstr "Seperti NF, tetapi menonaktifkan mekanik HP sepenuhnya. Akan memblokir pengiriman skor online."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Select [Notelock]"
+msgstr "Pilih [Notelock]"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Info about different notelock algorithms:"
+msgstr "Info tentang berbagai algoritma notelock:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "- McOsu: Auto miss previous circle, always."
+msgstr "- McOsu: Otomatis miss lingkaran sebelumnya, selalu."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "- osu!stable: Locked until previous circle is miss."
+msgstr "- osu!stable: Terkunci sampai lingkaran sebelumnya miss."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "- osu!lazer 2020: Auto miss previous circle if > time."
+msgstr "- osu!lazer 2020: Otomatis miss lingkaran sebelumnya jika > waktu."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Backgrounds"
+msgstr "Latar"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Load Background Images (!)"
+msgstr "Muat Gambar Latar (!)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "NOTE: Disabling this will disable ALL beatmap images everywhere!"
+msgstr "CATATAN: Menonaktifkan ini akan menonaktifkan SEMUA gambar beatmap di mana pun!"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Background in Beatmap"
+msgstr "Tampilkan Latar di Beatmap"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Background in SongBrowser"
+msgstr "Tampilkan Latar di Pemilih Lagu"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "NOTE: You can disable this if you always want menu-background."
+msgstr "CATATAN: Kamu bisa menonaktifkan ini jika selalu ingin menu-background."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Background Thumbnails in SongBrowser"
+msgstr "Tampilkan Thumbnail Latar di Pemilih Lagu"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Background in Ranking/Results Screen"
+msgstr "Tampilkan Latar di Layar Hasil"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Prefer beatmap background in Menu"
+msgstr "Utamakan latar beatmap di Menu"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Use the background from the currently playing song, even in the main menu."
+msgstr "Gunakan latar dari lagu yang sedang diputar, bahkan di menu utama."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw menu-background in Menu"
+msgstr "Tampilkan menu-background di Menu"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw menu-background in SongBrowser"
+msgstr "Tampilkan menu-background di Pemilih Lagu"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "NOTE: Only applies if \"Draw Background in SongBrowser\" is disabled."
+msgstr "CATATAN: Hanya berlaku jika \"Tampilkan Latar di Pemilih Lagu\" nonaktif."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Key Overlay"
+msgstr "Key Overlay"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Key Overlay"
+msgstr "Tampilkan Key Overlay"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Key Overlay Trail"
+msgstr "Tampilkan Jejak Key Overlay"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Scrolling blocks next to the key overlay, visualizing how long each key was held."
+msgstr "Balok bergulir di samping key overlay, menunjukkan berapa lama tiap tombol ditahan."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Trail Opacity:"
+msgstr "Opasitas Jejak:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Trail Speed:"
+msgstr "Kecepatan Jejak:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Trail Fade Distance:"
+msgstr "Jarak Pudar Jejak:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "HUD"
+msgstr "HUD"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw HUD"
+msgstr "Tampilkan HUD"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "NOTE: You can also press SHIFT + TAB while playing to toggle this."
+msgstr "CATATAN: Kamu juga bisa menekan SHIFT + TAB saat bermain untuk mengalihkannya."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "SHIFT + TAB toggles everything"
+msgstr "SHIFT + TAB mengalihkan semuanya"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Enabled: "
+msgstr "Aktif: "
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Score"
+msgstr "Tampilkan Skor"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Combo"
+msgstr "Tampilkan Combo"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Accuracy"
+msgstr "Tampilkan Akurasi"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Clock"
+msgstr "Tampilkan Jam"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw HitErrorBar"
+msgstr "Tampilkan HitErrorBar"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw HitErrorBar UR"
+msgstr "Tampilkan UR HitErrorBar"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Unstable Rate"
+msgstr "Unstable Rate"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw ScoreBar"
+msgstr "Tampilkan ScoreBar"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Health/HP Bar."
+msgstr "Bar Health/HP."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw ScoreBar-bg"
+msgstr "Tampilkan ScoreBar-bg"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Some skins abuse this as the playfield background image.\n"
+"It is actually just the background image for the Health/HP Bar."
+msgstr ""
+"Beberapa skin menyalahgunakan ini sebagai gambar latar area bermain.\n"
+"Sebenarnya ini hanya gambar latar untuk bar Health/HP."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw ScoreBoard in singleplayer"
+msgstr "Tampilkan ScoreBoard di singleplayer"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw ScoreBoard in multiplayer"
+msgstr "Tampilkan ScoreBoard di multiplayer"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Scrubbing Timeline"
+msgstr "Tampilkan Timeline Scrubbing"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Miss Window on HitErrorBar"
+msgstr "Tampilkan Jendela Miss di HitErrorBar"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: pp"
+msgstr "Tampilkan Statistik: pp"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Realtime pp counter.\n"
+"Dynamically calculates earned pp by incrementally updating the star rating."
+msgstr ""
+"Penghitung pp waktu nyata.\n"
+"Menghitung pp yang didapat secara dinamis dengan memperbarui star rating secara bertahap."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: pp (SS)"
+msgstr "Tampilkan Statistik: pp (SS)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Max possible total pp for active mods (full combo + perfect acc)."
+msgstr "Total pp maksimum yang mungkin untuk mod aktif (full combo + akurasi sempurna)."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: Misses"
+msgstr "Tampilkan Statistik: Miss"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Number of misses."
+msgstr "Jumlah miss."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: SliderBreaks"
+msgstr "Tampilkan Statistik: SliderBreak"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Number of slider breaks."
+msgstr "Jumlah slider break."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: Max Possible Combo"
+msgstr "Tampilkan Statistik: Combo Maksimum"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: Stars*** (Until Now)"
+msgstr "Tampilkan Statistik: Bintang*** (Sejauh Ini)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Incrementally updates the star rating (aka \"realtime stars\")."
+msgstr "Memperbarui star rating secara bertahap (alias \"bintang waktu nyata\")."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: Stars* (Total)"
+msgstr "Tampilkan Statistik: Bintang* (Total)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Total stars for active mods."
+msgstr "Total bintang untuk mod aktif."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: BPM"
+msgstr "Tampilkan Statistik: BPM"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: AR"
+msgstr "Tampilkan Statistik: AR"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: CS"
+msgstr "Tampilkan Statistik: CS"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: OD"
+msgstr "Tampilkan Statistik: OD"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: HP"
+msgstr "Tampilkan Statistik: HP"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: 300 hitwindow"
+msgstr "Tampilkan Statistik: jendela hit 300"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Timing window for hitting a 300 (e.g. +-25ms)."
+msgstr "Jendela timing untuk mendapat 300 (mis. +-25ms)."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: Notes Per Second"
+msgstr "Tampilkan Statistik: Not per Detik"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "How many clicks per second are currently required."
+msgstr "Berapa klik per detik yang dibutuhkan saat ini."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: Note Density"
+msgstr "Tampilkan Statistik: Kepadatan Not"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "How many objects are visible at the same time."
+msgstr "Berapa banyak objek yang terlihat bersamaan."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: Unstable Rate"
+msgstr "Tampilkan Statistik: Unstable Rate"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: Accuracy Error"
+msgstr "Tampilkan Statistik: Error Akurasi"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Average hit error delta (e.g. -5ms +15ms).\n"
+"See \"hud_statistics_hitdelta_chunksize 30\",\n"
+"it defines how many recent hit deltas are averaged."
+msgstr ""
+"Rata-rata delta error hit (mis. -5ms +15ms).\n"
+"Lihat \"hud_statistics_hitdelta_chunksize 30\",\n"
+"yang menentukan berapa delta hit terakhir yang dirata-rata."
+
+#. TRANSLATORS: Section of option sliders to set the scale of in-game UI elements
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Scaling"
+msgstr "Skala"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "HUD:"
+msgstr "HUD:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Score:"
+msgstr "Skor:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Combo:"
+msgstr "Combo:"
+
+#: src/App/Neomod/OptionsOverlay.cpp src/App/Neomod/RankingScreen.cpp
+msgid "Accuracy:"
+msgstr "Akurasi:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "HitErrorBar:"
+msgstr "HitErrorBar:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "HitErrorBar UR:"
+msgstr "UR HitErrorBar:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Clock:"
+msgstr "Jam:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "ScoreBar:"
+msgstr "ScoreBar:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "ScoreBoard:"
+msgstr "ScoreBoard:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Key Overlay:"
+msgstr "Key Overlay:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Statistics:"
+msgstr "Statistik:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Statistics Offset"
+msgstr "Offset Statistik"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "X Offset:"
+msgstr "Offset X:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Y Offset:"
+msgstr "Offset Y:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Playfield"
+msgstr "Area Bermain"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw FollowPoints"
+msgstr "Tampilkan FollowPoint"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Correct border relative to the current Circle Size."
+msgstr "Koreksi tepi relatif terhadap Circle Size saat ini."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Playfield Border"
+msgstr "Tampilkan Tepi Area Bermain"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Border Size:"
+msgstr "Ukuran Tepi:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Hitobjects"
+msgstr "Hitobject"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Use Fast Hidden Fading Sliders (!)"
+msgstr "Gunakan Slider Hidden yang Memudar Cepat (!)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"NOTE: osu! doesn't do this, so don't enable it for serious practicing.\n"
+"If enabled: Fade out sliders with the same speed as circles."
+msgstr ""
+"CATATAN: osu! tidak melakukan ini, jadi jangan aktifkan untuk latihan serius.\n"
+"Jika aktif: Slider memudar dengan kecepatan yang sama seperti lingkaran."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "FPoSu (3D)"
+msgstr "FPoSu (3D)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "FPoSu - General"
+msgstr "FPoSu - Umum"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "FPoSu"
+msgstr "FPoSu"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"The real 3D FPS mod.\n"
+"Play from a first person shooter perspective in a 3D environment.\n"
+"This is only intended for mouse! (Enable \"Tablet/Absolute Mode\" for tablets.)"
+msgstr ""
+"Mod FPS 3D yang sesungguhnya.\n"
+"Bermain dari sudut pandang first person shooter di lingkungan 3D.\n"
+"Ini hanya untuk mouse! (Aktifkan \"Mode Tablet/Absolut\" untuk tablet.)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "NOTE: Use CTRL + O during gameplay to get here!"
+msgstr "CATATAN: Gunakan CTRL + O saat bermain untuk sampai ke sini!"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "LEFT/RIGHT arrow keys to precisely adjust sliders."
+msgstr "Tombol panah KIRI/KANAN untuk menyetel slider dengan presisi."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Distance:"
+msgstr "Jarak:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"If enabled: Vertical FOV.\n"
+"If disabled: Horizontal FOV (default)."
+msgstr ""
+"Jika aktif: FOV vertikal.\n"
+"Jika nonaktif: FOV horizontal (bawaan)."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Vertical FOV"
+msgstr "FOV Vertikal"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "FOV:"
+msgstr "FOV:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "FOV (Zoom):"
+msgstr "FOV (Zoom):"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Zoom Key Toggle"
+msgstr "Toggle Tombol Zoom"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Enabled: Zoom key toggles zoom.\n"
+"Disabled: Zoom while zoom key is held."
+msgstr ""
+"Aktif: Tombol zoom mengalihkan zoom.\n"
+"Nonaktif: Zoom selama tombol zoom ditahan."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "FPoSu - Playfield"
+msgstr "FPoSu - Area Bermain"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Curved play area"
+msgstr "Area bermain melengkung"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Background cube"
+msgstr "Kubus latar"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Skybox"
+msgstr "Skybox"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"NOTE: Overrides \"Background cube\".\n"
+"See skybox_example.png for cubemap layout."
+msgstr ""
+"CATATAN: Menimpa \"Kubus latar\".\n"
+"Lihat skybox_example.png untuk tata letak cubemap."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Background Opacity"
+msgstr "Opasitas Latar"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "FPoSu - Mouse"
+msgstr "FPoSu - Mouse"
+
+#: src/App/Neomod/OptionsOverlay.cpp src/App/Neomod/OsuDirectScreen.cpp
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Opening browser, please wait ..."
+msgstr "Membuka browser, harap tunggu ..."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "DPI:"
+msgstr "DPI:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "cm per 360:"
+msgstr "cm per 360:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Invert Vertical"
+msgstr "Balik Vertikal"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Invert Horizontal"
+msgstr "Balik Horizontal"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Tablet/Absolute Mode (!)"
+msgstr "Mode Tablet/Absolut (!)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Don't enable this if you are using a mouse.\n"
+"If this is enabled, then DPI and cm per 360 will be ignored!"
+msgstr ""
+"Jangan aktifkan ini jika kamu memakai mouse.\n"
+"Jika ini aktif, DPI dan cm per 360 akan diabaikan!"
+
+#. TRANSLATORS: Name of a settings category containing joke/unnecessary options
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Bullshit"
+msgstr "Omong Kosong"
+
+#. TRANSLATORS: Subcategory of "Bullshit" - contains joke visual settings (rainbow circles, etc.)
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Why"
+msgstr "Kenapa"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Rainbow Circles"
+msgstr "Lingkaran Pelangi"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Rainbow Sliders"
+msgstr "Slider Pelangi"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Rainbow Numbers"
+msgstr "Angka Pelangi"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw 300s"
+msgstr "Tampilkan 300"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Miscellaneous"
+msgstr "Lain-lain"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Testing"
+msgstr "Pengujian"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Use bleeding edge release stream"
+msgstr "Gunakan rilis bleeding edge"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Screenshots"
+msgstr "Tangkapan Layar"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Crop Screenshots"
+msgstr "Potong Tangkapan Layar"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Crop screenshots to the letterbox resolution,\n"
+"if letterboxing is enabled."
+msgstr ""
+"Potong tangkapan layar ke resolusi letterbox,\n"
+"jika letterboxing aktif."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Copy Screenshots to Clipboard"
+msgstr "Salin Tangkapan Layar ke Clipboard"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"If screenshots should be copied to the system clipboard\n"
+"along with saving them to the screenshots/ folder."
+msgstr ""
+"Apakah tangkapan layar disalin ke clipboard sistem\n"
+"selain disimpan ke folder screenshots/."
+
+#. TRANSLATORS: Subsection with options for main menu tips and social media links
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Nags"
+msgstr "Pengingat"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Show Main Menu Tips"
+msgstr "Tampilkan Tips di Menu Utama"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Hide Discord/X Links"
+msgstr "Sembunyikan Tautan Discord/X"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Import/Reset"
+msgstr "Impor/Atur Ulang"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Import collections/scores/settings from McOsu"
+msgstr "Impor koleksi/skor/pengaturan dari McOsu"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Successfully imported settings from McOsu."
+msgstr "Berhasil mengimpor pengaturan dari McOsu."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Couldn't find McOsu config files! Make sure to select the directory containing McOsu.exe."
+msgstr "File konfigurasi McOsu tidak ditemukan! Pastikan memilih direktori yang berisi McOsu.exe."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Opening file browser ..."
+msgstr "Membuka penjelajah file ..."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "You must select the McOsu folder to import its settings."
+msgstr "Kamu harus memilih folder McOsu untuk mengimpor pengaturannya."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Reset all settings"
+msgstr "Atur ulang semua pengaturan"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Disconnect"
+msgstr "Putuskan koneksi"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Waiting for browser..."
+msgstr "Menunggu browser..."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Error: Couldn't find any skins"
+msgstr "Error: Tidak ada skin yang ditemukan"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Tried to enable exclusive mode, but couldn't :("
+msgstr "Mencoba mengaktifkan mode eksklusif, tetapi gagal :("
+
+#: src/App/Neomod/OptionsOverlay.cpp
+#, c++-format
+msgid "Press new key for {}:"
+msgstr "Tekan tombol baru untuk {}:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "All key bindings have been reset."
+msgstr "Semua tombol telah diatur ulang."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+#, c++-format
+msgid "Press {:d} more times to confirm."
+msgstr "Tekan {:d} kali lagi untuk mengonfirmasi."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+#, c++-format
+msgid "Press {:d} more time to confirm!"
+msgstr "Tekan {:d} kali lagi untuk mengonfirmasi!"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "This setting is locked in multiplayer rooms."
+msgstr "Pengaturan ini dikunci di ruang multiplayer."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "This setting is forced by the server."
+msgstr "Pengaturan ini dipaksa oleh server."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "This setting is forced by the current skin."
+msgstr "Pengaturan ini dipaksa oleh skin saat ini."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+#, c++-format
+msgid "(turn off \"{}\" in the skin options to change it)"
+msgstr "(matikan \"{}\" di opsi skin untuk mengubahnya)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "All settings have been reset."
+msgstr "Semua pengaturan telah diatur ulang."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Unbind"
+msgstr "Lepas"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Failed to save osu.cfg"
+msgstr "Gagal menyimpan osu.cfg"
+
+#: src/App/Neomod/Osu.cpp
+msgid "This replay's beatmap is not installed."
+msgstr "Beatmap replay ini tidak terpasang."
+
+#: src/App/Neomod/Osu.cpp
+#, c++-format
+msgid "Skin reloaded!{:s}"
+msgstr "Skin dimuat ulang!{:s}"
+
+#: src/App/Neomod/Osu.cpp
+msgid "Mouse buttons are disabled."
+msgstr "Tombol mouse dinonaktifkan."
+
+#: src/App/Neomod/Osu.cpp
+msgid "Mouse buttons are enabled."
+msgstr "Tombol mouse diaktifkan."
+
+#: src/App/Neomod/Osu.cpp
+msgid "No beatmap is currently selected."
+msgstr "Tidak ada beatmap yang dipilih."
+
+#: src/App/Neomod/Osu.cpp
+msgid "In-game interface has been enabled."
+msgstr "Antarmuka dalam game telah diaktifkan."
+
+#: src/App/Neomod/Osu.cpp
+msgid "In-game interface has been disabled."
+msgstr "Antarmuka dalam game telah dinonaktifkan."
+
+#: src/App/Neomod/Osu.cpp
+msgid "Scoreboard is hidden."
+msgstr "Papan skor disembunyikan."
+
+#: src/App/Neomod/Osu.cpp
+msgid "Scoreboard is shown."
+msgstr "Papan skor ditampilkan."
+
+#: src/App/Neomod/Osu.cpp
+#, c++-format
+msgid "Local beatmap offset set to {:d} ms"
+msgstr "Offset beatmap lokal diatur ke {:d} ms"
+
+#: src/App/Neomod/Osu.cpp
+msgid "Error: Couldn't grab a screenshot :("
+msgstr "Error: Tidak dapat mengambil tangkapan layar :("
+
+#: src/App/Neomod/Osu.cpp
+msgid "Screenshot copied to clipboard (click to open in a new tab)"
+msgstr "Tangkapan layar disalin ke clipboard (klik untuk membuka di tab baru)"
+
+#: src/App/Neomod/Osu.cpp
+msgid "Screenshot taken (click to open in a new tab)"
+msgstr "Tangkapan layar diambil (klik untuk membuka di tab baru)"
+
+#: src/App/Neomod/Osu.cpp
+#, c++-format
+msgid "Screenshot copied to clipboard and saved to {:s}"
+msgstr "Tangkapan layar disalin ke clipboard dan disimpan ke {:s}"
+
+#: src/App/Neomod/Osu.cpp
+#, c++-format
+msgid "Screenshot saved to {:s}"
+msgstr "Tangkapan layar disimpan ke {:s}"
+
+#: src/App/Neomod/Osu.cpp
+#, c++-format
+msgid "Skin exported to {:s}"
+msgstr "Skin diekspor ke {:s}"
+
+#: src/App/Neomod/Osu.cpp
+msgid "Can't export the default skin."
+msgstr "Tidak bisa mengekspor skin bawaan."
+
+#: src/App/Neomod/Osu.cpp
+#, c++-format
+msgid "Couldn't export the skin to {:s}"
+msgstr "Tidak dapat mengekspor skin ke {:s}"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+#, c++-format
+msgid "+{:d} more"
+msgstr "+{:d} lagi"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "View beatmap page"
+msgstr "Lihat halaman beatmap"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "Close"
+msgstr "Tutup"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "Download"
+msgstr "Unduh"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "Cancel download"
+msgstr "Batalkan unduhan"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "Go to beatmap"
+msgstr "Ke beatmap"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid ""
+"Click a beatmap to see its details.\n"
+"Click it again to download it."
+msgstr ""
+"Klik beatmap untuk melihat detailnya.\n"
+"Klik lagi untuk mengunduhnya."
+
+#: src/App/Neomod/OsuDirectScreen.cpp src/App/Neomod/SongBrowser/InfoLabel.cpp
+#, c++-format
+msgid "Mapped by {:s}"
+msgstr "Dibuat oleh {:s}"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "Pending"
+msgstr "Pending"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "Ranked"
+msgstr "Ranked"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "Approved"
+msgstr "Approved"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "Loved"
+msgstr "Loved"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+#, c++-format
+msgid "Updated {:s}"
+msgstr "Diperbarui {:s}"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "Video"
+msgstr "Video"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "Storyboard"
+msgstr "Storyboard"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "Newest maps"
+msgstr "Map terbaru"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "Best maps"
+msgstr "Map terbaik"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "Only show ranked beatmaps"
+msgstr "Hanya tampilkan beatmap ranked"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "Auto-select downloaded beatmaps"
+msgstr "Pilih otomatis beatmap yang diunduh"
+
+#: src/App/Neomod/PauseOverlay.cpp
+msgid "Resume"
+msgstr "Lanjutkan"
+
+#: src/App/Neomod/PauseOverlay.cpp src/App/Neomod/RankingScreen.cpp
+msgid "Retry"
+msgstr "Ulangi"
+
+#: src/App/Neomod/PauseOverlay.cpp
+msgid "Quit"
+msgstr "Keluar"
+
+#: src/App/Neomod/PromptOverlay.cpp
+msgid "OK"
+msgstr "OK"
+
+#: src/App/Neomod/PromptOverlay.cpp
+msgid "Cancel"
+msgstr "Batal"
+
+#: src/App/Neomod/RankingScreen.cpp
+msgid "You achieved the #1 score on local rankings!"
+msgstr "Kamu meraih skor #1 di peringkat lokal!"
+
+#: src/App/Neomod/RankingScreen.cpp
+msgid "Watch replay"
+msgstr "Tonton replay"
+
+#: src/App/Neomod/RankingScreen.cpp
+#, c++-format
+msgid "{:.2f}pp"
+msgstr "{:.2f}pp"
+
+#: src/App/Neomod/RankingScreen.cpp
+#, c++-format
+msgid "Stars: {:.2f} ({:.2f} aim, {:.2f} speed)"
+msgstr "Bintang: {:.2f} ({:.2f} aim, {:.2f} speed)"
+
+#: src/App/Neomod/RankingScreen.cpp
+#, c++-format
+msgid "Speed: {:.3g}x"
+msgstr "Kecepatan: {:.3g}x"
+
+#: src/App/Neomod/RankingScreen.cpp
+#, c++-format
+msgid "CS:{:.2f} AR:{:.2f} OD:{:.2f} HP:{:.2f}"
+msgstr "CS:{:.2f} AR:{:.2f} OD:{:.2f} HP:{:.2f}"
+
+#: src/App/Neomod/RankingScreen.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+#, c++-format
+msgid "Notelock: {}"
+msgstr "Notelock: {}"
+
+#: src/App/Neomod/RankingScreen.cpp
+#, c++-format
+msgid "Error: {:.2f}ms - {:.2f}ms avg"
+msgstr "Error: {:.2f}ms - {:.2f}ms rata-rata"
+
+#: src/App/Neomod/RankingScreen.cpp
+#, c++-format
+msgid "Unstable Rate: {:.2f}"
+msgstr "Unstable Rate: {:.2f}"
+
+#: src/App/Neomod/RankingScreen.cpp
+msgid "Mods: "
+msgstr "Mod: "
+
+#: src/App/Neomod/RankingScreen.cpp
+#, c++-format
+msgid "You achieved the #{} score on local rankings!"
+msgstr "Kamu meraih skor #{} di peringkat lokal!"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Multiplayer room"
+msgstr "Ruang multiplayer"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Host: None"
+msgstr "Host: Tidak ada"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Room name"
+msgstr "Nama ruang"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Change password"
+msgstr "Ganti kata sandi"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Win condition: Score"
+msgstr "Syarat menang: Skor"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Beatmap"
+msgstr "Beatmap"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Select map"
+msgstr "Pilih map"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Download maps"
+msgstr "Unduh map"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "(no map selected)"
+msgstr "(belum ada map yang dipilih)"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Mods"
+msgstr "Mod"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Select mods [F1]"
+msgstr "Pilih mod [F1]"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Freemod"
+msgstr "Freemod"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "No mods selected."
+msgstr "Tidak ada mod yang dipilih."
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Start game"
+msgstr "Mulai permainan"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Player list"
+msgstr "Daftar pemain"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Host is selecting a map..."
+msgstr "Host sedang memilih map..."
+
+#: src/App/Neomod/RoomScreen.cpp src/App/Neomod/SpectatorScreen.cpp
+#, c++-format
+msgid "Failed to download Beatmap #{:d} :("
+msgstr "Gagal mengunduh Beatmap #{:d} :("
+
+#: src/App/Neomod/RoomScreen.cpp
+#, c++-format
+msgid "Downloading... {:.2f}%"
+msgstr "Mengunduh... {:.2f}%"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Hit 'Escape' once more to exit this multiplayer match."
+msgstr "Tekan 'Escape' sekali lagi untuk keluar dari pertandingan multiplayer ini."
+
+#: src/App/Neomod/RoomScreen.cpp
+#, c++-format
+msgid "Host: {}"
+msgstr "Host: {}"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Win condition: Accuracy"
+msgstr "Syarat menang: Akurasi"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Win condition: Combo"
+msgstr "Syarat menang: Combo"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Win condition: ScoreV2"
+msgstr "Syarat menang: ScoreV2"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Win condition: ???"
+msgstr "Syarat menang: ???"
+
+#: src/App/Neomod/RoomScreen.cpp
+#, c++-format
+msgid "Force start ({:d}/{:d})"
+msgstr "Paksa mulai ({:d}/{:d})"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Not ready"
+msgstr "Belum siap"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Ready!"
+msgstr "Siap!"
+
+#: src/App/Neomod/RoomScreen.cpp
+#, c++-format
+msgid "[playing] {}"
+msgstr "[bermain] {}"
+
+#: src/App/Neomod/RoomScreen.cpp
+#, c++-format
+msgid "[no map] {}"
+msgstr "[tanpa map] {}"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Failed to load map"
+msgstr "Gagal memuat map"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "New password:"
+msgstr "Kata sandi baru:"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Score V1"
+msgstr "Score V1"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Accuracy"
+msgstr "Akurasi"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Combo"
+msgstr "Combo"
+
+#: src/App/Neomod/SongBrowser/BottomBar.cpp
+#, c++-format
+msgid "Calculating stars ({}/{}) ..."
+msgstr "Menghitung bintang ({}/{}) ..."
+
+#. TRANSLATORS: {} is the name of the exported collection, or "mapset"
+#: src/App/Neomod/SongBrowser/BottomBar.cpp
+#, c++-format
+msgid "Exporting {} {:.2f}%"
+msgstr "Mengekspor {} {:.2f}%"
+
+#. TRANSLATORS: {} is the name of the exported collection, or "mapset"
+#: src/App/Neomod/SongBrowser/BottomBar.cpp
+msgid "mapset"
+msgstr "mapset"
+
+#: src/App/Neomod/SongBrowser/BottomBar.cpp
+#, c++-format
+msgid " {:s}"
+msgstr " {:s}"
+
+#: src/App/Neomod/SongBrowser/BottomBar.cpp
+#, c++-format
+msgid "Computing loudness ({}/{}) ..."
+msgstr "Menghitung kenyaringan ({}/{}) ..."
+
+#: src/App/Neomod/SongBrowser/BottomBar.cpp
+#, c++-format
+msgid "Converting scores ({}/{}) ..."
+msgstr "Mengonversi skor ({}/{}) ..."
+
+#: src/App/Neomod/SongBrowser/InfoLabel.cpp
+#, c++-format
+msgid "Length: {:02d}:{:02d} BPM: {} Objects: {}"
+msgstr "Durasi: {:02d}:{:02d} BPM: {} Objek: {}"
+
+#: src/App/Neomod/SongBrowser/InfoLabel.cpp
+#, c++-format
+msgid "Length: {:02d}:{:02d} BPM: {}-{} ({}) Objects: {}"
+msgstr "Durasi: {:02d}:{:02d} BPM: {}-{} ({}) Objek: {}"
+
+#: src/App/Neomod/SongBrowser/InfoLabel.cpp
+#, c++-format
+msgid "CS:{:.3g} AR:{:.3g} OD:{:.3g} HP:{:.3g} Stars:{:.3g} ({}pp)"
+msgstr "CS:{:.3g} AR:{:.3g} OD:{:.3g} HP:{:.3g} Bintang:{:.3g} ({}pp)"
+
+#: src/App/Neomod/SongBrowser/InfoLabel.cpp
+#, c++-format
+msgid "CS:{:.3g} AR:{:.3g} OD:{:.3g} HP:{:.3g} Stars:{:.3g} -> {:.3g} ({}pp)"
+msgstr "CS:{:.3g} AR:{:.3g} OD:{:.3g} HP:{:.3g} Bintang:{:.3g} -> {:.3g} ({}pp)"
+
+#: src/App/Neomod/SongBrowser/InfoLabel.cpp
+#, c++-format
+msgid "CS:{:.3g} AR:{:.3g} OD:{:.3g} HP:{:.3g} Stars:{:.3g} * (??? pp)"
+msgstr "CS:{:.3g} AR:{:.3g} OD:{:.3g} HP:{:.3g} Bintang:{:.3g} * (??? pp)"
+
+#: src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Wobble 2"
+msgstr "Wobble 2"
+
+#: src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Shirone"
+msgstr "Shirone"
+
+#: src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "osu!stable"
+msgstr "osu!stable"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By Artist"
+msgstr "Berdasarkan Artis"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By BPM"
+msgstr "Berdasarkan BPM"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By Creator"
+msgstr "Berdasarkan Pembuat"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By Date Added"
+msgstr "Berdasarkan Tanggal Ditambahkan"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By Difficulty"
+msgstr "Berdasarkan Kesulitan"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By Length"
+msgstr "Berdasarkan Durasi"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By Title"
+msgstr "Berdasarkan Judul"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By Rank Achieved"
+msgstr "Berdasarkan Rank yang Diraih"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By Date Played"
+msgstr "Berdasarkan Tanggal Dimainkan"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By Date"
+msgstr "Berdasarkan Tanggal"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Collections"
+msgstr "Koleksi"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "No Grouping"
+msgstr "Tanpa Pengelompokan"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By accuracy"
+msgstr "Berdasarkan akurasi"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By combo"
+msgstr "Berdasarkan combo"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By date"
+msgstr "Berdasarkan tanggal"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By misses"
+msgstr "Berdasarkan miss"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By score"
+msgstr "Berdasarkan skor"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By pp"
+msgstr "Berdasarkan pp"
+
+#. TRANSLATORS: button that opens the selected beatmap on the website
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Web"
+msgstr "Web"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Group:"
+msgstr "Kelompok:"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Sort:"
+msgstr "Urutkan:"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Loading..."
+msgstr "Memuat..."
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "No records set!"
+msgstr "Belum ada rekor!"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Personal Best (from local scores)"
+msgstr "Rekor Pribadi (dari skor lokal)"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Invalid osu! folder (or no beatmaps found): "
+msgstr "Folder osu! tidak valid (atau tidak ada beatmap): "
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Go to Options -> osu!folder"
+msgstr "Buka Opsi -> Folder osu!"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Drop .osz beatmaps onto this window to import them"
+msgstr "Jatuhkan beatmap .osz ke jendela ini untuk mengimpornya"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Or click \"Online Beatmaps\" in the Main Menu"
+msgstr "Atau klik \"Beatmap Online\" di Menu Utama"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Beatmapset has no difficulties"
+msgstr "Beatmapset tidak memiliki tingkat kesulitan"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+#, c++-format
+msgid "Failed to find Beatmap #{:d} :("
+msgstr "Tidak dapat menemukan Beatmap #{:d} :("
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+#, c++-format
+msgid "Scanning beatmap folders ({:d}/{:d})"
+msgstr "Memindai folder beatmap ({:d}/{:d})"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+#, c++-format
+msgid "Importing beatmaps ({:d}/{:d})"
+msgstr "Mengimpor beatmap ({:d}/{:d})"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "0-9"
+msgstr "0-9"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Other"
+msgstr "Lainnya"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Below 1 star"
+msgstr "Di bawah 1 bintang"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Above 10 stars"
+msgstr "Di atas 10 bintang"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "1 star"
+msgstr "1 bintang"
+
+#. TRANSLATORS: song browser group of beatmaps by star rating, {:d} is between 2 and 10
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+#, c++-format
+msgid "{:d} stars"
+msgstr "{:d} bintang"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Under 60 BPM"
+msgstr "Di bawah 60 BPM"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Under 120 BPM"
+msgstr "Di bawah 120 BPM"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Under 180 BPM"
+msgstr "Di bawah 180 BPM"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Under 240 BPM"
+msgstr "Di bawah 240 BPM"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Under 300 BPM"
+msgstr "Di bawah 300 BPM"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Over 300 BPM"
+msgstr "Di atas 300 BPM"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "1 minute or less"
+msgstr "1 menit atau kurang"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "2 minutes or less"
+msgstr "2 menit atau kurang"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "3 minutes or less"
+msgstr "3 menit atau kurang"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "4 minutes or less"
+msgstr "4 menit atau kurang"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "5 minutes or less"
+msgstr "5 menit atau kurang"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "10 minutes or less"
+msgstr "10 menit atau kurang"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Over 10 minutes"
+msgstr "Lebih dari 10 menit"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Disabled FPoSu mode."
+msgstr "Mode FPoSu dinonaktifkan."
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Enabled FPoSu mode."
+msgstr "Mode FPoSu diaktifkan."
+
+#: src/App/Neomod/SpectatorScreen.cpp
+#, c++-format
+msgid "Started spectating {:s}"
+msgstr "Mulai menonton {:s}"
+
+#: src/App/Neomod/SpectatorScreen.cpp
+#, c++-format
+msgid "Stopped spectating {:s}"
+msgstr "Berhenti menonton {:s}"
+
+#: src/App/Neomod/SpectatorScreen.cpp
+msgid "Spectating"
+msgstr "Menonton"
+
+#: src/App/Neomod/SpectatorScreen.cpp
+msgid "..."
+msgstr "..."
+
+#: src/App/Neomod/SpectatorScreen.cpp
+msgid "Stop spectating"
+msgstr "Berhenti menonton"
+
+#: src/App/Neomod/SpectatorScreen.cpp
+#, c++-format
+msgid "Spectating {:s}"
+msgstr "Menonton {:s}"
+
+#. TRANSLATORS: {:s} is the name of the spectated player
+#: src/App/Neomod/SpectatorScreen.cpp
+#, c++-format
+msgid "{:s} is AFK"
+msgstr "{:s} sedang AFK"
+
+#: src/App/Neomod/SpectatorScreen.cpp
+#, c++-format
+msgid "{:s} is picking a map..."
+msgstr "{:s} sedang memilih map..."
+
+#: src/App/Neomod/SpectatorScreen.cpp
+#, c++-format
+msgid "{:s} is spectating someone else"
+msgstr "{:s} sedang menonton orang lain"
+
+#: src/App/Neomod/SpectatorScreen.cpp
+#, c++-format
+msgid "{:s} is playing minigames"
+msgstr "{:s} sedang bermain minigame"
+
+#: src/App/Neomod/SpectatorScreen.cpp
+#, c++-format
+msgid "Database not loaded, cannot install map"
+msgstr "Database belum dimuat, tidak bisa memasang map"
+
+#: src/App/Neomod/SpectatorScreen.cpp
+msgid "Downloading map..."
+msgstr "Mengunduh map..."
+
+#: src/App/Neomod/UIIconButton.cpp
+msgid "Play"
+msgstr "Main"
+
+#: src/App/Neomod/UIIconButton.cpp
+msgid "Pause"
+msgstr "Jeda"
+
+#: src/App/Neomod/UISearchOverlay.cpp
+msgid "Search: "
+msgstr "Cari: "
+
+#: src/App/Neomod/UISearchOverlay.cpp
+msgid "Type to search!"
+msgstr "Ketik untuk mencari!"
+
+#: src/App/Neomod/UISearchOverlay.cpp
+msgid "No matches found. Hit ESC to reset."
+msgstr "Tidak ada hasil. Tekan ESC untuk mengatur ulang."
+
+#: src/App/Neomod/UISearchOverlay.cpp
+msgid "Hit ESC to reset."
+msgstr "Tekan ESC untuk mengatur ulang."
+
+#: src/App/Neomod/UISearchOverlay.cpp
+msgid "Searching, please wait ..."
+msgstr "Mencari, harap tunggu ..."
+
+#: src/App/Neomod/UIUserContextMenu.cpp
+msgid "Switch User:"
+msgstr "Ganti Pengguna:"
+
+#: src/App/Neomod/UIUserContextMenu.cpp
+msgid "Set custom name"
+msgstr "Atur nama khusus"
+
+#: src/App/Neomod/UIUserContextMenu.cpp
+msgid "Enter Username:"
+msgstr "Masukkan Nama Pengguna:"
+
+#: src/App/Neomod/UIUserContextMenu.cpp
+msgid "(Press ENTER to confirm.)"
+msgstr "(Tekan ENTER untuk mengonfirmasi.)"
+
+#: src/Engine/Sound/SoundEngine.cpp
+msgid "No sound"
+msgstr "Tanpa suara"

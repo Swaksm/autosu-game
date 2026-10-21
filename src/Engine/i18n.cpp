@@ -12,7 +12,7 @@
 #include "Thread.h"
 #include "types.h"
 
-#include <algorithm>  // std::is_sorted
+#include <algorithm>  // std::is_sorted, std::ranges::replace
 #include <array>
 #include <utility>  // std::unreachable on gcc
 
@@ -39,7 +39,7 @@ enum class PLURAL_FORM : u8 {
 using enum PLURAL_FORM;
 
 static const std::unordered_map<std::string_view, PLURAL_FORM> plural_forms_table = {
-    {"ja", ONE_FORM},       {"vi", ONE_FORM},      {"ko", ONE_FORM},      {"th", ONE_FORM},
+    {"ja", ONE_FORM},       {"vi", ONE_FORM},      {"ko", ONE_FORM},      {"th", ONE_FORM},      {"zh", ONE_FORM},
 
     {"en", TWO_FORMS_A},    {"de", TWO_FORMS_A},   {"nl", TWO_FORMS_A},   {"sv", TWO_FORMS_A},   {"da", TWO_FORMS_A},
     {"no", TWO_FORMS_A},    {"fo", TWO_FORMS_A},   {"es", TWO_FORMS_A},   {"pt", TWO_FORMS_A},   {"it", TWO_FORMS_A},
@@ -207,21 +207,10 @@ void load(std::string_view locale) {
         return;
     }
 
-    // en_US.UTF-8 -> en
-    std::string lang{};
-    std::string region{};
-    {
-        auto parts = SString::split(locale, '.');
-        lang = parts[0];
-
-        for(int i = 0; i < lang.length(); i++) {
-            if(lang[i] == '_') lang[i] = '-';
-        }
-
-        auto lang_region = SString::split(lang, '-');
-        lang = lang_region[0];
-        if(lang_region.size() > 1) region = lang_region[1];
-    }
+    // en_US.UTF-8 -> en-US -> en + US
+    std::string tag{SString::split(locale, '.')[0]};
+    std::ranges::replace(tag, '_', '-');
+    std::string lang{SString::split(tag, '-')[0]};
 
     // English is the source language; no .mo blob is embedded for it. Re-check after parsing
     // to catch "en_US", "en_CA", etc. that the literal early-return above misses. "C" and "POSIX"
@@ -233,27 +222,37 @@ void load(std::string_view locale) {
         return;
     }
 
-    // Edge case for Brazillian Portuguese
-    std::string lang_for_plural = lang;
-    if(lang == "pt" && region == "BR") lang_for_plural = "pt-BR";
+    // prefer the exact locale (pt-BR), then the bare language (fr-CA -> fr), then another region of it (pt-PT -> pt-BR)
+    const Language* match = nullptr;
+    std::string match_tag{};
+    int best_rank = 0;
+    for(const auto& language : LANGUAGES) {
+        std::string candidate{language.code};
+        std::ranges::replace(candidate, '_', '-');
+        const int rank = candidate == tag ? 3 : candidate == lang ? 2 : candidate.starts_with(lang + '-') ? 1 : 0;
+        if(rank > best_rank) {
+            match = &language;
+            match_tag = std::move(candidate);
+            best_rank = rank;
+        }
+    }
 
-    for(const auto& [identifier, full_language_name] : LANGUAGES) {
-        if(identifier != lang) continue;
-
+    if(match) {
         std::string blob_key{"locale_"};
-        blob_key.append(identifier);
+        blob_key.append(match->code);
         assert(ALL_BINMAP.contains(blob_key));
         load_translation(ALL_BINMAP.at(blob_key).data() /* NOLINT(bugprone-suspicious-stringview-data-usage) */);
 
-        auto it = plural_forms_table.find(lang_for_plural);
+        auto it = plural_forms_table.find(match_tag);
+        if(it == plural_forms_table.end()) it = plural_forms_table.find(SString::split(match_tag, '-')[0]);
         if(it == plural_forms_table.end()) {
-            debugLog("Locale '{}' doesn't have registered plural forms!", lang_for_plural);
+            debugLog("Locale '{}' doesn't have registered plural forms!", match_tag);
             current_plural_form = ONE_FORM;
         } else {
             current_plural_form = it->second;
         }
 
-        current_language = lang;
+        current_language = match->code;
         return;
     }
 

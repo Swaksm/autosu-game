@@ -401,6 +401,8 @@ void AboutScreen::buildChangelog() {
     v44_01.title = "44.01 (" CHANGELOG_TIMESTAMP ")";
     v44_01.changes = {
         R"(- Added nightcore beats (only plays if your skin has them))",
+        R"(- Added Brazilian Portuguese, Indonesian, Italian, Korean, Simplified Chinese, Spanish, Turkish and Ukrainian translations)",
+        R"(- Improved existing translations)",
         R"(- Chat usernames and F9 user cards now highlight on hover)",
         R"(- The seeking timeline now shows where 100s, 50s and misses happened)",
         R"(- Music and effects volume are now linked and always add up to 100%)",
@@ -413,7 +415,6 @@ void AboutScreen::buildChangelog() {
         R"(- Fixed the F9 user list briefly showing disconnected users when opening chat)",
         R"(- Fixed seeking in replays reacting to clicks in options menu or outside the window)",
         R"(- Fixed the song sometimes restarting at the end of a map)",
-        R"(- Improved French, German, Japanese, Polish and Russian translations)",
         R"(- ScoreV2: slider judgements are now shown on the slider head instead of the tail)",
         R"(- Web: Added hardware cursor to reduce visual latency)",
     };

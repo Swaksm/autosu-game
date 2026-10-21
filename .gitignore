@@ -18,7 +18,6 @@ libraries-old
 *.o.*
 *.lo
 *.la
-*.Po
 *.Plo
 *.Tpo
 *.deps

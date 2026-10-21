@@ -1,0 +1,3695 @@
+# Turkish translations for neomod package.
+# Copyright (C) 2026 kiwec.
+# This file is distributed under the same license as the neomod package.
+#
+# WARNING: Machine-translated by LLMs. Not human-reviewed.
+# May contain errors in grammatical gender, politeness register, game-specific
+# terminology, or context-dependent meaning. Please flag mistranslations
+# or volunteer a review to replace these.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: neomod\n"
+"Report-Msgid-Bugs-To: \n"
+"Language-Team: none\n"
+"Language: tr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: src/App/Neomod/AboutScreen.cpp src/App/Neomod/MainMenu.cpp
+msgid "Changelog"
+msgstr "Değişiklik günlüğü"
+
+#: src/App/Neomod/AboutScreen.cpp
+msgid "Credits"
+msgstr "Emeği geçenler"
+
+#: src/App/Neomod/AboutScreen.cpp
+msgid "Licenses"
+msgstr "Lisanslar"
+
+#: src/App/Neomod/BanchoLeaderboard.cpp
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Global"
+msgstr "Küresel"
+
+#: src/App/Neomod/BanchoLeaderboard.cpp
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Selected mods"
+msgstr "Seçili modlar"
+
+#: src/App/Neomod/BanchoLeaderboard.cpp
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Friends"
+msgstr "Arkadaşlar"
+
+#: src/App/Neomod/BanchoLeaderboard.cpp
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Country"
+msgstr "Ülke"
+
+#: src/App/Neomod/BanchoLeaderboard.cpp
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Team"
+msgstr "Takım"
+
+#: src/App/Neomod/BeatmapInstallOverlay.cpp
+#, c++-format
+msgid "Beatmap #{:d}"
+msgstr "Beatmap #{:d}"
+
+#: src/App/Neomod/BeatmapInstallOverlay.cpp
+msgid "Failed"
+msgstr "Başarısız"
+
+#: src/App/Neomod/BeatmapInstallOverlay.cpp
+msgid "Installing..."
+msgstr "Yükleniyor..."
+
+#: src/App/Neomod/BeatmapInstallOverlay.cpp
+msgid "Extracting..."
+msgstr "Çıkarılıyor..."
+
+#: src/App/Neomod/BeatmapInstallOverlay.cpp
+msgid "Queued"
+msgstr "Sırada"
+
+#: src/App/Neomod/BeatmapInstaller.cpp
+#, c++-format
+msgid "{} is already installed"
+msgstr "{} zaten yüklü"
+
+#: src/App/Neomod/BeatmapInstaller.cpp
+#, c++-format
+msgid "Beatmapset #{:d} is already installed"
+msgstr "Beatmapset #{:d} zaten yüklü"
+
+#: src/App/Neomod/BeatmapInstaller.cpp
+#, c++-format
+msgid "Downloaded beatmapset #{:d}"
+msgstr "Beatmapset #{:d} indirildi"
+
+#: src/App/Neomod/BeatmapInstaller.cpp
+#, c++-format
+msgid "Failed to import {}"
+msgstr "{} içe aktarılamadı"
+
+#: src/App/Neomod/BeatmapInstaller.cpp
+#, c++-format
+msgid "Failed to download beatmapset #{:d} :("
+msgstr "Beatmapset #{:d} indirilemedi :("
+
+#: src/App/Neomod/BeatmapInstaller.cpp
+#, c++-format
+msgid "Couldn't delete {}"
+msgstr "{} silinemedi"
+
+#: src/App/Neomod/BeatmapInstaller.cpp
+#, c++-format
+msgid "Deleted {}"
+msgstr "{} silindi"
+
+#: src/App/Neomod/BeatmapInterface.cpp
+msgid "Buffering ..."
+msgstr "Arabelleğe alınıyor ..."
+
+#: src/App/Neomod/BeatmapInterface.cpp
+#, c++-format
+msgid "{} has paused"
+msgstr "{} duraklattı"
+
+#: src/App/Neomod/BeatmapInterface.cpp
+msgid "Waiting for players ..."
+msgstr "Oyuncular bekleniyor ..."
+
+#: src/App/Neomod/BeatmapInterface.cpp
+msgid "Loading ..."
+msgstr "Yükleniyor ..."
+
+#: src/App/Neomod/Chat.cpp
+#, c++-format
+msgid "You are silenced for another {:d}h {:02d}m {:02d}s."
+msgstr "{:d}sa {:02d}dk {:02d}sn daha susturuldun."
+
+#: src/App/Neomod/Chat.cpp
+msgid "You are not listening to anything."
+msgstr "Hiçbir şey dinlemiyorsun."
+
+#: src/App/Neomod/Chat.cpp
+#, c++-format
+msgid "User '{:s}' not found. Are they online?"
+msgstr "'{:s}' kullanıcısı bulunamadı. Çevrimiçi mi?"
+
+#: src/App/Neomod/Chat.cpp
+#, c++-format
+msgid "You are already friends with {:s}!"
+msgstr "{:s} ile zaten arkadaşsın!"
+
+#: src/App/Neomod/Chat.cpp
+#, c++-format
+msgid "You are now friends with {:s}."
+msgstr "Artık {:s} ile arkadaşsın."
+
+#: src/App/Neomod/Chat.cpp
+msgid "Away message removed."
+msgstr "Uzakta mesajı kaldırıldı."
+
+#: src/App/Neomod/Chat.cpp
+#, c++-format
+msgid "Away message set to '{:s}'."
+msgstr "Uzakta mesajı '{:s}' olarak ayarlandı."
+
+#: src/App/Neomod/Chat.cpp
+#, c++-format
+msgid "You are no longer friends with {:s}."
+msgstr "Artık {:s} ile arkadaş değilsin."
+
+#: src/App/Neomod/Chat.cpp
+#, c++-format
+msgid "You aren't friends with {:s}!"
+msgstr "{:s} ile arkadaş değilsin!"
+
+#: src/App/Neomod/Chat.cpp
+msgid "You are not in a multiplayer room!"
+msgstr "Bir çok oyunculu odada değilsin!"
+
+#: src/App/Neomod/Chat.cpp
+#, c++-format
+msgid "{:s} has been invited to the game."
+msgstr "{:s} oyuna davet edildi."
+
+#: src/App/Neomod/Chat.cpp
+msgid "This command is not supported."
+msgstr "Bu komut desteklenmiyor."
+
+#: src/App/Neomod/Chat.cpp
+#, c++-format
+msgid "{} mentioned you in {}"
+msgstr "{} seni {} kanalında andı"
+
+#: src/App/Neomod/Chat.cpp
+#, c++-format
+msgid "{} sent you a message"
+msgstr "{} sana bir mesaj gönderdi"
+
+#: src/App/Neomod/Chat.cpp
+#, c++-format
+msgid "You were mentioned in {:s}"
+msgstr "{:s} kanalında anıldın"
+
+#: src/App/Neomod/Chat.cpp src/App/Neomod/Osu.cpp
+msgid "You must log in to chat!"
+msgstr "Sohbet etmek için giriş yapmalısın!"
+
+#: src/App/Neomod/Chat.cpp
+msgid "Type in the channel you want to join (e.g. '#osu'):"
+msgstr "Katılmak istediğin kanalı yaz (örn. '#osu'):"
+
+#: src/App/Neomod/Database.cpp
+#, c++-format
+msgid "Added {:d} new beatmapset(s)."
+msgstr "{:d} yeni beatmapset eklendi."
+
+#: src/App/Neomod/Database.cpp
+msgid "No new beatmaps detected."
+msgstr "Yeni beatmap bulunamadı."
+
+#: src/App/Neomod/Database.cpp
+#, c++-format
+msgid "{} was written by a newer version, ignoring it"
+msgstr "{} daha yeni bir sürüm tarafından yazılmış, yok sayılıyor"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "{} spectators"
+msgstr "{} izleyici"
+
+#. TRANSLATORS: multiplayer scoreboard tag for a player who left the match
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "{} [quit]"
+msgstr "{} [çıktı]"
+
+#. TRANSLATORS: multiplayer scoreboard tag for a player who voted to skip the intro
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "{} [skip]"
+msgstr "{} [atla]"
+
+#: src/App/Neomod/HUD.cpp src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Local"
+msgstr "Yerel"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "{} UR"
+msgstr "{} UR"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "{:.{}f}pp"
+msgstr "{:.{}f}pp"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "SS: {:.{}f}pp"
+msgstr "SS: {:.{}f}pp"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "Miss: {:d}"
+msgstr "Miss: {:d}"
+
+#. TRANSLATORS: "SBrk" stands for "Slider Breaks" (number of slider breaks/missed slider ticks)
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "SBrk: {:d}"
+msgstr "SBrk: {:d}"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "FC: {:d}x"
+msgstr "FC: {:d}x"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "{:.3g}***"
+msgstr "{:.3g}***"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "{:.3g}*"
+msgstr "{:.3g}*"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "BPM: {:d}"
+msgstr "BPM: {:d}"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "AR: {:g}"
+msgstr "AR: {:g}"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "CS: {:g}"
+msgstr "CS: {:g}"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "OD: {:g}"
+msgstr "OD: {:g}"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "HP: {:g}"
+msgstr "HP: {:g}"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "300: +-{:d}ms"
+msgstr "300: +-{:d}ms"
+
+#. TRANSLATORS: "NPS" stands for "Notes Per Second"
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "NPS: {:d}"
+msgstr "NPS: {:d}"
+
+#. TRANSLATORS: "ND" stands for "Note Density"
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "ND: {:d}"
+msgstr "ND: {:d}"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "UR: {:d}"
+msgstr "UR: {:d}"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "-{:d}ms +{:d}ms"
+msgstr "-{:d}ms +{:d}ms"
+
+#: src/App/Neomod/LoadingScreen.cpp
+#, c++-format
+msgid "Loading ... ({:d} %)"
+msgstr "Yükleniyor ... ({:d} %)"
+
+#: src/App/Neomod/Lobby.cpp
+#, c++-format
+msgid "Players: {:d}/{:d}"
+msgstr "Oyuncular: {:d}/{:d}"
+
+#: src/App/Neomod/Lobby.cpp
+msgid "Join room"
+msgstr "Odaya katıl"
+
+#: src/App/Neomod/Lobby.cpp
+msgid "(password required)"
+msgstr "(şifre gerekli)"
+
+#: src/App/Neomod/Lobby.cpp
+msgid "Room password:"
+msgstr "Oda şifresi:"
+
+#: src/App/Neomod/Lobby.cpp
+msgid "Multiplayer rooms"
+msgstr "Çok oyunculu odalar"
+
+#: src/App/Neomod/Lobby.cpp
+msgid "Create new room"
+msgstr "Yeni oda oluştur"
+
+#. TRANSLATORS: online status shown to other players while browsing multiplayer rooms
+#: src/App/Neomod/Lobby.cpp
+msgid "Looking to play"
+msgstr "Oyun arıyor"
+
+#: src/App/Neomod/Lobby.cpp
+msgid "There are no matches available."
+msgstr "Uygun maç yok."
+
+#: src/App/Neomod/Lobby.cpp
+msgid "Joining room..."
+msgstr "Odaya katılınıyor..."
+
+#: src/App/Neomod/Lobby.cpp
+msgid "New room"
+msgstr "Yeni oda"
+
+#: src/App/Neomod/Lobby.cpp
+msgid "Creating room..."
+msgstr "Oda oluşturuluyor..."
+
+#: src/App/Neomod/MainMenu.cpp
+msgid "Save everything from this session."
+msgstr "Bu oturumdaki her şeyi kaydet."
+
+#: src/App/Neomod/MainMenu.cpp
+msgid "(Optional, automatic on tab close.)"
+msgstr "(İsteğe bağlı, sekme kapanınca otomatik.)"
+
+#: src/App/Neomod/MainMenu.cpp
+msgid "Checking for updates ..."
+msgstr "Güncellemeler denetleniyor ..."
+
+#: src/App/Neomod/MainMenu.cpp
+msgid "Singleplayer"
+msgstr "Tek oyunculu"
+
+#: src/App/Neomod/MainMenu.cpp
+msgid "Multiplayer"
+msgstr "Çok oyunculu"
+
+#: src/App/Neomod/MainMenu.cpp
+msgid "Options"
+msgstr "Seçenekler"
+
+#: src/App/Neomod/MainMenu.cpp
+msgid "Exit"
+msgstr "Çıkış"
+
+#: src/App/Neomod/MainMenu.cpp
+msgid "Save"
+msgstr "Kaydet"
+
+#: src/App/Neomod/MainMenu.cpp src/App/Neomod/OsuDirectScreen.cpp
+msgid "Online Beatmaps"
+msgstr "Çevrimiçi Beatmapler"
+
+#: src/App/Neomod/MainMenu.cpp
+#, c++-format
+msgid "Version {:.2f} ({:s})"
+msgstr "Sürüm {:.2f} ({:s})"
+
+#: src/App/Neomod/MainMenu.cpp
+#, c++-format
+msgid "Version {:.2f}"
+msgstr "Sürüm {:.2f}"
+
+#: src/App/Neomod/MainMenu.cpp
+msgid "Downloading ..."
+msgstr "İndiriliyor ..."
+
+#: src/App/Neomod/MainMenu.cpp
+#, c++-format
+msgid "A new version of {} is ready!"
+msgstr "{} için yeni bir sürüm hazır!"
+
+#: src/App/Neomod/MainMenu.cpp
+msgid "Click here to install the update!"
+msgstr "Güncellemeyi yüklemek için buraya tıkla!"
+
+#: src/App/Neomod/MainMenu.cpp
+msgid "A new version is available! Click to open the download page."
+msgstr "Yeni bir sürüm mevcut! İndirme sayfasını açmak için tıkla."
+
+#: src/App/Neomod/MainMenu.cpp
+msgid "Update Error! Click to retry ..."
+msgstr "Güncelleme hatası! Yeniden denemek için tıkla ..."
+
+#: src/App/Neomod/MainMenu.cpp
+msgid "You must log in to join Multiplayer!"
+msgstr "Çok oyunculuya katılmak için giriş yapmalısın!"
+
+#: src/App/Neomod/MainMenu.cpp
+msgid "You must log in to download beatmaps!"
+msgstr "Beatmap indirmek için giriş yapmalısın!"
+
+#: src/App/Neomod/MainMenuNowPlaying.cpp
+msgid "Collapse when idle"
+msgstr "Boştayken daralt"
+
+#: src/App/Neomod/MainMenuNowPlaying.cpp
+msgid "Keep expanded"
+msgstr "Genişletilmiş tut"
+
+#: src/App/Neomod/MainMenuNowPlaying.cpp
+msgid "Previous song"
+msgstr "Önceki şarkı"
+
+#: src/App/Neomod/MainMenuNowPlaying.cpp
+msgid "Next song"
+msgstr "Sonraki şarkı"
+
+#: src/App/Neomod/MainMenuTips.cpp
+msgid "Press Alt + Enter to toggle Fullscreen."
+msgstr "Tam ekranı açıp kapatmak için Alt + Enter'a bas."
+
+#: src/App/Neomod/MainMenuTips.cpp
+msgid "Press Shift + F1 to open the in-game console."
+msgstr "Oyun içi konsolu açmak için Shift + F1'e bas."
+
+#: src/App/Neomod/MainMenuTips.cpp
+msgid "Shift + Click on a skin in the dropdown list to change the source for base skin elements."
+msgstr "Temel skin öğelerinin kaynağını değiştirmek için açılır listedeki bir skin'e Shift + Tıkla."
+
+#: src/App/Neomod/MainMenuTips.cpp
+#, c++-format
+msgid "Press {:s} during gameplay to change mods in realtime."
+msgstr "Oyun sırasında modları anında değiştirmek için {:s} tuşuna bas."
+
+#: src/App/Neomod/MainMenuTips.cpp
+#, c++-format
+msgid "Press {:s} or {:s} anywhere to open chat."
+msgstr "Sohbeti açmak için her yerde {:s} veya {:s} tuşuna bas."
+
+#: src/App/Neomod/MainMenuTips.cpp
+msgid "Launch with the neomod-BASS shortcut to use BASS (ASIO/Exclusive mode) for audio."
+msgstr "Ses için BASS (ASIO/Özel mod) kullanmak üzere neomod-BASS kısayoluyla başlat."
+
+#: src/App/Neomod/MainMenuTips.cpp
+msgid "Launch with \"-sound bass\" as a commandline argument to use BASS for audio."
+msgstr "Ses için BASS kullanmak üzere komut satırı argümanı olarak \"-sound bass\" ile başlat."
+
+#: src/App/Neomod/MainMenuTips.cpp
+msgid "Put \"-gpu vk\" after the \"Target:\" field in a shortcut to neomod to use the Vulkan renderer."
+msgstr "Vulkan oluşturucuyu kullanmak için neomod kısayolunda \"Hedef:\" alanından sonra \"-gpu vk\" ekle."
+
+#: src/App/Neomod/MainMenuTips.cpp
+msgid "Put \"-dx11\" after the \"Target:\" field in a shortcut to neomod to use the D3D11 renderer."
+msgstr "D3D11 oluşturucuyu kullanmak için neomod kısayolunda \"Hedef:\" alanından sonra \"-dx11\" ekle."
+
+#: src/App/Neomod/MainMenuTips.cpp
+msgid "Launch with \"-dx11\" as a commandline argument to use the D3D11 renderer."
+msgstr "D3D11 oluşturucuyu kullanmak için komut satırı argümanı olarak \"-dx11\" ile başlat."
+
+#: src/App/Neomod/MainMenuTips.cpp
+msgid "Press Ctrl + O to open the options menu from anywhere."
+msgstr "Seçenekler menüsünü her yerden açmak için Ctrl + O'ya bas."
+
+#: src/App/Neomod/MainMenuTips.cpp
+#, c++-format
+msgid "Tip: {:s}"
+msgstr "İpucu: {:s}"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "CS Override"
+msgstr "CS Geçersiz Kılma"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "CS:"
+msgstr "CS:"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Circle Size (higher number = smaller circles)."
+msgstr "Daire Boyutu (yüksek sayı = daha küçük daireler)."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "AR Override"
+msgstr "AR Geçersiz Kılma"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "AR:"
+msgstr "AR:"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Approach Rate (higher number = faster circles)."
+msgstr "Yaklaşma Hızı (yüksek sayı = daha hızlı daireler)."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "OD Override"
+msgstr "OD Geçersiz Kılma"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "OD:"
+msgstr "OD:"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Overall Difficulty (higher number = harder accuracy)."
+msgstr "Genel Zorluk (yüksek sayı = daha zor isabet)."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "HP Override"
+msgstr "HP Geçersiz Kılma"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "HP:"
+msgstr "HP:"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Hit/Health Points (higher number = harder survival)."
+msgstr "Can Puanı (yüksek sayı = hayatta kalmak daha zor)."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Speed/BPM Multiplier"
+msgstr "Hız/BPM Çarpanı"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid " Experimental Mods (!)"
+msgstr " Deneysel Modlar (!)"
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Flip Up/Down"
+msgstr "Yukarı/Aşağı Çevir"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Playfield is flipped upside down (mirrored at horizontal axis)."
+msgstr "Oyun alanı baş aşağı çevrilir (yatay eksende aynalanır)."
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Flip Left/Right"
+msgstr "Sola/Sağa Çevir"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Playfield is flipped left/right (mirrored at vertical axis)."
+msgstr "Oyun alanı soldan sağa çevrilir (dikey eksende aynalanır)."
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Singletap"
+msgstr "Singletap"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "You can only press one key."
+msgstr "Yalnızca bir tuşa basabilirsin."
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Alternate"
+msgstr "Alternate"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "You can never use the same key twice in a row."
+msgstr "Aynı tuşu asla art arda iki kez kullanamazsın."
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "No keylock"
+msgstr "Tuş kilidi yok"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "You can use 4 keys instead of only 2."
+msgstr "Yalnızca 2 yerine 4 tuş kullanabilirsin."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Also click hitcircles when releasing a key."
+msgstr "Tuşu bırakırken de dairelere vurur."
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "DKS"
+msgstr "DKS"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Hitcircles are invisible. Good luck if you use this with Hidden!"
+msgstr "Daireler görünmez. Bunu Hidden ile kullanırsan bol şans!"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Traceable"
+msgstr "Traceable"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Freeze Frame"
+msgstr "Freeze Frame"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Draw all hitobjects in a combo group together. Try it with Hidden for an extra challenge!"
+msgstr "Bir kombo grubundaki tüm nesneleri birlikte çiz. Ekstra zorluk için Hidden ile dene!"
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "No pausing"
+msgstr "Duraklatma yok"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Pausing is cheating"
+msgstr "Duraklatmak hiledir"
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "FPoSu: Strafing"
+msgstr "FPoSu: Strafing"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid ""
+"Playfield moves in 3D space (see fposu_mod_strafing_...).\n"
+"Only works in FPoSu mode!"
+msgstr ""
+"Oyun alanı 3D uzayda hareket eder (bkz. fposu_mod_strafing_...).\n"
+"Yalnızca FPoSu modunda çalışır!"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Playfield rotates and moves."
+msgstr "Oyun alanı döner ve hareket eder."
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Wobble"
+msgstr "Wobble"
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "AR Wobble"
+msgstr "AR Wobble"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Approach rate oscillates between -1 and +1."
+msgstr "Yaklaşma hızı -1 ile +1 arasında salınır."
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Approach Different"
+msgstr "Approach Different"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid ""
+"Customize the approach circle animation.\n"
+"See mod_approach_different_style.\n"
+"See mod_approach_different_initial_size."
+msgstr ""
+"Yaklaşma dairesi animasyonunu özelleştir.\n"
+"Bkz. mod_approach_different_style.\n"
+"Bkz. mod_approach_different_initial_size."
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Timewarp"
+msgstr "Timewarp"
+
+#: src/App/Neomod/ModSelector.cpp
+#, no-c-format
+msgid "Speed increases from 100% to 150% over the course of the beatmap."
+msgstr "Hız, beatmap boyunca %100'den %150'ye çıkar."
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "AR Timewarp"
+msgstr "AR Timewarp"
+
+#: src/App/Neomod/ModSelector.cpp
+#, no-c-format
+msgid "Approach rate decreases from 100% to 50% over the course of the beatmap."
+msgstr "Yaklaşma hızı, beatmap boyunca %100'den %50'ye düşer."
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Minimize"
+msgstr "Minimize"
+
+#: src/App/Neomod/ModSelector.cpp
+#, no-c-format
+msgid "Circle size decreases from 100% to 50% over the course of the beatmap."
+msgstr "Daire boyutu, beatmap boyunca %100'den %50'ye düşer."
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Fading Cursor"
+msgstr "Fading Cursor"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "The cursor fades the higher the combo, becoming invisible at 50."
+msgstr "İmleç kombo arttıkça solar ve 50'de görünmez olur."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Centered cursor."
+msgstr "Ortalanmış imleç."
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "First Person"
+msgstr "Birinci Şahıs"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Massively reduced slider follow circle radius."
+msgstr "Slider takip dairesinin yarıçapı büyük ölçüde küçültülür."
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Precise sliders"
+msgstr "Hassas sliderlar"
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Reverse Sliders"
+msgstr "Reverse Sliders"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Reverses the direction of all sliders. (Reload beatmap to apply!)"
+msgstr "Tüm sliderların yönünü tersine çevirir. (Uygulamak için beatmap'i yeniden yükle!)"
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "No 50s"
+msgstr "50 yok"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Only 300s or 100s. Try harder."
+msgstr "Yalnızca 300 veya 100. Daha çok çabala."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "300 or miss. PF \"lite\""
+msgstr "300 ya da miss. PF \"lite\""
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "No 100s no 50s"
+msgstr "100 ve 50 yok"
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "MinG3012"
+msgstr "MinG3012"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "No 100s. Only 300s or 50s. Git gud."
+msgstr "100 yok. Yalnızca 300 veya 50. Git gud."
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Half Timing Window"
+msgstr "Yarım Zamanlama Penceresi"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "The hit timing window is cut in half. Hit early or perfect (300)."
+msgstr "İsabet zamanlama penceresi yarıya iner. Erken ya da mükemmel (300) vur."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Go below AR 0. Doubled approach time."
+msgstr "AR 0'ın altına in. Yaklaşma süresi iki katına çıkar."
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "MillhioreF"
+msgstr "MillhioreF"
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Mafham"
+msgstr "Mafham"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid ""
+"Approach rate is set to negative infinity. See the entire beatmap at once.\n"
+"Uses very aggressive optimizations to keep the framerate high, you have been warned!"
+msgstr ""
+"Yaklaşma hızı eksi sonsuza ayarlanır. Tüm beatmap'i aynı anda gör.\n"
+"Kare hızını yüksek tutmak için çok agresif optimizasyonlar kullanır, uyarıldın!"
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Strict clicks"
+msgstr "Katı tıklamalar"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Unnecessary clicks count as misses."
+msgstr "Gereksiz tıklamalar miss sayılır."
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Strict Tracking"
+msgstr "Katı Takip"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Leaving sliders in any way counts as a miss and combo break. (Reload beatmap to apply!)"
+msgstr "Sliderlardan herhangi bir şekilde çıkmak miss ve kombo kırılması sayılır. (Uygulamak için beatmap'i yeniden yükle!)"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "WARNING: Score submission will be disabled due to non-vanilla mod selection."
+msgstr "UYARI: Standart dışı mod seçimi nedeniyle skor gönderimi devre dışı kalacak."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "1. Reset All Mods"
+msgstr "1. Tüm Modları Sıfırla"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "2. Close"
+msgstr "2. Kapat"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Reduces overall difficulty - larger circles, more forgiving HP drain, less accuracy required."
+msgstr "Genel zorluğu azaltır - daha büyük daireler, daha hoşgörülü HP kaybı, daha az isabet gerekir."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid ""
+"You can't fail. No matter what.\n"
+"NOTE: To disable drain completely:\n"
+"Options > Gameplay > Mechanics > \"Disable HP Drain\"."
+msgstr ""
+"Başarısız olamazsın. Ne olursa olsun.\n"
+"NOT: HP kaybını tamamen kapatmak için:\n"
+"Seçenekler > Oynanış > Mekanikler > \"HP Kaybını Devre Dışı Bırak\"."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Everything just got a bit harder..."
+msgstr "Her şey biraz daha zorlaştı..."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Miss a note and fail."
+msgstr "Bir notayı kaçır ve başarısız ol."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "SS or quit."
+msgstr "Ya SS ya çıkış."
+
+#. TRANSLATORS: Half Time tooltips. "Less zoom." means the song plays slower (not a camera zoom).
+#. "A E S T H E T I C" is a vaporwave aesthetic meme, shown instead when Nightcore enjoyer mode is on.
+#: src/App/Neomod/ModSelector.cpp
+msgid "A E S T H E T I C"
+msgstr "A E S T H E T I C"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Less zoom."
+msgstr "Daha az yakınlaştırma."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Zoooooooooom."
+msgstr "Zoooooooooom."
+
+#. TRANSLATORS: Double Time tooltips. "Zoooooooooom." is the sound of going fast (not a camera zoom).
+#. "uguuuuuuuu" is an anime-style meme sound, shown instead when Nightcore enjoyer mode is on.
+#: src/App/Neomod/ModSelector.cpp
+msgid "uguuuuuuuu"
+msgstr "uguuuuuuuu"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Play with no approach circles and fading notes for a slight score advantage."
+msgstr "Küçük bir skor avantajı için yaklaşma daireleri olmadan ve solan notalarla oyna."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Restricted view area."
+msgstr "Kısıtlı görüş alanı."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Actual flashlight."
+msgstr "Gerçek bir el feneri."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid ""
+"You don't need to click.\n"
+"Give your clicking/tapping fingers a break from the heat of things.\n"
+"** UNRANKED **"
+msgstr ""
+"Tıklaman gerekmiyor.\n"
+"Tıklayan/dokunan parmaklarını biraz dinlendir.\n"
+"** DERECESİZ **"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid ""
+"Automatic cursor movement - just follow the rhythm.\n"
+"** UNRANKED **"
+msgstr ""
+"Otomatik imleç hareketi - sadece ritmi takip et.\n"
+"** DERECESİZ **"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Spinners will be automatically completed."
+msgstr "Spinnerlar otomatik olarak tamamlanır."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Watch a perfect automated play through the song."
+msgstr "Şarkının kusursuz otomatik oynanışını izle."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid ""
+"Accuracy is based on the distance to the center of all hitobjects.\n"
+"300s still require at least being in the hit window of a 100 in addition to the rule above."
+msgstr ""
+"İsabet, tüm nesnelerin merkezine olan uzaklığa göre hesaplanır.\n"
+"300'ler, yukarıdaki kurala ek olarak en az bir 100'ün isabet penceresinde olmayı gerektirir."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid ""
+"Try the future scoring system.\n"
+"** UNRANKED **"
+msgstr ""
+"Geleceğin skor sistemini dene.\n"
+"** DERECESİZ **"
+
+#: src/App/Neomod/ModSelector.cpp
+#, c++-format
+msgid "Score Multiplier: {:.2f}X"
+msgstr "Skor Çarpanı: {:.2f}X"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Experimental Mods"
+msgstr "Deneysel Modlar"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Hold [ALT] to slide in 0.01 increments."
+msgstr "0.01'lik adımlarla kaydırmak için [ALT] basılı tut."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Reset"
+msgstr "Sıfırla"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Mouse Left"
+msgstr "Fare Sol"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Mouse Right"
+msgstr "Fare Sağ"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "<UNBOUND>"
+msgstr "<ATANMAMIŞ>"
+
+#: src/App/Neomod/OptionsOverlay.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "McOsu"
+msgstr "McOsu"
+
+#: src/App/Neomod/OptionsOverlay.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "None"
+msgstr "Hiçbiri"
+
+#: src/App/Neomod/OptionsOverlay.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "osu!lazer 2020"
+msgstr "osu!lazer 2020"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "osu!stable (default)"
+msgstr "osu!stable (varsayılan)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "General"
+msgstr "Genel"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Online server"
+msgstr "Çevrimiçi sunucu"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+#, c++-format
+msgid "If the server admins don't explicitly allow {},"
+msgstr "Sunucu yöneticileri {} kullanımına açıkça izin vermiyorsa,"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "you might get banned!"
+msgstr "yasaklanabilirsin!"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Server address:"
+msgstr "Sunucu adresi:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Submit scores"
+msgstr "Skorları gönder"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Login details (username/password)"
+msgstr "Giriş bilgileri (kullanıcı adı/şifre)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Keep me logged in"
+msgstr "Oturumumu açık tut"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Log in"
+msgstr "Giriş yap"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Localization"
+msgstr "Yerelleştirme"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Select language"
+msgstr "Dil seç"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Prefer metadata in original language"
+msgstr "Orijinal dildeki meta verileri tercih et"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "osu! folder"
+msgstr "osu! klasörü"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "1) If you have an existing osu!stable installation:"
+msgstr "1) Mevcut bir osu!stable kurulumun varsa:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "2) osu! > Options > \"Open osu! folder\""
+msgstr "2) osu! > Seçenekler > \"osu! klasörünü aç\""
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "3) Copy paste the full path into the textbox:"
+msgstr "3) Tam yolu kopyalayıp metin kutusuna yapıştır:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Import settings from osu!stable"
+msgstr "Ayarları osu!stable'dan içe aktar"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Successfully imported settings from osu!stable."
+msgstr "Ayarlar osu!stable'dan başarıyla içe aktarıldı."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Error: Couldn't find osu!stable install directory or config file!"
+msgstr "Hata: osu!stable kurulum dizini veya yapılandırma dosyası bulunamadı!"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Use osu!.db database (read-only)"
+msgstr "osu!.db veritabanını kullan (salt okunur)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"If you have an existing osu! installation,\n"
+"then this will speed up the initial loading process."
+msgstr ""
+"Mevcut bir osu! kurulumun varsa,\n"
+"bu ilk yükleme sürecini hızlandırır."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Load osu! collection.db (read-only)"
+msgstr "osu! collection.db dosyasını yükle (salt okunur)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"If you have an existing osu! installation,\n"
+"also load and display your created collections from there."
+msgstr ""
+"Mevcut bir osu! kurulumun varsa,\n"
+"orada oluşturduğun koleksiyonları da yükleyip gösterir."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Include Relax/Autopilot for total weighted pp/acc"
+msgstr "Toplam ağırlıklı pp/isabete Relax/Autopilot'u dahil et"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"NOTE: osu! does not allow this (since these mods are unranked).\n"
+"Should relax/autopilot scores be included in the weighted pp/acc calculation?"
+msgstr ""
+"NOT: osu! buna izin vermez (bu modlar derecesiz olduğu için).\n"
+"Relax/autopilot skorları ağırlıklı pp/isabet hesabına dahil edilsin mi?"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Always show pp instead of score in scorebrowser"
+msgstr "Skor listesinde skor yerine her zaman pp göster"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Ignore score sorting type entirely."
+msgstr "Skor sıralama türünü tamamen yok say."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Show osu! scores.db user names in user switcher"
+msgstr "Kullanıcı değiştiricide osu! scores.db kullanıcı adlarını göster"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Only relevant if \"Load osu! scores.db\" is enabled.\n"
+"Should the user switcher show ALL user names from ALL scores?\n"
+"(Even from ones you got in your database because you watched a replay?)"
+msgstr ""
+"Yalnızca \"osu! scores.db'yi yükle\" açıksa geçerlidir.\n"
+"Kullanıcı değiştirici TÜM skorlardaki TÜM kullanıcı adlarını göstersin mi?\n"
+"(Bir tekrarı izlediğin için veritabanına giren skorlar dahil?)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Songbrowser"
+msgstr "Şarkı seçici"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Strain Graph in Songbrowser"
+msgstr "Şarkı seçicide zorlanma grafiğini çiz"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Hold either SHIFT/CTRL to show only speed/aim strains.\n"
+"Speed strain is red, aim strain is green.\n"
+"(See osu_hud_scrubbing_timeline_strains_*)"
+msgstr ""
+"Yalnızca hız/nişan zorlanmasını göstermek için SHIFT/CTRL basılı tut.\n"
+"Hız zorlanması kırmızı, nişan zorlanması yeşildir.\n"
+"(Bkz. osu_hud_scrubbing_timeline_strains_*)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Strain Graph in Scrubbing Timeline"
+msgstr "Zaman çizelgesinde zorlanma grafiğini çiz"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Speed strain is red, aim strain is green.\n"
+"(See osu_hud_scrubbing_timeline_strains_*)"
+msgstr ""
+"Hız zorlanması kırmızı, nişan zorlanması yeşildir.\n"
+"(Bkz. osu_hud_scrubbing_timeline_strains_*)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Song Buttons Velocity Animation"
+msgstr "Şarkı Düğmeleri Hız Animasyonu"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "If enabled, then song buttons are pushed to the right depending on the scrolling velocity."
+msgstr "Açıksa, şarkı düğmeleri kaydırma hızına göre sağa itilir."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Song Buttons Curved Layout"
+msgstr "Şarkı Düğmeleri Eğri Düzeni"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "If enabled, then song buttons are positioned on a vertically centered curve."
+msgstr "Açıksa, şarkı düğmeleri dikey olarak ortalanmış bir eğri üzerine yerleştirilir."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Window"
+msgstr "Pencere"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Pause on Focus Loss"
+msgstr "Odak Kaybında Duraklat"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Should the game pause when you switch to another application?"
+msgstr "Başka bir uygulamaya geçtiğinde oyun duraklatılsın mı?"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Alerts"
+msgstr "Uyarılar"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Notify when friends change status"
+msgstr "Arkadaşlar durum değiştirince bildir"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Notify when receiving a direct message"
+msgstr "Doğrudan mesaj alınca bildir"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Notify when mentioned"
+msgstr "Anıldığımda bildir"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Ping when mentioned"
+msgstr "Anıldığımda ses çal"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Show notifications during gameplay"
+msgstr "Oyun sırasında bildirimleri göster"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "In-game chat"
+msgstr "Oyun içi sohbet"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Chat ticker"
+msgstr "Sohbet şeridi"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Automatically hide chat during gameplay"
+msgstr "Oyun sırasında sohbeti otomatik gizle"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Chat word ignore list (space-separated):"
+msgstr "Sohbette yok sayılan kelimeler (boşlukla ayrılmış):"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Privacy"
+msgstr "Gizlilik"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Automatically update to the latest version"
+msgstr "En son sürüme otomatik güncelle"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Replace main menu logo with server logo"
+msgstr "Ana menü logosunu sunucu logosuyla değiştir"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Show spectator list"
+msgstr "İzleyici listesini göster"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Share currently played map with spectators"
+msgstr "Oynanan haritayı izleyicilerle paylaş"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Enable Discord Rich Presence"
+msgstr "Discord Rich Presence'ı etkinleştir"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Shows your current game state in your friends' friendslists.\n"
+"e.g.: Playing Gavin G - Reach Out [Cherry Blossom's Insane]"
+msgstr ""
+"Mevcut oyun durumunu arkadaşlarının arkadaş listesinde gösterir.\n"
+"örn.: Oynuyor: Gavin G - Reach Out [Cherry Blossom's Insane]"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw map backgrounds in Discord Rich Presence"
+msgstr "Discord Rich Presence'ta harita arka planlarını göster"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Graphics"
+msgstr "Grafik"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Renderer"
+msgstr "Oluşturucu"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "If enabled: plz enjoy input lag."
+msgstr "Açıksa: input lag'in tadını çıkar."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "VSync"
+msgstr "VSync"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "High Priority"
+msgstr "Yüksek Öncelik"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Sets the game process priority to high"
+msgstr "Oyun işleminin önceliğini yüksek olarak ayarlar"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Show FPS Counter"
+msgstr "FPS Sayacını Göster"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Max Queued Frames"
+msgstr "Maks. Sıradaki Kare"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Raise for higher fps, decrease for lower latency"
+msgstr "Daha yüksek fps için artır, daha düşük gecikme için azalt"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "FPS Limiter:"
+msgstr "FPS Sınırlayıcı:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "FPS Limiter (menus):"
+msgstr "FPS Sınırlayıcı (menüler):"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Layout"
+msgstr "Düzen"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Select Resolution"
+msgstr "Çözünürlük Seç"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Fullscreen"
+msgstr "Tam Ekran"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Minimize On ALT+TAB"
+msgstr "ALT+TAB ile Simge Durumuna Küçült"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Keep Aspect Ratio"
+msgstr "En Boy Oranını Koru"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Black borders instead of a stretched image.\n"
+"Only relevant if fullscreen is enabled, and letterboxing is disabled.\n"
+"Use the two position sliders below to move the viewport around."
+msgstr ""
+"Gerilmiş görüntü yerine siyah kenarlar.\n"
+"Yalnızca tam ekran açık ve letterboxing kapalıysa geçerlidir.\n"
+"Görüntü alanını taşımak için aşağıdaki iki konum kaydırıcısını kullan."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Letterboxing"
+msgstr "Letterboxing"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Useful to get the low latency of fullscreen with a smaller game resolution.\n"
+"Use the two position sliders below to move the viewport around."
+msgstr ""
+"Daha küçük bir oyun çözünürlüğüyle tam ekranın düşük gecikmesini elde etmek için kullanışlıdır.\n"
+"Görüntü alanını taşımak için aşağıdaki iki konum kaydırıcısını kullan."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Horizontal position"
+msgstr "Yatay konum"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Vertical position"
+msgstr "Dikey konum"
+
+#. TRANSLATORS: Global UI scale, to make text bigger on big screens
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "UI Scaling"
+msgstr "Arayüz Ölçekleme"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "DPI Scaling"
+msgstr "DPI Ölçekleme"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+#, c++-format
+msgid ""
+"Automatically scale to the DPI of your display: {} DPI.\n"
+"Scale factor = {} / 96 = {:.2g}x"
+msgstr ""
+"Ekranının DPI değerine otomatik ölçekle: {} DPI.\n"
+"Ölçek çarpanı = {} / 96 = {:.2g}x"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "UI Scale:"
+msgstr "Arayüz Ölçeği:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Detail Settings"
+msgstr "Ayrıntı Ayarları"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Animate scoreboard"
+msgstr "Skor tablosunu canlandır"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Use fancy animations for the in-game scoreboard"
+msgstr "Oyun içi skor tablosu için gösterişli animasyonlar kullan"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Avoid flashing elements"
+msgstr "Yanıp sönen öğelerden kaçın"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Disables cosmetic flash effects\n"
+"Disables dimming when holding sliders with Flashlight mod enabled"
+msgstr ""
+"Kozmetik parlama efektlerini kapatır\n"
+"Flashlight modu açıkken slider tutarken karartmayı kapatır"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Mipmaps"
+msgstr "Mipmap'ler"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Reload your skin to apply! (CTRL + ALT + S)\n"
+"Generate mipmaps for each skin element, at the cost of VRAM.\n"
+"Provides smoother visuals on lower resolutions for @2x-only skins."
+msgstr ""
+"Uygulamak için skin'i yeniden yükle! (CTRL + ALT + S)\n"
+"Her skin öğesi için VRAM pahasına mipmap oluşturur.\n"
+"Yalnızca @2x olan skinler için düşük çözünürlüklerde daha pürüzsüz görüntü sağlar."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Snaking in sliders"
+msgstr "Kıvrılarak beliren sliderlar"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"\"Growing\" sliders.\n"
+"Sliders gradually snake out from their starting point while fading in.\n"
+"Has no impact on performance whatsoever."
+msgstr ""
+"\"Büyüyen\" sliderlar.\n"
+"Sliderlar belirirken başlangıç noktalarından kademeli olarak uzar.\n"
+"Performansa hiçbir etkisi yoktur."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Snaking out sliders"
+msgstr "Kıvrılarak kaybolan sliderlar"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"\"Shrinking\" sliders.\n"
+"Sliders will shrink with the sliderball while sliding.\n"
+"Can improve performance a tiny bit, since there will be less to draw overall."
+msgstr ""
+"\"Küçülen\" sliderlar.\n"
+"Sliderlar kayarken slider topuyla birlikte kısalır.\n"
+"Çizilecek şey azaldığı için performansı biraz artırabilir."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Higher Quality Sliders (!)"
+msgstr "Daha Kaliteli Sliderlar (!)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Disable this if your fps drop too low while sliders are visible."
+msgstr "Sliderlar görünürken fps çok düşüyorsa bunu kapat."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Slider Quality"
+msgstr "Slider Kalitesi"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Audio"
+msgstr "Ses"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Devices"
+msgstr "Cihazlar"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Default"
+msgstr "Varsayılan"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Select Output Device"
+msgstr "Çıkış Cihazı Seç"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Backend"
+msgstr "Arka uç"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "MiniAudio"
+msgstr "MiniAudio"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "SDL"
+msgstr "SDL"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Pick the one you feel works best,\n"
+"there should be very little difference."
+msgstr ""
+"En iyi çalıştığını düşündüğünü seç,\n"
+"fark çok az olmalı."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Auto-disable exclusive mode"
+msgstr "Özel modu otomatik kapat"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Toggle exclusive mode off/on\n"
+"when losing/gaining focus, if already\n"
+"in exclusive mode."
+msgstr ""
+"Zaten özel moddaysa\n"
+"odak kaybedilince/kazanılınca\n"
+"özel modu kapat/aç."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Lower Latency (!)"
+msgstr "Daha Düşük Gecikme (!)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "NOTE: Enabling this may result in audio crackling!"
+msgstr "NOT: Bunu açmak seste cızırtıya neden olabilir!"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "WASAPI"
+msgstr "WASAPI"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Low-latency Callbacks"
+msgstr "Düşük Gecikmeli Geri Çağırmalar"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Run BASSWASAPI in callback mode to potentially further decrease latency.\n"
+"(period/buffer size are ignored)"
+msgstr ""
+"Gecikmeyi daha da azaltmak için BASSWASAPI'yi geri çağırma modunda çalıştır.\n"
+"(dönem/arabellek boyutu yok sayılır)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Buffer Size:"
+msgstr "Arabellek Boyutu:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Windows 7: Start at 11 ms,"
+msgstr "Windows 7: 11 ms'den başla,"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Windows 10: Start at 1 ms,"
+msgstr "Windows 10: 1 ms'den başla,"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "and if crackling: increment until fixed."
+msgstr "cızırtı olursa: düzelene kadar artır."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "(lower is better, non-wasapi has ~40 ms minimum)"
+msgstr "(düşük olan daha iyi, wasapi olmadan en az ~40 ms)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Exclusive Mode"
+msgstr "Özel Mod"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Dramatically reduces latency, but prevents other applications from capturing/playing audio."
+msgstr "Gecikmeyi önemli ölçüde azaltır, ancak diğer uygulamaların ses kaydetmesini/çalmasını engeller."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "WARNING: Only if you know what you are doing"
+msgstr "UYARI: Yalnızca ne yaptığını biliyorsan"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Period Size:"
+msgstr "Dönem Boyutu:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Restart SoundEngine"
+msgstr "Ses Motorunu Yeniden Başlat"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "ASIO"
+msgstr "ASIO"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Open ASIO settings"
+msgstr "ASIO ayarlarını aç"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Volume"
+msgstr "Ses Seviyesi"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Normalize loudness across songs"
+msgstr "Şarkılar arasında ses yüksekliğini eşitle"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Master:"
+msgstr "Ana:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Inactive:"
+msgstr "Pasif:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Music:"
+msgstr "Müzik:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Effects:"
+msgstr "Efektler:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Offset Adjustment"
+msgstr "Ofset Ayarı"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Scaled Offset:"
+msgstr "Ölçekli Ofset:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Behaves the same as \"Universal Offset\" in osu! (is multiplied by playback rate)."
+msgstr "osu!'daki \"Evrensel Ofset\" ile aynı şekilde çalışır (oynatma hızıyla çarpılır)."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Unscaled Offset:"
+msgstr "Ölçeksiz Ofset:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"\"Universal Offset\", but unaffected by rate adjustments.\n"
+"+15 unscaled offset is the same as using -15 local offset on every map."
+msgstr ""
+"\"Evrensel Ofset\", ancak hız ayarlarından etkilenmez.\n"
+"+15 ölçeksiz ofset, her haritada -15 yerel ofset kullanmakla aynıdır."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Gameplay"
+msgstr "Oynanış"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Boost hitsound volume"
+msgstr "Vuruş sesi seviyesini artır"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Apply a small logarithmic multiplier to non-sliderslide hitsounds."
+msgstr "Slider kayma sesi dışındaki vuruş seslerine küçük bir logaritmik çarpan uygula."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Change hitsound pitch based on accuracy"
+msgstr "Vuruş sesi perdesini isabete göre değiştir"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Prefer Nightcore over Double Time"
+msgstr "Double Time yerine Nightcore'u tercih et"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Apply speed/pitch mods while browsing"
+msgstr "Gezinirken hız/perde modlarını uygula"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Whether to always apply all mods, or keep the preview music normal."
+msgstr "Tüm modların her zaman uygulanıp uygulanmayacağı veya önizleme müziğinin normal tutulup tutulmayacağı."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Skin"
+msgstr "Skin"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "To import a skin, just drop the .osk file on this window!"
+msgstr "Bir skin'i içe aktarmak için .osk dosyasını bu pencereye bırak!"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Select Skin"
+msgstr "Skin Seç"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Shift-click a skin to set it as fallback.\n"
+"Missing elements fall back to it instead of \"default\"."
+msgstr ""
+"Yedek olarak ayarlamak için bir skin'e Shift + Tıkla.\n"
+"Eksik öğeler \"default\" yerine ondan alınır."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Export Skin"
+msgstr "Skin'i Dışa Aktar"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Open current Skin folder"
+msgstr "Mevcut Skin klasörünü aç"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Packs the current skin into an .osk file in the exports folder,\n"
+"together with whatever the fallback skin fills in."
+msgstr ""
+"Mevcut skin'i, yedek skin'in tamamladığı öğelerle birlikte\n"
+"exports klasöründe bir .osk dosyasına paketler."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Random Skin"
+msgstr "Rastgele Skin"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Reload Skin"
+msgstr "Skin'i Yeniden Yükle"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "(CTRL + ALT + S)"
+msgstr "(CTRL + ALT + S)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Temporary, does not change your configured skin (reload to reset).\n"
+"Use \"skin_random 1\" to randomize on every skin reload.\n"
+"Use \"skin_random_elements 1\" to mix multiple skins.\n"
+"Use \"skin_export\" to export the currently active skin."
+msgstr ""
+"Geçicidir, ayarladığın skin'i değiştirmez (sıfırlamak için yeniden yükle).\n"
+"Her skin yüklemesinde rastgele seçmek için \"skin_random 1\" kullan.\n"
+"Birden fazla skin'i karıştırmak için \"skin_random_elements 1\" kullan.\n"
+"Etkin skin'i dışa aktarmak için \"skin_export\" kullan."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Let Skins Change Settings"
+msgstr "Skinlerin Ayarları Değiştirmesine İzin Ver"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Skins can come with settings of their own ([neomod] section in skin.ini).\n"
+"While such a skin is in use, those settings can't be changed here."
+msgstr ""
+"Skinler kendi ayarlarıyla gelebilir (skin.ini içindeki [neomod] bölümü).\n"
+"Böyle bir skin kullanılırken bu ayarlar buradan değiştirilemez."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Number Scale:"
+msgstr "Sayı Ölçeği:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "HitResult Scale:"
+msgstr "HitResult Ölçeği:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Numbers"
+msgstr "Sayıları Çiz"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Approach Circles"
+msgstr "Yaklaşma Dairelerini Çiz"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Instafade Circles"
+msgstr "Daireleri Anında Soldur"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Instafade Sliders"
+msgstr "Sliderları Anında Soldur"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Storyboards"
+msgstr "Storyboard'ları Çiz"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Ignore Beatmap Skins"
+msgstr "Beatmap Skinlerini Yok Say"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Use your skin's elements and slider colours instead of the ones that come with a beatmap."
+msgstr "Beatmap ile gelenler yerine skin'inin öğelerini ve slider renklerini kullan."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Ignore Beatmap Hitsounds"
+msgstr "Beatmap Vuruş Seslerini Yok Say"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Use your skin's sounds instead of the ones that come with a beatmap."
+msgstr "Beatmap ile gelenler yerine skin'inin seslerini kullan."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Ignore Beatmap Combo Colors"
+msgstr "Beatmap Kombo Renklerini Yok Say"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Ignore Beatmap Sample Volume"
+msgstr "Beatmap Örnek Ses Seviyesini Yok Say"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Ignore beatmap timingpoint effect volumes.\n"
+"Quiet hitsounds can destroy accuracy and concentration, enabling this will fix that."
+msgstr ""
+"Beatmap zamanlama noktası efekt ses seviyelerini yok say.\n"
+"Sessiz vuruş sesleri isabeti ve konsantrasyonu mahvedebilir, bunu açmak sorunu çözer."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Use skin's sound samples"
+msgstr "Skin'in ses örneklerini kullan"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "If this is not selected, then the default skin hitsounds will be used."
+msgstr "Bu seçili değilse, varsayılan skin'in vuruş sesleri kullanılır."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Load HD @2x"
+msgstr "HD @2x Yükle"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "On very low resolutions (below 1600x900) you can disable this to get smoother visuals."
+msgstr "Çok düşük çözünürlüklerde (1600x900 altı) daha pürüzsüz görüntü için bunu kapatabilirsin."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Cursor Trail"
+msgstr "İmleç İzini Çiz"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Force Smooth Cursor Trail"
+msgstr "Pürüzsüz İmleç İzini Zorla"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Usually, the presence of the cursormiddle.png skin image enables smooth cursortrails.\n"
+"This option allows you to force enable smooth cursortrails for all skins."
+msgstr ""
+"Genelde skin'de cursormiddle.png görselinin bulunması pürüzsüz imleç izini açar.\n"
+"Bu seçenek tüm skinler için pürüzsüz imleç izini zorlar."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Always draw Cursor Trail"
+msgstr "İmleç İzini Her Zaman Çiz"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw the cursor trail even when the cursor isn't moving"
+msgstr "İmleç hareket etmese bile imleç izini çiz"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Cursor trail spacing:"
+msgstr "İmleç izi aralığı:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Cursor Size:"
+msgstr "İmleç Boyutu:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Automatic Cursor Size"
+msgstr "Otomatik İmleç Boyutu"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Cursor size will adjust based on the CS of the current beatmap."
+msgstr "İmleç boyutu mevcut beatmap'in CS değerine göre ayarlanır."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Slider Border Size"
+msgstr "Slider Kenar Boyutu"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Slider Opacity"
+msgstr "Slider Opaklığı"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Slider Body Opacity"
+msgstr "Slider Gövde Opaklığı"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Slider Body Saturation"
+msgstr "Slider Gövde Doygunluğu"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Use slidergradient.png"
+msgstr "slidergradient.png kullan"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"This will block all dynamic slider (color/border) features,\n"
+"but is more easily customizable."
+msgstr ""
+"Bu, tüm dinamik slider (renk/kenar) özelliklerini engeller,\n"
+"ancak daha kolay özelleştirilir."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Use osu!lazer Slider Style"
+msgstr "osu!lazer Slider Stilini Kullan"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Only really looks good if your skin doesn't \"SliderTrackOverride\" too dark."
+msgstr "Yalnızca skin'inin \"SliderTrackOverride\" değeri çok koyu değilse iyi görünür."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Use combo color as tint for slider ball"
+msgstr "Slider topu için kombo rengini ton olarak kullan"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Use combo color as tint for slider border"
+msgstr "Slider kenarı için kombo rengini ton olarak kullan"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Slider End Circle"
+msgstr "Slider Bitiş Dairesini Çiz"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Input"
+msgstr "Girdi"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Mouse"
+msgstr "Fare"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Sensitivity:"
+msgstr "Hassasiyet:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "WARNING: Set Sensitivity to 1 for tablets!"
+msgstr "UYARI: Tabletler için Hassasiyeti 1 yap!"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Not recommended if you're using a tablet."
+msgstr "Tablet kullanıyorsan önerilmez."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Raw Mouse Input"
+msgstr "Ham Fare Girdisi"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Confine Cursor (Windowed)"
+msgstr "İmleci Sınırla (Pencere)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Confine Cursor (Fullscreen)"
+msgstr "İmleci Sınırla (Tam Ekran)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Confine Cursor (NEVER)"
+msgstr "İmleci Sınırla (ASLA)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Overrides automatic cursor clipping during gameplay."
+msgstr "Oyun sırasında otomatik imleç sınırlamasını geçersiz kılar."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Disable Mouse Wheel in Play Mode"
+msgstr "Oyunda Fare Tekerleğini Devre Dışı Bırak"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Disable Mouse Buttons in Play Mode"
+msgstr "Oyunda Fare Tuşlarını Devre Dışı Bırak"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Cursor ripples"
+msgstr "İmleç dalgaları"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "The cursor will ripple outwards on clicking."
+msgstr "İmleç tıklamada dışa doğru dalgalanır."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Keyboard"
+msgstr "Klavye"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Raw Keyboard Input"
+msgstr "Ham Klavye Girdisi"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Global Media Hotkeys"
+msgstr "Küresel Medya Kısayolları"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Allows controlling main menu music with\n"
+"keyboard media shortcuts, even while alt-tabbed"
+msgstr ""
+"Alt-tab yapılmışken bile ana menü müziğini\n"
+"klavye medya tuşlarıyla kontrol etmeyi sağlar"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Reset all key bindings"
+msgstr "Tüm tuş atamalarını sıfırla"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Keys - In-Game"
+msgstr "Tuşlar - Oyun İçi"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Left Click"
+msgstr "Sol Tık"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Right Click"
+msgstr "Sağ Tık"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Left Click (2)"
+msgstr "Sol Tık (2)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Right Click (2)"
+msgstr "Sağ Tık (2)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Smoke"
+msgstr "Duman"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Game Pause"
+msgstr "Oyunu Duraklat"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Skip Cutscene"
+msgstr "Ara Sahneyi Atla"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Toggle Scoreboard"
+msgstr "Skor Tablosunu Aç/Kapat"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Scrubbing (+ Click Drag!)"
+msgstr "Sarma (+ Tıklayıp Sürükle!)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Quick Seek -5sec <<<"
+msgstr "Hızlı Geri -5sn <<<"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Quick Seek +5sec >>>"
+msgstr "Hızlı İleri +5sn >>>"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Increase Local Song Offset"
+msgstr "Yerel Şarkı Ofsetini Artır"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Decrease Local Song Offset"
+msgstr "Yerel Şarkı Ofsetini Azalt"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Quick Retry (hold briefly)"
+msgstr "Hızlı Tekrar (kısa süre basılı tut)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Quick Save"
+msgstr "Hızlı Kaydet"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Quick Load"
+msgstr "Hızlı Yükle"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Instant Replay"
+msgstr "Anında Tekrar"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Keys - FPoSu"
+msgstr "Tuşlar - FPoSu"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Zoom"
+msgstr "Yakınlaştır"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Keys - Universal"
+msgstr "Tuşlar - Genel"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Toggle chat"
+msgstr "Sohbeti aç/kapat"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Toggle user list"
+msgstr "Kullanıcı listesini aç/kapat"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Save Screenshot"
+msgstr "Ekran Görüntüsü Kaydet"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Increase Volume"
+msgstr "Sesi Artır"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Decrease Volume"
+msgstr "Sesi Azalt"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Disable Mouse Buttons"
+msgstr "Fare Tuşlarını Devre Dışı Bırak"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Toggle Map Background"
+msgstr "Harita Arka Planını Aç/Kapat"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Boss Key (Minimize)"
+msgstr "Patron Tuşu (Küçült)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Open Skin Selection Menu"
+msgstr "Skin Seçim Menüsünü Aç"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Keys - Song Select"
+msgstr "Tuşlar - Şarkı Seçimi"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Toggle Mod Selection Screen"
+msgstr "Mod Seçim Ekranını Aç/Kapat"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "(F1 can not be unbound. This is just an additional key.)"
+msgstr "(F1'in ataması kaldırılamaz. Bu yalnızca ek bir tuştur.)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Random Beatmap"
+msgstr "Rastgele Beatmap"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "(F2 can not be unbound. This is just an additional key.)"
+msgstr "(F2'nin ataması kaldırılamaz. Bu yalnızca ek bir tuştur.)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Keys - Mod Select"
+msgstr "Tuşlar - Mod Seçimi"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Easy"
+msgstr "Easy"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "No Fail"
+msgstr "No Fail"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Half Time"
+msgstr "Half Time"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Hard Rock"
+msgstr "Hard Rock"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Sudden Death"
+msgstr "Sudden Death"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Double Time"
+msgstr "Double Time"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Hidden"
+msgstr "Hidden"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Flashlight"
+msgstr "Flashlight"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Relax"
+msgstr "Relax"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Autopilot"
+msgstr "Autopilot"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Spunout"
+msgstr "Spunout"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Auto"
+msgstr "Auto"
+
+#: src/App/Neomod/OptionsOverlay.cpp src/App/Neomod/RoomScreen.cpp
+msgid "Score V2"
+msgstr "Score V2"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Background Dim:"
+msgstr "Arka Plan Karartma:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Background Brightness:"
+msgstr "Arka Plan Parlaklığı:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Don't change dim level during breaks"
+msgstr "Molalarda karartma seviyesini değiştirme"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Makes the background basically impossible to see during breaks.\n"
+"Not recommended."
+msgstr ""
+"Molalarda arka planı neredeyse görünmez yapar.\n"
+"Önerilmez."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Show approach circle on first \"Hidden\" object"
+msgstr "İlk \"Hidden\" nesnesinde yaklaşma dairesini göster"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "SuddenDeath restart on miss"
+msgstr "SuddenDeath'te miss olunca yeniden başlat"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Skips the failing animation, and instantly restarts like SS/PF."
+msgstr "Başarısızlık animasyonunu atlar ve SS/PF gibi anında yeniden başlar."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Show Skip Button during Intro"
+msgstr "Girişte Atla Düğmesini Göster"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Skip intro to first hitobject."
+msgstr "Girişi ilk nesneye kadar atla."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Show Skip Button during Breaks"
+msgstr "Molalarda Atla Düğmesini Göster"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Skip breaks in the middle of beatmaps."
+msgstr "Beatmap ortasındaki molaları atla."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Mechanics"
+msgstr "Mekanikler"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Kill Player upon Failing"
+msgstr "Başarısız Olunca Oyuncuyu Öldür"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Enabled: Singleplayer default. You die upon failing and the beatmap stops.\n"
+"Disabled: Multiplayer default. Allows you to keep playing even after failing."
+msgstr ""
+"Açık: Tek oyunculu varsayılanı. Başarısız olunca ölürsün ve beatmap durur.\n"
+"Kapalı: Çok oyunculu varsayılanı. Başarısız olduktan sonra da oynamaya devam etmeni sağlar."
+
+#: src/App/Neomod/OptionsOverlay.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Disable HP drain"
+msgstr "HP kaybını devre dışı bırak"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Like NF, but entirely disables HP mechanics. Will block online score submission."
+msgstr "NF gibi, ama HP mekaniklerini tamamen kapatır. Çevrimiçi skor gönderimini engeller."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Select [Notelock]"
+msgstr "[Notelock] Seç"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Info about different notelock algorithms:"
+msgstr "Farklı notelock algoritmaları hakkında bilgi:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "- McOsu: Auto miss previous circle, always."
+msgstr "- McOsu: Önceki daireyi her zaman otomatik miss yapar."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "- osu!stable: Locked until previous circle is miss."
+msgstr "- osu!stable: Önceki daire miss olana kadar kilitli."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "- osu!lazer 2020: Auto miss previous circle if > time."
+msgstr "- osu!lazer 2020: Süre aşılırsa önceki daireyi otomatik miss yapar."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Backgrounds"
+msgstr "Arka Planlar"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Load Background Images (!)"
+msgstr "Arka Plan Görsellerini Yükle (!)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "NOTE: Disabling this will disable ALL beatmap images everywhere!"
+msgstr "NOT: Bunu kapatmak HER YERDEKİ TÜM beatmap görsellerini kapatır!"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Background in Beatmap"
+msgstr "Beatmap'te Arka Planı Çiz"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Background in SongBrowser"
+msgstr "Şarkı Seçicide Arka Planı Çiz"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "NOTE: You can disable this if you always want menu-background."
+msgstr "NOT: Her zaman menu-background istiyorsan bunu kapatabilirsin."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Background Thumbnails in SongBrowser"
+msgstr "Şarkı Seçicide Arka Plan Küçük Resimlerini Çiz"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Background in Ranking/Results Screen"
+msgstr "Sonuç Ekranında Arka Planı Çiz"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Prefer beatmap background in Menu"
+msgstr "Menüde beatmap arka planını tercih et"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Use the background from the currently playing song, even in the main menu."
+msgstr "Ana menüde bile çalan şarkının arka planını kullan."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw menu-background in Menu"
+msgstr "Menüde menu-background çiz"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw menu-background in SongBrowser"
+msgstr "Şarkı Seçicide menu-background çiz"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "NOTE: Only applies if \"Draw Background in SongBrowser\" is disabled."
+msgstr "NOT: Yalnızca \"Şarkı Seçicide Arka Planı Çiz\" kapalıysa geçerlidir."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Key Overlay"
+msgstr "Tuş Göstergesi"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Key Overlay"
+msgstr "Tuş Göstergesini Çiz"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Key Overlay Trail"
+msgstr "Tuş Göstergesi İzini Çiz"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Scrolling blocks next to the key overlay, visualizing how long each key was held."
+msgstr "Tuş göstergesinin yanında, her tuşun ne kadar basılı tutulduğunu gösteren kayan bloklar."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Trail Opacity:"
+msgstr "İz Opaklığı:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Trail Speed:"
+msgstr "İz Hızı:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Trail Fade Distance:"
+msgstr "İz Solma Mesafesi:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "HUD"
+msgstr "HUD"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw HUD"
+msgstr "HUD'u Çiz"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "NOTE: You can also press SHIFT + TAB while playing to toggle this."
+msgstr "NOT: Bunu oynarken SHIFT + TAB ile de açıp kapatabilirsin."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "SHIFT + TAB toggles everything"
+msgstr "SHIFT + TAB her şeyi açar/kapatır"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Enabled: "
+msgstr "Açık: "
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Score"
+msgstr "Skoru Çiz"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Combo"
+msgstr "Komboyu Çiz"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Accuracy"
+msgstr "İsabeti Çiz"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Clock"
+msgstr "Saati Çiz"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw HitErrorBar"
+msgstr "HitErrorBar'ı Çiz"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw HitErrorBar UR"
+msgstr "HitErrorBar UR'sini Çiz"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Unstable Rate"
+msgstr "Unstable Rate"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw ScoreBar"
+msgstr "ScoreBar'ı Çiz"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Health/HP Bar."
+msgstr "Can/HP Çubuğu."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw ScoreBar-bg"
+msgstr "ScoreBar-bg'yi Çiz"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Some skins abuse this as the playfield background image.\n"
+"It is actually just the background image for the Health/HP Bar."
+msgstr ""
+"Bazı skinler bunu oyun alanı arka planı olarak kötüye kullanır.\n"
+"Aslında yalnızca Can/HP Çubuğunun arka plan görselidir."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw ScoreBoard in singleplayer"
+msgstr "Tek oyunculuda Skor Tablosunu Çiz"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw ScoreBoard in multiplayer"
+msgstr "Çok oyunculuda Skor Tablosunu Çiz"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Scrubbing Timeline"
+msgstr "Zaman Çizelgesini Çiz"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Miss Window on HitErrorBar"
+msgstr "HitErrorBar'da Miss Penceresini Çiz"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: pp"
+msgstr "İstatistik Çiz: pp"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Realtime pp counter.\n"
+"Dynamically calculates earned pp by incrementally updating the star rating."
+msgstr ""
+"Gerçek zamanlı pp sayacı.\n"
+"Yıldız derecesini kademeli güncelleyerek kazanılan pp'yi dinamik olarak hesaplar."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: pp (SS)"
+msgstr "İstatistik Çiz: pp (SS)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Max possible total pp for active mods (full combo + perfect acc)."
+msgstr "Etkin modlarla mümkün olan maksimum toplam pp (full combo + kusursuz isabet)."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: Misses"
+msgstr "İstatistik Çiz: Miss"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Number of misses."
+msgstr "Miss sayısı."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: SliderBreaks"
+msgstr "İstatistik Çiz: SliderBreak"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Number of slider breaks."
+msgstr "Slider break sayısı."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: Max Possible Combo"
+msgstr "İstatistik Çiz: Mümkün Maks. Kombo"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: Stars*** (Until Now)"
+msgstr "İstatistik Çiz: Yıldız*** (Şimdiye Kadar)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Incrementally updates the star rating (aka \"realtime stars\")."
+msgstr "Yıldız derecesini kademeli olarak günceller (\"gerçek zamanlı yıldız\")."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: Stars* (Total)"
+msgstr "İstatistik Çiz: Yıldız* (Toplam)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Total stars for active mods."
+msgstr "Etkin modlar için toplam yıldız."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: BPM"
+msgstr "İstatistik Çiz: BPM"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: AR"
+msgstr "İstatistik Çiz: AR"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: CS"
+msgstr "İstatistik Çiz: CS"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: OD"
+msgstr "İstatistik Çiz: OD"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: HP"
+msgstr "İstatistik Çiz: HP"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: 300 hitwindow"
+msgstr "İstatistik Çiz: 300 isabet penceresi"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Timing window for hitting a 300 (e.g. +-25ms)."
+msgstr "300 almak için zamanlama penceresi (örn. +-25ms)."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: Notes Per Second"
+msgstr "İstatistik Çiz: Saniye Başına Nota"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "How many clicks per second are currently required."
+msgstr "Şu anda saniyede kaç tıklama gerekiyor."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: Note Density"
+msgstr "İstatistik Çiz: Nota Yoğunluğu"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "How many objects are visible at the same time."
+msgstr "Aynı anda kaç nesne görünüyor."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: Unstable Rate"
+msgstr "İstatistik Çiz: Unstable Rate"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: Accuracy Error"
+msgstr "İstatistik Çiz: İsabet Hatası"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Average hit error delta (e.g. -5ms +15ms).\n"
+"See \"hud_statistics_hitdelta_chunksize 30\",\n"
+"it defines how many recent hit deltas are averaged."
+msgstr ""
+"Ortalama vuruş hatası farkı (örn. -5ms +15ms).\n"
+"Bkz. \"hud_statistics_hitdelta_chunksize 30\",\n"
+"kaç son vuruş farkının ortalamasının alınacağını belirler."
+
+#. TRANSLATORS: Section of option sliders to set the scale of in-game UI elements
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Scaling"
+msgstr "Ölçekleme"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "HUD:"
+msgstr "HUD:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Score:"
+msgstr "Skor:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Combo:"
+msgstr "Kombo:"
+
+#: src/App/Neomod/OptionsOverlay.cpp src/App/Neomod/RankingScreen.cpp
+msgid "Accuracy:"
+msgstr "İsabet:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "HitErrorBar:"
+msgstr "HitErrorBar:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "HitErrorBar UR:"
+msgstr "HitErrorBar UR:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Clock:"
+msgstr "Saat:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "ScoreBar:"
+msgstr "ScoreBar:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "ScoreBoard:"
+msgstr "Skor Tablosu:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Key Overlay:"
+msgstr "Tuş Göstergesi:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Statistics:"
+msgstr "İstatistikler:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Statistics Offset"
+msgstr "İstatistik Ofseti"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "X Offset:"
+msgstr "X Ofseti:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Y Offset:"
+msgstr "Y Ofseti:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Playfield"
+msgstr "Oyun Alanı"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw FollowPoints"
+msgstr "FollowPoint'leri Çiz"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Correct border relative to the current Circle Size."
+msgstr "Kenarı mevcut Daire Boyutuna göre düzelt."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Playfield Border"
+msgstr "Oyun Alanı Kenarını Çiz"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Border Size:"
+msgstr "Kenar Boyutu:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Hitobjects"
+msgstr "Nesneler"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Use Fast Hidden Fading Sliders (!)"
+msgstr "Hızlı Solan Hidden Sliderları Kullan (!)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"NOTE: osu! doesn't do this, so don't enable it for serious practicing.\n"
+"If enabled: Fade out sliders with the same speed as circles."
+msgstr ""
+"NOT: osu! bunu yapmaz, ciddi antrenman için açma.\n"
+"Açıksa: Sliderlar dairelerle aynı hızda solar."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "FPoSu (3D)"
+msgstr "FPoSu (3D)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "FPoSu - General"
+msgstr "FPoSu - Genel"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "FPoSu"
+msgstr "FPoSu"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"The real 3D FPS mod.\n"
+"Play from a first person shooter perspective in a 3D environment.\n"
+"This is only intended for mouse! (Enable \"Tablet/Absolute Mode\" for tablets.)"
+msgstr ""
+"Gerçek 3D FPS modu.\n"
+"3D bir ortamda birinci şahıs nişancı bakış açısıyla oyna.\n"
+"Yalnızca fare için tasarlandı! (Tabletler için \"Tablet/Mutlak Mod\"u aç.)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "NOTE: Use CTRL + O during gameplay to get here!"
+msgstr "NOT: Buraya oyun sırasında CTRL + O ile gel!"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "LEFT/RIGHT arrow keys to precisely adjust sliders."
+msgstr "Kaydırıcıları hassas ayarlamak için SOL/SAĞ ok tuşları."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Distance:"
+msgstr "Mesafe:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"If enabled: Vertical FOV.\n"
+"If disabled: Horizontal FOV (default)."
+msgstr ""
+"Açıksa: Dikey FOV.\n"
+"Kapalıysa: Yatay FOV (varsayılan)."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Vertical FOV"
+msgstr "Dikey FOV"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "FOV:"
+msgstr "FOV:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "FOV (Zoom):"
+msgstr "FOV (Yakınlaştırma):"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Zoom Key Toggle"
+msgstr "Yakınlaştırma Tuşu Aç/Kapat"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Enabled: Zoom key toggles zoom.\n"
+"Disabled: Zoom while zoom key is held."
+msgstr ""
+"Açık: Yakınlaştırma tuşu yakınlaştırmayı açıp kapatır.\n"
+"Kapalı: Tuş basılıyken yakınlaştırır."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "FPoSu - Playfield"
+msgstr "FPoSu - Oyun Alanı"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Curved play area"
+msgstr "Kavisli oyun alanı"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Background cube"
+msgstr "Arka plan küpü"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Skybox"
+msgstr "Skybox"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"NOTE: Overrides \"Background cube\".\n"
+"See skybox_example.png for cubemap layout."
+msgstr ""
+"NOT: \"Arka plan küpü\"nü geçersiz kılar.\n"
+"Cubemap düzeni için skybox_example.png'ye bak."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Background Opacity"
+msgstr "Arka Plan Opaklığı"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "FPoSu - Mouse"
+msgstr "FPoSu - Fare"
+
+#: src/App/Neomod/OptionsOverlay.cpp src/App/Neomod/OsuDirectScreen.cpp
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Opening browser, please wait ..."
+msgstr "Tarayıcı açılıyor, lütfen bekle ..."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "DPI:"
+msgstr "DPI:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "cm per 360:"
+msgstr "360 başına cm:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Invert Vertical"
+msgstr "Dikeyi Ters Çevir"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Invert Horizontal"
+msgstr "Yatayı Ters Çevir"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Tablet/Absolute Mode (!)"
+msgstr "Tablet/Mutlak Mod (!)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Don't enable this if you are using a mouse.\n"
+"If this is enabled, then DPI and cm per 360 will be ignored!"
+msgstr ""
+"Fare kullanıyorsan bunu açma.\n"
+"Bu açıksa DPI ve 360 başına cm yok sayılır!"
+
+#. TRANSLATORS: Name of a settings category containing joke/unnecessary options
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Bullshit"
+msgstr "Saçmalıklar"
+
+#. TRANSLATORS: Subcategory of "Bullshit" - contains joke visual settings (rainbow circles, etc.)
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Why"
+msgstr "Neden"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Rainbow Circles"
+msgstr "Gökkuşağı Daireler"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Rainbow Sliders"
+msgstr "Gökkuşağı Sliderlar"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Rainbow Numbers"
+msgstr "Gökkuşağı Sayılar"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw 300s"
+msgstr "300'leri Çiz"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Miscellaneous"
+msgstr "Çeşitli"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Testing"
+msgstr "Test"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Use bleeding edge release stream"
+msgstr "En yeni deneysel sürüm kanalını kullan"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Screenshots"
+msgstr "Ekran Görüntüleri"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Crop Screenshots"
+msgstr "Ekran Görüntülerini Kırp"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Crop screenshots to the letterbox resolution,\n"
+"if letterboxing is enabled."
+msgstr ""
+"Letterboxing açıksa ekran görüntülerini\n"
+"letterbox çözünürlüğüne kırp."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Copy Screenshots to Clipboard"
+msgstr "Ekran Görüntülerini Panoya Kopyala"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"If screenshots should be copied to the system clipboard\n"
+"along with saving them to the screenshots/ folder."
+msgstr ""
+"Ekran görüntüleri screenshots/ klasörüne kaydedilmenin yanında\n"
+"sistem panosuna da kopyalansın mı."
+
+#. TRANSLATORS: Subsection with options for main menu tips and social media links
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Nags"
+msgstr "Hatırlatmalar"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Show Main Menu Tips"
+msgstr "Ana Menü İpuçlarını Göster"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Hide Discord/X Links"
+msgstr "Discord/X Bağlantılarını Gizle"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Import/Reset"
+msgstr "İçe Aktar/Sıfırla"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Import collections/scores/settings from McOsu"
+msgstr "McOsu'dan koleksiyonları/skorları/ayarları içe aktar"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Successfully imported settings from McOsu."
+msgstr "Ayarlar McOsu'dan başarıyla içe aktarıldı."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Couldn't find McOsu config files! Make sure to select the directory containing McOsu.exe."
+msgstr "McOsu yapılandırma dosyaları bulunamadı! McOsu.exe'yi içeren klasörü seçtiğinden emin ol."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Opening file browser ..."
+msgstr "Dosya gezgini açılıyor ..."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "You must select the McOsu folder to import its settings."
+msgstr "Ayarlarını içe aktarmak için McOsu klasörünü seçmelisin."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Reset all settings"
+msgstr "Tüm ayarları sıfırla"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Disconnect"
+msgstr "Bağlantıyı kes"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Waiting for browser..."
+msgstr "Tarayıcı bekleniyor..."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Error: Couldn't find any skins"
+msgstr "Hata: Hiç skin bulunamadı"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Tried to enable exclusive mode, but couldn't :("
+msgstr "Özel mod açılmaya çalışıldı ama açılamadı :("
+
+#: src/App/Neomod/OptionsOverlay.cpp
+#, c++-format
+msgid "Press new key for {}:"
+msgstr "{} için yeni tuşa bas:"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "All key bindings have been reset."
+msgstr "Tüm tuş atamaları sıfırlandı."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+#, c++-format
+msgid "Press {:d} more times to confirm."
+msgstr "Onaylamak için {:d} kez daha bas."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+#, c++-format
+msgid "Press {:d} more time to confirm!"
+msgstr "Onaylamak için {:d} kez daha bas!"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "This setting is locked in multiplayer rooms."
+msgstr "Bu ayar çok oyunculu odalarda kilitli."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "This setting is forced by the server."
+msgstr "Bu ayar sunucu tarafından zorlanıyor."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "This setting is forced by the current skin."
+msgstr "Bu ayar mevcut skin tarafından zorlanıyor."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+#, c++-format
+msgid "(turn off \"{}\" in the skin options to change it)"
+msgstr "(değiştirmek için skin seçeneklerinde \"{}\" ayarını kapat)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "All settings have been reset."
+msgstr "Tüm ayarlar sıfırlandı."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Unbind"
+msgstr "Atamayı kaldır"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Failed to save osu.cfg"
+msgstr "osu.cfg kaydedilemedi"
+
+#: src/App/Neomod/Osu.cpp
+msgid "This replay's beatmap is not installed."
+msgstr "Bu tekrarın beatmap'i yüklü değil."
+
+#: src/App/Neomod/Osu.cpp
+#, c++-format
+msgid "Skin reloaded!{:s}"
+msgstr "Skin yeniden yüklendi!{:s}"
+
+#: src/App/Neomod/Osu.cpp
+msgid "Mouse buttons are disabled."
+msgstr "Fare tuşları devre dışı."
+
+#: src/App/Neomod/Osu.cpp
+msgid "Mouse buttons are enabled."
+msgstr "Fare tuşları etkin."
+
+#: src/App/Neomod/Osu.cpp
+msgid "No beatmap is currently selected."
+msgstr "Şu anda seçili bir beatmap yok."
+
+#: src/App/Neomod/Osu.cpp
+msgid "In-game interface has been enabled."
+msgstr "Oyun içi arayüz etkinleştirildi."
+
+#: src/App/Neomod/Osu.cpp
+msgid "In-game interface has been disabled."
+msgstr "Oyun içi arayüz devre dışı bırakıldı."
+
+#: src/App/Neomod/Osu.cpp
+msgid "Scoreboard is hidden."
+msgstr "Skor tablosu gizli."
+
+#: src/App/Neomod/Osu.cpp
+msgid "Scoreboard is shown."
+msgstr "Skor tablosu gösteriliyor."
+
+#: src/App/Neomod/Osu.cpp
+#, c++-format
+msgid "Local beatmap offset set to {:d} ms"
+msgstr "Yerel beatmap ofseti {:d} ms olarak ayarlandı"
+
+#: src/App/Neomod/Osu.cpp
+msgid "Error: Couldn't grab a screenshot :("
+msgstr "Hata: Ekran görüntüsü alınamadı :("
+
+#: src/App/Neomod/Osu.cpp
+msgid "Screenshot copied to clipboard (click to open in a new tab)"
+msgstr "Ekran görüntüsü panoya kopyalandı (yeni sekmede açmak için tıkla)"
+
+#: src/App/Neomod/Osu.cpp
+msgid "Screenshot taken (click to open in a new tab)"
+msgstr "Ekran görüntüsü alındı (yeni sekmede açmak için tıkla)"
+
+#: src/App/Neomod/Osu.cpp
+#, c++-format
+msgid "Screenshot copied to clipboard and saved to {:s}"
+msgstr "Ekran görüntüsü panoya kopyalandı ve {:s} konumuna kaydedildi"
+
+#: src/App/Neomod/Osu.cpp
+#, c++-format
+msgid "Screenshot saved to {:s}"
+msgstr "Ekran görüntüsü {:s} konumuna kaydedildi"
+
+#: src/App/Neomod/Osu.cpp
+#, c++-format
+msgid "Skin exported to {:s}"
+msgstr "Skin {:s} konumuna dışa aktarıldı"
+
+#: src/App/Neomod/Osu.cpp
+msgid "Can't export the default skin."
+msgstr "Varsayılan skin dışa aktarılamaz."
+
+#: src/App/Neomod/Osu.cpp
+#, c++-format
+msgid "Couldn't export the skin to {:s}"
+msgstr "Skin {:s} konumuna dışa aktarılamadı"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+#, c++-format
+msgid "+{:d} more"
+msgstr "+{:d} daha"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "View beatmap page"
+msgstr "Beatmap sayfasını görüntüle"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "Close"
+msgstr "Kapat"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "Download"
+msgstr "İndir"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "Cancel download"
+msgstr "İndirmeyi iptal et"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "Go to beatmap"
+msgstr "Beatmap'e git"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid ""
+"Click a beatmap to see its details.\n"
+"Click it again to download it."
+msgstr ""
+"Ayrıntılarını görmek için bir beatmap'e tıkla.\n"
+"İndirmek için tekrar tıkla."
+
+#: src/App/Neomod/OsuDirectScreen.cpp src/App/Neomod/SongBrowser/InfoLabel.cpp
+#, c++-format
+msgid "Mapped by {:s}"
+msgstr "Hazırlayan: {:s}"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "Pending"
+msgstr "Beklemede"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "Ranked"
+msgstr "Ranked"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "Approved"
+msgstr "Approved"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "Loved"
+msgstr "Loved"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+#, c++-format
+msgid "Updated {:s}"
+msgstr "Güncellendi: {:s}"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "Video"
+msgstr "Video"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "Storyboard"
+msgstr "Storyboard"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "Newest maps"
+msgstr "En yeni haritalar"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "Best maps"
+msgstr "En iyi haritalar"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "Only show ranked beatmaps"
+msgstr "Yalnızca ranked beatmapleri göster"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "Auto-select downloaded beatmaps"
+msgstr "İndirilen beatmapleri otomatik seç"
+
+#: src/App/Neomod/PauseOverlay.cpp
+msgid "Resume"
+msgstr "Devam et"
+
+#: src/App/Neomod/PauseOverlay.cpp src/App/Neomod/RankingScreen.cpp
+msgid "Retry"
+msgstr "Tekrar dene"
+
+#: src/App/Neomod/PauseOverlay.cpp
+msgid "Quit"
+msgstr "Çık"
+
+#: src/App/Neomod/PromptOverlay.cpp
+msgid "OK"
+msgstr "Tamam"
+
+#: src/App/Neomod/PromptOverlay.cpp
+msgid "Cancel"
+msgstr "İptal"
+
+#: src/App/Neomod/RankingScreen.cpp
+msgid "You achieved the #1 score on local rankings!"
+msgstr "Yerel sıralamada 1. skoru elde ettin!"
+
+#: src/App/Neomod/RankingScreen.cpp
+msgid "Watch replay"
+msgstr "Tekrarı izle"
+
+#: src/App/Neomod/RankingScreen.cpp
+#, c++-format
+msgid "{:.2f}pp"
+msgstr "{:.2f}pp"
+
+#: src/App/Neomod/RankingScreen.cpp
+#, c++-format
+msgid "Stars: {:.2f} ({:.2f} aim, {:.2f} speed)"
+msgstr "Yıldız: {:.2f} ({:.2f} nişan, {:.2f} hız)"
+
+#: src/App/Neomod/RankingScreen.cpp
+#, c++-format
+msgid "Speed: {:.3g}x"
+msgstr "Hız: {:.3g}x"
+
+#: src/App/Neomod/RankingScreen.cpp
+#, c++-format
+msgid "CS:{:.2f} AR:{:.2f} OD:{:.2f} HP:{:.2f}"
+msgstr "CS:{:.2f} AR:{:.2f} OD:{:.2f} HP:{:.2f}"
+
+#: src/App/Neomod/RankingScreen.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+#, c++-format
+msgid "Notelock: {}"
+msgstr "Notelock: {}"
+
+#: src/App/Neomod/RankingScreen.cpp
+#, c++-format
+msgid "Error: {:.2f}ms - {:.2f}ms avg"
+msgstr "Hata: {:.2f}ms - {:.2f}ms ort."
+
+#: src/App/Neomod/RankingScreen.cpp
+#, c++-format
+msgid "Unstable Rate: {:.2f}"
+msgstr "Unstable Rate: {:.2f}"
+
+#: src/App/Neomod/RankingScreen.cpp
+msgid "Mods: "
+msgstr "Modlar: "
+
+#: src/App/Neomod/RankingScreen.cpp
+#, c++-format
+msgid "You achieved the #{} score on local rankings!"
+msgstr "Yerel sıralamada #{} skoru elde ettin!"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Multiplayer room"
+msgstr "Çok oyunculu oda"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Host: None"
+msgstr "Host: Yok"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Room name"
+msgstr "Oda adı"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Change password"
+msgstr "Şifreyi değiştir"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Win condition: Score"
+msgstr "Kazanma koşulu: Skor"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Beatmap"
+msgstr "Beatmap"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Select map"
+msgstr "Harita seç"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Download maps"
+msgstr "Haritaları indir"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "(no map selected)"
+msgstr "(harita seçilmedi)"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Mods"
+msgstr "Modlar"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Select mods [F1]"
+msgstr "Mod seç [F1]"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Freemod"
+msgstr "Freemod"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "No mods selected."
+msgstr "Mod seçilmedi."
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Start game"
+msgstr "Oyunu başlat"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Player list"
+msgstr "Oyuncu listesi"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Host is selecting a map..."
+msgstr "Host bir harita seçiyor..."
+
+#: src/App/Neomod/RoomScreen.cpp src/App/Neomod/SpectatorScreen.cpp
+#, c++-format
+msgid "Failed to download Beatmap #{:d} :("
+msgstr "Beatmap #{:d} indirilemedi :("
+
+#: src/App/Neomod/RoomScreen.cpp
+#, c++-format
+msgid "Downloading... {:.2f}%"
+msgstr "İndiriliyor... {:.2f}%"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Hit 'Escape' once more to exit this multiplayer match."
+msgstr "Bu çok oyunculu maçtan çıkmak için 'Escape' tuşuna bir kez daha bas."
+
+#: src/App/Neomod/RoomScreen.cpp
+#, c++-format
+msgid "Host: {}"
+msgstr "Host: {}"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Win condition: Accuracy"
+msgstr "Kazanma koşulu: İsabet"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Win condition: Combo"
+msgstr "Kazanma koşulu: Kombo"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Win condition: ScoreV2"
+msgstr "Kazanma koşulu: ScoreV2"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Win condition: ???"
+msgstr "Kazanma koşulu: ???"
+
+#: src/App/Neomod/RoomScreen.cpp
+#, c++-format
+msgid "Force start ({:d}/{:d})"
+msgstr "Zorla başlat ({:d}/{:d})"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Not ready"
+msgstr "Hazır değil"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Ready!"
+msgstr "Hazır!"
+
+#: src/App/Neomod/RoomScreen.cpp
+#, c++-format
+msgid "[playing] {}"
+msgstr "[oynuyor] {}"
+
+#: src/App/Neomod/RoomScreen.cpp
+#, c++-format
+msgid "[no map] {}"
+msgstr "[harita yok] {}"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Failed to load map"
+msgstr "Harita yüklenemedi"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "New password:"
+msgstr "Yeni şifre:"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Score V1"
+msgstr "Score V1"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Accuracy"
+msgstr "İsabet"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Combo"
+msgstr "Kombo"
+
+#: src/App/Neomod/SongBrowser/BottomBar.cpp
+#, c++-format
+msgid "Calculating stars ({}/{}) ..."
+msgstr "Yıldızlar hesaplanıyor ({}/{}) ..."
+
+#. TRANSLATORS: {} is the name of the exported collection, or "mapset"
+#: src/App/Neomod/SongBrowser/BottomBar.cpp
+#, c++-format
+msgid "Exporting {} {:.2f}%"
+msgstr "Dışa aktarılıyor {} {:.2f}%"
+
+#. TRANSLATORS: {} is the name of the exported collection, or "mapset"
+#: src/App/Neomod/SongBrowser/BottomBar.cpp
+msgid "mapset"
+msgstr "mapset"
+
+#: src/App/Neomod/SongBrowser/BottomBar.cpp
+#, c++-format
+msgid " {:s}"
+msgstr " {:s}"
+
+#: src/App/Neomod/SongBrowser/BottomBar.cpp
+#, c++-format
+msgid "Computing loudness ({}/{}) ..."
+msgstr "Ses yüksekliği hesaplanıyor ({}/{}) ..."
+
+#: src/App/Neomod/SongBrowser/BottomBar.cpp
+#, c++-format
+msgid "Converting scores ({}/{}) ..."
+msgstr "Skorlar dönüştürülüyor ({}/{}) ..."
+
+#: src/App/Neomod/SongBrowser/InfoLabel.cpp
+#, c++-format
+msgid "Length: {:02d}:{:02d} BPM: {} Objects: {}"
+msgstr "Süre: {:02d}:{:02d} BPM: {} Nesne: {}"
+
+#: src/App/Neomod/SongBrowser/InfoLabel.cpp
+#, c++-format
+msgid "Length: {:02d}:{:02d} BPM: {}-{} ({}) Objects: {}"
+msgstr "Süre: {:02d}:{:02d} BPM: {}-{} ({}) Nesne: {}"
+
+#: src/App/Neomod/SongBrowser/InfoLabel.cpp
+#, c++-format
+msgid "CS:{:.3g} AR:{:.3g} OD:{:.3g} HP:{:.3g} Stars:{:.3g} ({}pp)"
+msgstr "CS:{:.3g} AR:{:.3g} OD:{:.3g} HP:{:.3g} Yıldız:{:.3g} ({}pp)"
+
+#: src/App/Neomod/SongBrowser/InfoLabel.cpp
+#, c++-format
+msgid "CS:{:.3g} AR:{:.3g} OD:{:.3g} HP:{:.3g} Stars:{:.3g} -> {:.3g} ({}pp)"
+msgstr "CS:{:.3g} AR:{:.3g} OD:{:.3g} HP:{:.3g} Yıldız:{:.3g} -> {:.3g} ({}pp)"
+
+#: src/App/Neomod/SongBrowser/InfoLabel.cpp
+#, c++-format
+msgid "CS:{:.3g} AR:{:.3g} OD:{:.3g} HP:{:.3g} Stars:{:.3g} * (??? pp)"
+msgstr "CS:{:.3g} AR:{:.3g} OD:{:.3g} HP:{:.3g} Yıldız:{:.3g} * (??? pp)"
+
+#: src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Wobble 2"
+msgstr "Wobble 2"
+
+#: src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Shirone"
+msgstr "Shirone"
+
+#: src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "osu!stable"
+msgstr "osu!stable"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By Artist"
+msgstr "Sanatçıya Göre"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By BPM"
+msgstr "BPM'e Göre"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By Creator"
+msgstr "Hazırlayana Göre"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By Date Added"
+msgstr "Eklenme Tarihine Göre"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By Difficulty"
+msgstr "Zorluğa Göre"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By Length"
+msgstr "Süreye Göre"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By Title"
+msgstr "Başlığa Göre"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By Rank Achieved"
+msgstr "Elde Edilen Dereceye Göre"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By Date Played"
+msgstr "Oynanma Tarihine Göre"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By Date"
+msgstr "Tarihe Göre"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Collections"
+msgstr "Koleksiyonlar"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "No Grouping"
+msgstr "Gruplama Yok"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By accuracy"
+msgstr "İsabete göre"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By combo"
+msgstr "Komboya göre"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By date"
+msgstr "Tarihe göre"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By misses"
+msgstr "Miss'e göre"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By score"
+msgstr "Skora göre"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By pp"
+msgstr "pp'ye göre"
+
+#. TRANSLATORS: button that opens the selected beatmap on the website
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Web"
+msgstr "Web"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Group:"
+msgstr "Grup:"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Sort:"
+msgstr "Sırala:"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Loading..."
+msgstr "Yükleniyor..."
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "No records set!"
+msgstr "Rekor yok!"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Personal Best (from local scores)"
+msgstr "Kişisel En İyi (yerel skorlardan)"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Invalid osu! folder (or no beatmaps found): "
+msgstr "Geçersiz osu! klasörü (veya beatmap bulunamadı): "
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Go to Options -> osu!folder"
+msgstr "Seçenekler -> osu! klasörü'ne git"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Drop .osz beatmaps onto this window to import them"
+msgstr "İçe aktarmak için .osz beatmaplerini bu pencereye bırak"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Or click \"Online Beatmaps\" in the Main Menu"
+msgstr "Ya da Ana Menüde \"Çevrimiçi Beatmapler\"e tıkla"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Beatmapset has no difficulties"
+msgstr "Beatmapset'in hiç zorluğu yok"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+#, c++-format
+msgid "Failed to find Beatmap #{:d} :("
+msgstr "Beatmap #{:d} bulunamadı :("
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+#, c++-format
+msgid "Scanning beatmap folders ({:d}/{:d})"
+msgstr "Beatmap klasörleri taranıyor ({:d}/{:d})"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+#, c++-format
+msgid "Importing beatmaps ({:d}/{:d})"
+msgstr "Beatmapler içe aktarılıyor ({:d}/{:d})"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "0-9"
+msgstr "0-9"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Other"
+msgstr "Diğer"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Below 1 star"
+msgstr "1 yıldızın altı"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Above 10 stars"
+msgstr "10 yıldızın üstü"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "1 star"
+msgstr "1 yıldız"
+
+#. TRANSLATORS: song browser group of beatmaps by star rating, {:d} is between 2 and 10
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+#, c++-format
+msgid "{:d} stars"
+msgstr "{:d} yıldız"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Under 60 BPM"
+msgstr "60 BPM altı"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Under 120 BPM"
+msgstr "120 BPM altı"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Under 180 BPM"
+msgstr "180 BPM altı"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Under 240 BPM"
+msgstr "240 BPM altı"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Under 300 BPM"
+msgstr "300 BPM altı"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Over 300 BPM"
+msgstr "300 BPM üstü"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "1 minute or less"
+msgstr "1 dakika veya daha az"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "2 minutes or less"
+msgstr "2 dakika veya daha az"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "3 minutes or less"
+msgstr "3 dakika veya daha az"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "4 minutes or less"
+msgstr "4 dakika veya daha az"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "5 minutes or less"
+msgstr "5 dakika veya daha az"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "10 minutes or less"
+msgstr "10 dakika veya daha az"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Over 10 minutes"
+msgstr "10 dakikadan fazla"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Disabled FPoSu mode."
+msgstr "FPoSu modu kapatıldı."
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Enabled FPoSu mode."
+msgstr "FPoSu modu açıldı."
+
+#: src/App/Neomod/SpectatorScreen.cpp
+#, c++-format
+msgid "Started spectating {:s}"
+msgstr "{:s} izlenmeye başlandı"
+
+#: src/App/Neomod/SpectatorScreen.cpp
+#, c++-format
+msgid "Stopped spectating {:s}"
+msgstr "{:s} izlenmesi bırakıldı"
+
+#: src/App/Neomod/SpectatorScreen.cpp
+msgid "Spectating"
+msgstr "İzleniyor"
+
+#: src/App/Neomod/SpectatorScreen.cpp
+msgid "..."
+msgstr "..."
+
+#: src/App/Neomod/SpectatorScreen.cpp
+msgid "Stop spectating"
+msgstr "İzlemeyi bırak"
+
+#: src/App/Neomod/SpectatorScreen.cpp
+#, c++-format
+msgid "Spectating {:s}"
+msgstr "{:s} izleniyor"
+
+#. TRANSLATORS: {:s} is the name of the spectated player
+#: src/App/Neomod/SpectatorScreen.cpp
+#, c++-format
+msgid "{:s} is AFK"
+msgstr "{:s} AFK"
+
+#: src/App/Neomod/SpectatorScreen.cpp
+#, c++-format
+msgid "{:s} is picking a map..."
+msgstr "{:s} bir harita seçiyor..."
+
+#: src/App/Neomod/SpectatorScreen.cpp
+#, c++-format
+msgid "{:s} is spectating someone else"
+msgstr "{:s} başka birini izliyor"
+
+#: src/App/Neomod/SpectatorScreen.cpp
+#, c++-format
+msgid "{:s} is playing minigames"
+msgstr "{:s} mini oyun oynuyor"
+
+#: src/App/Neomod/SpectatorScreen.cpp
+#, c++-format
+msgid "Database not loaded, cannot install map"
+msgstr "Veritabanı yüklenmedi, harita yüklenemiyor"
+
+#: src/App/Neomod/SpectatorScreen.cpp
+msgid "Downloading map..."
+msgstr "Harita indiriliyor..."
+
+#: src/App/Neomod/UIIconButton.cpp
+msgid "Play"
+msgstr "Oyna"
+
+#: src/App/Neomod/UIIconButton.cpp
+msgid "Pause"
+msgstr "Duraklat"
+
+#: src/App/Neomod/UISearchOverlay.cpp
+msgid "Search: "
+msgstr "Ara: "
+
+#: src/App/Neomod/UISearchOverlay.cpp
+msgid "Type to search!"
+msgstr "Aramak için yaz!"
+
+#: src/App/Neomod/UISearchOverlay.cpp
+msgid "No matches found. Hit ESC to reset."
+msgstr "Sonuç bulunamadı. Sıfırlamak için ESC'ye bas."
+
+#: src/App/Neomod/UISearchOverlay.cpp
+msgid "Hit ESC to reset."
+msgstr "Sıfırlamak için ESC'ye bas."
+
+#: src/App/Neomod/UISearchOverlay.cpp
+msgid "Searching, please wait ..."
+msgstr "Aranıyor, lütfen bekle ..."
+
+#: src/App/Neomod/UIUserContextMenu.cpp
+msgid "Switch User:"
+msgstr "Kullanıcı Değiştir:"
+
+#: src/App/Neomod/UIUserContextMenu.cpp
+msgid "Set custom name"
+msgstr "Özel ad belirle"
+
+#: src/App/Neomod/UIUserContextMenu.cpp
+msgid "Enter Username:"
+msgstr "Kullanıcı Adını Gir:"
+
+#: src/App/Neomod/UIUserContextMenu.cpp
+msgid "(Press ENTER to confirm.)"
+msgstr "(Onaylamak için ENTER'a bas.)"
+
+#: src/Engine/Sound/SoundEngine.cpp
+msgid "No sound"
+msgstr "Ses yok"

@@ -1,0 +1,3695 @@
+# Simplified Chinese translations for neomod package.
+# Copyright (C) 2026 kiwec.
+# This file is distributed under the same license as the neomod package.
+#
+# WARNING: Machine-translated by LLMs. Not human-reviewed.
+# May contain errors in grammatical gender, politeness register, game-specific
+# terminology, or context-dependent meaning. Please flag mistranslations
+# or volunteer a review to replace these.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: neomod\n"
+"Report-Msgid-Bugs-To: \n"
+"Language-Team: none\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: src/App/Neomod/AboutScreen.cpp src/App/Neomod/MainMenu.cpp
+msgid "Changelog"
+msgstr "更新日志"
+
+#: src/App/Neomod/AboutScreen.cpp
+msgid "Credits"
+msgstr "制作人员"
+
+#: src/App/Neomod/AboutScreen.cpp
+msgid "Licenses"
+msgstr "许可证"
+
+#: src/App/Neomod/BanchoLeaderboard.cpp
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Global"
+msgstr "全球"
+
+#: src/App/Neomod/BanchoLeaderboard.cpp
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Selected mods"
+msgstr "已选模组"
+
+#: src/App/Neomod/BanchoLeaderboard.cpp
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Friends"
+msgstr "好友"
+
+#: src/App/Neomod/BanchoLeaderboard.cpp
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Country"
+msgstr "国家/地区"
+
+#: src/App/Neomod/BanchoLeaderboard.cpp
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Team"
+msgstr "队伍"
+
+#: src/App/Neomod/BeatmapInstallOverlay.cpp
+#, c++-format
+msgid "Beatmap #{:d}"
+msgstr "谱面 #{:d}"
+
+#: src/App/Neomod/BeatmapInstallOverlay.cpp
+msgid "Failed"
+msgstr "失败"
+
+#: src/App/Neomod/BeatmapInstallOverlay.cpp
+msgid "Installing..."
+msgstr "正在安装..."
+
+#: src/App/Neomod/BeatmapInstallOverlay.cpp
+msgid "Extracting..."
+msgstr "正在解压..."
+
+#: src/App/Neomod/BeatmapInstallOverlay.cpp
+msgid "Queued"
+msgstr "排队中"
+
+#: src/App/Neomod/BeatmapInstaller.cpp
+#, c++-format
+msgid "{} is already installed"
+msgstr "{} 已安装"
+
+#: src/App/Neomod/BeatmapInstaller.cpp
+#, c++-format
+msgid "Beatmapset #{:d} is already installed"
+msgstr "谱面集 #{:d} 已安装"
+
+#: src/App/Neomod/BeatmapInstaller.cpp
+#, c++-format
+msgid "Downloaded beatmapset #{:d}"
+msgstr "已下载谱面集 #{:d}"
+
+#: src/App/Neomod/BeatmapInstaller.cpp
+#, c++-format
+msgid "Failed to import {}"
+msgstr "无法导入 {}"
+
+#: src/App/Neomod/BeatmapInstaller.cpp
+#, c++-format
+msgid "Failed to download beatmapset #{:d} :("
+msgstr "无法下载谱面集 #{:d} :("
+
+#: src/App/Neomod/BeatmapInstaller.cpp
+#, c++-format
+msgid "Couldn't delete {}"
+msgstr "无法删除 {}"
+
+#: src/App/Neomod/BeatmapInstaller.cpp
+#, c++-format
+msgid "Deleted {}"
+msgstr "已删除 {}"
+
+#: src/App/Neomod/BeatmapInterface.cpp
+msgid "Buffering ..."
+msgstr "正在缓冲 ..."
+
+#: src/App/Neomod/BeatmapInterface.cpp
+#, c++-format
+msgid "{} has paused"
+msgstr "{} 已暂停"
+
+#: src/App/Neomod/BeatmapInterface.cpp
+msgid "Waiting for players ..."
+msgstr "正在等待玩家 ..."
+
+#: src/App/Neomod/BeatmapInterface.cpp
+msgid "Loading ..."
+msgstr "正在加载 ..."
+
+#: src/App/Neomod/Chat.cpp
+#, c++-format
+msgid "You are silenced for another {:d}h {:02d}m {:02d}s."
+msgstr "你还将被禁言 {:d}小时 {:02d}分 {:02d}秒。"
+
+#: src/App/Neomod/Chat.cpp
+msgid "You are not listening to anything."
+msgstr "你没有在听任何东西。"
+
+#: src/App/Neomod/Chat.cpp
+#, c++-format
+msgid "User '{:s}' not found. Are they online?"
+msgstr "未找到用户 '{:s}'。对方在线吗？"
+
+#: src/App/Neomod/Chat.cpp
+#, c++-format
+msgid "You are already friends with {:s}!"
+msgstr "你已经和 {:s} 是好友了！"
+
+#: src/App/Neomod/Chat.cpp
+#, c++-format
+msgid "You are now friends with {:s}."
+msgstr "你现在和 {:s} 是好友了。"
+
+#: src/App/Neomod/Chat.cpp
+msgid "Away message removed."
+msgstr "已移除离开消息。"
+
+#: src/App/Neomod/Chat.cpp
+#, c++-format
+msgid "Away message set to '{:s}'."
+msgstr "离开消息已设为 '{:s}'。"
+
+#: src/App/Neomod/Chat.cpp
+#, c++-format
+msgid "You are no longer friends with {:s}."
+msgstr "你已不再和 {:s} 是好友。"
+
+#: src/App/Neomod/Chat.cpp
+#, c++-format
+msgid "You aren't friends with {:s}!"
+msgstr "你和 {:s} 不是好友！"
+
+#: src/App/Neomod/Chat.cpp
+msgid "You are not in a multiplayer room!"
+msgstr "你不在多人游戏房间中！"
+
+#: src/App/Neomod/Chat.cpp
+#, c++-format
+msgid "{:s} has been invited to the game."
+msgstr "已邀请 {:s} 加入游戏。"
+
+#: src/App/Neomod/Chat.cpp
+msgid "This command is not supported."
+msgstr "不支持此命令。"
+
+#: src/App/Neomod/Chat.cpp
+#, c++-format
+msgid "{} mentioned you in {}"
+msgstr "{} 在 {} 中提到了你"
+
+#: src/App/Neomod/Chat.cpp
+#, c++-format
+msgid "{} sent you a message"
+msgstr "{} 给你发送了一条消息"
+
+#: src/App/Neomod/Chat.cpp
+#, c++-format
+msgid "You were mentioned in {:s}"
+msgstr "你在 {:s} 中被提到"
+
+#: src/App/Neomod/Chat.cpp src/App/Neomod/Osu.cpp
+msgid "You must log in to chat!"
+msgstr "你必须登录才能聊天！"
+
+#: src/App/Neomod/Chat.cpp
+msgid "Type in the channel you want to join (e.g. '#osu'):"
+msgstr "输入你想加入的频道（例如 '#osu'）："
+
+#: src/App/Neomod/Database.cpp
+#, c++-format
+msgid "Added {:d} new beatmapset(s)."
+msgstr "已添加 {:d} 个新谱面集。"
+
+#: src/App/Neomod/Database.cpp
+msgid "No new beatmaps detected."
+msgstr "未检测到新谱面。"
+
+#: src/App/Neomod/Database.cpp
+#, c++-format
+msgid "{} was written by a newer version, ignoring it"
+msgstr "{} 由更新的版本写入，已忽略"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "{} spectators"
+msgstr "{} 名观众"
+
+#. TRANSLATORS: multiplayer scoreboard tag for a player who left the match
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "{} [quit]"
+msgstr "{} [已退出]"
+
+#. TRANSLATORS: multiplayer scoreboard tag for a player who voted to skip the intro
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "{} [skip]"
+msgstr "{} [跳过]"
+
+#: src/App/Neomod/HUD.cpp src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Local"
+msgstr "本地"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "{} UR"
+msgstr "{} UR"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "{:.{}f}pp"
+msgstr "{:.{}f}pp"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "SS: {:.{}f}pp"
+msgstr "SS: {:.{}f}pp"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "Miss: {:d}"
+msgstr "Miss: {:d}"
+
+#. TRANSLATORS: "SBrk" stands for "Slider Breaks" (number of slider breaks/missed slider ticks)
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "SBrk: {:d}"
+msgstr "SBrk: {:d}"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "FC: {:d}x"
+msgstr "FC: {:d}x"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "{:.3g}***"
+msgstr "{:.3g}***"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "{:.3g}*"
+msgstr "{:.3g}*"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "BPM: {:d}"
+msgstr "BPM: {:d}"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "AR: {:g}"
+msgstr "AR: {:g}"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "CS: {:g}"
+msgstr "CS: {:g}"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "OD: {:g}"
+msgstr "OD: {:g}"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "HP: {:g}"
+msgstr "HP: {:g}"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "300: +-{:d}ms"
+msgstr "300: +-{:d}ms"
+
+#. TRANSLATORS: "NPS" stands for "Notes Per Second"
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "NPS: {:d}"
+msgstr "NPS: {:d}"
+
+#. TRANSLATORS: "ND" stands for "Note Density"
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "ND: {:d}"
+msgstr "ND: {:d}"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "UR: {:d}"
+msgstr "UR: {:d}"
+
+#: src/App/Neomod/HUD.cpp
+#, c++-format
+msgid "-{:d}ms +{:d}ms"
+msgstr "-{:d}ms +{:d}ms"
+
+#: src/App/Neomod/LoadingScreen.cpp
+#, c++-format
+msgid "Loading ... ({:d} %)"
+msgstr "正在加载 ... ({:d} %)"
+
+#: src/App/Neomod/Lobby.cpp
+#, c++-format
+msgid "Players: {:d}/{:d}"
+msgstr "玩家: {:d}/{:d}"
+
+#: src/App/Neomod/Lobby.cpp
+msgid "Join room"
+msgstr "加入房间"
+
+#: src/App/Neomod/Lobby.cpp
+msgid "(password required)"
+msgstr "（需要密码）"
+
+#: src/App/Neomod/Lobby.cpp
+msgid "Room password:"
+msgstr "房间密码："
+
+#: src/App/Neomod/Lobby.cpp
+msgid "Multiplayer rooms"
+msgstr "多人游戏房间"
+
+#: src/App/Neomod/Lobby.cpp
+msgid "Create new room"
+msgstr "创建新房间"
+
+#. TRANSLATORS: online status shown to other players while browsing multiplayer rooms
+#: src/App/Neomod/Lobby.cpp
+msgid "Looking to play"
+msgstr "正在寻找对局"
+
+#: src/App/Neomod/Lobby.cpp
+msgid "There are no matches available."
+msgstr "暂无可用的对局。"
+
+#: src/App/Neomod/Lobby.cpp
+msgid "Joining room..."
+msgstr "正在加入房间..."
+
+#: src/App/Neomod/Lobby.cpp
+msgid "New room"
+msgstr "新房间"
+
+#: src/App/Neomod/Lobby.cpp
+msgid "Creating room..."
+msgstr "正在创建房间..."
+
+#: src/App/Neomod/MainMenu.cpp
+msgid "Save everything from this session."
+msgstr "保存本次会话的所有内容。"
+
+#: src/App/Neomod/MainMenu.cpp
+msgid "(Optional, automatic on tab close.)"
+msgstr "（可选，关闭标签页时自动保存。）"
+
+#: src/App/Neomod/MainMenu.cpp
+msgid "Checking for updates ..."
+msgstr "正在检查更新 ..."
+
+#: src/App/Neomod/MainMenu.cpp
+msgid "Singleplayer"
+msgstr "单人游戏"
+
+#: src/App/Neomod/MainMenu.cpp
+msgid "Multiplayer"
+msgstr "多人游戏"
+
+#: src/App/Neomod/MainMenu.cpp
+msgid "Options"
+msgstr "选项"
+
+#: src/App/Neomod/MainMenu.cpp
+msgid "Exit"
+msgstr "退出"
+
+#: src/App/Neomod/MainMenu.cpp
+msgid "Save"
+msgstr "保存"
+
+#: src/App/Neomod/MainMenu.cpp src/App/Neomod/OsuDirectScreen.cpp
+msgid "Online Beatmaps"
+msgstr "在线谱面"
+
+#: src/App/Neomod/MainMenu.cpp
+#, c++-format
+msgid "Version {:.2f} ({:s})"
+msgstr "版本 {:.2f} ({:s})"
+
+#: src/App/Neomod/MainMenu.cpp
+#, c++-format
+msgid "Version {:.2f}"
+msgstr "版本 {:.2f}"
+
+#: src/App/Neomod/MainMenu.cpp
+msgid "Downloading ..."
+msgstr "正在下载 ..."
+
+#: src/App/Neomod/MainMenu.cpp
+#, c++-format
+msgid "A new version of {} is ready!"
+msgstr "{} 的新版本已准备就绪！"
+
+#: src/App/Neomod/MainMenu.cpp
+msgid "Click here to install the update!"
+msgstr "点击此处安装更新！"
+
+#: src/App/Neomod/MainMenu.cpp
+msgid "A new version is available! Click to open the download page."
+msgstr "有新版本可用！点击打开下载页面。"
+
+#: src/App/Neomod/MainMenu.cpp
+msgid "Update Error! Click to retry ..."
+msgstr "更新出错！点击重试 ..."
+
+#: src/App/Neomod/MainMenu.cpp
+msgid "You must log in to join Multiplayer!"
+msgstr "你必须登录才能加入多人游戏！"
+
+#: src/App/Neomod/MainMenu.cpp
+msgid "You must log in to download beatmaps!"
+msgstr "你必须登录才能下载谱面！"
+
+#: src/App/Neomod/MainMenuNowPlaying.cpp
+msgid "Collapse when idle"
+msgstr "空闲时折叠"
+
+#: src/App/Neomod/MainMenuNowPlaying.cpp
+msgid "Keep expanded"
+msgstr "保持展开"
+
+#: src/App/Neomod/MainMenuNowPlaying.cpp
+msgid "Previous song"
+msgstr "上一首"
+
+#: src/App/Neomod/MainMenuNowPlaying.cpp
+msgid "Next song"
+msgstr "下一首"
+
+#: src/App/Neomod/MainMenuTips.cpp
+msgid "Press Alt + Enter to toggle Fullscreen."
+msgstr "按 Alt + Enter 切换全屏。"
+
+#: src/App/Neomod/MainMenuTips.cpp
+msgid "Press Shift + F1 to open the in-game console."
+msgstr "按 Shift + F1 打开游戏内控制台。"
+
+#: src/App/Neomod/MainMenuTips.cpp
+msgid "Shift + Click on a skin in the dropdown list to change the source for base skin elements."
+msgstr "在下拉列表中 Shift + 点击皮肤，可以更改基础皮肤元素的来源。"
+
+#: src/App/Neomod/MainMenuTips.cpp
+#, c++-format
+msgid "Press {:s} during gameplay to change mods in realtime."
+msgstr "游戏中按 {:s} 可实时更改模组。"
+
+#: src/App/Neomod/MainMenuTips.cpp
+#, c++-format
+msgid "Press {:s} or {:s} anywhere to open chat."
+msgstr "在任意位置按 {:s} 或 {:s} 打开聊天。"
+
+#: src/App/Neomod/MainMenuTips.cpp
+msgid "Launch with the neomod-BASS shortcut to use BASS (ASIO/Exclusive mode) for audio."
+msgstr "使用 neomod-BASS 快捷方式启动，以使用 BASS（ASIO/独占模式）输出音频。"
+
+#: src/App/Neomod/MainMenuTips.cpp
+msgid "Launch with \"-sound bass\" as a commandline argument to use BASS for audio."
+msgstr "使用命令行参数 \"-sound bass\" 启动，以使用 BASS 输出音频。"
+
+#: src/App/Neomod/MainMenuTips.cpp
+msgid "Put \"-gpu vk\" after the \"Target:\" field in a shortcut to neomod to use the Vulkan renderer."
+msgstr "在 neomod 快捷方式的 \"目标:\" 字段后加上 \"-gpu vk\"，即可使用 Vulkan 渲染器。"
+
+#: src/App/Neomod/MainMenuTips.cpp
+msgid "Put \"-dx11\" after the \"Target:\" field in a shortcut to neomod to use the D3D11 renderer."
+msgstr "在 neomod 快捷方式的 \"目标:\" 字段后加上 \"-dx11\"，即可使用 D3D11 渲染器。"
+
+#: src/App/Neomod/MainMenuTips.cpp
+msgid "Launch with \"-dx11\" as a commandline argument to use the D3D11 renderer."
+msgstr "使用命令行参数 \"-dx11\" 启动，即可使用 D3D11 渲染器。"
+
+#: src/App/Neomod/MainMenuTips.cpp
+msgid "Press Ctrl + O to open the options menu from anywhere."
+msgstr "在任意位置按 Ctrl + O 打开选项菜单。"
+
+#: src/App/Neomod/MainMenuTips.cpp
+#, c++-format
+msgid "Tip: {:s}"
+msgstr "提示：{:s}"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "CS Override"
+msgstr "覆盖 CS"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "CS:"
+msgstr "CS:"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Circle Size (higher number = smaller circles)."
+msgstr "圆圈大小（数值越高 = 圆圈越小）。"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "AR Override"
+msgstr "覆盖 AR"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "AR:"
+msgstr "AR:"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Approach Rate (higher number = faster circles)."
+msgstr "缩圈速度（数值越高 = 圆圈越快）。"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "OD Override"
+msgstr "覆盖 OD"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "OD:"
+msgstr "OD:"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Overall Difficulty (higher number = harder accuracy)."
+msgstr "整体难度（数值越高 = 判定越严格）。"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "HP Override"
+msgstr "覆盖 HP"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "HP:"
+msgstr "HP:"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Hit/Health Points (higher number = harder survival)."
+msgstr "生命值（数值越高 = 越难存活）。"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Speed/BPM Multiplier"
+msgstr "速度/BPM 倍率"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid " Experimental Mods (!)"
+msgstr " 实验性模组 (!)"
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Flip Up/Down"
+msgstr "上下翻转"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Playfield is flipped upside down (mirrored at horizontal axis)."
+msgstr "游戏区域上下颠倒（沿水平轴镜像）。"
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Flip Left/Right"
+msgstr "左右翻转"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Playfield is flipped left/right (mirrored at vertical axis)."
+msgstr "游戏区域左右颠倒（沿垂直轴镜像）。"
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Singletap"
+msgstr "Singletap"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "You can only press one key."
+msgstr "你只能按一个键。"
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Alternate"
+msgstr "Alternate"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "You can never use the same key twice in a row."
+msgstr "你不能连续两次使用同一个键。"
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "No keylock"
+msgstr "无按键锁定"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "You can use 4 keys instead of only 2."
+msgstr "你可以使用 4 个键，而不只是 2 个。"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Also click hitcircles when releasing a key."
+msgstr "松开按键时也会击打圆圈。"
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "DKS"
+msgstr "DKS"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Hitcircles are invisible. Good luck if you use this with Hidden!"
+msgstr "圆圈不可见。如果搭配 Hidden 使用，祝你好运！"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Traceable"
+msgstr "Traceable"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Freeze Frame"
+msgstr "Freeze Frame"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Draw all hitobjects in a combo group together. Try it with Hidden for an extra challenge!"
+msgstr "同一连击组的所有物件一起显示。搭配 Hidden 来挑战一下吧！"
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "No pausing"
+msgstr "禁止暂停"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Pausing is cheating"
+msgstr "暂停就是作弊"
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "FPoSu: Strafing"
+msgstr "FPoSu: Strafing"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid ""
+"Playfield moves in 3D space (see fposu_mod_strafing_...).\n"
+"Only works in FPoSu mode!"
+msgstr ""
+"游戏区域在 3D 空间中移动（参见 fposu_mod_strafing_...）。\n"
+"仅在 FPoSu 模式下生效！"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Playfield rotates and moves."
+msgstr "游戏区域会旋转和移动。"
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Wobble"
+msgstr "Wobble"
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "AR Wobble"
+msgstr "AR Wobble"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Approach rate oscillates between -1 and +1."
+msgstr "缩圈速度在 -1 和 +1 之间摆动。"
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Approach Different"
+msgstr "Approach Different"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid ""
+"Customize the approach circle animation.\n"
+"See mod_approach_different_style.\n"
+"See mod_approach_different_initial_size."
+msgstr ""
+"自定义缩圈动画。\n"
+"参见 mod_approach_different_style。\n"
+"参见 mod_approach_different_initial_size。"
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Timewarp"
+msgstr "Timewarp"
+
+#: src/App/Neomod/ModSelector.cpp
+#, no-c-format
+msgid "Speed increases from 100% to 150% over the course of the beatmap."
+msgstr "速度在整首谱面中从 100% 逐渐增加到 150%。"
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "AR Timewarp"
+msgstr "AR Timewarp"
+
+#: src/App/Neomod/ModSelector.cpp
+#, no-c-format
+msgid "Approach rate decreases from 100% to 50% over the course of the beatmap."
+msgstr "缩圈速度在整首谱面中从 100% 逐渐降低到 50%。"
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Minimize"
+msgstr "Minimize"
+
+#: src/App/Neomod/ModSelector.cpp
+#, no-c-format
+msgid "Circle size decreases from 100% to 50% over the course of the beatmap."
+msgstr "圆圈大小在整首谱面中从 100% 逐渐缩小到 50%。"
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Fading Cursor"
+msgstr "Fading Cursor"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "The cursor fades the higher the combo, becoming invisible at 50."
+msgstr "连击越高光标越淡，到 50 时完全不可见。"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Centered cursor."
+msgstr "光标居中。"
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "First Person"
+msgstr "第一人称"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Massively reduced slider follow circle radius."
+msgstr "滑条跟随圈半径大幅缩小。"
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Precise sliders"
+msgstr "精确滑条"
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Reverse Sliders"
+msgstr "Reverse Sliders"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Reverses the direction of all sliders. (Reload beatmap to apply!)"
+msgstr "反转所有滑条的方向。（重新加载谱面后生效！）"
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "No 50s"
+msgstr "禁止 50"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Only 300s or 100s. Try harder."
+msgstr "只能是 300 或 100。再努力点。"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "300 or miss. PF \"lite\""
+msgstr "300 或 Miss。轻量版 PF"
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "No 100s no 50s"
+msgstr "禁止 100 和 50"
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "MinG3012"
+msgstr "MinG3012"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "No 100s. Only 300s or 50s. Git gud."
+msgstr "禁止 100。只能是 300 或 50。Git gud."
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Half Timing Window"
+msgstr "判定区间减半"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "The hit timing window is cut in half. Hit early or perfect (300)."
+msgstr "击打判定区间减半。要么提前击打，要么完美（300）。"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Go below AR 0. Doubled approach time."
+msgstr "低于 AR 0。缩圈时间翻倍。"
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "MillhioreF"
+msgstr "MillhioreF"
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Mafham"
+msgstr "Mafham"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid ""
+"Approach rate is set to negative infinity. See the entire beatmap at once.\n"
+"Uses very aggressive optimizations to keep the framerate high, you have been warned!"
+msgstr ""
+"缩圈速度设为负无穷。一次看到整首谱面。\n"
+"使用非常激进的优化来保持高帧率，别说没提醒你！"
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Strict clicks"
+msgstr "严格点击"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Unnecessary clicks count as misses."
+msgstr "多余的点击算作 Miss。"
+
+#: src/App/Neomod/ModSelector.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Strict Tracking"
+msgstr "严格跟随"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Leaving sliders in any way counts as a miss and combo break. (Reload beatmap to apply!)"
+msgstr "以任何方式离开滑条都算作 Miss 并断连。（重新加载谱面后生效！）"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "WARNING: Score submission will be disabled due to non-vanilla mod selection."
+msgstr "警告：由于选择了非原版模组，成绩提交将被禁用。"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "1. Reset All Mods"
+msgstr "1. 重置所有模组"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "2. Close"
+msgstr "2. 关闭"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Reduces overall difficulty - larger circles, more forgiving HP drain, less accuracy required."
+msgstr "降低整体难度 - 圆圈更大，掉血更宽松，精准度要求更低。"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid ""
+"You can't fail. No matter what.\n"
+"NOTE: To disable drain completely:\n"
+"Options > Gameplay > Mechanics > \"Disable HP Drain\"."
+msgstr ""
+"你不会失败。无论如何。\n"
+"注意：要完全关闭掉血：\n"
+"选项 > 游戏玩法 > 机制 > \"禁用掉血\"。"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Everything just got a bit harder..."
+msgstr "一切都变得更难了一点..."
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Miss a note and fail."
+msgstr "漏掉一个音符就失败。"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "SS or quit."
+msgstr "不是 SS 就退出。"
+
+#. TRANSLATORS: Half Time tooltips. "Less zoom." means the song plays slower (not a camera zoom).
+#. "A E S T H E T I C" is a vaporwave aesthetic meme, shown instead when Nightcore enjoyer mode is on.
+#: src/App/Neomod/ModSelector.cpp
+msgid "A E S T H E T I C"
+msgstr "A E S T H E T I C"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Less zoom."
+msgstr "缩小视野。"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Zoooooooooom."
+msgstr "放——大——————。"
+
+#. TRANSLATORS: Double Time tooltips. "Zoooooooooom." is the sound of going fast (not a camera zoom).
+#. "uguuuuuuuu" is an anime-style meme sound, shown instead when Nightcore enjoyer mode is on.
+#: src/App/Neomod/ModSelector.cpp
+msgid "uguuuuuuuu"
+msgstr "uguuuuuuuu"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Play with no approach circles and fading notes for a slight score advantage."
+msgstr "无缩圈且音符渐隐，可获得少量分数加成。"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Restricted view area."
+msgstr "视野受限。"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Actual flashlight."
+msgstr "真正的手电筒。"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid ""
+"You don't need to click.\n"
+"Give your clicking/tapping fingers a break from the heat of things.\n"
+"** UNRANKED **"
+msgstr ""
+"你不需要点击。\n"
+"让点击/敲击的手指好好休息一下。\n"
+"** 不计排名 **"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid ""
+"Automatic cursor movement - just follow the rhythm.\n"
+"** UNRANKED **"
+msgstr ""
+"光标自动移动 - 只需跟上节奏。\n"
+"** 不计排名 **"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Spinners will be automatically completed."
+msgstr "转盘会自动完成。"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Watch a perfect automated play through the song."
+msgstr "观看这首歌的完美自动游玩。"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid ""
+"Accuracy is based on the distance to the center of all hitobjects.\n"
+"300s still require at least being in the hit window of a 100 in addition to the rule above."
+msgstr ""
+"精准度取决于与所有物件中心的距离。\n"
+"除上述规则外，300 仍要求至少处于 100 的判定区间内。"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid ""
+"Try the future scoring system.\n"
+"** UNRANKED **"
+msgstr ""
+"体验未来的计分系统。\n"
+"** 不计排名 **"
+
+#: src/App/Neomod/ModSelector.cpp
+#, c++-format
+msgid "Score Multiplier: {:.2f}X"
+msgstr "分数倍率：{:.2f}X"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Experimental Mods"
+msgstr "实验性模组"
+
+#: src/App/Neomod/ModSelector.cpp
+msgid "Hold [ALT] to slide in 0.01 increments."
+msgstr "按住 [ALT] 以 0.01 为步长调整。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Reset"
+msgstr "重置"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Mouse Left"
+msgstr "鼠标左键"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Mouse Right"
+msgstr "鼠标右键"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "<UNBOUND>"
+msgstr "<未绑定>"
+
+#: src/App/Neomod/OptionsOverlay.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "McOsu"
+msgstr "McOsu"
+
+#: src/App/Neomod/OptionsOverlay.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "None"
+msgstr "无"
+
+#: src/App/Neomod/OptionsOverlay.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "osu!lazer 2020"
+msgstr "osu!lazer 2020"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "osu!stable (default)"
+msgstr "osu!stable（默认）"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "General"
+msgstr "常规"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Online server"
+msgstr "在线服务器"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+#, c++-format
+msgid "If the server admins don't explicitly allow {},"
+msgstr "如果服务器管理员没有明确允许 {}，"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "you might get banned!"
+msgstr "你可能会被封禁！"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Server address:"
+msgstr "服务器地址："
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Submit scores"
+msgstr "提交成绩"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Login details (username/password)"
+msgstr "登录信息（用户名/密码）"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Keep me logged in"
+msgstr "保持登录"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Log in"
+msgstr "登录"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Localization"
+msgstr "本地化"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Select language"
+msgstr "选择语言"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Prefer metadata in original language"
+msgstr "优先显示原语言的元数据"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "osu! folder"
+msgstr "osu! 文件夹"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "1) If you have an existing osu!stable installation:"
+msgstr "1) 如果你已安装 osu!stable："
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "2) osu! > Options > \"Open osu! folder\""
+msgstr "2) osu! > 选项 > \"打开 osu! 文件夹\""
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "3) Copy paste the full path into the textbox:"
+msgstr "3) 将完整路径复制粘贴到文本框中："
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Import settings from osu!stable"
+msgstr "从 osu!stable 导入设置"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Successfully imported settings from osu!stable."
+msgstr "已成功从 osu!stable 导入设置。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Error: Couldn't find osu!stable install directory or config file!"
+msgstr "错误：找不到 osu!stable 安装目录或配置文件！"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Use osu!.db database (read-only)"
+msgstr "使用 osu!.db 数据库（只读）"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"If you have an existing osu! installation,\n"
+"then this will speed up the initial loading process."
+msgstr ""
+"如果你已安装 osu!，\n"
+"这将加快首次加载速度。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Load osu! collection.db (read-only)"
+msgstr "加载 osu! collection.db（只读）"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"If you have an existing osu! installation,\n"
+"also load and display your created collections from there."
+msgstr ""
+"如果你已安装 osu!，\n"
+"同时加载并显示你在那里创建的收藏夹。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Include Relax/Autopilot for total weighted pp/acc"
+msgstr "在总加权 pp/准确率中包含 Relax/Autopilot"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"NOTE: osu! does not allow this (since these mods are unranked).\n"
+"Should relax/autopilot scores be included in the weighted pp/acc calculation?"
+msgstr ""
+"注意：osu! 不允许这样做（因为这些模组不计排名）。\n"
+"是否将 relax/autopilot 成绩计入加权 pp/准确率？"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Always show pp instead of score in scorebrowser"
+msgstr "在成绩列表中始终显示 pp 而非分数"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Ignore score sorting type entirely."
+msgstr "完全忽略成绩排序方式。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Show osu! scores.db user names in user switcher"
+msgstr "在用户切换器中显示 osu! scores.db 的用户名"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Only relevant if \"Load osu! scores.db\" is enabled.\n"
+"Should the user switcher show ALL user names from ALL scores?\n"
+"(Even from ones you got in your database because you watched a replay?)"
+msgstr ""
+"仅在启用 \"加载 osu! scores.db\" 时有效。\n"
+"用户切换器是否应显示所有成绩中的所有用户名？\n"
+"（包括因为你观看回放而进入数据库的成绩？）"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Songbrowser"
+msgstr "选歌界面"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Strain Graph in Songbrowser"
+msgstr "在选歌界面绘制难度曲线"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Hold either SHIFT/CTRL to show only speed/aim strains.\n"
+"Speed strain is red, aim strain is green.\n"
+"(See osu_hud_scrubbing_timeline_strains_*)"
+msgstr ""
+"按住 SHIFT/CTRL 只显示速度/定位难度。\n"
+"速度难度为红色，定位难度为绿色。\n"
+"（参见 osu_hud_scrubbing_timeline_strains_*）"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Strain Graph in Scrubbing Timeline"
+msgstr "在进度条上绘制难度曲线"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Speed strain is red, aim strain is green.\n"
+"(See osu_hud_scrubbing_timeline_strains_*)"
+msgstr ""
+"速度难度为红色，定位难度为绿色。\n"
+"（参见 osu_hud_scrubbing_timeline_strains_*）"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Song Buttons Velocity Animation"
+msgstr "歌曲按钮速度动画"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "If enabled, then song buttons are pushed to the right depending on the scrolling velocity."
+msgstr "启用后，歌曲按钮会根据滚动速度被推向右侧。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Song Buttons Curved Layout"
+msgstr "歌曲按钮曲线布局"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "If enabled, then song buttons are positioned on a vertically centered curve."
+msgstr "启用后，歌曲按钮会排列在垂直居中的曲线上。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Window"
+msgstr "窗口"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Pause on Focus Loss"
+msgstr "失去焦点时暂停"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Should the game pause when you switch to another application?"
+msgstr "切换到其他应用时是否暂停游戏？"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Alerts"
+msgstr "提醒"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Notify when friends change status"
+msgstr "好友状态变化时通知"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Notify when receiving a direct message"
+msgstr "收到私信时通知"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Notify when mentioned"
+msgstr "被提到时通知"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Ping when mentioned"
+msgstr "被提到时发出提示音"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Show notifications during gameplay"
+msgstr "游戏中显示通知"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "In-game chat"
+msgstr "游戏内聊天"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Chat ticker"
+msgstr "聊天滚动条"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Automatically hide chat during gameplay"
+msgstr "游戏中自动隐藏聊天"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Chat word ignore list (space-separated):"
+msgstr "聊天屏蔽词列表（以空格分隔）："
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Privacy"
+msgstr "隐私"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Automatically update to the latest version"
+msgstr "自动更新到最新版本"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Replace main menu logo with server logo"
+msgstr "用服务器标志替换主菜单标志"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Show spectator list"
+msgstr "显示观众列表"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Share currently played map with spectators"
+msgstr "与观众分享正在游玩的谱面"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Enable Discord Rich Presence"
+msgstr "启用 Discord Rich Presence"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Shows your current game state in your friends' friendslists.\n"
+"e.g.: Playing Gavin G - Reach Out [Cherry Blossom's Insane]"
+msgstr ""
+"在好友的好友列表中显示你当前的游戏状态。\n"
+"例如：正在游玩 Gavin G - Reach Out [Cherry Blossom's Insane]"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw map backgrounds in Discord Rich Presence"
+msgstr "在 Discord Rich Presence 中显示谱面背景"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Graphics"
+msgstr "图形"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Renderer"
+msgstr "渲染器"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "If enabled: plz enjoy input lag."
+msgstr "启用后：请享受输入延迟。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "VSync"
+msgstr "垂直同步"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "High Priority"
+msgstr "高优先级"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Sets the game process priority to high"
+msgstr "将游戏进程优先级设为高"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Show FPS Counter"
+msgstr "显示 FPS 计数器"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Max Queued Frames"
+msgstr "最大排队帧数"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Raise for higher fps, decrease for lower latency"
+msgstr "调高可提升帧率，调低可降低延迟"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "FPS Limiter:"
+msgstr "帧率限制："
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "FPS Limiter (menus):"
+msgstr "帧率限制（菜单）："
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Layout"
+msgstr "布局"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Select Resolution"
+msgstr "选择分辨率"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Fullscreen"
+msgstr "全屏"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Minimize On ALT+TAB"
+msgstr "ALT+TAB 时最小化"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Keep Aspect Ratio"
+msgstr "保持宽高比"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Black borders instead of a stretched image.\n"
+"Only relevant if fullscreen is enabled, and letterboxing is disabled.\n"
+"Use the two position sliders below to move the viewport around."
+msgstr ""
+"使用黑边而不是拉伸画面。\n"
+"仅在启用全屏且禁用信箱模式时有效。\n"
+"使用下方两个位置滑块移动视口。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Letterboxing"
+msgstr "信箱模式"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Useful to get the low latency of fullscreen with a smaller game resolution.\n"
+"Use the two position sliders below to move the viewport around."
+msgstr ""
+"可在较小的游戏分辨率下获得全屏的低延迟。\n"
+"使用下方两个位置滑块移动视口。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Horizontal position"
+msgstr "水平位置"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Vertical position"
+msgstr "垂直位置"
+
+#. TRANSLATORS: Global UI scale, to make text bigger on big screens
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "UI Scaling"
+msgstr "界面缩放"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "DPI Scaling"
+msgstr "DPI 缩放"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+#, c++-format
+msgid ""
+"Automatically scale to the DPI of your display: {} DPI.\n"
+"Scale factor = {} / 96 = {:.2g}x"
+msgstr ""
+"根据显示器的 DPI 自动缩放：{} DPI。\n"
+"缩放系数 = {} / 96 = {:.2g}x"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "UI Scale:"
+msgstr "界面缩放："
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Detail Settings"
+msgstr "细节设置"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Animate scoreboard"
+msgstr "计分板动画"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Use fancy animations for the in-game scoreboard"
+msgstr "为游戏内计分板使用华丽的动画"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Avoid flashing elements"
+msgstr "避免闪烁元素"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Disables cosmetic flash effects\n"
+"Disables dimming when holding sliders with Flashlight mod enabled"
+msgstr ""
+"禁用装饰性的闪光效果\n"
+"禁用 Flashlight 模组下按住滑条时的变暗效果"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Mipmaps"
+msgstr "多级纹理"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Reload your skin to apply! (CTRL + ALT + S)\n"
+"Generate mipmaps for each skin element, at the cost of VRAM.\n"
+"Provides smoother visuals on lower resolutions for @2x-only skins."
+msgstr ""
+"重新加载皮肤后生效！(CTRL + ALT + S)\n"
+"为每个皮肤元素生成多级纹理，会占用更多显存。\n"
+"让仅有 @2x 的皮肤在低分辨率下显示更平滑。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Snaking in sliders"
+msgstr "滑条逐渐展开"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"\"Growing\" sliders.\n"
+"Sliders gradually snake out from their starting point while fading in.\n"
+"Has no impact on performance whatsoever."
+msgstr ""
+"\"生长\"的滑条。\n"
+"滑条在淡入时从起点逐渐延伸出来。\n"
+"对性能没有任何影响。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Snaking out sliders"
+msgstr "滑条逐渐收起"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"\"Shrinking\" sliders.\n"
+"Sliders will shrink with the sliderball while sliding.\n"
+"Can improve performance a tiny bit, since there will be less to draw overall."
+msgstr ""
+"\"收缩\"的滑条。\n"
+"滑条会随着滑条球的移动而缩短。\n"
+"由于需要绘制的内容变少，可以稍微提升性能。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Higher Quality Sliders (!)"
+msgstr "更高质量的滑条 (!)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Disable this if your fps drop too low while sliders are visible."
+msgstr "如果出现滑条时帧率过低，请禁用此项。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Slider Quality"
+msgstr "滑条质量"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Audio"
+msgstr "音频"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Devices"
+msgstr "设备"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Default"
+msgstr "默认"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Select Output Device"
+msgstr "选择输出设备"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Backend"
+msgstr "后端"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "MiniAudio"
+msgstr "MiniAudio"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "SDL"
+msgstr "SDL"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Pick the one you feel works best,\n"
+"there should be very little difference."
+msgstr ""
+"选择你觉得效果最好的那个，\n"
+"差别应该很小。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Auto-disable exclusive mode"
+msgstr "自动关闭独占模式"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Toggle exclusive mode off/on\n"
+"when losing/gaining focus, if already\n"
+"in exclusive mode."
+msgstr ""
+"如果已处于独占模式，\n"
+"则在失去/获得焦点时\n"
+"关闭/开启独占模式。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Lower Latency (!)"
+msgstr "更低延迟 (!)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "NOTE: Enabling this may result in audio crackling!"
+msgstr "注意：启用此项可能导致音频爆音！"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "WASAPI"
+msgstr "WASAPI"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Low-latency Callbacks"
+msgstr "低延迟回调"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Run BASSWASAPI in callback mode to potentially further decrease latency.\n"
+"(period/buffer size are ignored)"
+msgstr ""
+"以回调模式运行 BASSWASAPI，可能进一步降低延迟。\n"
+"（周期/缓冲区大小将被忽略）"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Buffer Size:"
+msgstr "缓冲区大小："
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Windows 7: Start at 11 ms,"
+msgstr "Windows 7：从 11 ms 开始，"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Windows 10: Start at 1 ms,"
+msgstr "Windows 10：从 1 ms 开始，"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "and if crackling: increment until fixed."
+msgstr "如果有爆音：逐步调高直到消失。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "(lower is better, non-wasapi has ~40 ms minimum)"
+msgstr "（越低越好，非 wasapi 最低约 40 ms）"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Exclusive Mode"
+msgstr "独占模式"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Dramatically reduces latency, but prevents other applications from capturing/playing audio."
+msgstr "大幅降低延迟，但会阻止其他应用录制/播放音频。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "WARNING: Only if you know what you are doing"
+msgstr "警告：除非你清楚自己在做什么"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Period Size:"
+msgstr "周期大小："
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Restart SoundEngine"
+msgstr "重启音频引擎"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "ASIO"
+msgstr "ASIO"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Open ASIO settings"
+msgstr "打开 ASIO 设置"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Volume"
+msgstr "音量"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Normalize loudness across songs"
+msgstr "统一各歌曲的响度"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Master:"
+msgstr "主音量："
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Inactive:"
+msgstr "非活动时："
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Music:"
+msgstr "音乐："
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Effects:"
+msgstr "音效："
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Offset Adjustment"
+msgstr "偏移调整"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Scaled Offset:"
+msgstr "缩放偏移："
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Behaves the same as \"Universal Offset\" in osu! (is multiplied by playback rate)."
+msgstr "与 osu! 中的 \"全局偏移\" 行为相同（会乘以播放速度）。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Unscaled Offset:"
+msgstr "非缩放偏移："
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"\"Universal Offset\", but unaffected by rate adjustments.\n"
+"+15 unscaled offset is the same as using -15 local offset on every map."
+msgstr ""
+"\"全局偏移\"，但不受速度调整影响。\n"
+"+15 的非缩放偏移等同于在每张谱面上使用 -15 的本地偏移。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Gameplay"
+msgstr "游戏玩法"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Boost hitsound volume"
+msgstr "增强打击音效音量"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Apply a small logarithmic multiplier to non-sliderslide hitsounds."
+msgstr "对滑条滑动以外的打击音效应用一个小的对数倍率。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Change hitsound pitch based on accuracy"
+msgstr "根据准确率改变打击音效音调"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Prefer Nightcore over Double Time"
+msgstr "优先使用 Nightcore 而非 Double Time"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Apply speed/pitch mods while browsing"
+msgstr "浏览时应用速度/音调模组"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Whether to always apply all mods, or keep the preview music normal."
+msgstr "是始终应用所有模组，还是保持预览音乐不变。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Skin"
+msgstr "皮肤"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "To import a skin, just drop the .osk file on this window!"
+msgstr "要导入皮肤，只需把 .osk 文件拖到此窗口中！"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Select Skin"
+msgstr "选择皮肤"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Shift-click a skin to set it as fallback.\n"
+"Missing elements fall back to it instead of \"default\"."
+msgstr ""
+"Shift + 点击皮肤可将其设为后备皮肤。\n"
+"缺失的元素将从它获取，而不是从 \"default\" 获取。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Export Skin"
+msgstr "导出皮肤"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Open current Skin folder"
+msgstr "打开当前皮肤文件夹"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Packs the current skin into an .osk file in the exports folder,\n"
+"together with whatever the fallback skin fills in."
+msgstr ""
+"将当前皮肤连同后备皮肤补全的部分\n"
+"打包为 exports 文件夹中的 .osk 文件。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Random Skin"
+msgstr "随机皮肤"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Reload Skin"
+msgstr "重新加载皮肤"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "(CTRL + ALT + S)"
+msgstr "(CTRL + ALT + S)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Temporary, does not change your configured skin (reload to reset).\n"
+"Use \"skin_random 1\" to randomize on every skin reload.\n"
+"Use \"skin_random_elements 1\" to mix multiple skins.\n"
+"Use \"skin_export\" to export the currently active skin."
+msgstr ""
+"临时生效，不会更改你设置的皮肤（重新加载即可还原）。\n"
+"使用 \"skin_random 1\" 在每次重新加载皮肤时随机选择。\n"
+"使用 \"skin_random_elements 1\" 混合多个皮肤。\n"
+"使用 \"skin_export\" 导出当前皮肤。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Let Skins Change Settings"
+msgstr "允许皮肤更改设置"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Skins can come with settings of their own ([neomod] section in skin.ini).\n"
+"While such a skin is in use, those settings can't be changed here."
+msgstr ""
+"皮肤可以自带设置（skin.ini 中的 [neomod] 部分）。\n"
+"使用此类皮肤时，这些设置无法在此处更改。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Number Scale:"
+msgstr "数字缩放："
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "HitResult Scale:"
+msgstr "判定结果缩放："
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Numbers"
+msgstr "绘制数字"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Approach Circles"
+msgstr "绘制缩圈"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Instafade Circles"
+msgstr "圆圈瞬间消失"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Instafade Sliders"
+msgstr "滑条瞬间消失"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Storyboards"
+msgstr "绘制故事板"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Ignore Beatmap Skins"
+msgstr "忽略谱面皮肤"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Use your skin's elements and slider colours instead of the ones that come with a beatmap."
+msgstr "使用你的皮肤元素和滑条颜色，而不是谱面自带的。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Ignore Beatmap Hitsounds"
+msgstr "忽略谱面打击音效"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Use your skin's sounds instead of the ones that come with a beatmap."
+msgstr "使用你的皮肤音效，而不是谱面自带的。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Ignore Beatmap Combo Colors"
+msgstr "忽略谱面连击颜色"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Ignore Beatmap Sample Volume"
+msgstr "忽略谱面采样音量"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Ignore beatmap timingpoint effect volumes.\n"
+"Quiet hitsounds can destroy accuracy and concentration, enabling this will fix that."
+msgstr ""
+"忽略谱面时间点的音效音量。\n"
+"过小的打击音效会破坏准确率和专注力，启用此项可以解决。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Use skin's sound samples"
+msgstr "使用皮肤的音效采样"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "If this is not selected, then the default skin hitsounds will be used."
+msgstr "如果不勾选，将使用默认皮肤的打击音效。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Load HD @2x"
+msgstr "加载 HD @2x"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "On very low resolutions (below 1600x900) you can disable this to get smoother visuals."
+msgstr "在非常低的分辨率下（低于 1600x900），可以禁用此项以获得更平滑的画面。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Cursor Trail"
+msgstr "绘制光标拖尾"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Force Smooth Cursor Trail"
+msgstr "强制平滑光标拖尾"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Usually, the presence of the cursormiddle.png skin image enables smooth cursortrails.\n"
+"This option allows you to force enable smooth cursortrails for all skins."
+msgstr ""
+"通常，皮肤中存在 cursormiddle.png 时会启用平滑光标拖尾。\n"
+"此选项可以为所有皮肤强制启用平滑光标拖尾。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Always draw Cursor Trail"
+msgstr "始终绘制光标拖尾"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw the cursor trail even when the cursor isn't moving"
+msgstr "即使光标不动也绘制光标拖尾"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Cursor trail spacing:"
+msgstr "光标拖尾间距："
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Cursor Size:"
+msgstr "光标大小："
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Automatic Cursor Size"
+msgstr "自动光标大小"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Cursor size will adjust based on the CS of the current beatmap."
+msgstr "光标大小会根据当前谱面的 CS 调整。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Slider Border Size"
+msgstr "滑条边框大小"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Slider Opacity"
+msgstr "滑条不透明度"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Slider Body Opacity"
+msgstr "滑条主体不透明度"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Slider Body Saturation"
+msgstr "滑条主体饱和度"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Use slidergradient.png"
+msgstr "使用 slidergradient.png"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"This will block all dynamic slider (color/border) features,\n"
+"but is more easily customizable."
+msgstr ""
+"这会屏蔽所有动态滑条（颜色/边框）功能，\n"
+"但更容易自定义。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Use osu!lazer Slider Style"
+msgstr "使用 osu!lazer 滑条样式"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Only really looks good if your skin doesn't \"SliderTrackOverride\" too dark."
+msgstr "只有在皮肤的 \"SliderTrackOverride\" 不太暗时才好看。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Use combo color as tint for slider ball"
+msgstr "用连击颜色为滑条球着色"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Use combo color as tint for slider border"
+msgstr "用连击颜色为滑条边框着色"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Slider End Circle"
+msgstr "绘制滑条尾圈"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Input"
+msgstr "输入"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Mouse"
+msgstr "鼠标"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Sensitivity:"
+msgstr "灵敏度："
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "WARNING: Set Sensitivity to 1 for tablets!"
+msgstr "警告：使用数位板时请将灵敏度设为 1！"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Not recommended if you're using a tablet."
+msgstr "如果你使用数位板，不建议开启。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Raw Mouse Input"
+msgstr "原始鼠标输入"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Confine Cursor (Windowed)"
+msgstr "限制光标（窗口）"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Confine Cursor (Fullscreen)"
+msgstr "限制光标（全屏）"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Confine Cursor (NEVER)"
+msgstr "限制光标（从不）"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Overrides automatic cursor clipping during gameplay."
+msgstr "覆盖游戏中的自动光标限制。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Disable Mouse Wheel in Play Mode"
+msgstr "游戏中禁用鼠标滚轮"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Disable Mouse Buttons in Play Mode"
+msgstr "游戏中禁用鼠标按键"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Cursor ripples"
+msgstr "光标涟漪"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "The cursor will ripple outwards on clicking."
+msgstr "点击时光标会向外泛起涟漪。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Keyboard"
+msgstr "键盘"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Raw Keyboard Input"
+msgstr "原始键盘输入"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Global Media Hotkeys"
+msgstr "全局媒体快捷键"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Allows controlling main menu music with\n"
+"keyboard media shortcuts, even while alt-tabbed"
+msgstr ""
+"允许用键盘媒体键控制主菜单音乐，\n"
+"即使在 alt-tab 切出时也可以"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Reset all key bindings"
+msgstr "重置所有按键绑定"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Keys - In-Game"
+msgstr "按键 - 游戏内"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Left Click"
+msgstr "左键点击"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Right Click"
+msgstr "右键点击"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Left Click (2)"
+msgstr "左键点击 (2)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Right Click (2)"
+msgstr "右键点击 (2)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Smoke"
+msgstr "烟雾"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Game Pause"
+msgstr "暂停游戏"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Skip Cutscene"
+msgstr "跳过过场"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Toggle Scoreboard"
+msgstr "切换计分板"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Scrubbing (+ Click Drag!)"
+msgstr "拖动进度（+ 点击拖拽！）"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Quick Seek -5sec <<<"
+msgstr "快速后退 -5 秒 <<<"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Quick Seek +5sec >>>"
+msgstr "快速前进 +5 秒 >>>"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Increase Local Song Offset"
+msgstr "增加本地歌曲偏移"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Decrease Local Song Offset"
+msgstr "减少本地歌曲偏移"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Quick Retry (hold briefly)"
+msgstr "快速重试（短按住）"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Quick Save"
+msgstr "快速保存"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Quick Load"
+msgstr "快速读取"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Instant Replay"
+msgstr "即时回放"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Keys - FPoSu"
+msgstr "按键 - FPoSu"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Zoom"
+msgstr "缩放"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Keys - Universal"
+msgstr "按键 - 通用"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Toggle chat"
+msgstr "切换聊天"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Toggle user list"
+msgstr "切换用户列表"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Save Screenshot"
+msgstr "保存截图"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Increase Volume"
+msgstr "增大音量"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Decrease Volume"
+msgstr "减小音量"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Disable Mouse Buttons"
+msgstr "禁用鼠标按键"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Toggle Map Background"
+msgstr "切换谱面背景"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Boss Key (Minimize)"
+msgstr "老板键（最小化）"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Open Skin Selection Menu"
+msgstr "打开皮肤选择菜单"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Keys - Song Select"
+msgstr "按键 - 选歌"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Toggle Mod Selection Screen"
+msgstr "切换模组选择界面"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "(F1 can not be unbound. This is just an additional key.)"
+msgstr "（F1 无法解绑。这只是一个额外按键。）"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Random Beatmap"
+msgstr "随机谱面"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "(F2 can not be unbound. This is just an additional key.)"
+msgstr "（F2 无法解绑。这只是一个额外按键。）"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Keys - Mod Select"
+msgstr "按键 - 模组选择"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Easy"
+msgstr "Easy"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "No Fail"
+msgstr "No Fail"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Half Time"
+msgstr "Half Time"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Hard Rock"
+msgstr "Hard Rock"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Sudden Death"
+msgstr "Sudden Death"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Double Time"
+msgstr "Double Time"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Hidden"
+msgstr "Hidden"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Flashlight"
+msgstr "Flashlight"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Relax"
+msgstr "Relax"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Autopilot"
+msgstr "Autopilot"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Spunout"
+msgstr "Spunout"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Auto"
+msgstr "Auto"
+
+#: src/App/Neomod/OptionsOverlay.cpp src/App/Neomod/RoomScreen.cpp
+msgid "Score V2"
+msgstr "Score V2"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Background Dim:"
+msgstr "背景暗化："
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Background Brightness:"
+msgstr "背景亮度："
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Don't change dim level during breaks"
+msgstr "休息时不改变暗化程度"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Makes the background basically impossible to see during breaks.\n"
+"Not recommended."
+msgstr ""
+"休息时背景几乎完全看不见。\n"
+"不推荐。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Show approach circle on first \"Hidden\" object"
+msgstr "在第一个 \"Hidden\" 物件上显示缩圈"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "SuddenDeath restart on miss"
+msgstr "SuddenDeath 下 Miss 后重新开始"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Skips the failing animation, and instantly restarts like SS/PF."
+msgstr "跳过失败动画，像 SS/PF 一样立即重新开始。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Show Skip Button during Intro"
+msgstr "在前奏中显示跳过按钮"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Skip intro to first hitobject."
+msgstr "跳过前奏直到第一个物件。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Show Skip Button during Breaks"
+msgstr "在休息段显示跳过按钮"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Skip breaks in the middle of beatmaps."
+msgstr "跳过谱面中间的休息段。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Mechanics"
+msgstr "机制"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Kill Player upon Failing"
+msgstr "失败时玩家死亡"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Enabled: Singleplayer default. You die upon failing and the beatmap stops.\n"
+"Disabled: Multiplayer default. Allows you to keep playing even after failing."
+msgstr ""
+"启用：单人游戏默认。失败后死亡，谱面停止。\n"
+"禁用：多人游戏默认。失败后仍可继续游玩。"
+
+#: src/App/Neomod/OptionsOverlay.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Disable HP drain"
+msgstr "禁用掉血"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Like NF, but entirely disables HP mechanics. Will block online score submission."
+msgstr "类似 NF，但完全禁用 HP 机制。会阻止在线成绩提交。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Select [Notelock]"
+msgstr "选择 [Notelock]"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Info about different notelock algorithms:"
+msgstr "不同 notelock 算法的说明："
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "- McOsu: Auto miss previous circle, always."
+msgstr "- McOsu：总是自动判定前一个圆圈为 Miss。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "- osu!stable: Locked until previous circle is miss."
+msgstr "- osu!stable：锁定直到前一个圆圈判定为 Miss。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "- osu!lazer 2020: Auto miss previous circle if > time."
+msgstr "- osu!lazer 2020：如果 > 时间，则自动判定前一个圆圈为 Miss。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Backgrounds"
+msgstr "背景"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Load Background Images (!)"
+msgstr "加载背景图片 (!)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "NOTE: Disabling this will disable ALL beatmap images everywhere!"
+msgstr "注意：禁用此项会禁用所有地方的所有谱面图片！"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Background in Beatmap"
+msgstr "在谱面中绘制背景"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Background in SongBrowser"
+msgstr "在选歌界面绘制背景"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "NOTE: You can disable this if you always want menu-background."
+msgstr "注意：如果你总是想要 menu-background，可以禁用此项。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Background Thumbnails in SongBrowser"
+msgstr "在选歌界面绘制背景缩略图"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Background in Ranking/Results Screen"
+msgstr "在结算界面绘制背景"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Prefer beatmap background in Menu"
+msgstr "在菜单中优先使用谱面背景"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Use the background from the currently playing song, even in the main menu."
+msgstr "即使在主菜单中，也使用正在播放歌曲的背景。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw menu-background in Menu"
+msgstr "在菜单中绘制 menu-background"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw menu-background in SongBrowser"
+msgstr "在选歌界面绘制 menu-background"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "NOTE: Only applies if \"Draw Background in SongBrowser\" is disabled."
+msgstr "注意：仅在禁用 \"在选歌界面绘制背景\" 时生效。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Key Overlay"
+msgstr "按键显示"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Key Overlay"
+msgstr "绘制按键显示"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Key Overlay Trail"
+msgstr "绘制按键显示拖尾"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Scrolling blocks next to the key overlay, visualizing how long each key was held."
+msgstr "按键显示旁边的滚动方块，显示每个按键被按住了多久。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Trail Opacity:"
+msgstr "拖尾不透明度："
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Trail Speed:"
+msgstr "拖尾速度："
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Trail Fade Distance:"
+msgstr "拖尾淡出距离："
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "HUD"
+msgstr "HUD"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw HUD"
+msgstr "绘制 HUD"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "NOTE: You can also press SHIFT + TAB while playing to toggle this."
+msgstr "注意：游戏中也可以按 SHIFT + TAB 来切换。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "SHIFT + TAB toggles everything"
+msgstr "SHIFT + TAB 切换全部"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Enabled: "
+msgstr "已启用： "
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Score"
+msgstr "绘制分数"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Combo"
+msgstr "绘制连击"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Accuracy"
+msgstr "绘制准确率"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Clock"
+msgstr "绘制时钟"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw HitErrorBar"
+msgstr "绘制 HitErrorBar"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw HitErrorBar UR"
+msgstr "绘制 HitErrorBar UR"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Unstable Rate"
+msgstr "Unstable Rate"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw ScoreBar"
+msgstr "绘制 ScoreBar"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Health/HP Bar."
+msgstr "生命值/HP 条。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw ScoreBar-bg"
+msgstr "绘制 ScoreBar-bg"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Some skins abuse this as the playfield background image.\n"
+"It is actually just the background image for the Health/HP Bar."
+msgstr ""
+"有些皮肤滥用它作为游戏区域背景图片。\n"
+"它实际上只是生命值/HP 条的背景图片。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw ScoreBoard in singleplayer"
+msgstr "单人游戏中绘制计分板"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw ScoreBoard in multiplayer"
+msgstr "多人游戏中绘制计分板"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Scrubbing Timeline"
+msgstr "绘制进度时间轴"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Miss Window on HitErrorBar"
+msgstr "在 HitErrorBar 上绘制 Miss 区间"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: pp"
+msgstr "绘制统计：pp"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Realtime pp counter.\n"
+"Dynamically calculates earned pp by incrementally updating the star rating."
+msgstr ""
+"实时 pp 计数器。\n"
+"通过逐步更新星级来动态计算已获得的 pp。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: pp (SS)"
+msgstr "绘制统计：pp (SS)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Max possible total pp for active mods (full combo + perfect acc)."
+msgstr "当前模组下可能的最高总 pp（全连 + 完美准确率）。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: Misses"
+msgstr "绘制统计：Miss"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Number of misses."
+msgstr "Miss 数量。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: SliderBreaks"
+msgstr "绘制统计：断滑条"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Number of slider breaks."
+msgstr "断滑条次数。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: Max Possible Combo"
+msgstr "绘制统计：最大可能连击"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: Stars*** (Until Now)"
+msgstr "绘制统计：星级***（截至目前）"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Incrementally updates the star rating (aka \"realtime stars\")."
+msgstr "逐步更新星级（即 \"实时星级\"）。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: Stars* (Total)"
+msgstr "绘制统计：星级*（总计）"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Total stars for active mods."
+msgstr "当前模组下的总星级。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: BPM"
+msgstr "绘制统计：BPM"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: AR"
+msgstr "绘制统计：AR"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: CS"
+msgstr "绘制统计：CS"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: OD"
+msgstr "绘制统计：OD"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: HP"
+msgstr "绘制统计：HP"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: 300 hitwindow"
+msgstr "绘制统计：300 判定区间"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Timing window for hitting a 300 (e.g. +-25ms)."
+msgstr "击中 300 的判定区间（例如 +-25ms）。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: Notes Per Second"
+msgstr "绘制统计：每秒音符数"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "How many clicks per second are currently required."
+msgstr "当前每秒需要点击多少次。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: Note Density"
+msgstr "绘制统计：音符密度"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "How many objects are visible at the same time."
+msgstr "同时可见的物件数量。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: Unstable Rate"
+msgstr "绘制统计：Unstable Rate"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Stats: Accuracy Error"
+msgstr "绘制统计：准确率误差"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Average hit error delta (e.g. -5ms +15ms).\n"
+"See \"hud_statistics_hitdelta_chunksize 30\",\n"
+"it defines how many recent hit deltas are averaged."
+msgstr ""
+"平均击打误差（例如 -5ms +15ms）。\n"
+"参见 \"hud_statistics_hitdelta_chunksize 30\"，\n"
+"它决定对最近多少次击打误差取平均。"
+
+#. TRANSLATORS: Section of option sliders to set the scale of in-game UI elements
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Scaling"
+msgstr "缩放"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "HUD:"
+msgstr "HUD："
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Score:"
+msgstr "分数："
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Combo:"
+msgstr "连击："
+
+#: src/App/Neomod/OptionsOverlay.cpp src/App/Neomod/RankingScreen.cpp
+msgid "Accuracy:"
+msgstr "准确率："
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "HitErrorBar:"
+msgstr "HitErrorBar："
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "HitErrorBar UR:"
+msgstr "HitErrorBar UR："
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Clock:"
+msgstr "时钟："
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "ScoreBar:"
+msgstr "ScoreBar："
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "ScoreBoard:"
+msgstr "计分板："
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Key Overlay:"
+msgstr "按键显示："
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Statistics:"
+msgstr "统计："
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Statistics Offset"
+msgstr "统计偏移"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "X Offset:"
+msgstr "X 偏移："
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Y Offset:"
+msgstr "Y 偏移："
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Playfield"
+msgstr "游戏区域"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw FollowPoints"
+msgstr "绘制跟随点"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Correct border relative to the current Circle Size."
+msgstr "根据当前圆圈大小修正边框。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw Playfield Border"
+msgstr "绘制游戏区域边框"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Border Size:"
+msgstr "边框大小："
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Hitobjects"
+msgstr "物件"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Use Fast Hidden Fading Sliders (!)"
+msgstr "使用快速淡出的 Hidden 滑条 (!)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"NOTE: osu! doesn't do this, so don't enable it for serious practicing.\n"
+"If enabled: Fade out sliders with the same speed as circles."
+msgstr ""
+"注意：osu! 不会这样做，所以认真练习时不要启用。\n"
+"启用后：滑条以与圆圈相同的速度淡出。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "FPoSu (3D)"
+msgstr "FPoSu (3D)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "FPoSu - General"
+msgstr "FPoSu - 常规"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "FPoSu"
+msgstr "FPoSu"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"The real 3D FPS mod.\n"
+"Play from a first person shooter perspective in a 3D environment.\n"
+"This is only intended for mouse! (Enable \"Tablet/Absolute Mode\" for tablets.)"
+msgstr ""
+"真正的 3D FPS 模组。\n"
+"在 3D 环境中以第一人称射击视角游玩。\n"
+"仅适用于鼠标！（数位板请启用 \"数位板/绝对模式\"。）"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "NOTE: Use CTRL + O during gameplay to get here!"
+msgstr "注意：游戏中按 CTRL + O 可以来到这里！"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "LEFT/RIGHT arrow keys to precisely adjust sliders."
+msgstr "使用左/右方向键精确调节滑块。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Distance:"
+msgstr "距离："
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"If enabled: Vertical FOV.\n"
+"If disabled: Horizontal FOV (default)."
+msgstr ""
+"启用：垂直 FOV。\n"
+"禁用：水平 FOV（默认）。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Vertical FOV"
+msgstr "垂直 FOV"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "FOV:"
+msgstr "FOV："
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "FOV (Zoom):"
+msgstr "FOV（缩放）："
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Zoom Key Toggle"
+msgstr "缩放键切换"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Enabled: Zoom key toggles zoom.\n"
+"Disabled: Zoom while zoom key is held."
+msgstr ""
+"启用：缩放键切换缩放。\n"
+"禁用：按住缩放键时缩放。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "FPoSu - Playfield"
+msgstr "FPoSu - 游戏区域"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Curved play area"
+msgstr "弧形游戏区域"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Background cube"
+msgstr "背景立方体"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Skybox"
+msgstr "天空盒"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"NOTE: Overrides \"Background cube\".\n"
+"See skybox_example.png for cubemap layout."
+msgstr ""
+"注意：会覆盖 \"背景立方体\"。\n"
+"立方体贴图布局请参见 skybox_example.png。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Background Opacity"
+msgstr "背景不透明度"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "FPoSu - Mouse"
+msgstr "FPoSu - 鼠标"
+
+#: src/App/Neomod/OptionsOverlay.cpp src/App/Neomod/OsuDirectScreen.cpp
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Opening browser, please wait ..."
+msgstr "正在打开浏览器，请稍候 ..."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "DPI:"
+msgstr "DPI："
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "cm per 360:"
+msgstr "每 360 度厘米数："
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Invert Vertical"
+msgstr "反转垂直"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Invert Horizontal"
+msgstr "反转水平"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Tablet/Absolute Mode (!)"
+msgstr "数位板/绝对模式 (!)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Don't enable this if you are using a mouse.\n"
+"If this is enabled, then DPI and cm per 360 will be ignored!"
+msgstr ""
+"如果你使用鼠标，请不要启用。\n"
+"启用后，DPI 和每 360 度厘米数将被忽略！"
+
+#. TRANSLATORS: Name of a settings category containing joke/unnecessary options
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Bullshit"
+msgstr "瞎搞"
+
+#. TRANSLATORS: Subcategory of "Bullshit" - contains joke visual settings (rainbow circles, etc.)
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Why"
+msgstr "为什么"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Rainbow Circles"
+msgstr "彩虹圆圈"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Rainbow Sliders"
+msgstr "彩虹滑条"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Rainbow Numbers"
+msgstr "彩虹数字"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Draw 300s"
+msgstr "绘制 300"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Miscellaneous"
+msgstr "杂项"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Testing"
+msgstr "测试"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Use bleeding edge release stream"
+msgstr "使用最新测试版更新通道"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Screenshots"
+msgstr "截图"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Crop Screenshots"
+msgstr "裁剪截图"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"Crop screenshots to the letterbox resolution,\n"
+"if letterboxing is enabled."
+msgstr ""
+"如果启用了信箱模式，\n"
+"将截图裁剪为信箱分辨率。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Copy Screenshots to Clipboard"
+msgstr "复制截图到剪贴板"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid ""
+"If screenshots should be copied to the system clipboard\n"
+"along with saving them to the screenshots/ folder."
+msgstr ""
+"截图除保存到 screenshots/ 文件夹外，\n"
+"是否同时复制到系统剪贴板。"
+
+#. TRANSLATORS: Subsection with options for main menu tips and social media links
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Nags"
+msgstr "提示信息"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Show Main Menu Tips"
+msgstr "显示主菜单提示"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Hide Discord/X Links"
+msgstr "隐藏 Discord/X 链接"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Import/Reset"
+msgstr "导入/重置"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Import collections/scores/settings from McOsu"
+msgstr "从 McOsu 导入收藏夹/成绩/设置"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Successfully imported settings from McOsu."
+msgstr "已成功从 McOsu 导入设置。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Couldn't find McOsu config files! Make sure to select the directory containing McOsu.exe."
+msgstr "找不到 McOsu 配置文件！请确保选择了包含 McOsu.exe 的目录。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Opening file browser ..."
+msgstr "正在打开文件浏览器 ..."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "You must select the McOsu folder to import its settings."
+msgstr "你必须选择 McOsu 文件夹才能导入其设置。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Reset all settings"
+msgstr "重置所有设置"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Disconnect"
+msgstr "断开连接"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Waiting for browser..."
+msgstr "正在等待浏览器..."
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Error: Couldn't find any skins"
+msgstr "错误：找不到任何皮肤"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Tried to enable exclusive mode, but couldn't :("
+msgstr "尝试启用独占模式，但失败了 :("
+
+#: src/App/Neomod/OptionsOverlay.cpp
+#, c++-format
+msgid "Press new key for {}:"
+msgstr "为 {} 按下新按键："
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "All key bindings have been reset."
+msgstr "所有按键绑定已重置。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+#, c++-format
+msgid "Press {:d} more times to confirm."
+msgstr "再按 {:d} 次以确认。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+#, c++-format
+msgid "Press {:d} more time to confirm!"
+msgstr "再按 {:d} 次以确认！"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "This setting is locked in multiplayer rooms."
+msgstr "此设置在多人游戏房间中被锁定。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "This setting is forced by the server."
+msgstr "此设置由服务器强制设定。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "This setting is forced by the current skin."
+msgstr "此设置由当前皮肤强制设定。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+#, c++-format
+msgid "(turn off \"{}\" in the skin options to change it)"
+msgstr "（在皮肤选项中关闭 \"{}\" 即可更改）"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "All settings have been reset."
+msgstr "所有设置已重置。"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Unbind"
+msgstr "解绑"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "Failed to save osu.cfg"
+msgstr "无法保存 osu.cfg"
+
+#: src/App/Neomod/Osu.cpp
+msgid "This replay's beatmap is not installed."
+msgstr "此回放的谱面未安装。"
+
+#: src/App/Neomod/Osu.cpp
+#, c++-format
+msgid "Skin reloaded!{:s}"
+msgstr "皮肤已重新加载！{:s}"
+
+#: src/App/Neomod/Osu.cpp
+msgid "Mouse buttons are disabled."
+msgstr "鼠标按键已禁用。"
+
+#: src/App/Neomod/Osu.cpp
+msgid "Mouse buttons are enabled."
+msgstr "鼠标按键已启用。"
+
+#: src/App/Neomod/Osu.cpp
+msgid "No beatmap is currently selected."
+msgstr "当前未选择谱面。"
+
+#: src/App/Neomod/Osu.cpp
+msgid "In-game interface has been enabled."
+msgstr "已启用游戏内界面。"
+
+#: src/App/Neomod/Osu.cpp
+msgid "In-game interface has been disabled."
+msgstr "已禁用游戏内界面。"
+
+#: src/App/Neomod/Osu.cpp
+msgid "Scoreboard is hidden."
+msgstr "计分板已隐藏。"
+
+#: src/App/Neomod/Osu.cpp
+msgid "Scoreboard is shown."
+msgstr "计分板已显示。"
+
+#: src/App/Neomod/Osu.cpp
+#, c++-format
+msgid "Local beatmap offset set to {:d} ms"
+msgstr "本地谱面偏移已设为 {:d} ms"
+
+#: src/App/Neomod/Osu.cpp
+msgid "Error: Couldn't grab a screenshot :("
+msgstr "错误：无法截图 :("
+
+#: src/App/Neomod/Osu.cpp
+msgid "Screenshot copied to clipboard (click to open in a new tab)"
+msgstr "截图已复制到剪贴板（点击在新标签页中打开）"
+
+#: src/App/Neomod/Osu.cpp
+msgid "Screenshot taken (click to open in a new tab)"
+msgstr "已截图（点击在新标签页中打开）"
+
+#: src/App/Neomod/Osu.cpp
+#, c++-format
+msgid "Screenshot copied to clipboard and saved to {:s}"
+msgstr "截图已复制到剪贴板并保存到 {:s}"
+
+#: src/App/Neomod/Osu.cpp
+#, c++-format
+msgid "Screenshot saved to {:s}"
+msgstr "截图已保存到 {:s}"
+
+#: src/App/Neomod/Osu.cpp
+#, c++-format
+msgid "Skin exported to {:s}"
+msgstr "皮肤已导出到 {:s}"
+
+#: src/App/Neomod/Osu.cpp
+msgid "Can't export the default skin."
+msgstr "无法导出默认皮肤。"
+
+#: src/App/Neomod/Osu.cpp
+#, c++-format
+msgid "Couldn't export the skin to {:s}"
+msgstr "无法将皮肤导出到 {:s}"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+#, c++-format
+msgid "+{:d} more"
+msgstr "还有 +{:d} 个"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "View beatmap page"
+msgstr "查看谱面页面"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "Close"
+msgstr "关闭"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "Download"
+msgstr "下载"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "Cancel download"
+msgstr "取消下载"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "Go to beatmap"
+msgstr "前往谱面"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid ""
+"Click a beatmap to see its details.\n"
+"Click it again to download it."
+msgstr ""
+"点击谱面查看详情。\n"
+"再次点击即可下载。"
+
+#: src/App/Neomod/OsuDirectScreen.cpp src/App/Neomod/SongBrowser/InfoLabel.cpp
+#, c++-format
+msgid "Mapped by {:s}"
+msgstr "作图者：{:s}"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "Pending"
+msgstr "Pending"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "Ranked"
+msgstr "Ranked"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "Approved"
+msgstr "Approved"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "Loved"
+msgstr "Loved"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+#, c++-format
+msgid "Updated {:s}"
+msgstr "更新于 {:s}"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "Video"
+msgstr "视频"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "Storyboard"
+msgstr "故事板"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "Newest maps"
+msgstr "最新谱面"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "Best maps"
+msgstr "最佳谱面"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "Only show ranked beatmaps"
+msgstr "只显示 Ranked 谱面"
+
+#: src/App/Neomod/OsuDirectScreen.cpp
+msgid "Auto-select downloaded beatmaps"
+msgstr "自动选择已下载的谱面"
+
+#: src/App/Neomod/PauseOverlay.cpp
+msgid "Resume"
+msgstr "继续"
+
+#: src/App/Neomod/PauseOverlay.cpp src/App/Neomod/RankingScreen.cpp
+msgid "Retry"
+msgstr "重试"
+
+#: src/App/Neomod/PauseOverlay.cpp
+msgid "Quit"
+msgstr "退出"
+
+#: src/App/Neomod/PromptOverlay.cpp
+msgid "OK"
+msgstr "确定"
+
+#: src/App/Neomod/PromptOverlay.cpp
+msgid "Cancel"
+msgstr "取消"
+
+#: src/App/Neomod/RankingScreen.cpp
+msgid "You achieved the #1 score on local rankings!"
+msgstr "你在本地排行榜中取得了第 1 名！"
+
+#: src/App/Neomod/RankingScreen.cpp
+msgid "Watch replay"
+msgstr "观看回放"
+
+#: src/App/Neomod/RankingScreen.cpp
+#, c++-format
+msgid "{:.2f}pp"
+msgstr "{:.2f}pp"
+
+#: src/App/Neomod/RankingScreen.cpp
+#, c++-format
+msgid "Stars: {:.2f} ({:.2f} aim, {:.2f} speed)"
+msgstr "星级：{:.2f}（定位 {:.2f}，速度 {:.2f}）"
+
+#: src/App/Neomod/RankingScreen.cpp
+#, c++-format
+msgid "Speed: {:.3g}x"
+msgstr "速度：{:.3g}x"
+
+#: src/App/Neomod/RankingScreen.cpp
+#, c++-format
+msgid "CS:{:.2f} AR:{:.2f} OD:{:.2f} HP:{:.2f}"
+msgstr "CS:{:.2f} AR:{:.2f} OD:{:.2f} HP:{:.2f}"
+
+#: src/App/Neomod/RankingScreen.cpp src/App/Neomod/SongBrowser/ScoreButton.cpp
+#, c++-format
+msgid "Notelock: {}"
+msgstr "Notelock：{}"
+
+#: src/App/Neomod/RankingScreen.cpp
+#, c++-format
+msgid "Error: {:.2f}ms - {:.2f}ms avg"
+msgstr "误差：{:.2f}ms - {:.2f}ms 平均"
+
+#: src/App/Neomod/RankingScreen.cpp
+#, c++-format
+msgid "Unstable Rate: {:.2f}"
+msgstr "Unstable Rate：{:.2f}"
+
+#: src/App/Neomod/RankingScreen.cpp
+msgid "Mods: "
+msgstr "模组： "
+
+#: src/App/Neomod/RankingScreen.cpp
+#, c++-format
+msgid "You achieved the #{} score on local rankings!"
+msgstr "你在本地排行榜中取得了第 {} 名！"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Multiplayer room"
+msgstr "多人游戏房间"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Host: None"
+msgstr "房主：无"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Room name"
+msgstr "房间名称"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Change password"
+msgstr "修改密码"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Win condition: Score"
+msgstr "胜利条件：分数"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Beatmap"
+msgstr "谱面"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Select map"
+msgstr "选择谱面"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Download maps"
+msgstr "下载谱面"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "(no map selected)"
+msgstr "（未选择谱面）"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Mods"
+msgstr "模组"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Select mods [F1]"
+msgstr "选择模组 [F1]"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Freemod"
+msgstr "Freemod"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "No mods selected."
+msgstr "未选择模组。"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Start game"
+msgstr "开始游戏"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Player list"
+msgstr "玩家列表"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Host is selecting a map..."
+msgstr "房主正在选择谱面..."
+
+#: src/App/Neomod/RoomScreen.cpp src/App/Neomod/SpectatorScreen.cpp
+#, c++-format
+msgid "Failed to download Beatmap #{:d} :("
+msgstr "无法下载谱面 #{:d} :("
+
+#: src/App/Neomod/RoomScreen.cpp
+#, c++-format
+msgid "Downloading... {:.2f}%"
+msgstr "正在下载... {:.2f}%"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Hit 'Escape' once more to exit this multiplayer match."
+msgstr "再按一次 'Escape' 退出这场多人游戏对局。"
+
+#: src/App/Neomod/RoomScreen.cpp
+#, c++-format
+msgid "Host: {}"
+msgstr "房主：{}"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Win condition: Accuracy"
+msgstr "胜利条件：准确率"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Win condition: Combo"
+msgstr "胜利条件：连击"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Win condition: ScoreV2"
+msgstr "胜利条件：ScoreV2"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Win condition: ???"
+msgstr "胜利条件：???"
+
+#: src/App/Neomod/RoomScreen.cpp
+#, c++-format
+msgid "Force start ({:d}/{:d})"
+msgstr "强制开始 ({:d}/{:d})"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Not ready"
+msgstr "未准备"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Ready!"
+msgstr "已准备！"
+
+#: src/App/Neomod/RoomScreen.cpp
+#, c++-format
+msgid "[playing] {}"
+msgstr "[游玩中] {}"
+
+#: src/App/Neomod/RoomScreen.cpp
+#, c++-format
+msgid "[no map] {}"
+msgstr "[无谱面] {}"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Failed to load map"
+msgstr "无法加载谱面"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "New password:"
+msgstr "新密码："
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Score V1"
+msgstr "Score V1"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Accuracy"
+msgstr "准确率"
+
+#: src/App/Neomod/RoomScreen.cpp
+msgid "Combo"
+msgstr "连击"
+
+#: src/App/Neomod/SongBrowser/BottomBar.cpp
+#, c++-format
+msgid "Calculating stars ({}/{}) ..."
+msgstr "正在计算星级 ({}/{}) ..."
+
+#. TRANSLATORS: {} is the name of the exported collection, or "mapset"
+#: src/App/Neomod/SongBrowser/BottomBar.cpp
+#, c++-format
+msgid "Exporting {} {:.2f}%"
+msgstr "正在导出 {} {:.2f}%"
+
+#. TRANSLATORS: {} is the name of the exported collection, or "mapset"
+#: src/App/Neomod/SongBrowser/BottomBar.cpp
+msgid "mapset"
+msgstr "谱面集"
+
+#: src/App/Neomod/SongBrowser/BottomBar.cpp
+#, c++-format
+msgid " {:s}"
+msgstr " {:s}"
+
+#: src/App/Neomod/SongBrowser/BottomBar.cpp
+#, c++-format
+msgid "Computing loudness ({}/{}) ..."
+msgstr "正在计算响度 ({}/{}) ..."
+
+#: src/App/Neomod/SongBrowser/BottomBar.cpp
+#, c++-format
+msgid "Converting scores ({}/{}) ..."
+msgstr "正在转换成绩 ({}/{}) ..."
+
+#: src/App/Neomod/SongBrowser/InfoLabel.cpp
+#, c++-format
+msgid "Length: {:02d}:{:02d} BPM: {} Objects: {}"
+msgstr "时长: {:02d}:{:02d} BPM: {} 物件: {}"
+
+#: src/App/Neomod/SongBrowser/InfoLabel.cpp
+#, c++-format
+msgid "Length: {:02d}:{:02d} BPM: {}-{} ({}) Objects: {}"
+msgstr "时长: {:02d}:{:02d} BPM: {}-{} ({}) 物件: {}"
+
+#: src/App/Neomod/SongBrowser/InfoLabel.cpp
+#, c++-format
+msgid "CS:{:.3g} AR:{:.3g} OD:{:.3g} HP:{:.3g} Stars:{:.3g} ({}pp)"
+msgstr "CS:{:.3g} AR:{:.3g} OD:{:.3g} HP:{:.3g} 星级:{:.3g} ({}pp)"
+
+#: src/App/Neomod/SongBrowser/InfoLabel.cpp
+#, c++-format
+msgid "CS:{:.3g} AR:{:.3g} OD:{:.3g} HP:{:.3g} Stars:{:.3g} -> {:.3g} ({}pp)"
+msgstr "CS:{:.3g} AR:{:.3g} OD:{:.3g} HP:{:.3g} 星级:{:.3g} -> {:.3g} ({}pp)"
+
+#: src/App/Neomod/SongBrowser/InfoLabel.cpp
+#, c++-format
+msgid "CS:{:.3g} AR:{:.3g} OD:{:.3g} HP:{:.3g} Stars:{:.3g} * (??? pp)"
+msgstr "CS:{:.3g} AR:{:.3g} OD:{:.3g} HP:{:.3g} 星级:{:.3g} * (??? pp)"
+
+#: src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Wobble 2"
+msgstr "Wobble 2"
+
+#: src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "Shirone"
+msgstr "Shirone"
+
+#: src/App/Neomod/SongBrowser/ScoreButton.cpp
+msgid "osu!stable"
+msgstr "osu!stable"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By Artist"
+msgstr "按艺术家"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By BPM"
+msgstr "按 BPM"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By Creator"
+msgstr "按作图者"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By Date Added"
+msgstr "按添加日期"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By Difficulty"
+msgstr "按难度"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By Length"
+msgstr "按时长"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By Title"
+msgstr "按标题"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By Rank Achieved"
+msgstr "按获得评级"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By Date Played"
+msgstr "按游玩日期"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By Date"
+msgstr "按日期"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Collections"
+msgstr "收藏夹"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "No Grouping"
+msgstr "不分组"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By accuracy"
+msgstr "按准确率"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By combo"
+msgstr "按连击"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By date"
+msgstr "按日期"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By misses"
+msgstr "按 Miss"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By score"
+msgstr "按分数"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "By pp"
+msgstr "按 pp"
+
+#. TRANSLATORS: button that opens the selected beatmap on the website
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Web"
+msgstr "网络"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Group:"
+msgstr "分组："
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Sort:"
+msgstr "排序："
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Loading..."
+msgstr "正在加载..."
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "No records set!"
+msgstr "暂无记录！"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Personal Best (from local scores)"
+msgstr "个人最佳（来自本地成绩）"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Invalid osu! folder (or no beatmaps found): "
+msgstr "osu! 文件夹无效（或未找到谱面）： "
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Go to Options -> osu!folder"
+msgstr "前往 选项 -> osu! 文件夹"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Drop .osz beatmaps onto this window to import them"
+msgstr "将 .osz 谱面拖到此窗口即可导入"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Or click \"Online Beatmaps\" in the Main Menu"
+msgstr "或者点击主菜单中的 \"在线谱面\""
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Beatmapset has no difficulties"
+msgstr "谱面集中没有难度"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+#, c++-format
+msgid "Failed to find Beatmap #{:d} :("
+msgstr "找不到谱面 #{:d} :("
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+#, c++-format
+msgid "Scanning beatmap folders ({:d}/{:d})"
+msgstr "正在扫描谱面文件夹 ({:d}/{:d})"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+#, c++-format
+msgid "Importing beatmaps ({:d}/{:d})"
+msgstr "正在导入谱面 ({:d}/{:d})"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "0-9"
+msgstr "0-9"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Other"
+msgstr "其他"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Below 1 star"
+msgstr "低于 1 星"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Above 10 stars"
+msgstr "高于 10 星"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "1 star"
+msgstr "1 星"
+
+#. TRANSLATORS: song browser group of beatmaps by star rating, {:d} is between 2 and 10
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+#, c++-format
+msgid "{:d} stars"
+msgstr "{:d} 星"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Under 60 BPM"
+msgstr "低于 60 BPM"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Under 120 BPM"
+msgstr "低于 120 BPM"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Under 180 BPM"
+msgstr "低于 180 BPM"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Under 240 BPM"
+msgstr "低于 240 BPM"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Under 300 BPM"
+msgstr "低于 300 BPM"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Over 300 BPM"
+msgstr "高于 300 BPM"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "1 minute or less"
+msgstr "1 分钟或更短"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "2 minutes or less"
+msgstr "2 分钟或更短"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "3 minutes or less"
+msgstr "3 分钟或更短"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "4 minutes or less"
+msgstr "4 分钟或更短"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "5 minutes or less"
+msgstr "5 分钟或更短"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "10 minutes or less"
+msgstr "10 分钟或更短"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Over 10 minutes"
+msgstr "超过 10 分钟"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Disabled FPoSu mode."
+msgstr "已关闭 FPoSu 模式。"
+
+#: src/App/Neomod/SongBrowser/SongBrowser.cpp
+msgid "Enabled FPoSu mode."
+msgstr "已开启 FPoSu 模式。"
+
+#: src/App/Neomod/SpectatorScreen.cpp
+#, c++-format
+msgid "Started spectating {:s}"
+msgstr "开始观战 {:s}"
+
+#: src/App/Neomod/SpectatorScreen.cpp
+#, c++-format
+msgid "Stopped spectating {:s}"
+msgstr "停止观战 {:s}"
+
+#: src/App/Neomod/SpectatorScreen.cpp
+msgid "Spectating"
+msgstr "观战中"
+
+#: src/App/Neomod/SpectatorScreen.cpp
+msgid "..."
+msgstr "..."
+
+#: src/App/Neomod/SpectatorScreen.cpp
+msgid "Stop spectating"
+msgstr "停止观战"
+
+#: src/App/Neomod/SpectatorScreen.cpp
+#, c++-format
+msgid "Spectating {:s}"
+msgstr "正在观战 {:s}"
+
+#. TRANSLATORS: {:s} is the name of the spectated player
+#: src/App/Neomod/SpectatorScreen.cpp
+#, c++-format
+msgid "{:s} is AFK"
+msgstr "{:s} 暂时离开"
+
+#: src/App/Neomod/SpectatorScreen.cpp
+#, c++-format
+msgid "{:s} is picking a map..."
+msgstr "{:s} 正在选择谱面..."
+
+#: src/App/Neomod/SpectatorScreen.cpp
+#, c++-format
+msgid "{:s} is spectating someone else"
+msgstr "{:s} 正在观战其他人"
+
+#: src/App/Neomod/SpectatorScreen.cpp
+#, c++-format
+msgid "{:s} is playing minigames"
+msgstr "{:s} 正在玩小游戏"
+
+#: src/App/Neomod/SpectatorScreen.cpp
+#, c++-format
+msgid "Database not loaded, cannot install map"
+msgstr "数据库未加载，无法安装谱面"
+
+#: src/App/Neomod/SpectatorScreen.cpp
+msgid "Downloading map..."
+msgstr "正在下载谱面..."
+
+#: src/App/Neomod/UIIconButton.cpp
+msgid "Play"
+msgstr "开始"
+
+#: src/App/Neomod/UIIconButton.cpp
+msgid "Pause"
+msgstr "暂停"
+
+#: src/App/Neomod/UISearchOverlay.cpp
+msgid "Search: "
+msgstr "搜索： "
+
+#: src/App/Neomod/UISearchOverlay.cpp
+msgid "Type to search!"
+msgstr "输入以搜索！"
+
+#: src/App/Neomod/UISearchOverlay.cpp
+msgid "No matches found. Hit ESC to reset."
+msgstr "未找到结果。按 ESC 重置。"
+
+#: src/App/Neomod/UISearchOverlay.cpp
+msgid "Hit ESC to reset."
+msgstr "按 ESC 重置。"
+
+#: src/App/Neomod/UISearchOverlay.cpp
+msgid "Searching, please wait ..."
+msgstr "正在搜索，请稍候 ..."
+
+#: src/App/Neomod/UIUserContextMenu.cpp
+msgid "Switch User:"
+msgstr "切换用户："
+
+#: src/App/Neomod/UIUserContextMenu.cpp
+msgid "Set custom name"
+msgstr "设置自定义名称"
+
+#: src/App/Neomod/UIUserContextMenu.cpp
+msgid "Enter Username:"
+msgstr "输入用户名："
+
+#: src/App/Neomod/UIUserContextMenu.cpp
+msgid "(Press ENTER to confirm.)"
+msgstr "（按 ENTER 确认。）"
+
+#: src/Engine/Sound/SoundEngine.cpp
+msgid "No sound"
+msgstr "无声音"
