@@ -1227,6 +1227,7 @@ void Chat::updateButtonLayout(vec2 screen) {
         }
 
         btn->setPos(total_x, chat_y - button_container_height + total_y);
+        btn->onResized();
         // Buttons are drawn a bit smaller than they should, so we up the size here
         btn->setSize(button_width + border, this->button_height + border);
 
@@ -1244,6 +1245,7 @@ void Chat::updateButtonLayout(vec2 screen) {
     }
 
     this->join_channel_btn->setPos(total_x, chat_y - button_container_height + total_y);
+    this->join_channel_btn->onResized();
     this->join_channel_btn->setSize(button_container_height, button_container_height);
     this->button_container->setPos(0, chat_y - button_container_height);
     this->button_container->setSize(screen.x, button_container_height);
