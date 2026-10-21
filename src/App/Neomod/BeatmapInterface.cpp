@@ -1740,14 +1740,6 @@ void BeatmapInterface::drawHitObjects() {
     const i32 currentHitObjectIndex = this->judge->getCurrentHitObjectIndex();
     const bool usePVS = cv::pvs.getBool();
 
-    // the slider bodies are queued before any of the objects is drawn, so their fields render together
-    const auto drawObjects = [](std::span<HitObject *const> objects) {
-        SliderRenderer::Batch sliderBodies{osu->getSliderFrameBuffer()};
-        for(const HitObject *obj : objects)
-            if(obj->isSlider()) sliderBodies.queue(*static_cast<const Slider *>(obj));
-        for(HitObject *obj : objects) obj->draw();
-    };
-
     if(!cv::mod_mafham.getBool()) {
         this->objectsToDraw.clear();
         i32 mostDistantEndTimeDrawn = 0;
@@ -1755,13 +1747,13 @@ void BeatmapInterface::drawHitObjects() {
         for(sSz i = static_cast<sSz>(hitobjectsSortedByEndTime.size()) - 1; i >= 0; i--) {
             // PVS optimization (reversed)
             HitObject *obj = hitobjectsSortedByEndTime[i];
-            if(usePVS) {
-                const i32 endTime = obj->getEndTime();
-
-                if(obj->isFinished() && (curPos - pvs > endTime))  // past objects
-                    break;
+            if(likely(usePVS)) {
                 if(obj->getClickTime() > curPos + pvs)  // future objects
                     continue;
+
+                const i32 endTime = obj->getEndTime();
+                if(obj->isFinished() && (curPos - pvs > endTime))  // past objects
+                    break;
 
                 if(endTime > mostDistantEndTimeDrawn) mostDistantEndTimeDrawn = endTime;
             }
@@ -1780,7 +1772,7 @@ void BeatmapInterface::drawHitObjects() {
         for(auto *obj : hitobjectsSortedByEndTime) {
             // NOTE: to fix mayday simultaneous sliders with increasing endtime getting culled here, would have to
             // switch from m_hitobjectsSortedByEndTime to m_hitobjects PVS optimization
-            if(usePVS) {
+            if(likely(usePVS)) {
                 if(obj->isFinished() && (curPos - pvs > obj->getEndTime()))  // past objects
                     continue;
 
@@ -1791,6 +1783,14 @@ void BeatmapInterface::drawHitObjects() {
             obj->draw2();
         }
     } else {
+        // the slider bodies are queued before any of the objects is drawn, so their fields render together
+        const auto drawObjects = [](std::span<HitObject *const> objects) {
+            SliderRenderer::Batch sliderBodies{osu->getSliderFrameBuffer()};
+            for(const HitObject *obj : objects)
+                if(obj->isSlider()) sliderBodies.queue(*static_cast<const Slider *>(obj));
+            for(HitObject *obj : objects) obj->draw();
+        };
+
         const int mafhamRenderLiveSize = cv::mod_mafham_render_livesize.getInt();
 
         if(this->mafhamActiveRenderTarget == nullptr) this->mafhamActiveRenderTarget = osu->getFrameBuffer();
@@ -1819,7 +1819,7 @@ void BeatmapInterface::drawHitObjects() {
                 }
 
                 // PVS optimization (reversed)
-                if(usePVS) {
+                if(likely(usePVS)) {
                     if(hitobjectsSortedByEndTime[i]->isFinished() &&
                        (curPos - pvs > hitobjectsSortedByEndTime[i]->getClickTime() +
                                            hitobjectsSortedByEndTime[i]->getDuration()))  // past objects
@@ -1880,13 +1880,13 @@ void BeatmapInterface::drawHitObjects() {
             this->objectsToDraw.clear();
             for(int i = hitobjectsSortedByEndTime.size() - 1; i >= 0; i--) {
                 // PVS optimization (reversed)
-                if(usePVS) {
+                if(likely(usePVS)) {
+                    if(hitobjectsSortedByEndTime[i]->getClickTime() > curPos + pvs)  // future objects
+                        continue;
                     if(hitobjectsSortedByEndTime[i]->isFinished() &&
                        (curPos - pvs > hitobjectsSortedByEndTime[i]->getClickTime() +
                                            hitobjectsSortedByEndTime[i]->getDuration()))  // past objects
                         break;
-                    if(hitobjectsSortedByEndTime[i]->getClickTime() > curPos + pvs)  // future objects
-                        continue;
                 }
 
                 if(i > currentHitObjectIndex + mafhamRenderLiveSize ||
@@ -1899,7 +1899,7 @@ void BeatmapInterface::drawHitObjects() {
 
             for(int i = 0; i < hitobjectsSortedByEndTime.size(); i++) {
                 // PVS optimization
-                if(usePVS) {
+                if(likely(usePVS)) {
                     if(hitobjectsSortedByEndTime[i]->isFinished() &&
                        (curPos - pvs > hitobjectsSortedByEndTime[i]->getClickTime() +
                                            hitobjectsSortedByEndTime[i]->getDuration()))  // past objects
