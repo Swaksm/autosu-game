@@ -851,6 +851,8 @@ CONVAR(pause_anim_duration, 0.15f, CLIENT | SKINS | SERVER);
 CONVAR(pause_dim_alpha, 0.58f, CLIENT | SKINS | SERVER);
 CONVAR(pause_dim_background, true, CLIENT | SKINS | SERVER);
 CONVAR(pause_on_focus_loss, true, CLIENT | SKINS | SERVER);
+CONVAR(map_settings_hold_time, 0.8f, CLIENT,
+       "how long the ingame map settings panel delays the start of the map (0 = immediate)).", Range{0., 10.});
 CONVAR(pausemenu_button_delay, 0.2f, CLIENT,
        R"(add a delay (in seconds) before the pause menu continue/retry/quit buttons become usable)");
 CONVAR(unpause_continue_delay, 0.15f, CLIENT,

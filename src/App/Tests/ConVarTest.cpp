@@ -144,6 +144,7 @@ void ConVarTest::update() {
     this->testTypesAndParsing();
     this->testPermissions();
     this->testLayers();
+    this->testContextLayer();
     this->testProtectionLock();
     this->testPolicy();
     this->testCallbacks();
@@ -349,6 +350,63 @@ void ConVarTest::testLayers() {
     t_layered.removeAllCallbacks();
     t_layered.setValue(1.0f);
     t_string.setValue("abc");
+}
+
+void ConVarTest::testContextLayer() {
+    TEST_SECTION("context layer");
+    using Values = std::vector<std::pair<ConVar *, std::string>>;
+    using enum CvarSetResult;
+
+    t_layered.setValue(1.25f);
+    t_layered.setValue(1.5f, true, CvarEditor::SKIN);
+    TEST_ASSERT(t_layered.setValue(1.6f, true, CvarEditor::CONTEXT) == APPLIED, "context write is applied");
+    TEST_ASSERT_EQ(t_layered.getFloat(), 1.6f, "context value overrides the skin value");
+    TEST_ASSERT(t_layered.getMaster() == CvarEditor::CONTEXT, "context is the master");
+    TEST_ASSERT(t_layered.setValue(2.0f) == MASKED && t_layered.setValue(1.75f, true, CvarEditor::SKIN) == MASKED,
+                "client and skin writes below the context value are masked");
+    TEST_ASSERT_EQ(t_layered.getClientString(), "2", "the client's own value stays what configs see");
+
+    t_layered.setValue(3.0f, true, CvarEditor::SERVER);
+    TEST_ASSERT(t_layered.getFloat() == 3.0f && t_layered.getMaster() == CvarEditor::SERVER,
+                "server value overrides the context value");
+    TEST_ASSERT(t_layered.setValue(1.6f, true, CvarEditor::CONTEXT) == MASKED,
+                "context write below the server value is masked");
+    cvars().clearLayer(CvarEditor::SERVER);
+    TEST_ASSERT_EQ(t_layered.getFloat(), 1.6f, "context value is back without the server value");
+    cvars().clearLayer(CvarEditor::CONTEXT);
+    TEST_ASSERT(t_layered.getFloat() == 1.75f && t_layered.getMaster() == CvarEditor::SKIN,
+                "skin value is back without the context value");
+    cvars().clearLayer(CvarEditor::SKIN);
+    TEST_ASSERT_EQ(t_layered.getFloat(), 2.0f, "client value is back without the overrides");
+
+    // the context is the client, for what it is doing at the moment
+    TEST_ASSERT(t_serverOnly.setValue(1, true, CvarEditor::CONTEXT) == DENIED,
+                "context write to a convar without CLIENT is denied");
+    TEST_ASSERT(t_float.setValue(2.0f, true, CvarEditor::CONTEXT) == APPLIED,
+                "context write to a CLIENT convar without SKINS is applied");
+    cvars().clearLayer(CvarEditor::CONTEXT);
+    TEST_ASSERT(t_float.isDefault(), "clearing the context layer removes its values");
+
+    // nobody but the server gets around the lock
+    t_protected.setValue(45.0f, true, CvarEditor::CONTEXT);
+    setLocked(true);
+    TEST_ASSERT(t_protected.getFloat() == 0.0f && t_protected.isLocked(), "lock beats the context value");
+    setLocked(false);
+    TEST_ASSERT_EQ(t_protected.getFloat(), 45.0f, "context value is back after unlocking");
+    cvars().clearLayer(CvarEditor::CONTEXT);
+
+    // and the app's policy hears about its writes like any other
+    s_gateOpen = false;
+    const Values values{{&t_layered, "1.5"}, {&t_gameplay, "7"}};
+    const auto results = cvars().setLayer(CvarEditor::CONTEXT, values);
+    TEST_ASSERT(results.size() == 2 && results[0] == APPLIED && results[1] == VETOED,
+                "the policy can veto a context write");
+    TEST_ASSERT(s_gateLastEditor == CvarEditor::CONTEXT, "the policy is told who is writing");
+    TEST_ASSERT(t_layered.getFloat() == 1.5f && t_gameplay.getFloat() == 0.0f, "only the allowed value is in place");
+    s_gateOpen = true;
+    cvars().clearLayer(CvarEditor::CONTEXT);
+
+    t_layered.setValue(1.0f);
 }
 
 void ConVarTest::testProtectionLock() {

@@ -25,6 +25,7 @@ class Chat;
 class HUD;
 class Lobby;
 class MainMenu;
+class MapSettingsOverlay;
 class ModSelector;
 class NotificationOverlay;
 class OptionsOverlay;
@@ -67,10 +68,11 @@ class UIDebug;
 //     matter; the 9 setScreen-swapped base screens (room, rankingscreen, userstatsscreen,
 //     spectatorscreen, songbrowser, osudirectscreen, lobby, aboutscreen, mainmenu), then hud
 //     (rank 10, drawn by the gameplay composite).
-//   OVERLAY band (ranks 11-20): occlusion matters here, so this order is important:
-//     11 pauseoverlay  12 chat  13 modselector  14 useractions  15 optionsoverlay
-//     16 promptoverlay  17 beatmapinstalloverlay  18 volumeoverlay 19 notificationoverlay
-//     20 tooltipoverlay
+//   OVERLAY band (ranks 11-21): occlusion matters here, so this order is important:
+//     11 pauseoverlay  12 mapsettingsoverlay  13 chat  14 modselector  15 useractions
+//     16 optionsoverlay  17 promptoverlay  18 beatmapinstalloverlay  19 volumeoverlay
+//     20 notificationoverlay  21 tooltipoverlay
+//   mapsettingsoverlay > pauseoverlay: it's reachable while paused (the pause menu is modal).
 //   chat < modselector/options: they cover the chat (the menu modselector leaves it up underneath, dimmed).
 //   notification > volume is deliberate: VolumeOverlay::onKeyDown is ungated (KEY_MUTE, volume
 //   binds) and must not eat keys ahead of notification's keybind capture. extra_overlays from
@@ -78,26 +80,27 @@ class UIDebug;
 
 // clang-format off
 #define UI_SCREEN_REGISTRY(X) \
-    X(19, UIF_DEFAULT,           NotificationOverlay,     notificationoverlay) \
-    X(18, UIF_DEFAULT,           VolumeOverlay,           volumeoverlay) \
-    X(16, UIF_MODAL | UIF_CLOSE, PromptOverlay,           promptoverlay) \
-    X(13, UIF_MODAL | UIF_CLOSE, ModSelector,             modselector) \
-    X(14, UIF_DEFAULT,           UIUserContextMenuScreen, useractions) \
+    X(20, UIF_DEFAULT,           NotificationOverlay,     notificationoverlay) \
+    X(19, UIF_DEFAULT,           VolumeOverlay,           volumeoverlay) \
+    X(17, UIF_MODAL | UIF_CLOSE, PromptOverlay,           promptoverlay) \
+    X(14, UIF_MODAL | UIF_CLOSE, ModSelector,             modselector) \
+    X(15, UIF_DEFAULT,           UIUserContextMenuScreen, useractions) \
     X( 1, UIF_DEFAULT,           RoomScreen,              room) \
-    X(12, UIF_DEFAULT,           Chat,                    chat) \
-    X(15, UIF_CLOSE,             OptionsOverlay,          optionsoverlay) \
+    X(13, UIF_DEFAULT,           Chat,                    chat) \
+    X(16, UIF_CLOSE,             OptionsOverlay,          optionsoverlay) \
     X( 2, UIF_DEFAULT,           RankingScreen,           rankingscreen) \
     X( 3, UIF_DEFAULT,           UserStatsScreen,         userstatsscreen) \
     X( 4, UIF_DEFAULT,           SpectatorScreen,         spectatorscreen) \
     X(11, UIF_MODAL | UIF_CLOSE, PauseOverlay,            pauseoverlay) \
+    X(12, UIF_DEFAULT,           MapSettingsOverlay,      mapsettingsoverlay) \
     X(10, UIF_DEFAULT,           HUD,                     hud) \
     X( 5, UIF_DEFAULT,           SongBrowser,             songbrowser) \
     X( 6, UIF_DEFAULT,           OsuDirectScreen,         osudirectscreen) \
     X( 7, UIF_DEFAULT,           Lobby,                   lobby) \
     X( 8, UIF_DEFAULT,           AboutScreen,             aboutscreen) \
     X( 9, UIF_DEFAULT,           MainMenu,                mainmenu) \
-    X(20, UIF_DEFAULT,           TooltipOverlay,          tooltipoverlay) \
-    X(17, UIF_DEFAULT,           BeatmapInstallOverlay,   beatmapinstalloverlay)
+    X(21, UIF_DEFAULT,           TooltipOverlay,          tooltipoverlay) \
+    X(18, UIF_DEFAULT,           BeatmapInstallOverlay,   beatmapinstalloverlay)
 // clang-format on
 
 struct UI final {

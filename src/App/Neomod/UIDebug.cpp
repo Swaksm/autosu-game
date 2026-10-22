@@ -170,7 +170,7 @@ void UIDebug::debugAssert(std::string_view args) {
         } else if(map && parts[1] == "offset"sv) {
             actual = fmt::to_string(map->getLocalOffset());
         } else if(map && parts[1] == "background"sv) {
-            actual = fmt::to_string(int{map->draw_background});
+            actual = fmt::to_string(int{map->getSettings().draw_background});
         } else if(map) {
             logRaw("UITEST FAIL map {} (unknown field, expected file|root|md5|offset|background)", parts[1]);
             return;

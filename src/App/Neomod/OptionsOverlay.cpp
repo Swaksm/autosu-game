@@ -3968,6 +3968,10 @@ void OptionsOverlayImpl::pushForcedCvarTooltipIfHovered() {
                     ttoverlay->addLine(
                         tformat("(turn off \"{}\" in the skin options to change it)", _("Let Skins Change Settings")));
                     break;
+                case CvarEditor::CONTEXT:
+                    ttoverlay->addLine(_("This setting is overridden for the current beatmap."));
+                    ttoverlay->addLine(_("(change it in the beatmap settings at the bottom of the screen)"));
+                    break;
                 case CvarEditor::CLIENT:
                     break;  // unreachable: cvarLocked implies non-CLIENT master
             }

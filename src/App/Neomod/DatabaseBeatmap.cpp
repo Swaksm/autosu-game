@@ -565,6 +565,7 @@ DatabaseBeatmap::LOAD_GAMEPLAY_RESULT DatabaseBeatmap::loadGameplay(PlayedMap &p
 
 MapOverrides DatabaseBeatmap::get_overrides() const {
     return {.background_image_filename{this->getBackgroundImageFileName()},
+            .settings = this->settings,
             .last_played = this->last_play_time,
             .ppv2_version = this->ppv2Version,
             .star_rating = this->fStarsNomod,
@@ -572,12 +573,10 @@ MapOverrides DatabaseBeatmap::get_overrides() const {
             .min_bpm = this->iMinBPM,
             .max_bpm = this->iMaxBPM,
             .avg_bpm = this->iMostCommonBPM,
-            .local_offset = this->iLocalOffset,
             .online_offset = this->iOnlineOffset,
             .nb_circles = static_cast<u16>(this->iNumCircles),
             .nb_sliders = static_cast<u16>(this->iNumSliders),
-            .nb_spinners = static_cast<u16>(this->iNumSpinners),
-            .draw_background = this->draw_background};
+            .nb_spinners = static_cast<u16>(this->iNumSpinners)};
 }
 
 TIMING_INFO DatabaseBeatmap::getTimingInfoForTime(i32 positionMS) const {

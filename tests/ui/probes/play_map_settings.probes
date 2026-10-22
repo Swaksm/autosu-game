@@ -1,0 +1,4 @@
+# the map settings panel holds a fresh play's start (1280x720, playable fixture, cursor on the open panel): at the
+# start of the lead-in, so the first circle (stacked to the top left, fading in from 200 ms of music time before it)
+# isn't out yet. its dark blue fill is here once it is (0x001a33), about half of that at the song's start
+0.2344 0.0833 000000 8

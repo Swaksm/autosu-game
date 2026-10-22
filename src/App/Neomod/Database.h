@@ -63,7 +63,7 @@ struct ReconcileResult {
     [[nodiscard]] std::string_view outcomeName() const;
 };
 
-#define NEOMOD_MAPS_DB_VERSION 20260829
+#define NEOMOD_MAPS_DB_VERSION 20261022
 #define NEOMOD_SCORE_DB_VERSION 20240725
 
 class Database;
@@ -209,6 +209,9 @@ class Database final {
 
     // locks peppy_overrides mutex and updates overrides for loaded-from-stable-db maps which will be stored in the local database
     void update_overrides(const BeatmapDifficulty *diff);
+
+    // what the player has set for a map, stored with it from now on
+    void setSettings(BeatmapDifficulty *diff, MapSettings settings);
 
     Sync::shared_mutex peppy_overrides_mtx;
     Sync::shared_mutex scores_mtx;

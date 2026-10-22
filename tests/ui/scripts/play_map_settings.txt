@@ -1,0 +1,120 @@
+# uitest-datadir: fresh
+# the played map's settings panel (MapSettingsOverlay), on the playable fixture (see play_modselector_dance):
+#  - a fresh play shows it while loading and its lead-in waits while the cursor is over it, at the start of the lead-in
+#    (the screenshot's probe: the first circle isn't out yet)
+#  - a toggle in it is the map's own value, in effect only for the play (the context convar layer), with a reset
+#  - paused, it's a strip along the bottom edge that opens on hover, and it makes way for the chat
+#  - while a continue waits for its click nothing of it is out, but the bottom edge opens it: a click on the panel
+#    doesn't continue, and a click on the continue point always does (here the point is on the panel's bottom row,
+#    which steps aside once the cursor is on the point)
+# assertion-only: play-start timing is wall-clock (the lead-in too, hence the @sleep before pausing)
+options_save_on_back 0
+debug_fixed_frametime 0.0166667
+ui_scale_to_dpi 0
+windowed_resolution 1280x720
+mod_nofail 1
+disable_mousebuttons 0
+mouse_to 10 10
+@wait 30
+debug_fake_online 1
+@wait 5
+debug_chat_message #osu 0 hello
+osu_folder uitest_osu_folder_play
+set_active_ui_screen songbrowser
+@wait 300
+ui_assert convar draw_storyboard 1
+sendkey Return
+@wait 3
+ui_assert visible mapsettingsoverlay 1
+mouse_to 700 650
+@sleep 1000
+@wait 200
+ui_assert visible mapsettingsoverlay 1
+take_screenshot screenshots/uitest_play_map_settings.png
+@wait 2
+ui_assert visible mapsettings_draw_storyboard_reset 0
+mouse_to 700 633
+@wait 2
+mouse_down
+@wait 3
+mouse_up
+@wait 3
+ui_assert convar draw_storyboard 0
+ui_assert visible mapsettings_draw_storyboard_reset 1
+mouse_to 640 300
+@wait 120
+@sleep 2500
+@wait 30
+ui_assert visible mapsettingsoverlay 0
+ui_assert visible songbrowser 0
+mouse_to 700 693
+@wait 5
+sendkey Escape
+@wait 30
+ui_assert visible pauseoverlay 1
+ui_assert visible mapsettingsoverlay 1
+sendkey F8
+@wait 30
+ui_assert visible chat 1
+ui_assert visible mapsettingsoverlay 0
+sendkey F8
+@wait 30
+ui_assert visible chat 0
+mouse_to 640 715
+@wait 30
+ui_assert hovered mapsettingsoverlay 1
+mouse_to 1027 633
+@wait 2
+mouse_down
+@wait 3
+mouse_up
+@wait 3
+ui_assert convar draw_storyboard 1
+ui_assert visible mapsettings_draw_storyboard_reset 0
+mouse_to 700 663
+@wait 2
+mouse_down
+@wait 3
+mouse_up
+@wait 3
+ui_assert convar ignore_beatmap_skins 0
+mouse_to 640 300
+@wait 2
+sendkey Escape
+@wait 30
+ui_assert visible pauseoverlay 0
+ui_assert visible mapsettingsoverlay 0
+mouse_to 200 705
+@wait 30
+ui_assert visible mapsettingsoverlay 1
+mouse_to 700 633
+@wait 30
+ui_assert hovered mapsettings_draw_storyboard 1
+mouse_down
+@wait 3
+mouse_up
+@wait 30
+ui_assert convar draw_storyboard 0
+ui_assert visible mapsettingsoverlay 1
+mouse_to 700 690
+@wait 3
+ui_assert hovered mapsettings_ignore_beatmap_samples 0
+mouse_down
+@wait 3
+mouse_up
+@wait 30
+ui_assert convar ignore_beatmap_samples 1
+ui_assert visible mapsettingsoverlay 0
+sendkey Escape
+@wait 30
+ui_assert visible pauseoverlay 1
+mouse_to 640 508
+@wait 10
+mouse_down
+@wait 3
+mouse_up
+@wait 30
+ui_assert visible songbrowser 1
+ui_assert convar ignore_beatmap_skins 1
+ui_assert convar draw_storyboard 1
+exit

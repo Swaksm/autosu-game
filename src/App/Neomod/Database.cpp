@@ -1026,6 +1026,27 @@ MD5Hash Database::recalcMD5(std::string osu_path) {
     return md5digest;
 }
 
+namespace {
+// MapSettings::convars, at the end of a map's record
+void read_map_convars(ByteBufferedFile::Reader &dbr, std::vector<std::pair<std::string, std::string>> &convars) {
+    const u16 count = dbr.read<u16>();
+    convars.reserve(count);
+    for(u16 i = 0; i < count; i++) {
+        std::string name = dbr.read_string();
+        std::string value = dbr.read_string();
+        convars.emplace_back(std::move(name), std::move(value));
+    }
+}
+
+void write_map_convars(ByteBufferedFile::Writer &dbw, std::span<const std::pair<std::string, std::string>> convars) {
+    dbw.write<u16>(static_cast<u16>(convars.size()));
+    for(const auto &[name, value] : convars) {
+        dbw.write_string(name);
+        dbw.write_string(value);
+    }
+}
+}  // namespace
+
 void Database::loadMaps(std::string_view neomod_maps_path, std::string_view peppy_db_path) {
     Timer importTimer;
     importTimer.start();
@@ -1189,7 +1210,8 @@ void Database::loadMaps(std::string_view neomod_maps_path, std::string_view pepp
                         last_modification_time =
                             (maybe_dotnettime - LegacyReplay::UNIX_EPOCH_TICKS) / LegacyReplay::TICKS_PER_SECOND;
                     }
-                    i16 iLocalOffset = neomod_maps.read<i16>();
+                    MapSettings settings;
+                    settings.local_offset = neomod_maps.read<i16>();
                     i16 iOnlineOffset = neomod_maps.read<i16>();
                     u16 iNumCircles = neomod_maps.read<u16>();
                     u16 iNumSliders = neomod_maps.read<u16>();
@@ -1210,9 +1232,8 @@ void Database::loadMaps(std::string_view neomod_maps_path, std::string_view pepp
                         neomod_maps.skip_bytes(sizeof(DB_TIMINGPOINT) * nb_timing_points);
                     }
 
-                    bool draw_background = true;
                     if(version >= 20240703) {
-                        draw_background = neomod_maps.read<u8>();
+                        settings.draw_background = neomod_maps.read<u8>();
                     }
 
                     f32 loudness = 0.f;
@@ -1245,6 +1266,10 @@ void Database::loadMaps(std::string_view neomod_maps_path, std::string_view pepp
                     i64 last_played = 0;
                     if(version >= 20260816) {
                         last_played = neomod_maps.read<i64>();
+                    }
+
+                    if(version >= 20261022) {
+                        read_map_convars(neomod_maps, settings.convars);
                     }
 
                     // Fixup a bug with certain bleeding edge commits ~December 2025,
@@ -1300,7 +1325,7 @@ void Database::loadMaps(std::string_view neomod_maps_path, std::string_view pepp
                     diff->iPreviewTime = (i32)iPreviewTime;
                     diff->last_modification_time = last_modification_time;
                     diff->last_play_time = last_played;
-                    diff->iLocalOffset = iLocalOffset;
+                    diff->settings = std::move(settings);
                     diff->iOnlineOffset = iOnlineOffset;
                     diff->iNumCircles = iNumCircles;
                     diff->iNumSliders = iNumSliders;
@@ -1310,8 +1335,6 @@ void Database::loadMaps(std::string_view neomod_maps_path, std::string_view pepp
                     diff->iMinBPM = iMinBPM;
                     diff->iMaxBPM = iMaxBPM;
                     diff->iMostCommonBPM = iMostCommonBPM;
-
-                    diff->draw_background = draw_background;
 
                     diff->loudness = loudness;
 
@@ -1370,7 +1393,7 @@ void Database::loadMaps(std::string_view neomod_maps_path, std::string_view pepp
                         (void)neomod_maps.read_hash_chars(map_md5);  // TODO: validate
                     }
 
-                    over.local_offset = neomod_maps.read<i16>();
+                    over.settings.local_offset = neomod_maps.read<i16>();
                     over.online_offset = neomod_maps.read<i16>();
                     over.star_rating = neomod_maps.read<f32>();
                     over.loudness = neomod_maps.read<f32>();
@@ -1384,7 +1407,7 @@ void Database::loadMaps(std::string_view neomod_maps_path, std::string_view pepp
                         over.max_bpm = -1;
                         over.avg_bpm = -1;
                     }
-                    over.draw_background = neomod_maps.read<u8>();
+                    over.settings.draw_background = neomod_maps.read<u8>();
                     if(version >= 20251009) {
                         neomod_maps.read_string(over.background_image_filename);
                     }
@@ -1393,6 +1416,9 @@ void Database::loadMaps(std::string_view neomod_maps_path, std::string_view pepp
                     }
                     if(version >= 20260816) {
                         over.last_played = neomod_maps.read<i64>();
+                    }
+                    if(version >= 20261022) {
+                        read_map_convars(neomod_maps, over.settings.convars);
                     }
                     this->peppy_overrides[map_md5] = over;
                 }
@@ -1783,7 +1809,7 @@ void Database::loadMaps(std::string_view neomod_maps_path, std::string_view pepp
                 if(diffp != nullptr) {  // if we actually added it
                     bool loudness_found = false;
                     if(overrides_found) {
-                        diffp->iLocalOffset = override_.local_offset;
+                        diffp->settings = std::move(override_.settings);
                         diffp->iOnlineOffset = override_.online_offset;
                         diffp->fStarsNomod = override_.star_rating;
                         diffp->ppv2Version = override_.ppv2_version;
@@ -1791,7 +1817,6 @@ void Database::loadMaps(std::string_view neomod_maps_path, std::string_view pepp
                             diffp->last_play_time = override_.last_played;
                         }
                         diffp->loudness = override_.loudness;
-                        diffp->draw_background = override_.draw_background;
                         diffp->sBackgroundImageFileName = override_.background_image_filename;
                         if(override_.loudness != 0.f) {
                             loudness_found = true;
@@ -1801,10 +1826,9 @@ void Database::loadMaps(std::string_view neomod_maps_path, std::string_view pepp
                             nomod_star_rating *= -1.f;
                         }
 
-                        diffp->iLocalOffset = offset_local;
+                        diffp->settings.local_offset = offset_local;
                         diffp->iOnlineOffset = offset_online;
                         diffp->fStarsNomod = nomod_star_rating;
-                        diffp->draw_background = true;
                     }
 
                     if(!loudness_found) {
@@ -1948,7 +1972,7 @@ void Database::saveMaps() {
                 maps.write<f64>(diff->fSliderMultiplier);
                 maps.write<u32>(diff->iPreviewTime);
                 maps.write<i64>(diff->last_modification_time);
-                maps.write<i16>(diff->iLocalOffset);
+                maps.write<i16>(diff->getSettings().local_offset);
                 maps.write<i16>(diff->iOnlineOffset);
                 maps.write<u16>(diff->iNumCircles);
                 maps.write<u16>(diff->iNumSliders);
@@ -1957,13 +1981,14 @@ void Database::saveMaps() {
                 maps.write<i32>(diff->iMinBPM);
                 maps.write<i32>(diff->iMaxBPM);
                 maps.write<i32>(diff->iMostCommonBPM);
-                maps.write<u8>(diff->draw_background);
+                maps.write<u8>(diff->getSettings().draw_background);
                 maps.write<f32>(diff->loudness.load(std::memory_order_acquire));
                 maps.write_string(diff->getTitleUnicode());
                 maps.write_string(diff->getArtistUnicode());
                 maps.write_string(diff->getBackgroundImageFileName());
                 maps.write<u32>(diff->ppv2Version);
                 maps.write<i64>(diff->last_play_time);
+                write_map_convars(maps, diff->getSettings().convars);
 
                 nb_diffs_saved++;
             }
@@ -1999,17 +2024,18 @@ void Database::saveMaps() {
     maps.write<u32>(real_overrides.size());
     for(const auto &[hash, override_] : real_overrides) {
         maps.write_hash_digest(hash);
-        maps.write<i16>(override_.local_offset);
+        maps.write<i16>(override_.settings.local_offset);
         maps.write<i16>(override_.online_offset);
         maps.write<f32>(override_.star_rating);
         maps.write<f32>(override_.loudness);
         maps.write<i32>(override_.min_bpm);
         maps.write<i32>(override_.max_bpm);
         maps.write<i32>(override_.avg_bpm);
-        maps.write<u8>(override_.draw_background);
+        maps.write<u8>(override_.settings.draw_background);
         maps.write_string(override_.background_image_filename);
         maps.write<u32>(override_.ppv2_version);
         maps.write<i64>(override_.last_played);
+        write_map_convars(maps, override_.settings.convars);
 
         nb_overrides++;
     }
@@ -2964,9 +2990,8 @@ ReconcileResult Database::reconcileFolder(MapRoot root, std::string_view rel_fol
             if(const BeatmapDifficulty *was = slot.was) {
                 // what's the user's stays with the map, as on the object osu!stable's editor saves
                 BeatmapDifficulty &now = *slot.parsed;
-                now.iLocalOffset = was->iLocalOffset;
+                now.settings = was->settings;
                 now.iOnlineOffset = was->iOnlineOffset;
-                now.draw_background = was->draw_background;
                 now.last_play_time = was->last_play_time;
                 if(now.iID <= 0) now.iID = was->iID;
                 if(now.sAudioFileName == was->sAudioFileName) {
@@ -3224,4 +3249,9 @@ void Database::update_overrides(const BeatmapDifficulty *diff) {
 
     Sync::unique_lock lock(this->peppy_overrides_mtx);
     this->peppy_overrides[diff->getMD5()] = diff->get_overrides();
+}
+
+void Database::setSettings(BeatmapDifficulty *diff, MapSettings settings) {
+    diff->settings = std::move(settings);
+    this->update_overrides(diff);
 }

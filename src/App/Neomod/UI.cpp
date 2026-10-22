@@ -25,6 +25,7 @@
 #include "HUD.h"
 #include "Lobby.h"
 #include "MainMenu.h"
+#include "MapSettingsOverlay.h"
 #include "ModSelector.h"
 #include "NotificationOverlay.h"
 #include "OptionsOverlay.h"

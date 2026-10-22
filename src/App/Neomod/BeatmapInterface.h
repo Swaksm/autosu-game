@@ -60,6 +60,9 @@ class BeatmapInterface final : public GameplayJudge::Listener, public PlayfieldV
     void loadBeatmapSkin();
     void loadStoryboard();
 
+    // puts the selected map's settings in effect for the play (see CvarEditor::CONTEXT), again after they changed
+    void applyMapSettings();
+
     [[nodiscard]] inline Storyboard *getStoryboard() const { return this->storyboard.get(); }
     [[nodiscard]] Storyboard::View getStoryboardView() const;
 
@@ -252,6 +255,8 @@ class BeatmapInterface final : public GameplayJudge::Listener, public PlayfieldV
     [[nodiscard]] inline bool isPaused() const { return this->bIsPaused; }
     [[nodiscard]] inline bool isRestartScheduled() const { return this->bIsRestartScheduled; }
     [[nodiscard]] inline bool isContinueScheduled() const { return this->bContinueScheduled; }
+    // whether a continue is waiting for its click and the cursor is where it would go ahead
+    [[nodiscard]] bool isCursorOnContinuePoint() const;
     [[nodiscard]] inline bool isInSkippableSection() const { return this->bIsInSkippableSection; }
     [[nodiscard]] inline bool isSkipScheduled() const { return this->bSkipScheduled; }
     [[nodiscard]] inline bool isSkipButtonHeld() const { return this->bClickedSkipButton; }
@@ -299,6 +304,8 @@ class BeatmapInterface final : public GameplayJudge::Listener, public PlayfieldV
     bool canDraw();
 
     void actualRestart();
+    // puts the music where the play starts, which waits there for its lead-in (see update2()); quick: a quick restart's
+    void seekToStart(bool quick);
 
     void unloadObjects();
 

@@ -68,9 +68,9 @@ class ConVarHandler {
     void setProtectionEnforced(bool enforced);
     [[nodiscard]] forceinline bool isProtectionEnforced() const { return this->bProtectionEnforced; }
 
-    // ConVar::clearValue() for every convar: forgets everything a skin/the server has set, which for the server
-    // includes what it has protected/unprotected (or everything the client has: every convar is back at its default,
-    // and no value is kept for names without one)
+    // ConVar::clearValue() for every convar: forgets everything a skin/the context/the server has set, which for the
+    // server includes what it has protected/unprotected (or everything the client has: every convar is back at its
+    // default, and no value is kept for names without one)
     void clearLayer(CvarEditor editor);
 
     // a session is a time during which what the client sets some convars to isn't meant to last, like the mods of a
@@ -82,10 +82,10 @@ class ConVarHandler {
     void endSession();
     [[nodiscard]] forceinline bool isInSession() const { return !this->vSessionConVars.empty(); }
 
-    // makes the given values everything that a skin/the server has set, as one change: values it had set before and
-    // that aren't among them go away, and whatever ends up with the value it already had is left alone, so callbacks
-    // only run for convars whose value actually changed (once everything is in place). commands among them get run
-    // after that, in order. returns what became of each entry
+    // makes the given values everything that a skin/the context/the server has set, as one change: values it had set
+    // before and that aren't among them go away, and whatever ends up with the value it already had is left alone, so
+    // callbacks only run for convars whose value actually changed (once everything is in place). commands among them
+    // get run after that, in order. returns what became of each entry
     // (not for the client: its values aren't a set that comes and goes as a whole)
     std::vector<CvarSetResult> setLayer(CvarEditor editor, std::span<const std::pair<ConVar *, std::string>> values);
 

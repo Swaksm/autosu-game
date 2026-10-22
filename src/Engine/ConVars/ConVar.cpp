@@ -120,6 +120,8 @@ std::string_view ConVar::editorToString(CvarEditor editor) {
             return "server"sv;
         case SKIN:
             return "skin"sv;
+        case CONTEXT:
+            return "context"sv;
     }
 
     std::unreachable();
@@ -154,7 +156,7 @@ void ConVar::resolve() {
     // (every change to a convar's value ends up here)
     assert(McThread::is_main_thread() && "convars can only be changed on the main thread");
 
-    // server > protection lock > skin > client (whose value has a stand-in during a session) > default
+    // server > protection lock > context > skin > client (whose value has a stand-in during a session) > default
     const Value *value = &this->defaultValue;
     if(const auto &client = this->layer(CvarEditor::CLIENT); client) value = client.get();
     this->master = CvarEditor::CLIENT;
@@ -165,6 +167,9 @@ void ConVar::resolve() {
         // nobody but the server gets a say about protected convars while the lock is on
         value = &this->defaultValue;
         this->master = CvarEditor::SERVER;
+    } else if(this->contextValue) {
+        value = this->contextValue.get();
+        this->master = CvarEditor::CONTEXT;
     } else if(this->skinValue) {
         value = this->skinValue.get();
         this->master = CvarEditor::SKIN;
@@ -293,8 +298,9 @@ CvarSetResult ConVar::setValueImpl(std::string_view newString, bool doCallback, 
 }
 
 CvarSetResult ConVar::checkWrite(CvarEditor editor) const {
-    // editor must match a flag we accept
-    if(editor == CvarEditor::CLIENT && !this->isFlagSet(cv::CLIENT)) return CvarSetResult::DENIED;
+    // editor must match a flag we accept (the context is the client too)
+    if((editor == CvarEditor::CLIENT || editor == CvarEditor::CONTEXT) && !this->isFlagSet(cv::CLIENT))
+        return CvarSetResult::DENIED;
     if(editor == CvarEditor::SKIN && !this->isFlagSet(cv::SKINS)) return CvarSetResult::DENIED;
     if(editor == CvarEditor::SERVER && !this->isFlagSet(cv::SERVER)) return CvarSetResult::DENIED;
 

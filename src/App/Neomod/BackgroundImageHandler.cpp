@@ -353,7 +353,7 @@ void BGImageHandlerImpl::update(bool allow_eviction) {
 
 const Image *BGImageHandlerImpl::getLoadBackgroundImage(const DatabaseBeatmap *beatmap, bool load_immediately,
                                                         bool allow_menubg_fallback) {
-    if(beatmap == nullptr || this->disabled || !beatmap->draw_background) return nullptr;
+    if(beatmap == nullptr || this->disabled || !beatmap->getSettings().draw_background) return nullptr;
     const Image *ret = nullptr;
 
     // only fall back to skin menu-bg if it was found in the cache but not usable, or if we want to load immediately

@@ -269,8 +269,10 @@ am__neomod_SOURCES_DIST = libraries/MD5.cpp libraries/demoji.c \
 	src/App/Neomod/MainMenu.cpp \
 	src/App/Neomod/MainMenuNowPlaying.cpp \
 	src/App/Neomod/MainMenuTips.cpp src/App/Neomod/MapExporter.cpp \
-	src/App/Neomod/MapFetcher.cpp src/App/Neomod/ModFPoSu.cpp \
-	src/App/Neomod/ModSelector.cpp src/App/Neomod/MusicTrack.cpp \
+	src/App/Neomod/MapFetcher.cpp \
+	src/App/Neomod/MapSettingsOverlay.cpp \
+	src/App/Neomod/ModFPoSu.cpp src/App/Neomod/ModSelector.cpp \
+	src/App/Neomod/MusicTrack.cpp \
 	src/App/Neomod/NeomodEnvInterop.cpp \
 	src/App/Neomod/NeomodUrl.cpp \
 	src/App/Neomod/NotificationOverlay.cpp \
@@ -542,6 +544,7 @@ am_neomod_OBJECTS = libraries/neomod-MD5.$(OBJEXT) \
 	src/App/Neomod/neomod-MainMenuTips.$(OBJEXT) \
 	src/App/Neomod/neomod-MapExporter.$(OBJEXT) \
 	src/App/Neomod/neomod-MapFetcher.$(OBJEXT) \
+	src/App/Neomod/neomod-MapSettingsOverlay.$(OBJEXT) \
 	src/App/Neomod/neomod-ModFPoSu.$(OBJEXT) \
 	src/App/Neomod/neomod-ModSelector.$(OBJEXT) \
 	src/App/Neomod/neomod-MusicTrack.$(OBJEXT) \
@@ -787,6 +790,7 @@ am__depfiles_remade = $(DEPS_PREFIX)/mimalloc/$(DEPDIR)/neomod-mimalloc_new_dele
 	src/App/Neomod/$(DEPDIR)/neomod-MainMenuTips.Po \
 	src/App/Neomod/$(DEPDIR)/neomod-MapExporter.Po \
 	src/App/Neomod/$(DEPDIR)/neomod-MapFetcher.Po \
+	src/App/Neomod/$(DEPDIR)/neomod-MapSettingsOverlay.Po \
 	src/App/Neomod/$(DEPDIR)/neomod-ModFPoSu.Po \
 	src/App/Neomod/$(DEPDIR)/neomod-ModSelector.Po \
 	src/App/Neomod/$(DEPDIR)/neomod-MusicTrack.Po \
@@ -1570,8 +1574,10 @@ neomod_SOURCES = libraries/MD5.cpp libraries/demoji.c \
 	src/App/Neomod/MainMenu.cpp \
 	src/App/Neomod/MainMenuNowPlaying.cpp \
 	src/App/Neomod/MainMenuTips.cpp src/App/Neomod/MapExporter.cpp \
-	src/App/Neomod/MapFetcher.cpp src/App/Neomod/ModFPoSu.cpp \
-	src/App/Neomod/ModSelector.cpp src/App/Neomod/MusicTrack.cpp \
+	src/App/Neomod/MapFetcher.cpp \
+	src/App/Neomod/MapSettingsOverlay.cpp \
+	src/App/Neomod/ModFPoSu.cpp src/App/Neomod/ModSelector.cpp \
+	src/App/Neomod/MusicTrack.cpp \
 	src/App/Neomod/NeomodEnvInterop.cpp \
 	src/App/Neomod/NeomodUrl.cpp \
 	src/App/Neomod/NotificationOverlay.cpp \
@@ -2437,6 +2443,9 @@ src/App/Neomod/neomod-MapExporter.$(OBJEXT):  \
 	src/App/Neomod/$(am__dirstamp) \
 	src/App/Neomod/$(DEPDIR)/$(am__dirstamp)
 src/App/Neomod/neomod-MapFetcher.$(OBJEXT):  \
+	src/App/Neomod/$(am__dirstamp) \
+	src/App/Neomod/$(DEPDIR)/$(am__dirstamp)
+src/App/Neomod/neomod-MapSettingsOverlay.$(OBJEXT):  \
 	src/App/Neomod/$(am__dirstamp) \
 	src/App/Neomod/$(DEPDIR)/$(am__dirstamp)
 src/App/Neomod/neomod-ModFPoSu.$(OBJEXT):  \
@@ -3367,6 +3376,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@src/App/Neomod/$(DEPDIR)/neomod-MainMenuTips.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@src/App/Neomod/$(DEPDIR)/neomod-MapExporter.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@src/App/Neomod/$(DEPDIR)/neomod-MapFetcher.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@src/App/Neomod/$(DEPDIR)/neomod-MapSettingsOverlay.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@src/App/Neomod/$(DEPDIR)/neomod-ModFPoSu.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@src/App/Neomod/$(DEPDIR)/neomod-ModSelector.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@src/App/Neomod/$(DEPDIR)/neomod-MusicTrack.Po@am__quote@ # am--include-marker
@@ -4371,6 +4381,20 @@ src/App/Neomod/neomod-MapFetcher.obj: src/App/Neomod/MapFetcher.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/App/Neomod/MapFetcher.cpp' object='src/App/Neomod/neomod-MapFetcher.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(neomod_CPPFLAGS) $(CPPFLAGS) $(neomod_CXXFLAGS) $(CXXFLAGS) -c -o src/App/Neomod/neomod-MapFetcher.obj `if test -f 'src/App/Neomod/MapFetcher.cpp'; then $(CYGPATH_W) 'src/App/Neomod/MapFetcher.cpp'; else $(CYGPATH_W) '$(srcdir)/src/App/Neomod/MapFetcher.cpp'; fi`
+
+src/App/Neomod/neomod-MapSettingsOverlay.o: src/App/Neomod/MapSettingsOverlay.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(neomod_CPPFLAGS) $(CPPFLAGS) $(neomod_CXXFLAGS) $(CXXFLAGS) -MT src/App/Neomod/neomod-MapSettingsOverlay.o -MD -MP -MF src/App/Neomod/$(DEPDIR)/neomod-MapSettingsOverlay.Tpo -c -o src/App/Neomod/neomod-MapSettingsOverlay.o `test -f 'src/App/Neomod/MapSettingsOverlay.cpp' || echo '$(srcdir)/'`src/App/Neomod/MapSettingsOverlay.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/App/Neomod/$(DEPDIR)/neomod-MapSettingsOverlay.Tpo src/App/Neomod/$(DEPDIR)/neomod-MapSettingsOverlay.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/App/Neomod/MapSettingsOverlay.cpp' object='src/App/Neomod/neomod-MapSettingsOverlay.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(neomod_CPPFLAGS) $(CPPFLAGS) $(neomod_CXXFLAGS) $(CXXFLAGS) -c -o src/App/Neomod/neomod-MapSettingsOverlay.o `test -f 'src/App/Neomod/MapSettingsOverlay.cpp' || echo '$(srcdir)/'`src/App/Neomod/MapSettingsOverlay.cpp
+
+src/App/Neomod/neomod-MapSettingsOverlay.obj: src/App/Neomod/MapSettingsOverlay.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(neomod_CPPFLAGS) $(CPPFLAGS) $(neomod_CXXFLAGS) $(CXXFLAGS) -MT src/App/Neomod/neomod-MapSettingsOverlay.obj -MD -MP -MF src/App/Neomod/$(DEPDIR)/neomod-MapSettingsOverlay.Tpo -c -o src/App/Neomod/neomod-MapSettingsOverlay.obj `if test -f 'src/App/Neomod/MapSettingsOverlay.cpp'; then $(CYGPATH_W) 'src/App/Neomod/MapSettingsOverlay.cpp'; else $(CYGPATH_W) '$(srcdir)/src/App/Neomod/MapSettingsOverlay.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/App/Neomod/$(DEPDIR)/neomod-MapSettingsOverlay.Tpo src/App/Neomod/$(DEPDIR)/neomod-MapSettingsOverlay.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/App/Neomod/MapSettingsOverlay.cpp' object='src/App/Neomod/neomod-MapSettingsOverlay.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(neomod_CPPFLAGS) $(CPPFLAGS) $(neomod_CXXFLAGS) $(CXXFLAGS) -c -o src/App/Neomod/neomod-MapSettingsOverlay.obj `if test -f 'src/App/Neomod/MapSettingsOverlay.cpp'; then $(CYGPATH_W) 'src/App/Neomod/MapSettingsOverlay.cpp'; else $(CYGPATH_W) '$(srcdir)/src/App/Neomod/MapSettingsOverlay.cpp'; fi`
 
 src/App/Neomod/neomod-ModFPoSu.o: src/App/Neomod/ModFPoSu.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(neomod_CPPFLAGS) $(CPPFLAGS) $(neomod_CXXFLAGS) $(CXXFLAGS) -MT src/App/Neomod/neomod-ModFPoSu.o -MD -MP -MF src/App/Neomod/$(DEPDIR)/neomod-ModFPoSu.Tpo -c -o src/App/Neomod/neomod-ModFPoSu.o `test -f 'src/App/Neomod/ModFPoSu.cpp' || echo '$(srcdir)/'`src/App/Neomod/ModFPoSu.cpp
@@ -7934,6 +7958,7 @@ distclean: distclean-am
 	-rm -f src/App/Neomod/$(DEPDIR)/neomod-MainMenuTips.Po
 	-rm -f src/App/Neomod/$(DEPDIR)/neomod-MapExporter.Po
 	-rm -f src/App/Neomod/$(DEPDIR)/neomod-MapFetcher.Po
+	-rm -f src/App/Neomod/$(DEPDIR)/neomod-MapSettingsOverlay.Po
 	-rm -f src/App/Neomod/$(DEPDIR)/neomod-ModFPoSu.Po
 	-rm -f src/App/Neomod/$(DEPDIR)/neomod-ModSelector.Po
 	-rm -f src/App/Neomod/$(DEPDIR)/neomod-MusicTrack.Po
@@ -8256,6 +8281,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f src/App/Neomod/$(DEPDIR)/neomod-MainMenuTips.Po
 	-rm -f src/App/Neomod/$(DEPDIR)/neomod-MapExporter.Po
 	-rm -f src/App/Neomod/$(DEPDIR)/neomod-MapFetcher.Po
+	-rm -f src/App/Neomod/$(DEPDIR)/neomod-MapSettingsOverlay.Po
 	-rm -f src/App/Neomod/$(DEPDIR)/neomod-ModFPoSu.Po
 	-rm -f src/App/Neomod/$(DEPDIR)/neomod-ModSelector.Po
 	-rm -f src/App/Neomod/$(DEPDIR)/neomod-MusicTrack.Po

@@ -528,6 +528,59 @@ msgstr "Seçenekler menüsünü her yerden açmak için Ctrl + O'ya bas."
 msgid "Tip: {:s}"
 msgstr "İpucu: {:s}"
 
+#: src/App/Neomod/MapSettingsOverlay.cpp src/App/Neomod/OptionsOverlay.cpp
+msgid "This setting is locked in multiplayer rooms."
+msgstr "Bu ayar çok oyunculu odalarda kilitli."
+
+#: src/App/Neomod/MapSettingsOverlay.cpp src/App/Neomod/OptionsOverlay.cpp
+msgid "This setting is forced by the server."
+msgstr "Bu ayar sunucu tarafından zorlanıyor."
+
+#: src/App/Neomod/MapSettingsOverlay.cpp
+msgid "This setting can't be changed during a multiplayer match."
+msgstr ""
+
+#: src/App/Neomod/MapSettingsOverlay.cpp
+msgid "Use the usual setting"
+msgstr ""
+
+#: src/App/Neomod/MapSettingsOverlay.cpp src/App/Neomod/OptionsOverlay.cpp
+msgid "Reset"
+msgstr "Sıfırla"
+
+#: src/App/Neomod/MapSettingsOverlay.cpp src/App/Neomod/OsuDirectScreen.cpp
+msgid "Storyboard"
+msgstr "Storyboard"
+
+#: src/App/Neomod/MapSettingsOverlay.cpp
+msgid "Beatmap skin"
+msgstr ""
+
+#: src/App/Neomod/MapSettingsOverlay.cpp
+msgid "Beatmap hitsounds"
+msgstr ""
+
+#: src/App/Neomod/MapSettingsOverlay.cpp
+msgid "Changing this mid-play makes the play unranked."
+msgstr ""
+
+#: src/App/Neomod/MapSettingsOverlay.cpp
+msgid "Background dim"
+msgstr ""
+
+#: src/App/Neomod/MapSettingsOverlay.cpp
+msgid "Local offset"
+msgstr ""
+
+#: src/App/Neomod/MapSettingsOverlay.cpp
+msgid "Beatmap settings"
+msgstr ""
+
+#: src/App/Neomod/MapSettingsOverlay.cpp
+#, c++-format
+msgid "{:d} ms"
+msgstr ""
+
 #: src/App/Neomod/ModSelector.cpp
 msgid "CS Override"
 msgstr "CS Geçersiz Kılma"
@@ -949,10 +1002,6 @@ msgstr "Deneysel Modlar"
 #: src/App/Neomod/ModSelector.cpp
 msgid "Hold [ALT] to slide in 0.01 increments."
 msgstr "0.01'lik adımlarla kaydırmak için [ALT] basılı tut."
-
-#: src/App/Neomod/OptionsOverlay.cpp
-msgid "Reset"
-msgstr "Sıfırla"
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "Mouse Left"
@@ -2900,14 +2949,6 @@ msgid "Press {:d} more time to confirm!"
 msgstr "Onaylamak için {:d} kez daha bas!"
 
 #: src/App/Neomod/OptionsOverlay.cpp
-msgid "This setting is locked in multiplayer rooms."
-msgstr "Bu ayar çok oyunculu odalarda kilitli."
-
-#: src/App/Neomod/OptionsOverlay.cpp
-msgid "This setting is forced by the server."
-msgstr "Bu ayar sunucu tarafından zorlanıyor."
-
-#: src/App/Neomod/OptionsOverlay.cpp
 msgid "This setting is forced by the current skin."
 msgstr "Bu ayar mevcut skin tarafından zorlanıyor."
 
@@ -2915,6 +2956,14 @@ msgstr "Bu ayar mevcut skin tarafından zorlanıyor."
 #, c++-format
 msgid "(turn off \"{}\" in the skin options to change it)"
 msgstr "(değiştirmek için skin seçeneklerinde \"{}\" ayarını kapat)"
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "This setting is overridden for the current beatmap."
+msgstr ""
+
+#: src/App/Neomod/OptionsOverlay.cpp
+msgid "(change it in the beatmap settings at the bottom of the screen)"
+msgstr ""
 
 #: src/App/Neomod/OptionsOverlay.cpp
 msgid "All settings have been reset."
@@ -3068,10 +3117,6 @@ msgstr "Güncellendi: {:s}"
 #: src/App/Neomod/OsuDirectScreen.cpp
 msgid "Video"
 msgstr "Video"
-
-#: src/App/Neomod/OsuDirectScreen.cpp
-msgid "Storyboard"
-msgstr "Storyboard"
 
 #: src/App/Neomod/OsuDirectScreen.cpp
 msgid "Newest maps"

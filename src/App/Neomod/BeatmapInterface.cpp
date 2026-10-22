@@ -19,6 +19,7 @@
 #include "BanchoUsers.h"
 #include "BeatmapInterface.h"
 #include "Chat.h"
+#include "ConVarHandler.h"
 #include "OsuConVars.h"
 #include "Timing.h"
 #include "BeatmapInstaller.h"
@@ -33,6 +34,7 @@
 #include "i18n.h"
 #include "LegacyReplay.h"
 #include "Logging.h"
+#include "MapSettingsOverlay.h"
 #include "ModFPoSu.h"
 #include "ModSelector.h"
 #include "Mouse.h"
@@ -357,9 +359,7 @@ void BeatmapInterface::onKey(GameplayKeys key_flag, bool down, u64 timestamp) {
             this->vContinueCursorPoint =
                 vec::clamp(this->vContinueCursorPoint, vec2{10.f, 10.f}, osu->getVirtScreenSize() - vec2{10.f, 10.f});
 
-            this->bClickedContinue =
-                !ui->getModSelector()->isMouseInside() &&
-                vec::length(this->getMousePos() - this->vContinueCursorPoint) < (this->fHitcircleDiameter / 2.f);
+            this->bClickedContinue = !ui->getModSelector()->isMouseInside() && this->isCursorOnContinuePoint();
             if(!this->bClickedContinue) {
                 return;
             }
@@ -442,6 +442,7 @@ bool BeatmapInterface::play() {
     this->is_watching = false;
 
     if(this->start()) {
+        ui->getMapSettingsOverlay()->onPlayStart();
         this->last_spectator_broadcast = engine->getTime();
         RichPresence::onPlayStart();
         if(!BanchoState::spectators.empty()) {
@@ -609,6 +610,9 @@ bool BeatmapInterface::start() {
     this->updateHitobjectMetrics();
     this->bIsPreLoading = false;
 
+    // the map's settings first: some of them decide what gets loaded (its skin, its storyboard)
+    this->applyMapSettings();
+
     // actually load the difficulty (and the hitobjects)
     {
         const Primitives::LoadError error = this->judge->load();
@@ -655,6 +659,7 @@ bool BeatmapInterface::start() {
                 ui->getNotificationOverlay()->addToast(errorMessage, ERROR_TOAST);
             }
 
+            cvars().clearLayer(CvarEditor::CONTEXT);
             osu->bIsPlayingASelectedBeatmap = false;
             osu->setShouldPauseBGThreads(false);
 
@@ -708,8 +713,7 @@ bool BeatmapInterface::start() {
     this->fShouldFlashSectionPass = 0.0f;
     this->fShouldFlashSectionFail = 0.0f;
 
-    this->music.setPosition(0);
-    this->iCurMusicPos = 0;
+    this->seekToStart(false);
 
     // we are waiting for an asynchronous start of the beatmap in the next update()
     // (from the beginning, even if the last play was quit while waiting for a quick restart)
@@ -790,11 +794,27 @@ void BeatmapInterface::actualRestart() {
     this->onModUpdate();  // sanity
 
     // reset position
-    this->music.setPosition(0);
+    this->seekToStart(std::exchange(this->bIsRestartScheduledQuick, false));
     this->bWasSeekFrame = true;
-    this->iCurMusicPos = 0;
 
     this->bIsPlaying = true;
+}
+
+void BeatmapInterface::seekToStart(bool quick) {
+    // a quick restart starts just before the first hitobject (even if there is a long waiting period at the beginning
+    // with nothing etc.); from the song's start, a first hitobject that starts immediately gets early_note_time of
+    // lead-in
+    const auto hitobjects = this->judge->getHitObjects();
+    i32 start_ms = 0;
+    if(quick && likely(!hitobjects.empty())) {
+        const i32 retry_time = std::max(0, cv::quick_retry_time.getInt());
+        start_ms = std::max(hitobjects[0]->getClickTime() - retry_time, 0);
+    }
+    if(start_ms == 0 && likely(!hitobjects.empty()) && hitobjects[0]->getClickTime() < cv::early_note_time.getInt()) {
+        start_ms = -(i32)(cv::early_note_time.getFloat() * this->getSpeedMultiplier());
+    }
+    this->music.setPosition(start_ms);
+    this->iCurMusicPos = start_ms;
 }
 
 void BeatmapInterface::pause(bool quitIfWaiting) {
@@ -832,8 +852,8 @@ void BeatmapInterface::pause(bool quitIfWaiting) {
     } else if(this->bIsPaused && !this->bContinueScheduled) {
         // if this is the first time unpausing
         if(osu->getModAuto() || osu->getModAutopilot() || this->bIsInSkippableSection || this->is_watching) {
-            // (also during the lead-in, which runs on the music's virtual time)
-            this->music.play();
+            // (also during the lead-in, which runs on the music's virtual time, but before it the music waits for it)
+            if(this->bLeadInStarted || !this->bIsWaiting) this->music.play();
 
             this->bIsPlaying = true;
             this->bIsPaused = false;
@@ -933,6 +953,7 @@ void BeatmapInterface::stop(bool quit) {
     if(this->judge->hasFailed()) this->music.endSlowdown();
 
     this->unloadObjects();
+    cvars().clearLayer(CvarEditor::CONTEXT);
 
     if(BanchoState::is_playing_a_multi_map()) {
         if(quit && !Osu::isKioskMode()) {
@@ -1053,7 +1074,6 @@ void BeatmapInterface::seekMS(u32 ms) {
     if(this->bIsWaiting) {
         this->bIsWaiting = false;
         this->bIsPlaying = true;
-        this->bIsRestartScheduledQuick = false;
 
         this->music.play();
 
@@ -1388,6 +1408,20 @@ void BeatmapInterface::loadStoryboard() {
         Storyboard::parseAsync(*sbmap, map->data, skin ? skin->skin_dir : std::string{}, Lane::Foreground);
 }
 
+void BeatmapInterface::applyMapSettings() {
+    std::vector<std::pair<ConVar *, std::string>> values;
+    if(this->beatmap) {
+        for(const auto &[name, value] : this->beatmap->getSettings().convars) {
+            if(ConVar *cvar = cvars().getConVarByName(name)) values.emplace_back(cvar, value);
+        }
+    }
+    cvars().setLayer(CvarEditor::CONTEXT, values);
+
+    // nothing has been played while the play waits to start (paused or not), so it starts over with these (and so does
+    // the score, whose mods some of them are part of)
+    if((this->bIsPlaying || this->bIsPaused) && this->bIsWaiting && !this->bLeadInStarted) this->judge->reset(-1000);
+}
+
 void BeatmapInterface::unloadObjects() {
     this->resetLiveStarsTasks();
     if(this->judge) this->judge->unload();
@@ -1631,7 +1665,7 @@ void BeatmapInterface::drawSmoke() {
 
     // We're not using this->iCurMusicPos, because we want the user to be able
     // to draw while the music is loading / before the map starts.
-    const u64 current_time = Timing::getTicksMS();
+    const u64 current_time = std::lround(engine->getTime() * 1000);
 
     // Add new smoke particles if unpaused & smoke key pressed
     if(!this->bIsPaused && (this->current_keys & GameplayKeys::Smoke)) {
@@ -2020,7 +2054,8 @@ void BeatmapInterface::update2() {
             // (for allowing consolebox optionsmenu chat etc. text input in the continue screen)
             osu->updateWindowsKeyDisable();
 
-            this->music.play();
+            // (before the lead-in, the music waits for it, see below)
+            if(this->bLeadInStarted || !this->bIsWaiting) this->music.play();
 
             this->bIsPlaying = true;  // usually this should be checked with the result of the above play() call, but
                                       // since we are continuing we can assume that everything works
@@ -2065,35 +2100,18 @@ void BeatmapInterface::update2() {
 
     // waiting to start: the load, then the lead-in, which is the music track's virtual time before the song
     if(this->bIsWaiting) {
-        if(!this->isLoading() && !this->bLeadInStarted && !this->bIsPaused) {
+        if(!this->isLoading() && !this->bLeadInStarted && !this->bIsPaused &&
+           !ui->getMapSettingsOverlay()->isHoldingStart()) {
             this->bLeadInStarted = true;
             this->bIsPlaying = true;
 
-            // a quick restart starts just before the first hitobject (even if there is a long waiting period at the
-            // beginning with nothing etc.); from the song's start, a first hitobject that starts immediately gets
-            // early_note_time of lead-in
-            i32 start_ms = 0;
-            if(this->bIsRestartScheduledQuick) {
-                if(likely(!hitobjects.empty())) {
-                    const i32 retry_time = std::max(0, cv::quick_retry_time.getInt());
-                    start_ms = std::max(hitobjects[0]->getClickTime() - retry_time, 0);
-                }
-                this->bIsRestartScheduledQuick = false;
-            }
-            if(start_ms == 0 && likely(!hitobjects.empty()) &&
-               hitobjects[0]->getClickTime() < cv::early_note_time.getInt()) {
-                start_ms = -(i32)(cv::early_note_time.getFloat() * this->getSpeedMultiplier());
-            }
-            this->iLeadInMS = -std::min(start_ms, 0);
+            // (from where the play waited, see seekToStart())
+            this->iLeadInMS = -std::min(this->iCurMusicPos, 0);
             // (without a lead-in the waiting ends with the start)
-            this->bIsWaiting = start_ms < 0;
+            this->bIsWaiting = this->iLeadInMS > 0;
 
             this->music.setLoop(false);
-            this->music.setPosition(start_ms);
             this->music.play();
-            // (the time was read before this seek, and the rest of the frame plays from the start point)
-            this->iCurMusicPos = this->music.getTime();
-            this->bWasSeekFrame = true;
 
             // if there are calculations in there that need the hitobjects to be loaded, also applies speed/pitch
             this->onModUpdate(false, false);
@@ -2887,6 +2905,11 @@ vec2 BeatmapInterface::getMousePos() const {
     } else {
         return mouse->getPos();
     }
+}
+
+bool BeatmapInterface::isCursorOnContinuePoint() const {
+    return this->bContinueScheduled && !this->bIsPaused &&
+           vec::length(this->getMousePos() - this->vContinueCursorPoint) < (this->fHitcircleDiameter / 2.f);
 }
 
 vec2 BeatmapInterface::getCursorPos() const {

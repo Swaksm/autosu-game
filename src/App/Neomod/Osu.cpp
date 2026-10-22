@@ -46,6 +46,7 @@
 #include "NotificationOverlay.h"
 #include "OptionsOverlay.h"
 #include "OsuDirectScreen.h"
+#include "Overrides.h"
 #include "Parsing.h"
 #include "PauseOverlay.h"
 #include "SettingsImporter.h"
@@ -93,14 +94,16 @@ using namespace flags::operators;
 Osu *osu{nullptr};
 
 // prevents changing gameplay convars while playing multi
-bool Osu::globalAllowConVarWrite(const ConVar &cvar, CvarEditor editor) {
+bool Osu::isConVarEditable(const ConVar &cvar, CvarEditor editor) {
     // Only SERVER can edit GAMEPLAY cvars during multiplayer matches
-    if(cvar.isFlagSet(cv::GAMEPLAY) && BanchoState::is_playing_a_multi_map() && editor != CvarEditor::SERVER) {
-        debugLog("Can't edit {:s} while in a multiplayer match.", cvar.getName());
-        return false;
-    }
+    return !cvar.isFlagSet(cv::GAMEPLAY) || !BanchoState::is_playing_a_multi_map() || editor == CvarEditor::SERVER;
+}
 
-    return true;
+bool Osu::globalAllowConVarWrite(const ConVar &cvar, CvarEditor editor) {
+    if(isConVarEditable(cvar, editor)) return true;
+
+    debugLog("Can't edit {:s} while in a multiplayer match.", cvar.getName());
+    return false;
 }
 
 // disables score submission when a convar that scores depend on has changed, no matter what changed it
@@ -827,8 +830,9 @@ void Osu::onKeyDown(KeyboardEvent &key) {
         if(!diff) {
             ui->getNotificationOverlay()->addNotification(_("No beatmap is currently selected."));
         } else {
-            diff->draw_background = !diff->draw_background;
-            db->update_overrides(diff);
+            MapSettings settings = diff->getSettings();
+            settings.draw_background = !settings.draw_background;
+            db->setSettings(diff, std::move(settings));
             DiscRPC::clear_activity();
         }
         key.consume();
@@ -1065,10 +1069,11 @@ void Osu::onKeyDown(KeyboardEvent &key) {
             if(key == binds::DECREASE_LOCAL_OFFSET) {
                 offsetAdd = -offsetAdd;
             }
-            const i32 newOffset = curMap->getLocalOffset() + offsetAdd;
-            curMap->setLocalOffset((i16)newOffset);
-            db->update_overrides(curMap);
-            ui->getNotificationOverlay()->addNotification(tformat("Local beatmap offset set to {:d} ms", newOffset));
+            MapSettings settings = curMap->getSettings();
+            settings.local_offset = (i16)(settings.local_offset + offsetAdd);
+            ui->getNotificationOverlay()->addNotification(
+                tformat("Local beatmap offset set to {:d} ms", settings.local_offset));
+            db->setSettings(curMap, std::move(settings));
         }
     }
 }
@@ -1830,8 +1835,10 @@ bool Osu::onShutdown() {
     BanchoState::disconnect(true);
 
     // the process may go on without us (the app selection screen of test builds): like what the server had set, what
-    // the skin had set isn't for whichever app comes next (nor are the mods of a replay that was still being watched)
+    // the skin had set isn't for whichever app comes next (nor are the settings of a map that was still being played,
+    // or the mods of a replay that was still being watched)
     cvars().clearLayer(CvarEditor::SKIN);
+    cvars().clearLayer(CvarEditor::CONTEXT);
     Replay::Mods::end_session();
 
     return true;

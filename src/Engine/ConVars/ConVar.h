@@ -84,7 +84,9 @@ concept CallbackAny = CallbackCmd<C> || std::is_invocable_v<C, std::string_view,
 }  // namespace detail
 }  // namespace cv
 
-enum class CvarEditor : uint8_t { CLIENT, SERVER, SKIN };
+// who a value comes from (see ConVar::resolve() for who wins). CONTEXT is the client as well, with values for what it
+// is doing at the moment (like playing one particular map): set and taken away as a whole (see ConVarHandler::setLayer())
+enum class CvarEditor : uint8_t { CLIENT, SERVER, SKIN, CONTEXT };
 enum class CvarProtection : uint8_t { DEFAULT, PROTECTED, UNPROTECTED };
 
 // what became of a setValue()
@@ -265,7 +267,8 @@ class ConVar {
     // ConVarHandler::getKeptValues())
     ~ConVar();
 
-    // every editor has a value of its own: the server's beats the skin's, which beats the client's (see resolve()).
+    // every editor has a value of its own: the server's beats the context's, which beats the skin's, which beats the
+    // client's (see resolve()).
     // not every text is something a convar can be set to: numeric ones only take numbers, as all of the text (and bool
     // ones "true"/"false"). anything else leaves the convar alone and is INVALID, which is for whoever lets text in
     // from outside to look at, since nobody else is able to tell anyone about it (debug_cv logs it as well)
@@ -470,6 +473,7 @@ class ConVar {
     [[nodiscard]] inline std::unique_ptr<Value> &layer(CvarEditor editor) {
         if(editor == CvarEditor::SKIN) return this->skinValue;
         if(editor == CvarEditor::SERVER) return this->serverValue;
+        if(editor == CvarEditor::CONTEXT) return this->contextValue;
         return this->bInSession ? this->sessionValue : this->clientValue;
     }
 
@@ -479,7 +483,7 @@ class ConVar {
     // central store-and-dispatch routine called by both setValueImpl overloads
     CvarSetResult setValueInt(Value newValue, bool doCallback, CvarEditor editor);
 
-    // recomputes what the getters return: the only place that picks between the default/client/skin/server values.
+    // recomputes what the getters return: the only place that picks between the default and the editors' values.
     // has to run after every change to something it looks at (setValueInt does for writes, everything else
     // goes through change())
     void resolve();
@@ -517,6 +521,7 @@ class ConVar {
     std::unique_ptr<Value> clientValue{nullptr};   // null while the client hasn't set this convar
     std::unique_ptr<Value> sessionValue{nullptr};  // what the client sets during a session, instead of clientValue
     std::unique_ptr<Value> skinValue{nullptr};     // null if the skin doesn't set this convar
+    std::unique_ptr<Value> contextValue{nullptr};  // ditto for the context
     std::unique_ptr<Value> serverValue{nullptr};   // ditto for the server
 
     // callback storage (allow having 1 "change" callback and 1 single value (or void) callback)

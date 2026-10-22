@@ -134,7 +134,9 @@ class DatabaseBeatmap final {
 
     [[nodiscard]] MapOverrides get_overrides() const;
 
-    inline void setLocalOffset(i16 localOffset) { this->iLocalOffset = localOffset; }
+    // (changed through Database::setSettings())
+    [[nodiscard]] inline const MapSettings &getSettings() const { return this->settings; }
+
     inline void setOnlineOffset(i16 onlineOffset) { this->iOnlineOffset = onlineOffset; }
     inline void setMapID(i32 id) { this->iID = id; }
 
@@ -234,7 +236,7 @@ class DatabaseBeatmap final {
     [[nodiscard]] inline i32 getNumSliders() const { return this->iNumSliders; }
     [[nodiscard]] inline i32 getNumSpinners() const { return this->iNumSpinners; }
 
-    [[nodiscard]] inline i32 getLocalOffset() const { return this->iLocalOffset; }
+    [[nodiscard]] inline i32 getLocalOffset() const { return this->settings.local_offset; }
     [[nodiscard]] inline i32 getOnlineOffset() const { return this->iOnlineOffset; }
 
     inline void writeMD5(const MD5Hash &hash) {
@@ -259,6 +261,8 @@ class DatabaseBeatmap final {
     // if this is non-NULL: it MUST contain at least 1 entry (a BeatmapSet cannot have 0 difficulties)
     // NOTE: this class has ownership of the individual beatmap difficulties, Database owns the top-level beatmapsets
     std::unique_ptr<DiffContainer> difficulties;
+
+    MapSettings settings;
 
     // this is XOR difficulties, if we are a difficulty, this points to our parent container beatmapset
     BeatmapSet *parentSet{nullptr};
@@ -295,7 +299,6 @@ class DatabaseBeatmap final {
     int iID{0};  // online ID, if uploaded
     u32 iLengthMS{0};
 
-    i16 iLocalOffset{0};
     i16 iOnlineOffset{0};
 
     int iSetID{-1};  // online set ID, if uploaded
@@ -340,7 +343,6 @@ class DatabaseBeatmap final {
     BeatmapType type{BeatmapType::NEOMOD_DIFFICULTY};
 
     bool do_not_store{false};
-    bool draw_background{true};
 
    private:
     bool has_unicode_title{false};

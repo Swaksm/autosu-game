@@ -403,6 +403,8 @@ void AboutScreen::buildChangelog() {
         R"(- Added nightcore beats (only plays if your skin has them))",
         R"(- Added Brazilian Portuguese, Indonesian, Italian, Korean, Simplified Chinese, Spanish, Turkish and Ukrainian translations)",
         R"(- Improved existing translations)",
+        R"(- Added per-beatmap settings panel)",
+        R"(  - Adjust "map_settings_hold_time" to change the beatmap start delay)",
         R"(- Chat usernames and F9 user cards now highlight on hover)",
         R"(- The seeking timeline now shows where 100s, 50s and misses happened)",
         R"(- Fixed followpoint animation being half invisible)",

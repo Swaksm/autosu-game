@@ -16,6 +16,7 @@ class ConVarTest : public App {
     void testTypesAndParsing();
     void testPermissions();
     void testLayers();
+    void testContextLayer();
     void testProtectionLock();
     void testPolicy();
     void testCallbacks();

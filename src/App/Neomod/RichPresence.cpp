@@ -77,7 +77,7 @@ void set_activity_with_image(DiscordActivity& to_set) {
     const auto map = osu->getMapInterface()->getBeatmap();
     const bool listening = !!map && osu->getMusicTrack()->isPlaying();
     const bool playing = !!map && osu->isInPlayMode();
-    const bool bg_visible = !!map && map->draw_background && cv::rich_presence_map_backgrounds.getBool();
+    const bool bg_visible = !!map && map->getSettings().draw_background && cv::rich_presence_map_backgrounds.getBool();
 
     to_set.assets.large_image = {PACKAGE_NAME "_icon"};
     to_set.assets.small_image = {};

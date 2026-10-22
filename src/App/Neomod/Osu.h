@@ -262,6 +262,9 @@ class Osu final : public App, public MouseListener, public TouchListener {
 
     void onUserCardChange(std::string_view new_username);
 
+    // whether the app lets an editor change the convar right now (what the convar policy goes by)
+    [[nodiscard]] static bool isConVarEditable(const ConVar &cvar, CvarEditor editor);
+
    private:
     static float getUIScale(vec2 resolution);
     float prevUIScale{1.f};  // hack-ish dpi change reload check
