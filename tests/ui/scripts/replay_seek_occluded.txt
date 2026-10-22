@@ -40,7 +40,7 @@ sendkey O
 sendkey Left Ctrl up
 @wait 40
 ui_assert visible optionsoverlay 1
-mouse_to 150 360
+mouse_to 150 395
 @wait 2
 mouse_down
 @wait 3
