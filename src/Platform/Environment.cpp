@@ -1290,16 +1290,26 @@ bool Environment::setNormalCursorImage(const std::vector<CursorImageLayer> &laye
             if(!fileBuffer) continue;
         }
 
-        SDL_Surface *img = SDL_LoadSurface_IO(SDL_IOFromConstMem(fileBuffer.get(), fileSize), true);
-        if(!img) {
+        SDL_Surface *loaded = SDL_LoadSurface_IO(SDL_IOFromConstMem(fileBuffer.get(), fileSize), true);
+        if(!loaded) {
             debugLog("couldn't load cursor image {}: {}", layer.path, SDL_GetError());
             continue;
         }
+        SDL_Surface *img = SDL_ConvertSurface(loaded, SDL_PIXELFORMAT_RGBA32);
+        SDL_DestroySurface(loaded);
+        if(!img) continue;
+
+        // compositing onto the transparent surface (and linear filtering) is only correct with premultiplied alpha,
+        // straight alpha darkens translucent edges towards the cleared black
+        SDL_PremultiplySurfaceAlpha(img, false);
         const vec2 dstMin = layer.rect.getMin() - bounds.getMin();
         SDL_Rect dst{(int)std::round(dstMin.x), (int)std::round(dstMin.y), (int)std::round(layer.rect.getWidth()),
                      (int)std::round(layer.rect.getHeight())};
-        SDL_SetSurfaceBlendMode(img, SDL_BLENDMODE_BLEND);
-        SDL_SetSurfaceAlphaMod(img, (Uint8)std::round(std::clamp(layer.alpha, 0.f, 1.f) * 255.f));
+        SDL_SetSurfaceBlendMode(img, SDL_BLENDMODE_BLEND_PREMULTIPLIED);
+        // the premultiplied blend doesn't apply the alpha mod to the colors
+        const auto alpha = (Uint8)std::round(std::clamp(layer.alpha, 0.f, 1.f) * 255.f);
+        SDL_SetSurfaceColorMod(img, alpha, alpha, alpha);
+        SDL_SetSurfaceAlphaMod(img, alpha);
         anyLoaded |= SDL_BlitSurfaceScaled(img, nullptr, composite, &dst, SDL_SCALEMODE_LINEAR);
         SDL_DestroySurface(img);
     }
@@ -1319,6 +1329,21 @@ bool Environment::setNormalCursorImage(const std::vector<CursorImageLayer> &laye
             base = SDL_ScaleSurface(composite, pointSize.x, pointSize.y, SDL_SCALEMODE_LINEAR);
             if(base) SDL_AddSurfaceAlternateImage(base, composite);
         }
+
+        // sdl cursors take straight alpha
+        const auto unpremultiply = [](SDL_Surface *surface) {
+            for(int y = 0; y < surface->h; y++) {
+                u8 *px = (u8 *)surface->pixels + (size_t)y * surface->pitch;
+                for(int x = 0; x < surface->w; x++, px += 4) {
+                    const u32 a = px[3];
+                    if(a == 0 || a == 255) continue;
+                    for(int c = 0; c < 3; c++) px[c] = (u8)std::min<u32>(255, (px[c] * 255 + a / 2) / a);
+                }
+            }
+        };
+        unpremultiply(composite);
+        if(base && base != composite) unpremultiply(base);
+
         if(base) {
             const vec2 hotspotPos = -bounds.getMin() * pointScale;
             const ivec2 hotspot{std::clamp((int)std::round(hotspotPos.x), 0, pointSize.x - 1),
