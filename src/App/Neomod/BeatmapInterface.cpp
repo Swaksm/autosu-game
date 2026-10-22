@@ -199,7 +199,7 @@ void BeatmapInterface::drawBackground() {
         if(!storyboard && !cv::draw_beatmap_background_image.getBool()) drawBackgroundImage = false;
 
         vec2 offset{0.f};
-        if(storyboard) offset = storyboard->getBackgroundOffset() * (osu->getVirtScreenHeight() / 480.f);
+        if(storyboard) offset = storyboard->getBackgroundOffset() * (view.screen.getHeight() / 480.f);
 
         if(drawBackgroundImage) {
             const float scale = Osu::getImageScaleToFillResolution(backgroundImage, osu->getVirtScreenSize());
@@ -1355,8 +1355,11 @@ void BeatmapInterface::loadBeatmapSkin() {
 }
 
 Storyboard::View BeatmapInterface::getStoryboardView() const {
+    // the storyboard follows playfield scale and position
+    // osu! centers the playfield in the 640x480 storyboard area at (64, 48), then shifts it 8px down
+    const f32 scale = this->fScaleFactor;
     return {
-        .screen = McRect(0, 0, osu->getVirtScreenWidth(), osu->getVirtScreenHeight()),
+        .screen = McRect(this->vPlayfieldOffset - vec2{64.f, 56.f} * scale, vec2{640.f, 480.f} * scale),
         .pivot = this->vPlayfieldCenter,
         .flipX = cv::playfield_mirror_vertical.getBool(),
         .flipY = cv::playfield_mirror_horizontal.getBool(),

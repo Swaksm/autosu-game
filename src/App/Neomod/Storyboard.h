@@ -74,6 +74,7 @@ class Storyboard {
     void onHitObjectHit(f64 time);
 
     struct View {
+        // where the 640x480 storyboard area goes: scaled to its height, centered across its width
         McRect screen;
         vec2 pivot{0.f};
         bool flipX{false};
