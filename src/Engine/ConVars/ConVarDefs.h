@@ -169,10 +169,10 @@ CONVAR(snd_disable_exclusive_unfocused, true, CLIENT,
        "disable WASAPI exclusive mode when losing focus (currently SoLoud+MiniAudio only)");
 CONVAR(snd_speed_compensate_pitch, true, CLIENT, "automatically keep pitch constant if speed changes");
 CONVAR(volume_change_interval, 0.05f, CLIENT | SKINS | SERVER);
-CONVAR(volume_master, 0.5f, CLIENT | SKINS | SERVER);
+CONVAR(volume_effects, 1.0f, CLIENT | SKINS | SERVER);
+CONVAR(volume_master, 0.7f, CLIENT | SKINS | SERVER);
 CONVAR(volume_master_inactive, 0.25f, CLIENT | SKINS | SERVER);
-CONVAR(volume_effects, 0.4f, CLIENT | SKINS | SERVER, "linked with volume_music: both add up to 1", Range{0., 1.});
-CONVAR(volume_music, 0.6f, CLIENT | SKINS | SERVER, "linked with volume_effects: both add up to 1", Range{0., 1.});
+CONVAR(volume_music, 0.4f, CLIENT | SKINS | SERVER);
 CONVAR(win_snd_wasapi_buffer_size, 0.011f, CLIENT,
        "buffer size/length in seconds (e.g. 0.011 = 11 ms), directly responsible for audio delay and crackling");
 CONVAR(win_snd_wasapi_exclusive, true, CLIENT);

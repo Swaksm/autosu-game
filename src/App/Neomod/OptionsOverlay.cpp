@@ -175,7 +175,6 @@ struct OptionsOverlayImpl final {
     void onSliderChangeIntMS(CBaseUISlider *slider);
     void onSliderChangeFloatMS(CBaseUISlider *slider);
     void onSliderChangePercent(CBaseUISlider *slider);
-    void onVolumeSliderChange(CBaseUISlider *slider);
     void onFPSSliderChange(CBaseUISlider *slider);
 
     void onKeyBindingButtonPressed(CBaseUIButton *button);
@@ -247,8 +246,6 @@ struct OptionsOverlayImpl final {
     Hash::flat::map<CBaseUIElement *, OptionsElement *> uiToOptElemMap;
 
     CBaseUICheckbox *fullscreenCheckbox{nullptr};
-    CBaseUISlider *musicVolumeSlider{nullptr};
-    CBaseUISlider *effectsVolumeSlider{nullptr};
     CBaseUISlider *backgroundDimSlider{nullptr};
     CBaseUISlider *backgroundBrightnessSlider{nullptr};
     CBaseUISlider *hudSizeSlider{nullptr};
@@ -1308,12 +1305,12 @@ OptionsOverlayImpl::OptionsOverlayImpl(OptionsOverlay *parent) : parent(parent) 
         this->addSlider(_("Inactive:"), 0.0f, 1.0f, &cv::volume_master_inactive, 70.0f);
     inactiveVolumeSlider->setChangeCallback(SA::MakeDelegate<&OptionsOverlayImpl::onSliderChangePercent>(this));
     inactiveVolumeSlider->setKeyDelta(0.01f);
-    this->musicVolumeSlider = this->addSlider(_("Music:"), 0.0f, 1.0f, &cv::volume_music, 70.0f);
-    this->musicVolumeSlider->setChangeCallback(SA::MakeDelegate<&OptionsOverlayImpl::onVolumeSliderChange>(this));
-    this->musicVolumeSlider->setKeyDelta(0.01f);
-    this->effectsVolumeSlider = this->addSlider(_("Effects:"), 0.0f, 1.0f, &cv::volume_effects, 70.0f);
-    this->effectsVolumeSlider->setChangeCallback(SA::MakeDelegate<&OptionsOverlayImpl::onVolumeSliderChange>(this));
-    this->effectsVolumeSlider->setKeyDelta(0.01f);
+    CBaseUISlider *musicVolumeSlider = this->addSlider(_("Music:"), 0.0f, 1.0f, &cv::volume_music, 70.0f);
+    musicVolumeSlider->setChangeCallback(SA::MakeDelegate<&OptionsOverlayImpl::onSliderChangePercent>(this));
+    musicVolumeSlider->setKeyDelta(0.01f);
+    CBaseUISlider *effectsVolumeSlider = this->addSlider(_("Effects:"), 0.0f, 1.0f, &cv::volume_effects, 70.0f);
+    effectsVolumeSlider->setChangeCallback(SA::MakeDelegate<&OptionsOverlayImpl::onSliderChangePercent>(this));
+    effectsVolumeSlider->setKeyDelta(0.01f);
 
     this->addSubSection(_("Offset Adjustment"));
     {
@@ -3526,16 +3523,6 @@ void OptionsOverlayImpl::onSliderChange(CBaseUISlider *slider) {
         this->onResetUpdate(element->resetButton.get());
         DO_UPDATE_LAYOUT_CHECK(slider);
     }
-}
-
-void OptionsOverlayImpl::onVolumeSliderChange(CBaseUISlider *slider) {
-    this->onSliderChangePercent(slider);
-
-    // music and effects volume are linked (see VolumeOverlay), so the other slider moved as well
-    const bool isMusic = slider == this->musicVolumeSlider;
-    CBaseUISlider *other = isMusic ? this->effectsVolumeSlider : this->musicVolumeSlider;
-    other->setValue((isMusic ? cv::volume_effects : cv::volume_music).getFloat(), false, false);
-    this->onSliderChangePercent(other);
 }
 
 void OptionsOverlayImpl::onFPSSliderChange(CBaseUISlider *slider) {

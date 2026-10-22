@@ -21,8 +21,6 @@
 #include "PreviewTrackManager.h"
 #include "Skin.h"
 
-#include <cmath>
-
 VolumeOverlay::VolumeOverlay() : UIScreen() {
     cv::volume_master.setCallback(SA::MakeDelegate<&VolumeOverlay::onMasterVolumeChange>(this));
     cv::volume_effects.setCallback(SA::MakeDelegate<&VolumeOverlay::onEffectVolumeChange>(this));
@@ -364,19 +362,7 @@ void VolumeOverlay::onMasterVolumeChange(float newValue) {
     soundEngine->setMasterVolume(newValue);
 }
 
-namespace {
-// effects and music volume always add up to 1, so that more of one is less of the other.
-void linkVolume(float oldValue, float newValue, ConVar &other) {
-    const float newOther = 1.f - newValue;
-    if(oldValue != newValue && std::abs(other.getFloat() - newOther) > 0.0001f) {
-        other.setValue(newOther);
-    }
-}
-}  // namespace
-
-void VolumeOverlay::onEffectVolumeChange(float oldValue, float newValue) {
-    linkVolume(oldValue, newValue, cv::volume_music);
-
+void VolumeOverlay::onEffectVolumeChange() {
     if(!osu || osu->isSkinLoading()) return;
     updateEffectVolume(osu->getSkinMutable());
 }
@@ -394,7 +380,4 @@ void VolumeOverlay::updateEffectVolume(Skin *skin) {
     for(Sound *sound : skin->getBeatmapSamples()) sound->setBaseVolume(volume);
 }
 
-void VolumeOverlay::onMusicVolumeChange(float oldValue, float newValue) {
-    linkVolume(oldValue, newValue, cv::volume_effects);
-    osu->getPreviewTrackManager()->apply_music_volume();
-}
+void VolumeOverlay::onMusicVolumeChange() { osu->getPreviewTrackManager()->apply_music_volume(); }
