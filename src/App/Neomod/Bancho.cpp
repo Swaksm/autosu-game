@@ -170,6 +170,7 @@ void BanchoState::initialize_neomod_server_session() {
     // clang-format off
     const auto to_unprotect = {
         &cv::ar_override, &cv::ar_override_lock, &cv::ar_overridenegative,
+        &cv::od_override, &cv::od_override_lock,
         &cv::cs_override, &cv::cs_overridenegative,
         &cv::hp_override,
         &cv::mod_actual_flashlight,

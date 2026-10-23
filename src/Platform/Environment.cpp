@@ -998,8 +998,7 @@ bool Environment::minimizeWindow() {
     // see SDL3/test/testautomation_video.c
     // if SDL is hardcoding not running tests on certain setups then i give up
 
-    // TODO: make minimize-on-focus-lost an option in options menu and stop trying to be smart about it,
-    // i don't think it's possible to cover all edge cases automatically
+    // TODO: use SDL's built-in minimize on fullscreen alt tab behavior instead of this mess
 
     // also somehow disableFullscreen seems to go into an "infinite loop" on i3wm? so really try to avoid it...
     // on KDE Wayland, calling disableFullscreen() before SDL_MinimizeWindow() makes the window unrestorable
@@ -1085,8 +1084,8 @@ void Environment::enableFullscreen() {
     SDL_SetWindowFullscreenMode(m_window, nullptr);
 
     if(!SDL_SetWindowFullscreen(m_window, true)) {
-        SDL_SetWindowBordered(m_window, true);
         debugLog("Failed to enable fullscreen: {:s}", SDL_GetError());
+        SDL_SetWindowBordered(m_window, true);
     } else {
         if(!changeBorderlessBeforeFullscreen) {
             SDL_SetWindowBordered(m_window, false);
