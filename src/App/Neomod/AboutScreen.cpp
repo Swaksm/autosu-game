@@ -418,6 +418,7 @@ void AboutScreen::buildChangelog() {
         R"(- Fixed the song sometimes restarting at the end of a map)",
         R"(- ScoreV2: slider judgements are now shown on the slider head instead of the tail)",
         R"(- Web: Added hardware cursor to reduce visual latency)",
+        R"(- Web: Fixed score links incorrectly using lazer format)",
     };
     changelogs.push_back(std::move(v44_01));
 
