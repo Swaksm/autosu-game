@@ -517,8 +517,7 @@ void Engine::onFocusLost() {
     app->onFocusLost();
 
     // auto minimize on certain conditions
-    if(env->winFullscreened() && (cv::minimize_on_focus_lost_if_borderless_windowed_fullscreen.getBool() ||
-                                  cv::minimize_on_focus_lost_if_fullscreen.getBool())) {
+    if(env->winFullscreened() && cv::minimize_on_focus_lost_if_fullscreen.getBool()) {
         env->minimizeWindow();
     }
 }

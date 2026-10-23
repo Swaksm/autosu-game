@@ -298,8 +298,8 @@ CONVAR(file_size_max, 1024, CLIENT | SKINS | SERVER,
 CONVAR(interpolate_music_pos, 3L, CLIENT | SKINS | SERVER,
        "interpolate song position with engine time (0 = none, 2 = McOsu, 3 = \"lazer\")");
 CONVAR(language, "en"sv, CLIENT | SKINS | SERVER, "display language used by the game" I18N_LOAD_CB);
-CONVAR(minimize_on_focus_lost_if_borderless_windowed_fullscreen, false, CLIENT | SKINS | SERVER);
-CONVAR(minimize_on_focus_lost_if_fullscreen, true, CLIENT | SKINS | SERVER);
+CONVAR(minimize_on_focus_lost_if_fullscreen, Env::cfg(OS::WINDOWS) ? true : false,
+       CLIENT | SKINS | SERVER);  // buggy/unpredictable on other platforms
 CONVAR(mouse_raw_input, Env::cfg(OS::MAC) ? true : false,
        CLIENT | SKINS | SERVER);  // non-raw-input behaves horribly on macos
 CONVAR(keyboard_raw_input, false, CLIENT | SKINS | SERVER,
