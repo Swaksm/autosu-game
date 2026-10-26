@@ -3,7 +3,8 @@
 vraies commandes UDP et vérifie l'état qu'il publie. échoue si une étape ne se produit pas :
 
   commande hors liste refusée -> autosu_miss : exactement un miss -> speed_override 1.5 -> cs_override 7
-  -> retour à la normale -> autosu_retry : la map repart de zéro -> arrêt propre du jeu
+  -> retour à la normale -> mod_hardrock 1 : CS x1,3 -> mod_hardrock 0
+  -> autosu_retry : la map repart de zéro -> arrêt propre du jeu
 
 usage : e2e.py <neomod.exe> [--timeout SECS]   (ports 13370 et 13371 libres)
 même préparation du dossier de données que tests/sanity/run.py, avec une map plus longue.
@@ -157,6 +158,12 @@ def main():
             send("cs_override -1")
             phase = "retour"
         elif phase == "retour" and s["speed"] == 1 and s["cs"] == 4:
+            send("mod_hardrock 1")
+            phase = "hr"
+        elif phase == "hr" and abs(s["cs"] - 5.2) < 0.01:  # HR : CS x1.3 en pleine partie
+            send("mod_hardrock 0")
+            phase = "sans hr"
+        elif phase == "sans hr" and s["cs"] == 4:
             seen["retour"] = s
             send("autosu_retry")
             phase = "retry"

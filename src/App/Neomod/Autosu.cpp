@@ -46,11 +46,13 @@ constexpr int MAX_COMMANDS_PER_FRAME = 16;  // une rafale de commandes ne bloque
 // le HUD du jeu est masqué en live, l'overlay affiche déjà score, combo et pp ; draw_statistics_pp reste
 // nécessaire car neomod ne calcule les pp en direct que s'il est activé, même HUD masqué ; les volume_* règlent
 // le son du live, y compris fenêtre sans focus, où neomod baisse sinon tout à 25 %)
-constexpr std::array<std::string_view, 16> ALLOWED{
+constexpr std::array<std::string_view, 21> ALLOWED{
     "autosu_miss",         "autosu_retry",       "speed_override",  "cs_override",
     "mod_autoplay",        "mod_nofail",         "mod_endless",     "pause_on_focus_loss",
+    "mod_hardrock",        "mod_flashlight",
     "draw_hud",            "draw_fps",           "draw_playfield_border", "draw_statistics_pp",
-    "volume_master",       "volume_master_inactive", "volume_music", "volume_effects"};
+    "volume_master",       "volume_master_inactive", "volume_music", "volume_effects",
+    "cursor_trail_length", "cursor_trail_smooth_length", "cursor_trail_scale"};
 
 #ifdef MCENGINE_PLATFORM_WINDOWS
 using socket_t = SOCKET;
@@ -133,7 +135,8 @@ bool allowed(std::string_view command) {
 // (même chemin que le sélecteur de mods du jeu)
 bool changesMods(std::string_view command) {
     const std::string_view name = commandName(command);
-    return name == "speed_override" || name == "cs_override" || name == "mod_autoplay" || name == "mod_nofail";
+    return name == "speed_override" || name == "cs_override" || name == "mod_autoplay" || name == "mod_nofail" ||
+           name == "mod_hardrock" || name == "mod_flashlight";
 }
 
 void receiveCommands() {
