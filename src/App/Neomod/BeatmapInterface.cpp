@@ -2305,6 +2305,11 @@ void BeatmapInterface::update2() {
         }
     }
 
+    // Autosu : intro passée automatiquement, comme un clic sur le bouton skip (personne au clavier pendant le live)
+    if(cv::autosu_auto_skip.getBool() && this->bIsInSkippableSection && !this->bIsPaused &&
+       this->getCurrentHitObjectIndex() < 1 && !BanchoState::is_playing_a_multi_map())
+        this->bSkipScheduled = true;
+
     // skipping
     if(this->bSkipScheduled) {
         if(this->bIsInSkippableSection && !this->bIsPaused) {

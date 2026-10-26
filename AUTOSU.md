@@ -36,12 +36,12 @@ Les workflows hérités de neomod ne se déclenchent que sur `master`, qu'on n'u
 | `src/App/Neomod/Osu.cpp` | `autosu::update()` une fois par frame dans `Osu::update()` ; fin de map en endless : `autosu::delayEndless()`, puis map suivante dans l'ordre |
 | `src/App/Neomod/SongBrowser/SongBrowser.{h,cpp}` | `selectNextBeatmap()` / `playNextBeatmap()` : beatmap suivante dans l'ordre du carousel, en boucle |
 | `src/App/Neomod/HitObjects.cpp` | branches Auto de `Circle::update` et de la tête de `Slider::update` : `autosu::consumeMiss()` |
-| `src/App/Neomod/BeatmapInterface.cpp` | `drawSmoke` : fumée aussi quand `autosu_smoke` vaut 1 |
+| `src/App/Neomod/BeatmapInterface.cpp` | `drawSmoke` : fumée aussi quand `autosu_smoke` vaut 1 ; `update` : skip de l'intro quand `autosu_auto_skip` vaut 1 |
 | `src/Makefile.sources` | ajout de `Autosu.cpp` (regénéré de toute façon par `autogen.sh`) |
 
 - **Commandes** : un datagramme UDP = une commande console, reçue sur `127.0.0.1:autosu_port`. Seules
   `autosu_miss`, `autosu_retry`, `speed_override`, `cs_override`, `mod_autoplay`, `mod_nofail`, `mod_endless`,
-  `pause_on_focus_loss`, `mod_hardrock`, `mod_flashlight`, `mod_hidden`, `autosu_endless_delay`, `autosu_smoke` (le curseur dessine de la fumée
+  `pause_on_focus_loss`, `mod_hardrock`, `mod_flashlight`, `mod_hidden`, `autosu_endless_delay`, `autosu_auto_skip` (intro passée toute seule), `autosu_smoke` (le curseur dessine de la fumée
   comme si la touche smoke était tenue, `BeatmapInterface::drawSmoke`), sa durée à l'écran
   `smoke_trail_duration` et `smoke_trail_opaque_duration`, `language` (le live est en anglais, neomod
   prend sinon la langue de Windows), et les réglages d'affichage `draw_hud`, `draw_fps`, `draw_playfield_border` (HUD masqué
