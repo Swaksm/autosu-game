@@ -116,11 +116,19 @@ bool ensureSockets() {
     return true;
 }
 
+std::string_view commandName(std::string_view command) { return command.substr(0, command.find(' ')); }
+
 bool allowed(std::string_view command) {
-    const std::string_view name = command.substr(0, command.find(' '));
     for(const auto a : ALLOWED)
-        if(a == name) return true;
+        if(a == commandName(command)) return true;
     return false;
+}
+
+// les mods de la partie sont figés au lancement : on les relit pour que vitesse et CS changent en pleine partie
+// (même chemin que le sélecteur de mods du jeu)
+bool changesMods(std::string_view command) {
+    const std::string_view name = commandName(command);
+    return name == "speed_override" || name == "cs_override" || name == "mods";
 }
 
 void receiveCommands() {
@@ -140,6 +148,10 @@ void receiveCommands() {
             continue;
         }
         Console::processCommand(command);
+        if(changesMods(command)) {
+            osu->updateMods();
+            sendNow = true;
+        }
     }
 }
 
