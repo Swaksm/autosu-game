@@ -65,6 +65,7 @@ CONVAR(save, CLIENT);  // database save, callback set in Database
 // Autosu : commandes reçues par le canal UDP local (voir AUTOSU.md)
 CONVAR(autosu_miss, CLIENT | NOLOAD | NOSAVE, CFUNC(autosu::miss));
 CONVAR(autosu_retry, CLIENT | NOLOAD | NOSAVE, CFUNC(autosu::retry));
+CONVAR(autosu_next, CLIENT | NOLOAD | NOSAVE, CFUNC(autosu::next));
 
 }  // namespace cmd
 

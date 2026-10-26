@@ -16,8 +16,9 @@ bool consumeMiss(const GameplayJudge *judge);
 // suivante après ce délai ; le jeu affiche l'écran de résultats en attendant
 bool delayEndless();
 
-// commandes console autosu_miss et autosu_retry
+// commandes console autosu_miss, autosu_retry et autosu_next (quitte la map, lance la suivante dans l'ordre)
 void miss();
 void retry();
+void next();
 
 }  // namespace autosu
