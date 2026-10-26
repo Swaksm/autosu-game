@@ -40,7 +40,7 @@ Les workflows hérités de neomod ne se déclenchent que sur `master`, qu'on n'u
 
 - **Commandes** : un datagramme UDP = une commande console, reçue sur `127.0.0.1:autosu_port`. Seules
   `autosu_miss`, `autosu_retry`, `speed_override`, `cs_override`, `mod_autoplay`, `mod_nofail`, `mod_endless`,
-  `pause_on_focus_loss`, `mod_hardrock`, `mod_flashlight`, `autosu_smoke` (le curseur dessine de la fumée
+  `pause_on_focus_loss`, `mod_hardrock`, `mod_flashlight`, `mod_hidden`, `autosu_smoke` (le curseur dessine de la fumée
   comme si la touche smoke était tenue, `BeatmapInterface::drawSmoke`), sa durée à l'écran
   `smoke_trail_duration` et `smoke_trail_opaque_duration`, `language` (le live est en anglais, neomod
   prend sinon la langue de Windows), et les réglages d'affichage `draw_hud`, `draw_fps`, `draw_playfield_border` (HUD masqué
@@ -49,7 +49,7 @@ Les workflows hérités de neomod ne se déclenchent que sur `master`, qu'on n'u
   `volume_master_inactive` (sinon le son tombe à 25 % dès que la fenêtre perd le focus), `volume_music` et
   `volume_effects` sont exécutées ; 16 au plus par frame ; tout datagramme qui ne vient pas de 127.0.0.1 est ignoré.
 - **Mods en pleine partie** : neomod fige les mods au lancement de la map. Après `speed_override`, `cs_override`,
-  `mod_autoplay`, `mod_nofail`, `mod_hardrock` ou `mod_flashlight`, le patch appelle `Osu::updateMods()` (comme le sélecteur de mods) : vitesse et
+  `mod_autoplay`, `mod_nofail`, `mod_hardrock`, `mod_flashlight` ou `mod_hidden`, le patch appelle `Osu::updateMods()` (comme le sélecteur de mods) : vitesse et
   taille des cercles changent immédiatement.
 - **État** : JSON envoyé à `127.0.0.1:autosu_state_port` toutes les 250 ms et juste après un miss, un retry ou un
   changement de map :

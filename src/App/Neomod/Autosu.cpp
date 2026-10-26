@@ -46,10 +46,10 @@ constexpr int MAX_COMMANDS_PER_FRAME = 16;  // une rafale de commandes ne bloque
 // le HUD du jeu est masqué en live, l'overlay affiche déjà score, combo et pp ; draw_statistics_pp reste
 // nécessaire car neomod ne calcule les pp en direct que s'il est activé, même HUD masqué ; les volume_* règlent
 // le son du live, y compris fenêtre sans focus, où neomod baisse sinon tout à 25 %)
-constexpr std::array<std::string_view, 22> ALLOWED{
+constexpr std::array<std::string_view, 23> ALLOWED{
     "autosu_miss",         "autosu_retry",       "speed_override",  "cs_override",
     "mod_autoplay",        "mod_nofail",         "mod_endless",     "pause_on_focus_loss",
-    "mod_hardrock",        "mod_flashlight",
+    "mod_hardrock",        "mod_flashlight",     "mod_hidden",
     "draw_hud",            "draw_fps",           "draw_playfield_border", "draw_statistics_pp",
     "volume_master",       "volume_master_inactive", "volume_music", "volume_effects",
     "autosu_smoke",        "smoke_trail_duration", "smoke_trail_opaque_duration", "language"};
@@ -136,7 +136,7 @@ bool allowed(std::string_view command) {
 bool changesMods(std::string_view command) {
     const std::string_view name = commandName(command);
     return name == "speed_override" || name == "cs_override" || name == "mod_autoplay" || name == "mod_nofail" ||
-           name == "mod_hardrock" || name == "mod_flashlight";
+           name == "mod_hardrock" || name == "mod_flashlight" || name == "mod_hidden";
 }
 
 void receiveCommands() {
