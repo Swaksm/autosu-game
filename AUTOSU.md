@@ -41,7 +41,8 @@ Les workflows hérités de neomod ne se déclenchent que sur `master`, qu'on n'u
 - **Commandes** : un datagramme UDP = une commande console, reçue sur `127.0.0.1:autosu_port`. Seules
   `autosu_miss`, `autosu_retry`, `speed_override`, `cs_override`, `mod_autoplay`, `mod_nofail`, `mod_endless`,
   `pause_on_focus_loss`, `mod_hardrock`, `mod_flashlight`, `autosu_smoke` (le curseur dessine de la fumée
-  comme si la touche smoke était tenue, `BeatmapInterface::drawSmoke`), `language` (le live est en anglais, neomod
+  comme si la touche smoke était tenue, `BeatmapInterface::drawSmoke`), sa durée à l'écran
+  `smoke_trail_duration` et `smoke_trail_opaque_duration`, `language` (le live est en anglais, neomod
   prend sinon la langue de Windows), et les réglages d'affichage `draw_hud`, `draw_fps`, `draw_playfield_border` (HUD masqué
   en live : l'overlay affiche déjà score, combo et pp) et `draw_statistics_pp` (neomod ne calcule les pp en direct
   que s'il est activé, `BeatmapInterface.cpp:2020`), ainsi que les volumes `volume_master`,
