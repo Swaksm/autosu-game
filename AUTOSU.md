@@ -40,7 +40,8 @@ Les workflows hérités de neomod ne se déclenchent que sur `master`, qu'on n'u
 - **Commandes** : un datagramme UDP = une commande console, reçue sur `127.0.0.1:autosu_port`. Seules
   `autosu_miss`, `autosu_retry`, `speed_override`, `cs_override`, `mod_autoplay`, `mod_nofail`, `mod_endless`,
   `pause_on_focus_loss`, et les réglages d'affichage `draw_hud`, `draw_fps`, `draw_playfield_border` (HUD masqué
-  en live : l'overlay affiche déjà score, combo et pp) sont exécutées ; 16 au plus par frame ; tout datagramme qui ne vient pas de 127.0.0.1 est ignoré.
+  en live : l'overlay affiche déjà score, combo et pp) et `draw_statistics_pp` (neomod ne calcule les pp en direct
+  que s'il est activé, `BeatmapInterface.cpp:2020`) sont exécutées ; 16 au plus par frame ; tout datagramme qui ne vient pas de 127.0.0.1 est ignoré.
 - **Mods en pleine partie** : neomod fige les mods au lancement de la map. Après `speed_override`, `cs_override`,
   `mod_autoplay` ou `mod_nofail`, le patch appelle `Osu::updateMods()` (comme le sélecteur de mods) : vitesse et
   taille des cercles changent immédiatement.

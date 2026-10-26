@@ -43,11 +43,12 @@ constexpr auto BIND_RETRY_INTERVAL = std::chrono::seconds(5);
 constexpr int MAX_COMMANDS_PER_FRAME = 16;  // une rafale de commandes ne bloque jamais une frame
 
 // seules ces commandes sont exécutées, tout le reste est ignoré (les draw_* ne changent que l'affichage :
-// le HUD du jeu est masqué en live, l'overlay affiche déjà score, combo et pp)
-constexpr std::array<std::string_view, 11> ALLOWED{"autosu_miss",  "autosu_retry", "speed_override",
+// le HUD du jeu est masqué en live, l'overlay affiche déjà score, combo et pp ; draw_statistics_pp reste
+// nécessaire car neomod ne calcule les pp en direct que s'il est activé, même HUD masqué)
+constexpr std::array<std::string_view, 12> ALLOWED{"autosu_miss",  "autosu_retry", "speed_override",
                                                    "cs_override",  "mod_autoplay", "mod_nofail",
                                                    "mod_endless",  "pause_on_focus_loss", "draw_hud",
-                                                   "draw_fps",     "draw_playfield_border"};
+                                                   "draw_fps",     "draw_playfield_border", "draw_statistics_pp"};
 
 #ifdef MCENGINE_PLATFORM_WINDOWS
 using socket_t = SOCKET;
