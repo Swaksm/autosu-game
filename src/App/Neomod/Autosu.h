@@ -12,6 +12,10 @@ void update();
 // l'Auto envoie alors HIT_MISS au lieu de HIT_300 pour cet objet
 bool consumeMiss(const GameplayJudge *judge);
 
+// fin de map en mode endless (Osu::onPlayEnd) : si autosu_endless_delay > 0, renvoie vrai et update() lance la map
+// suivante après ce délai ; le jeu affiche l'écran de résultats en attendant
+bool delayEndless();
+
 // commandes console autosu_miss et autosu_retry
 void miss();
 void retry();

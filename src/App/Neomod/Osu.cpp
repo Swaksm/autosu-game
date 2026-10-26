@@ -686,7 +686,7 @@ void Osu::update() {
     // endless mod
     if(this->bScheduleEndlessModNextBeatmap) {
         this->bScheduleEndlessModNextBeatmap = false;
-        ui->getSongBrowser()->playNextRandomBeatmap();
+        ui->getSongBrowser()->playNextBeatmap();  // Autosu : dans l'ordre, pas au hasard
     }
 
     // multiplayer/networking update
@@ -1448,7 +1448,7 @@ void Osu::openScoreScreenWhenReady(const FinishedScore &score) {
 }
 
 void Osu::onPlayEnd(const FinishedScore &score, bool quit) {
-    if(!quit && cv::mod_endless.getBool()) {
+    if(!quit && cv::mod_endless.getBool() && !autosu::delayEndless()) {
         this->bScheduleEndlessModNextBeatmap = true;
         return;  // nothing more to do here
     }

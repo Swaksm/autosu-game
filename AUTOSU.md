@@ -33,14 +33,15 @@ Les workflows hérités de neomod ne se déclenchent que sur `master`, qu'on n'u
 |---|---|
 | `src/App/Neomod/Autosu.cpp/.h` | tout le code Autosu : sockets UDP, liste autorisée, `autosu_miss`, `autosu_retry`, état JSON |
 | `src/App/Neomod/OsuConVars/OsuConVarDefs.h` | convars `autosu_port` (13370), `autosu_state_port` (13371), commandes `autosu_miss`, `autosu_retry` |
-| `src/App/Neomod/Osu.cpp` | `autosu::update()` une fois par frame dans `Osu::update()` |
+| `src/App/Neomod/Osu.cpp` | `autosu::update()` une fois par frame dans `Osu::update()` ; fin de map en endless : `autosu::delayEndless()`, puis map suivante dans l'ordre |
+| `src/App/Neomod/SongBrowser/SongBrowser.{h,cpp}` | `selectNextBeatmap()` / `playNextBeatmap()` : beatmap suivante dans l'ordre du carousel, en boucle |
 | `src/App/Neomod/HitObjects.cpp` | branches Auto de `Circle::update` et de la tête de `Slider::update` : `autosu::consumeMiss()` |
 | `src/App/Neomod/BeatmapInterface.cpp` | `drawSmoke` : fumée aussi quand `autosu_smoke` vaut 1 |
 | `src/Makefile.sources` | ajout de `Autosu.cpp` (regénéré de toute façon par `autogen.sh`) |
 
 - **Commandes** : un datagramme UDP = une commande console, reçue sur `127.0.0.1:autosu_port`. Seules
   `autosu_miss`, `autosu_retry`, `speed_override`, `cs_override`, `mod_autoplay`, `mod_nofail`, `mod_endless`,
-  `pause_on_focus_loss`, `mod_hardrock`, `mod_flashlight`, `mod_hidden`, `autosu_smoke` (le curseur dessine de la fumée
+  `pause_on_focus_loss`, `mod_hardrock`, `mod_flashlight`, `mod_hidden`, `autosu_endless_delay`, `autosu_smoke` (le curseur dessine de la fumée
   comme si la touche smoke était tenue, `BeatmapInterface::drawSmoke`), sa durée à l'écran
   `smoke_trail_duration` et `smoke_trail_opaque_duration`, `language` (le live est en anglais, neomod
   prend sinon la langue de Windows), et les réglages d'affichage `draw_hud`, `draw_fps`, `draw_playfield_border` (HUD masqué
@@ -51,6 +52,9 @@ Les workflows hérités de neomod ne se déclenchent que sur `master`, qu'on n'u
 - **Mods en pleine partie** : neomod fige les mods au lancement de la map. Après `speed_override`, `cs_override`,
   `mod_autoplay`, `mod_nofail`, `mod_hardrock`, `mod_flashlight` ou `mod_hidden`, le patch appelle `Osu::updateMods()` (comme le sélecteur de mods) : vitesse et
   taille des cercles changent immédiatement.
+- **Fin de map en endless** : les maps du dossier s'enchaînent dans l'ordre du carousel, en boucle (neomod les tire
+  au hasard). Avec `autosu_endless_delay N`, le jeu affiche d'abord l'écran de résultats pendant N secondes ; l'état
+  publie alors `restartIn` (secondes restantes).
 - **État** : JSON envoyé à `127.0.0.1:autosu_state_port` toutes les 250 ms et juste après un miss, un retry ou un
   changement de map :
   `{"protocol":1,"playing":true,"combo":1243,"maxCombo":1500,"misses":3,"score":8812345,"acc":99.12,"pp":412.5,"progress":0.4200,"speed":1.00,"cs":4.30,"ppFc":530.2,"stars":9.11,"map":"Artist - Title [Diff]"}`

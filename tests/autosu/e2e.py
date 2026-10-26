@@ -4,7 +4,8 @@ vraies commandes UDP et vérifie l'état qu'il publie. échoue si une étape ne 
 
   commande hors liste refusée -> autosu_miss : exactement un miss -> speed_override 1.5 -> cs_override 7
   -> retour à la normale -> mod_hardrock 1 : CS x1,3 -> mod_hardrock 0
-  -> autosu_retry : la map repart de zéro -> arrêt propre du jeu
+  -> autosu_retry : la map repart de zéro -> fin de map en endless avec autosu_endless_delay 3 : écran de
+  résultats et restartIn publié, puis la map repart -> arrêt propre du jeu
 
 usage : e2e.py <neomod.exe> [--timeout SECS]   (ports 13370 et 13371 libres)
 même préparation du dossier de données que tests/sanity/run.py, avec une map plus longue.
@@ -26,7 +27,7 @@ from pathlib import Path
 
 COMMAND_PORT, STATE_PORT = 13370, 13371
 # joue la map en Auto le temps du test, puis quitte proprement
-SCRIPT = ["mod_autoplay 1", "set_active_ui_screen songbrowser", "@wait_secs 3", "sendkey Return", "@wait_secs 32", "exit"]
+SCRIPT = ["mod_autoplay 1", "set_active_ui_screen songbrowser", "@wait_secs 3", "sendkey Return", "@wait_secs 45", "exit"]
 
 HEADER = """osu file format v14
 
@@ -139,6 +140,10 @@ def main():
         states += 1
         seen.setdefault("protocole", s.get("protocol"))
         saw_pp = saw_pp or ("ppFc" in s and "stars" in s)
+        if phase == "fin de map" and not s.get("playing") and s.get("restartIn", 0) > 0:
+            seen["recap"] = s  # écran de résultats, la map suivante attend autosu_endless_delay
+            phase = "relance"
+            continue
         if not s.get("playing"):
             continue
         if phase == "attente" and s["combo"] >= 3:
@@ -165,10 +170,14 @@ def main():
             phase = "sans hr"
         elif phase == "sans hr" and s["cs"] == 4:
             seen["retour"] = s
+            send("mod_endless 1")
+            send("autosu_endless_delay 3")
             send("autosu_retry")
             phase = "retry"
         elif phase == "retry" and s["progress"] < seen["retour"]["progress"] - 0.05:
             seen["retry"] = s
+            phase = "fin de map"
+        elif phase == "relance" and s["progress"] < 0.2:
             phase = "fini"
     runner.join()
     elapsed = time.monotonic() - start

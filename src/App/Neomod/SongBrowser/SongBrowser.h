@@ -166,6 +166,12 @@ class SongBrowser final : public ScreenBackable {
         this->selectRandomBeatmap();
         this->playSelectedDifficulty();
     }
+    // Autosu : beatmap suivante dans l'ordre du carousel, en boucle (rejoue la même s'il n'y en a qu'une)
+    bool selectNextBeatmap();
+    void playNextBeatmap() {
+        this->selectNextBeatmap();
+        this->playSelectedDifficulty();
+    }
 
     // reloads the database and rebuilds everything. full_rescan (F5) also stats every .osu of every set folder
     // instead of trusting unchanged folder mtimes

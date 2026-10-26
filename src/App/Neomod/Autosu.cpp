@@ -23,6 +23,8 @@
 #include "Logging.h"
 #include "Osu.h"
 #include "OsuConVars.h"
+#include "SongBrowser/SongBrowser.h"
+#include "UI.h"
 #include "score.h"
 
 #include "fmt/format.h"
@@ -46,13 +48,14 @@ constexpr int MAX_COMMANDS_PER_FRAME = 16;  // une rafale de commandes ne bloque
 // le HUD du jeu est masqué en live, l'overlay affiche déjà score, combo et pp ; draw_statistics_pp reste
 // nécessaire car neomod ne calcule les pp en direct que s'il est activé, même HUD masqué ; les volume_* règlent
 // le son du live, y compris fenêtre sans focus, où neomod baisse sinon tout à 25 %)
-constexpr std::array<std::string_view, 23> ALLOWED{
+constexpr std::array<std::string_view, 24> ALLOWED{
     "autosu_miss",         "autosu_retry",       "speed_override",  "cs_override",
     "mod_autoplay",        "mod_nofail",         "mod_endless",     "pause_on_focus_loss",
     "mod_hardrock",        "mod_flashlight",     "mod_hidden",
     "draw_hud",            "draw_fps",           "draw_playfield_border", "draw_statistics_pp",
     "volume_master",       "volume_master_inactive", "volume_music", "volume_effects",
-    "autosu_smoke",        "smoke_trail_duration", "smoke_trail_opaque_duration", "language"};
+    "autosu_smoke",        "smoke_trail_duration", "smoke_trail_opaque_duration", "language",
+    "autosu_endless_delay"};
 
 #ifdef MCENGINE_PLATFORM_WINDOWS
 using socket_t = SOCKET;
@@ -71,6 +74,8 @@ std::atomic<bool> sendNow{false};
 socket_t recvSocket = NO_SOCKET;
 socket_t sendSocket = NO_SOCKET;
 steady::time_point nextBindAttempt{};
+steady::time_point nextMapAt{};  // fin de map en endless : lancement de la suivante (autosu_endless_delay)
+bool nextMapScheduled = false;
 steady::time_point nextStateAt{};
 const void *lastMap = nullptr;
 
@@ -196,6 +201,10 @@ void publishState() {
         const auto &whole = map->getWholeMapPPInfo();
         if(whole.pp >= 0.0) json += fmt::format(R"(,"ppFc":{:.1f},"stars":{:.2f})", whole.pp, whole.total_stars);
     }
+    if(nextMapScheduled) {
+        const auto left = std::chrono::duration<float>(nextMapAt - steady::now()).count();
+        json += fmt::format(R"(,"restartIn":{:.1f})", left > 0.f ? left : 0.f);
+    }
     if(diff != nullptr)
         json += fmt::format(R"(,"map":{})", jsonString(fmt::format("{} - {} [{}]", diff->getArtist(),
                                                                      diff->getTitle(), diff->getDifficultyName())));
@@ -222,6 +231,11 @@ void update() {
     }
 
     const auto now = steady::now();
+    if(nextMapScheduled && now >= nextMapAt) {
+        nextMapScheduled = false;
+        if(!osu->isInPlayMode()) ui->getSongBrowser()->playNextBeatmap();
+        sendNow = true;
+    }
     if(sendNow.exchange(false) || now >= nextStateAt) {
         nextStateAt = now + STATE_INTERVAL;
         publishState();
@@ -231,6 +245,15 @@ void update() {
 bool consumeMiss(const GameplayJudge *judge) {
     BeatmapInterface *map = osu != nullptr ? osu->getMapInterface() : nullptr;
     if(map == nullptr || map->getJudge() != judge || !pendingMiss.exchange(false)) return false;
+    sendNow = true;
+    return true;
+}
+
+bool delayEndless() {
+    const float delay = cv::autosu_endless_delay.getFloat();
+    if(delay <= 0.f) return false;
+    nextMapAt = steady::now() + std::chrono::duration_cast<steady::duration>(std::chrono::duration<float>(delay));
+    nextMapScheduled = true;
     sendNow = true;
     return true;
 }

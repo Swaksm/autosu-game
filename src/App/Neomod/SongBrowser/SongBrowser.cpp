@@ -3593,6 +3593,35 @@ bool SongBrowser::selectRandomBeatmap() {
     return true;
 }
 
+bool SongBrowser::selectNextBeatmap() {
+    const DatabaseBeatmap *current = osu->getMapInterface()->getBeatmap();
+    const auto setOf = [](const DatabaseBeatmap *map) { return map->getParentSet() ? map->getParentSet() : map; };
+
+    // mêmes boutons que selectRandomBeatmap, dans l'ordre du carousel
+    std::vector<CarouselButton *> songButtons;
+    for(auto *element : this->carousel->container.getElementsAs<CarouselButton>()) {
+        if(!element->isType<SongButton>() || !element->isIndependentDiffButton()) continue;
+        if(element->getDatabaseBeatmap() != nullptr) songButtons.push_back(element);
+    }
+    if(songButtons.empty()) return false;
+
+    // après le dernier bouton de la beatmap en cours, la première d'une autre, en revenant au début
+    const auto isCurrent = [&](CarouselButton *b) {
+        return current != nullptr && setOf(b->getDatabaseBeatmap()) == setOf(current);
+    };
+    size_t last = songButtons.size() - 1;
+    for(size_t i = 0; i < songButtons.size(); i++)
+        if(isCurrent(songButtons[i])) last = i;
+    for(size_t step = 1; step <= songButtons.size(); step++) {
+        CarouselButton *next = songButtons[(last + step) % songButtons.size()];
+        if(!isCurrent(next)) {
+            this->selectSongButton(next);
+            return true;
+        }
+    }
+    return false;
+}
+
 bool SongBrowser::selectPreviousRandomBeatmap() {
     auto &history = this->previousRandomBeatmaps;
 
