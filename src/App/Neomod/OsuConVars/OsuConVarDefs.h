@@ -44,6 +44,11 @@ namespace VolNormalization {
 extern void loudness_cb(float new_value);
 }
 
+namespace autosu {
+extern void miss();
+extern void retry();
+}
+
 #else
 #define CONVAR(name, ...) extern ConVar _CV(name)
 #endif
@@ -57,7 +62,15 @@ CONVAR(spectate, CLIENT | SERVER, CFUNC(Spectating::start_by_username));
 
 CONVAR(save, CLIENT);  // database save, callback set in Database
 
+// Autosu : commandes reçues par le canal UDP local (voir AUTOSU.md)
+CONVAR(autosu_miss, CLIENT | NOLOAD | NOSAVE, CFUNC(autosu::miss));
+CONVAR(autosu_retry, CLIENT | NOLOAD | NOSAVE, CFUNC(autosu::retry));
+
 }  // namespace cmd
+
+// Autosu : ports UDP locaux (lus au démarrage)
+CONVAR(autosu_port, 13370, CLIENT, "Autosu: local UDP port for incoming commands");
+CONVAR(autosu_state_port, 13371, CLIENT, "Autosu: local UDP port the game state is published to");
 
 // Audio
 CONVAR(loudness_calc_threads, 0.f, CLIENT, "0 = autodetect. do not use too many threads or your PC will explode");

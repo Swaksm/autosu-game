@@ -1,0 +1,19 @@
+#pragma once
+// Autosu : pilotage du jeu en UDP local pour le live TikTok interactif (voir AUTOSU.md).
+
+class GameplayJudge;
+
+namespace autosu {
+
+// une fois par frame (Osu::update) : exécute les commandes reçues, publie l'état du jeu
+void update();
+
+// vrai une seule fois après autosu_miss, et seulement pour la partie en cours (pas une simulation) :
+// l'Auto envoie alors HIT_MISS au lieu de HIT_300 pour cet objet
+bool consumeMiss(const GameplayJudge *judge);
+
+// commandes console autosu_miss et autosu_retry
+void miss();
+void retry();
+
+}  // namespace autosu

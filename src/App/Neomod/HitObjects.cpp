@@ -7,6 +7,7 @@
 
 #include "GameplayJudge.h"
 #include "AnimationHandler.h"
+#include "Autosu.h"
 #include "BeatmapPrimitives.h"
 #include "BeatmapStacking.h"
 #include "ContainerRanges.h"
@@ -893,7 +894,8 @@ void Circle::update(i32 curPosMS, f64 frameTimeSecs) {
 
     if(flags::has<ModFlags::Autoplay>(curIFaceMods)) {
         if(curPosMS >= m_clickTimeMS) {
-            onHit(LiveHitResult::HIT_300, 0);
+            // Autosu : un spectateur a demandé un miss, l'Auto rate ce cercle
+            onHit(autosu::consumeMiss(m_judge) ? LiveHitResult::HIT_MISS : LiveHitResult::HIT_300, 0);
         }
         return;
     }
@@ -1602,8 +1604,15 @@ void Slider::update(i32 curPosMS, f64 /*frameTimeSecs*/) {
     if(!m_startFinished) {
         if((flags::has<ModFlags::Autoplay>(curIFaceMods))) {
             if(curPosMS >= m_clickTimeMS) {
-                onHit(LiveHitResult::HIT_300, 0, false);
-                m_judge->holding_slider = true;
+                if(autosu::consumeMiss(m_judge)) {
+                    // Autosu : un spectateur a demandé un miss, l'Auto rate la tête du slider (comme missStartCircleAfter)
+                    m_startResult = LiveHitResult::HIT_MISS;
+                    onHit(m_startResult, 0, false);
+                    m_judge->holding_slider = false;
+                } else {
+                    onHit(LiveHitResult::HIT_300, 0, false);
+                    m_judge->holding_slider = true;
+                }
             }
         } else {
             i32 deltaMS = curPosMS - m_clickTimeMS;

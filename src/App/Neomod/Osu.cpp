@@ -1,6 +1,7 @@
 // Copyright (c) 2015, PG, All rights reserved.
 #include "Osu.h"
 
+#include "Autosu.h"
 #include "BeatmapInstaller.h"
 #include "MusicTrack.h"
 #include "PreviewTrackManager.h"
@@ -591,6 +592,7 @@ void Osu::update() {
     }
 
     Downloader::update();
+    autosu::update();
 
     // beatmap imports: local .osz files (drag-drop, file association, maps/ watcher) can arrive while
     // offline, so the installer must tick regardless of online status. download entries are only ever

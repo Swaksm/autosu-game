@@ -127,6 +127,7 @@ neomod_SOURCES = \
 	src/App/AppRegistry.cpp \
 	src/App/AppRunner.cpp \
 	src/App/Neomod/AboutScreen.cpp \
+	src/App/Neomod/Autosu.cpp \
 	src/App/Neomod/BackgroundImageHandler.cpp \
 	src/App/Neomod/Bancho.cpp \
 	src/App/Neomod/BanchoAes.cpp \
