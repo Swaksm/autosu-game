@@ -1,0 +1,116 @@
+# Autosu : build Windows x64 (audio SoLoud uniquement, BASS exclu pour sa licence non commerciale),
+# puis test de démarrage sous Windows. Version réduite de win-multiarch.yml de neomod.
+name: autosu-win64
+on:
+  push:
+    branches:
+      - autosu
+    paths-ignore:
+      - 'cmake-win/**/*'
+      - 'tools/**/*'
+      - '**/*.md'
+      - '.clangd-template'
+      - '.gitignore'
+      - '.git-blame-ignore-revs'
+  workflow_dispatch:
+
+# un push plus récent annule le build en cours : économise les minutes du dépôt privé
+concurrency:
+  group: autosu-win64-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CCACHE_DIR: /tmp/.ccache
+  LLVM_MINGW_VERSION: 20260908
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: archlinux:multilib-devel
+
+    steps:
+      - uses: actions/checkout@v6.0.1
+
+      - name: Installing dependencies
+        run: |
+          pacman -Syu --noconfirm libx11 libxi glu \
+            libjpeg-turbo libglvnd sdl3 zlib wget \
+            cmake meson nasm git autoconf automake libtool autoconf-archive \
+            mingw-w64-gcc ccache unzip wine freetype2 curl shaderc spirv-cross
+          mkdir -p /opt/llvm-mingw && \
+          wget -qO /opt/llvm-mingw/llvm-mingw.tar.xz "https://github.com/mstorsjo/llvm-mingw/releases/download/${{ env.LLVM_MINGW_VERSION }}/llvm-mingw-${{ env.LLVM_MINGW_VERSION }}-ucrt-ubuntu-22.04-x86_64.tar.xz" && \
+          tar xf /opt/llvm-mingw/llvm-mingw.tar.xz -C /opt/llvm-mingw --strip-components=1
+
+      - name: Set up build directory
+        run: |
+          mkdir -p "$(pwd)"/build-out/build
+          mkdir -p "$(pwd)"/build-out/.ltocache-clang
+          mkdir -p ${{ env.CCACHE_DIR }}
+
+      - name: Cache dependency tarballs
+        uses: actions/cache@v5.0.1
+        with:
+          path: |
+            build-aux/cache
+          key: tarballs-win-x64-${{ hashFiles('configure.ac', 'Makefile.am', 'mk/**') }}
+          restore-keys: |
+            tarballs-win-x64-
+            tarballs-win-
+
+      - name: Cache built dependencies
+        uses: actions/cache@v5.0.1
+        with:
+          path: |
+            build-out/build/deps
+          key: deps-win-x64-soloud-${{ hashFiles('configure.ac', 'Makefile.am', 'mk/**') }}
+          restore-keys: |
+            deps-win-x64-soloud-
+
+      - name: ccache
+        uses: actions/cache@v5.0.1
+        with:
+          path: |
+            ${{ env.CCACHE_DIR }}
+            build-out/.ltocache-clang
+          key: ccache-win-x64-${{ github.sha }}
+          restore-keys: |
+            ccache-win-x64-
+
+      - name: Building Autosu Game
+        run: |
+          ./autogen.sh
+          cd build-out
+          export MAKEFLAGS="-j$(nproc)"
+          export CCACHE_DIR="${{ env.CCACHE_DIR }}"
+          export PATH="/opt/llvm-mingw/bin:$PATH"
+          ../configure --disable-tests --enable-clang --with-audio="soloud" --with-renderer="opengl,dx11,sdlgpu" \
+            --host=x86_64-w64-mingw32
+          make install
+
+      - uses: actions/upload-artifact@v6.0.0
+        with:
+          name: autosu-game-win64
+          path: build-out/dist
+          retention-days: 3
+
+  # démarre le build sous Windows sans écran et lui fait jouer une map en Auto (tests/sanity/run.py de neomod)
+  sanity-test:
+    needs: build
+    runs-on: windows-2025
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - uses: actions/checkout@v6.0.1
+        with:
+          sparse-checkout: tests/sanity
+
+      - uses: actions/download-artifact@v7.0.0
+        with:
+          name: autosu-game-win64
+          path: artifact
+
+      - name: Sanity test (SDL_gpu)
+        timeout-minutes: 10
+        run: python tests/sanity/run.py artifact/bin-x86_64/neomod.exe
