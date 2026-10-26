@@ -31,8 +31,11 @@ Les workflows hérités de neomod ne se déclenchent que sur `master`, qu'on n'u
 | `src/Makefile.sources` | ajout de `Autosu.cpp` (regénéré de toute façon par `autogen.sh`) |
 
 - **Commandes** : un datagramme UDP = une commande console, reçue sur `127.0.0.1:autosu_port`. Seules
-  `autosu_miss`, `autosu_retry`, `speed_override`, `cs_override`, `mods`, `mod_endless`, `pause_on_focus_loss`
-  sont exécutées ; 16 au plus par frame ; tout datagramme qui ne vient pas de 127.0.0.1 est ignoré.
+  `autosu_miss`, `autosu_retry`, `speed_override`, `cs_override`, `mod_autoplay`, `mod_nofail`, `mod_endless`,
+  `pause_on_focus_loss` sont exécutées ; 16 au plus par frame ; tout datagramme qui ne vient pas de 127.0.0.1 est ignoré.
+- **Mods en pleine partie** : neomod fige les mods au lancement de la map. Après `speed_override`, `cs_override`,
+  `mod_autoplay` ou `mod_nofail`, le patch appelle `Osu::updateMods()` (comme le sélecteur de mods) : vitesse et
+  taille des cercles changent immédiatement.
 - **État** : JSON envoyé à `127.0.0.1:autosu_state_port` toutes les 250 ms et juste après un miss, un retry ou un
   changement de map :
   `{"protocol":1,"playing":true,"combo":1243,"maxCombo":1500,"misses":3,"score":8812345,"acc":99.12,"pp":412.5,"progress":0.4200,"speed":1.00,"cs":4.30,"ppFc":530.2,"stars":9.11,"map":"Artist - Title [Diff]"}`

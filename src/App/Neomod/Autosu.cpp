@@ -43,9 +43,9 @@ constexpr auto BIND_RETRY_INTERVAL = std::chrono::seconds(5);
 constexpr int MAX_COMMANDS_PER_FRAME = 16;  // une rafale de commandes ne bloque jamais une frame
 
 // seules ces commandes sont exécutées, tout le reste est ignoré
-constexpr std::array<std::string_view, 7> ALLOWED{"autosu_miss", "autosu_retry",         "speed_override",
-                                                  "cs_override", "mods",                 "mod_endless",
-                                                  "pause_on_focus_loss"};
+constexpr std::array<std::string_view, 8> ALLOWED{"autosu_miss",  "autosu_retry", "speed_override",
+                                                  "cs_override",  "mod_autoplay", "mod_nofail",
+                                                  "mod_endless",  "pause_on_focus_loss"};
 
 #ifdef MCENGINE_PLATFORM_WINDOWS
 using socket_t = SOCKET;
@@ -128,7 +128,7 @@ bool allowed(std::string_view command) {
 // (même chemin que le sélecteur de mods du jeu)
 bool changesMods(std::string_view command) {
     const std::string_view name = commandName(command);
-    return name == "speed_override" || name == "cs_override" || name == "mods";
+    return name == "speed_override" || name == "cs_override" || name == "mod_autoplay" || name == "mod_nofail";
 }
 
 void receiveCommands() {
