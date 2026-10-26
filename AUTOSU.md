@@ -7,8 +7,15 @@ Le serveur, l'overlay et la spec complète sont dans [Swaksm/Autosu](https://git
 ## État
 
 Base : neomod **v44.01** + patch Autosu (canal UDP, `autosu_miss`, `autosu_retry`, état publié).
-CI : `.github/workflows/autosu-win64.yml` compile Windows x64 (audio SoLoud seul) à chaque push sur `autosu`,
-puis démarre le jeu sous Windows et lui fait jouer une map en Auto. Le zip est dans l'onglet Actions, conservé 3 jours.
+CI : `.github/workflows/autosu-win64.yml`, à chaque push sur `autosu` :
+1. compile Windows x64 (audio SoLoud seul) ;
+2. démarre le jeu sous Windows et lui fait jouer une map en Auto (`tests/sanity/run.py`) ;
+3. test de bout en bout Autosu (`tests/autosu/e2e.py`) : vraies commandes UDP sur le build, échec si le miss, la
+   vitesse, le CS, le retour à la normale, le retry ou le refus d'une commande hors liste ne se produit pas ;
+4. publie le zip en release `build-<n>` (les 5 dernières sont gardées).
+
+Télécharger le dernier build : `gh release download -R Swaksm/autosu-game -p autosu-game-win64.zip`.
+En local : `python tests/autosu/e2e.py <chemin>/neomod.exe` (ports 13370 et 13371 libres).
 Les workflows hérités de neomod ne se déclenchent que sur `master`, qu'on n'utilise pas.
 
 ## Branches et remotes

@@ -1,5 +1,5 @@
 # Autosu : build Windows x64 (audio SoLoud uniquement, BASS exclu pour sa licence non commerciale),
-# puis test de démarrage sous Windows. Version réduite de win-multiarch.yml de neomod.
+# test de démarrage et test de bout en bout UDP sous Windows, puis release. Version réduite de win-multiarch.yml.
 name: autosu-win64
 on:
   push:
@@ -104,7 +104,9 @@ jobs:
     steps:
       - uses: actions/checkout@v6.0.1
         with:
-          sparse-checkout: tests/sanity
+          sparse-checkout: |
+            tests/sanity
+            tests/autosu
 
       - uses: actions/download-artifact@v7.0.0
         with:
@@ -114,3 +116,33 @@ jobs:
       - name: Sanity test (SDL_gpu)
         timeout-minutes: 10
         run: python tests/sanity/run.py artifact/bin-x86_64/neomod.exe
+
+      # vraies commandes UDP sur le build : miss, vitesse, CS, retour, retry, commande refusée
+      - name: Autosu e2e
+        timeout-minutes: 5
+        run: python tests/autosu/e2e.py artifact/bin-x86_64/neomod.exe
+
+  # chaque build vert devient une release (les artefacts expirent en 3 jours, pas les releases) ; 5 gardées
+  release:
+    needs: sanity-test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+
+    steps:
+      - uses: actions/download-artifact@v7.0.0
+        with:
+          name: autosu-game-win64
+          path: autosu-game-win64
+
+      - name: Publish release
+        run: |
+          (cd autosu-game-win64 && zip -qr ../autosu-game-win64.zip .)
+          tag="build-${{ github.run_number }}"
+          gh release create "$tag" autosu-game-win64.zip --target "${{ github.sha }}" --latest \
+            --title "Autosu Game $tag" \
+            --notes "Build de ${{ github.sha }} : compilation Windows x64, démarrage et test de bout en bout UDP verts."
+          gh release list --limit 100 --json tagName --jq '.[5:][].tagName' | xargs -r -n1 gh release delete --cleanup-tag --yes
