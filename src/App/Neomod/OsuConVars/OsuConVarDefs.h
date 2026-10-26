@@ -47,6 +47,7 @@ extern void loudness_cb(float new_value);
 namespace autosu {
 extern void miss();
 extern void retry();
+extern void next();
 }
 
 #else
