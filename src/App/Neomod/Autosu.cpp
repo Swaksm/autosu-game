@@ -44,11 +44,13 @@ constexpr int MAX_COMMANDS_PER_FRAME = 16;  // une rafale de commandes ne bloque
 
 // seules ces commandes sont exécutées, tout le reste est ignoré (les draw_* ne changent que l'affichage :
 // le HUD du jeu est masqué en live, l'overlay affiche déjà score, combo et pp ; draw_statistics_pp reste
-// nécessaire car neomod ne calcule les pp en direct que s'il est activé, même HUD masqué)
-constexpr std::array<std::string_view, 12> ALLOWED{"autosu_miss",  "autosu_retry", "speed_override",
-                                                   "cs_override",  "mod_autoplay", "mod_nofail",
-                                                   "mod_endless",  "pause_on_focus_loss", "draw_hud",
-                                                   "draw_fps",     "draw_playfield_border", "draw_statistics_pp"};
+// nécessaire car neomod ne calcule les pp en direct que s'il est activé, même HUD masqué ; les volume_* règlent
+// le son du live, y compris fenêtre sans focus, où neomod baisse sinon tout à 25 %)
+constexpr std::array<std::string_view, 16> ALLOWED{
+    "autosu_miss",         "autosu_retry",       "speed_override",  "cs_override",
+    "mod_autoplay",        "mod_nofail",         "mod_endless",     "pause_on_focus_loss",
+    "draw_hud",            "draw_fps",           "draw_playfield_border", "draw_statistics_pp",
+    "volume_master",       "volume_master_inactive", "volume_music", "volume_effects"};
 
 #ifdef MCENGINE_PLATFORM_WINDOWS
 using socket_t = SOCKET;
