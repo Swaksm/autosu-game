@@ -1668,7 +1668,7 @@ void BeatmapInterface::drawSmoke() {
     const u64 current_time = std::lround(engine->getTime() * 1000);
 
     // Add new smoke particles if unpaused & smoke key pressed
-    if(!this->bIsPaused && (this->current_keys & GameplayKeys::Smoke)) {
+    if(!this->bIsPaused && ((this->current_keys & GameplayKeys::Smoke) || cv::autosu_smoke.getBool())) {
         SMOKETRAIL sm;
         sm.pos = this->pixels2OsuCoords(this->getCursorPos());
         sm.time = current_time;

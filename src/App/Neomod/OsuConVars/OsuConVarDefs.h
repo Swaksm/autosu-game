@@ -71,6 +71,7 @@ CONVAR(autosu_retry, CLIENT | NOLOAD | NOSAVE, CFUNC(autosu::retry));
 // Autosu : ports UDP locaux (lus au démarrage)
 CONVAR(autosu_port, 13370, CLIENT, "Autosu: local UDP port for incoming commands");
 CONVAR(autosu_state_port, 13371, CLIENT, "Autosu: local UDP port the game state is published to");
+CONVAR(autosu_smoke, false, CLIENT | NOLOAD | NOSAVE, "Autosu: the cursor draws smoke as if the smoke key were held");
 
 // Audio
 CONVAR(loudness_calc_threads, 0.f, CLIENT, "0 = autodetect. do not use too many threads or your PC will explode");
