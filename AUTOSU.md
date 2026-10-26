@@ -6,7 +6,7 @@ Le serveur, l'overlay et la spec complète sont dans [Swaksm/Autosu](https://git
 
 ## État
 
-Base : neomod **v44.01**, sans modification du jeu pour l'instant.
+Base : neomod **v44.01** + patch Autosu (canal UDP, `autosu_miss`, `autosu_retry`, état publié).
 CI : `.github/workflows/autosu-win64.yml` compile Windows x64 (audio SoLoud seul) à chaque push sur `autosu`,
 puis démarre le jeu sous Windows et lui fait jouer une map en Auto. Le zip est dans l'onglet Actions, conservé 3 jours.
 Les workflows hérités de neomod ne se déclenchent que sur `master`, qu'on n'utilise pas.
@@ -20,14 +20,44 @@ Les workflows hérités de neomod ne se déclenchent que sur `master`, qu'on n'u
 | remote `origin` | ce dépôt privé |
 | remote `upstream` | neomod, en lecture seule (push désactivé) |
 
-## Ce que le patch ajoutera (à venir)
+## Le patch
 
-- Canal UDP local : commandes reçues sur `127.0.0.1:13370`, liste autorisée uniquement.
-- Commandes `autosu_miss` et `autosu_retry`.
-- État du jeu publié en JSON sur `127.0.0.1:13371`, avec un numéro de version de protocole (`"protocol": 1`).
+| Fichier | Rôle |
+|---|---|
+| `src/App/Neomod/Autosu.cpp/.h` | tout le code Autosu : sockets UDP, liste autorisée, `autosu_miss`, `autosu_retry`, état JSON |
+| `src/App/Neomod/OsuConVars/OsuConVarDefs.h` | convars `autosu_port` (13370), `autosu_state_port` (13371), commandes `autosu_miss`, `autosu_retry` |
+| `src/App/Neomod/Osu.cpp` | `autosu::update()` une fois par frame dans `Osu::update()` |
+| `src/App/Neomod/HitObjects.cpp` | branches Auto de `Circle::update` et de la tête de `Slider::update` : `autosu::consumeMiss()` |
+| `src/Makefile.sources` | ajout de `Autosu.cpp` (regénéré de toute façon par `autogen.sh`) |
+
+- **Commandes** : un datagramme UDP = une commande console, reçue sur `127.0.0.1:autosu_port`. Seules
+  `autosu_miss`, `autosu_retry`, `speed_override`, `cs_override`, `mods`, `mod_endless`, `pause_on_focus_loss`
+  sont exécutées ; 16 au plus par frame ; tout datagramme qui ne vient pas de 127.0.0.1 est ignoré.
+- **État** : JSON envoyé à `127.0.0.1:autosu_state_port` toutes les 250 ms et juste après un miss, un retry ou un
+  changement de map :
+  `{"protocol":1,"playing":true,"combo":1243,"maxCombo":1500,"misses":3,"score":8812345,"acc":99.12,"pp":412.5,"progress":0.4200,"speed":1.00,"cs":4.30,"ppFc":530.2,"stars":9.11,"map":"Artist - Title [Diff]"}`
+  (hors partie : `playing:false`, sans pp ni progression). `protocol` s'incrémente ici et dans le serveur à chaque
+  changement incompatible.
+- **Ports** : lus au démarrage du jeu ; si le port est pris, nouvel essai toutes les 5 s.
 
 Règles : code Autosu isolé dans `src/App/Neomod/Autosu*`, préfixe `autosu_` pour toute convar ou commande
 ajoutée, style `.clang-format` de neomod.
+
+## Checklist CP2 (sur le vrai jeu)
+
+Jeu lancé, une map en Auto ; depuis le dépôt `Autosu` :
+
+```bash
+npm run game:listen                              # l'état arrive en JSON, 4 fois par seconde
+npm run game:send -- autosu_miss                 # exactement un objet raté, combo à 0, son de combo break
+npm run game:send -- "speed_override 1.5"        # vitesse x1,5 ; "speed_override -1" pour revenir
+npm run game:send -- "cs_override 7"             # cercles plus petits ; "cs_override -1" pour revenir
+npm run game:send -- autosu_retry                # la map repart de zéro
+npm run game:send -- quit                        # refusé (log « command refused »), le jeu continue
+```
+
+À vérifier aussi : un miss pendant un slider (seule la tête est ratée), pendant un spinner (le miss attend
+l'objet suivant), hors partie (aucun effet).
 
 ## Spike T2 : où brancher le patch (neomod v44.01)
 
