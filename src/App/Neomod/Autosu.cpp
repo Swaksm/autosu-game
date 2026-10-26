@@ -42,10 +42,12 @@ constexpr auto STATE_INTERVAL = std::chrono::milliseconds(250);
 constexpr auto BIND_RETRY_INTERVAL = std::chrono::seconds(5);
 constexpr int MAX_COMMANDS_PER_FRAME = 16;  // une rafale de commandes ne bloque jamais une frame
 
-// seules ces commandes sont exécutées, tout le reste est ignoré
-constexpr std::array<std::string_view, 8> ALLOWED{"autosu_miss",  "autosu_retry", "speed_override",
-                                                  "cs_override",  "mod_autoplay", "mod_nofail",
-                                                  "mod_endless",  "pause_on_focus_loss"};
+// seules ces commandes sont exécutées, tout le reste est ignoré (les draw_* ne changent que l'affichage :
+// le HUD du jeu est masqué en live, l'overlay affiche déjà score, combo et pp)
+constexpr std::array<std::string_view, 11> ALLOWED{"autosu_miss",  "autosu_retry", "speed_override",
+                                                   "cs_override",  "mod_autoplay", "mod_nofail",
+                                                   "mod_endless",  "pause_on_focus_loss", "draw_hud",
+                                                   "draw_fps",     "draw_playfield_border"};
 
 #ifdef MCENGINE_PLATFORM_WINDOWS
 using socket_t = SOCKET;
