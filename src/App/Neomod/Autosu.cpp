@@ -77,8 +77,10 @@ socket_t sendSocket = NO_SOCKET;
 steady::time_point nextBindAttempt{};
 steady::time_point nextMapAt{};  // fin de map en endless : lancement de la suivante (autosu_endless_delay)
 bool nextMapScheduled = false;
-// autosu_play : 1 = ouvrir la liste des maps quand la base est chargée, 2 = lancer une map une fois la liste construite
+// autosu_play : 1 = liste des maps ouverte, en attente de la base ; 2 = lancer une map ; 3 = vérifier qu'elle a démarré
+// (sinon nouvel essai : la liste peut mettre un moment à se construire, surtout au premier lancement)
 int playStage = 0;
+int playTries = 0;
 steady::time_point playAt{};
 steady::time_point nextStateAt{};
 const void *lastMap = nullptr;
@@ -235,15 +237,18 @@ void update() {
     }
 
     const auto now = steady::now();
-    if(playStage > 0 && (osu->isInPlayMode() || nextMapScheduled)) playStage = 0;  // déjà en partie : rien à faire
-    if(playStage == 1 && db->isFinished() && !db->isCancelled()) {
-        ui->setScreen(ui->getSongBrowser());
+    if(playStage > 0 && (osu->isInPlayMode() || nextMapScheduled)) playStage = 0;  // en partie : c'est gagné
+    if(playStage == 1 && db->isFinished() && !db->isCancelled() && now >= playAt) {
         playStage = 2;
-        playAt = now + std::chrono::milliseconds(1500);  // le temps que la liste des maps se construise
-    } else if(playStage == 2 && now >= playAt) {
-        playStage = 0;
+    } else if(playStage == 2) {
+        debugLog("Autosu: autosu_play, try {}", ++playTries);
         ui->getSongBrowser()->playNextBeatmap();
         sendNow = true;
+        playStage = 3;
+        playAt = now + std::chrono::seconds(3);
+    } else if(playStage == 3 && now >= playAt) {
+        playStage = playTries < 10 ? 2 : 0;
+        if(playStage == 2) ui->setScreen(ui->getSongBrowser());
     }
     if(nextMapScheduled && now >= nextMapAt) {
         nextMapScheduled = false;
@@ -288,7 +293,11 @@ void next() {
 
 void play() {
     if(osu == nullptr || osu->isInPlayMode() || nextMapScheduled || playStage > 0) return;
+    // la liste des maps s'ouvre tout de suite : c'est elle qui fait charger la base de maps au premier lancement
+    ui->setScreen(ui->getSongBrowser());
     playStage = 1;
+    playTries = 0;
+    playAt = steady::now() + std::chrono::milliseconds(1500);  // le temps que la liste se construise
 }
 
 void retry() {
