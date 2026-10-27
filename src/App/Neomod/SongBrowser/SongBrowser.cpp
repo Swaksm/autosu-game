@@ -3605,6 +3605,16 @@ bool SongBrowser::selectNextBeatmap() {
     }
     if(songButtons.empty()) return false;
 
+    // map demandée par le chat (autosu_request <set id>) : jouée en priorité dès qu'elle est installée
+    if(const i32 wanted = cv::autosu_request.getInt(); wanted > 0) {
+        for(CarouselButton *b : songButtons) {
+            if(b->getDatabaseBeatmap()->getSetID() != wanted) continue;
+            cv::autosu_request.setValue(0);
+            this->selectSongButton(b);
+            return true;
+        }
+    }
+
     // après le dernier bouton de la beatmap en cours, la première d'une autre, en revenant au début
     const auto isCurrent = [&](CarouselButton *b) {
         return current != nullptr && setOf(b->getDatabaseBeatmap()) == setOf(current);
