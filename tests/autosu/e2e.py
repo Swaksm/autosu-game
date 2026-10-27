@@ -27,7 +27,8 @@ from pathlib import Path
 
 COMMAND_PORT, STATE_PORT = 13370, 13371
 # joue la map en Auto le temps du test, puis quitte proprement
-SCRIPT = ["mod_autoplay 1", "set_active_ui_screen songbrowser", "@wait_secs 3", "sendkey Return", "@wait_secs 45", "exit"]
+# la map est lancée par la commande autosu_play (le jeu passe seul du menu à une map), pas au clavier
+SCRIPT = ["mod_autoplay 1", "@wait_secs 50", "exit"]
 
 HEADER = """osu file format v14
 
@@ -144,6 +145,9 @@ def main():
             seen["recap"] = s  # écran de résultats, la map suivante attend autosu_endless_delay
             phase = "relance"
             continue
+        if phase == "attente" and not s.get("playing") and not seen.get("play"):
+            seen["play"] = True
+            send("autosu_play")
         if not s.get("playing"):
             continue
         if phase == "attente" and s["combo"] >= 3:

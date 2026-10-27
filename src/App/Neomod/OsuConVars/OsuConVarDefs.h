@@ -48,6 +48,7 @@ namespace autosu {
 extern void miss();
 extern void retry();
 extern void next();
+extern void play();
 }
 
 #else
@@ -67,6 +68,7 @@ CONVAR(save, CLIENT);  // database save, callback set in Database
 CONVAR(autosu_miss, CLIENT | NOLOAD | NOSAVE, CFUNC(autosu::miss));
 CONVAR(autosu_retry, CLIENT | NOLOAD | NOSAVE, CFUNC(autosu::retry));
 CONVAR(autosu_next, CLIENT | NOLOAD | NOSAVE, CFUNC(autosu::next));
+CONVAR(autosu_play, CLIENT | NOLOAD | NOSAVE, CFUNC(autosu::play));
 
 }  // namespace cmd
 

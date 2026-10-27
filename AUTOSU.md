@@ -41,7 +41,7 @@ Les workflows hérités de neomod ne se déclenchent que sur `master`, qu'on n'u
 
 - **Commandes** : un datagramme UDP = une commande console, reçue sur `127.0.0.1:autosu_port`. Seules
   `autosu_miss`, `autosu_retry`, `speed_override`, `cs_override`, `mod_autoplay`, `mod_nofail`, `mod_endless`,
-  `pause_on_focus_loss`, `mod_hardrock`, `mod_flashlight`, `mod_hidden`, `autosu_next` (quitte la map et lance la suivante dans l'ordre), `autosu_request <set id>` (map demandée par le chat, jouée juste après dès qu'elle est installée dans `maps/`), `autosu_endless_delay`, `autosu_auto_skip` (intro passée toute seule), `autosu_smoke` (le curseur dessine de la fumée
+  `pause_on_focus_loss`, `mod_hardrock`, `mod_flashlight`, `mod_hidden`, `autosu_next` (quitte la map et lance la suivante dans l'ordre), `autosu_play` (depuis le menu, lance une map sans clic), `autosu_request <set id>` (map demandée par le chat, jouée juste après dès qu'elle est installée dans `maps/`), `autosu_endless_delay`, `autosu_auto_skip` (intro passée toute seule), `autosu_smoke` (le curseur dessine de la fumée
   comme si la touche smoke était tenue, `BeatmapInterface::drawSmoke`), sa durée à l'écran
   `smoke_trail_duration` et `smoke_trail_opaque_duration`, `language` (le live est en anglais, neomod
   prend sinon la langue de Windows), et les réglages d'affichage `draw_hud`, `draw_fps`, `draw_playfield_border` (HUD masqué

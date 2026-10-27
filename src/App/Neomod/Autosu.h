@@ -20,5 +20,7 @@ bool delayEndless();
 void miss();
 void retry();
 void next();
+// commande autosu_play : depuis le menu, ouvre la liste des maps et lance la suivante (rien en pleine partie)
+void play();
 
 }  // namespace autosu

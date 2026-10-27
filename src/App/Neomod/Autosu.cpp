@@ -19,6 +19,7 @@
 
 #include "BeatmapInterface.h"
 #include "Console.h"
+#include "Database.h"
 #include "DatabaseBeatmap.h"
 #include "Logging.h"
 #include "Osu.h"
@@ -48,14 +49,14 @@ constexpr int MAX_COMMANDS_PER_FRAME = 16;  // une rafale de commandes ne bloque
 // le HUD du jeu est masqué en live, l'overlay affiche déjà score, combo et pp ; draw_statistics_pp reste
 // nécessaire car neomod ne calcule les pp en direct que s'il est activé, même HUD masqué ; les volume_* règlent
 // le son du live, y compris fenêtre sans focus, où neomod baisse sinon tout à 25 %)
-constexpr std::array<std::string_view, 27> ALLOWED{
+constexpr std::array<std::string_view, 28> ALLOWED{
     "autosu_miss",         "autosu_retry",       "speed_override",  "cs_override",
     "mod_autoplay",        "mod_nofail",         "mod_endless",     "pause_on_focus_loss",
     "mod_hardrock",        "mod_flashlight",     "mod_hidden",
     "draw_hud",            "draw_fps",           "draw_playfield_border", "draw_statistics_pp",
     "volume_master",       "volume_master_inactive", "volume_music", "volume_effects",
     "autosu_smoke",        "smoke_trail_duration", "smoke_trail_opaque_duration", "language",
-    "autosu_endless_delay", "autosu_auto_skip", "autosu_next", "autosu_request"};
+    "autosu_endless_delay", "autosu_auto_skip", "autosu_next", "autosu_request", "autosu_play"};
 
 #ifdef MCENGINE_PLATFORM_WINDOWS
 using socket_t = SOCKET;
@@ -76,6 +77,9 @@ socket_t sendSocket = NO_SOCKET;
 steady::time_point nextBindAttempt{};
 steady::time_point nextMapAt{};  // fin de map en endless : lancement de la suivante (autosu_endless_delay)
 bool nextMapScheduled = false;
+// autosu_play : 1 = ouvrir la liste des maps quand la base est chargée, 2 = lancer une map une fois la liste construite
+int playStage = 0;
+steady::time_point playAt{};
 steady::time_point nextStateAt{};
 const void *lastMap = nullptr;
 
@@ -231,6 +235,16 @@ void update() {
     }
 
     const auto now = steady::now();
+    if(playStage > 0 && (osu->isInPlayMode() || nextMapScheduled)) playStage = 0;  // déjà en partie : rien à faire
+    if(playStage == 1 && db->isFinished() && !db->isCancelled()) {
+        ui->setScreen(ui->getSongBrowser());
+        playStage = 2;
+        playAt = now + std::chrono::milliseconds(1500);  // le temps que la liste des maps se construise
+    } else if(playStage == 2 && now >= playAt) {
+        playStage = 0;
+        ui->getSongBrowser()->playNextBeatmap();
+        sendNow = true;
+    }
     if(nextMapScheduled && now >= nextMapAt) {
         nextMapScheduled = false;
         if(!osu->isInPlayMode()) ui->getSongBrowser()->playNextBeatmap();
@@ -270,6 +284,11 @@ void next() {
     nextMapAt = steady::now();
     nextMapScheduled = true;
     sendNow = true;
+}
+
+void play() {
+    if(osu == nullptr || osu->isInPlayMode() || nextMapScheduled || playStage > 0) return;
+    playStage = 1;
 }
 
 void retry() {
