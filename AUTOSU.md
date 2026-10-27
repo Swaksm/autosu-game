@@ -55,7 +55,7 @@ Les workflows hérités de neomod ne se déclenchent que sur `master`, qu'on n'u
 - **Fin de map en endless** : les maps du dossier s'enchaînent dans l'ordre du carousel, en boucle (neomod les tire
   au hasard). Avec `autosu_endless_delay N`, le jeu affiche d'abord l'écran de résultats pendant N secondes ; l'état
   publie alors `restartIn` (secondes restantes).
-- **État** : JSON envoyé à `127.0.0.1:autosu_state_port` toutes les 250 ms et juste après un miss, un retry ou un
+- **État** : JSON envoyé à `127.0.0.1:autosu_state_port` environ 30 fois par seconde et juste après un miss, un retry ou un
   changement de map :
   `{"protocol":1,"playing":true,"combo":1243,"maxCombo":1500,"misses":3,"score":8812345,"acc":99.12,"pp":412.5,"progress":0.4200,"speed":1.00,"cs":4.30,"ppFc":530.2,"stars":9.11,"map":"Artist - Title [Diff]"}`
   (hors partie : `playing:false`, sans pp ni progression). `protocol` s'incrémente ici et dans le serveur à chaque

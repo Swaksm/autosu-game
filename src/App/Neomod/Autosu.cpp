@@ -41,7 +41,8 @@ namespace autosu {
 namespace {
 
 constexpr int PROTOCOL = 1;  // à incrémenter ici et dans le serveur à chaque changement incompatible
-constexpr auto STATE_INTERVAL = std::chrono::milliseconds(250);
+// ~30 fois par seconde : le chat de l'overlay suit le curseur et tape au rythme des notes
+constexpr auto STATE_INTERVAL = std::chrono::milliseconds(33);
 constexpr auto BIND_RETRY_INTERVAL = std::chrono::seconds(5);
 constexpr int MAX_COMMANDS_PER_FRAME = 16;  // une rafale de commandes ne bloque jamais une frame
 
@@ -206,6 +207,9 @@ void publishState() {
                             map->getPercentFinished(), map->getSpeedMultiplier(), map->getCS());
         const auto &whole = map->getWholeMapPPInfo();
         if(whole.pp >= 0.0) json += fmt::format(R"(,"ppFc":{:.1f},"stars":{:.2f})", whole.pp, whole.total_stars);
+        // curseur en coordonnées osu! (0 à 512 × 0 à 384), pour le stylet du chat de l'overlay
+        const vec2 cursor = map->pixels2OsuCoords(map->getCursorPos());
+        json += fmt::format(R"(,"cx":{:.0f},"cy":{:.0f})", cursor.x, cursor.y);
     }
     if(nextMapScheduled) {
         const auto left = std::chrono::duration<float>(nextMapAt - steady::now()).count();
