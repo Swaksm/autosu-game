@@ -45,15 +45,18 @@ constexpr int PROTOCOL = 1;  // à incrémenter ici et dans le serveur à chaque
 constexpr auto STATE_INTERVAL = std::chrono::milliseconds(33);
 constexpr auto BIND_RETRY_INTERVAL = std::chrono::seconds(5);
 constexpr int MAX_COMMANDS_PER_FRAME = 16;  // une rafale de commandes ne bloque jamais une frame
+// map demandée pas encore dans la base au moment de lancer la suivante : le jeu n'importe rien en pleine partie, on
+// lui laisse ce temps hors partie pour l'ajouter (sinon autosu_next passait à la map suivante de la rotation)
+constexpr auto REQUEST_WAIT = std::chrono::seconds(10);
 
 // seules ces commandes sont exécutées, tout le reste est ignoré (les draw_* ne changent que l'affichage :
 // le HUD du jeu est masqué en live, l'overlay affiche déjà score, combo et pp ; draw_statistics_pp reste
 // nécessaire car neomod ne calcule les pp en direct que s'il est activé, même HUD masqué ; les volume_* règlent
 // le son du live, y compris fenêtre sans focus, où neomod baisse sinon tout à 25 %)
-constexpr std::array<std::string_view, 28> ALLOWED{
+constexpr std::array<std::string_view, 29> ALLOWED{
     "autosu_miss",         "autosu_retry",       "speed_override",  "cs_override",
     "mod_autoplay",        "mod_nofail",         "mod_endless",     "pause_on_focus_loss",
-    "mod_hardrock",        "mod_flashlight",     "mod_hidden",
+    "mod_hardrock",        "mod_flashlight",     "mod_hidden",      "mod_relax",
     "draw_hud",            "draw_fps",           "draw_playfield_border", "draw_statistics_pp",
     "volume_master",       "volume_master_inactive", "volume_music", "volume_effects",
     "autosu_smoke",        "smoke_trail_duration", "smoke_trail_opaque_duration", "language",
@@ -85,6 +88,12 @@ int playTries = 0;
 steady::time_point playAt{};
 steady::time_point nextStateAt{};
 const void *lastMap = nullptr;
+
+// autosu_request posé, mais la map pas encore importée dans la base
+bool requestPending() {
+    const i32 wanted = cv::autosu_request.getInt();
+    return wanted > 0 && db->getBeatmapSet(wanted) == nullptr;
+}
 
 sockaddr_in loopback(int port) {
     sockaddr_in addr{};
@@ -148,7 +157,7 @@ bool allowed(std::string_view command) {
 bool changesMods(std::string_view command) {
     const std::string_view name = commandName(command);
     return name == "speed_override" || name == "cs_override" || name == "mod_autoplay" || name == "mod_nofail" ||
-           name == "mod_hardrock" || name == "mod_flashlight" || name == "mod_hidden";
+           name == "mod_hardrock" || name == "mod_flashlight" || name == "mod_hidden" || name == "mod_relax";
 }
 
 void receiveCommands() {
@@ -254,7 +263,7 @@ void update() {
         playStage = playTries < 10 ? 2 : 0;
         if(playStage == 2) ui->setScreen(ui->getSongBrowser());
     }
-    if(nextMapScheduled && now >= nextMapAt) {
+    if(nextMapScheduled && now >= nextMapAt && !(requestPending() && now < nextMapAt + REQUEST_WAIT)) {
         nextMapScheduled = false;
         if(!osu->isInPlayMode()) ui->getSongBrowser()->playNextBeatmap();
         sendNow = true;
@@ -290,9 +299,10 @@ void next() {
     if(osu == nullptr || !osu->isInPlayMode() || osu->getMapInterface() == nullptr) return;
     pendingMiss = false;
     osu->getMapInterface()->stop(true);  // comme quitter depuis la pause ; update() lance ensuite la map suivante
+    sendNow = true;
+    if(!cv::mod_endless.getBool()) return;  // maps choisies à la main : retour à la liste des maps, rien ne se lance
     nextMapAt = steady::now();
     nextMapScheduled = true;
-    sendNow = true;
 }
 
 void play() {

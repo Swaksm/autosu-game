@@ -1003,6 +1003,9 @@ void Circle::onClickEvent(std::vector<Click> &clicks) {
 }
 
 void Circle::onHit(LiveHitResult result, i32 delta, f32 targetDelta, f32 targetAngle) {
+    // Autosu : miss demandé par un spectateur pendant que le streamer joue lui-même (l'Auto le prend avant, plus haut)
+    if(result != LiveHitResult::HIT_MISS && autosu::consumeMiss(m_judge)) result = LiveHitResult::HIT_MISS;
+
     // sound and hit animation
     if(result != LiveHitResult::HIT_MISS) {
         m_judge->playHitSound(m_hitSamples, m_rawPos, delta, m_clickTimeMS);
@@ -2187,6 +2190,10 @@ void Slider::onClickEvent(std::vector<Click> &clicks) {
 void Slider::onHit(LiveHitResult result, i32 delta, bool isEndCircle, f32 targetDelta, f32 targetAngle,
                    bool isEndResultFromStrictTrackingMod) {
     if(m_numCtrlPoints == 0) return;
+
+    // Autosu : miss demandé par un spectateur pendant que le streamer joue lui-même, sur la tête du slider
+    if(!isEndCircle && result != LiveHitResult::HIT_MISS && autosu::consumeMiss(m_judge))
+        result = LiveHitResult::HIT_MISS;
 
     // start + end of a slider add +30 points, if successful
 
